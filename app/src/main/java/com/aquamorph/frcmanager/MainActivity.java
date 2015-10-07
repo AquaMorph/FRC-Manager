@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
+		tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 		fab.setOnClickListener(new View.OnClickListener() {
@@ -109,17 +110,23 @@ public class MainActivity extends AppCompatActivity {
 		@Override
 		public int getCount() {
 			// Show 3 total pages.
-			return 3;
+			return 6;
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
 			switch (position) {
 				case 0:
-					return "SECTION 1";
+					return "Team Schedule";
 				case 1:
-					return "SECTION 2";
+					return "Event Schedule";
 				case 2:
+					return "Rankings";
+				case 3:
+					return "SECTION 3";
+				case 4:
+					return "SECTION 3";
+				case 5:
 					return "SECTION 3";
 			}
 			return null;
