@@ -50,11 +50,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 			case 2:
 				return "Rankings";
 			case 3:
-				return "SECTION 3";
+				return "OPR";
 			case 4:
-				return "SECTION 3";
+				return "DPR";
 			case 5:
-				return "SECTION 3";
+				return "Awards";
 		}
 		return null;
 	}
