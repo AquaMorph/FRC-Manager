@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -13,8 +14,24 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public Fragment getItem(int position) {
 		// getItem is called to instantiate the fragment for the given page.
-		// Return a PlaceholderFragment (defined as a static inner class below).
-		return PlaceholderFragment.newInstance(position + 1);
+		// Return a EventScheduleFragment (defined as a static inner class below).
+		Log.i("TAG", "Position" + position);
+//		if(position == 0) return TeamScheduleFragment.newInstance();
+//		else return EventScheduleFragment.newInstance(position + 1);
+		switch (position) {
+			case 0:
+				return TeamScheduleFragment.newInstance();
+			case 1:
+				return TeamScheduleFragment.newInstance();
+			case 2:
+				return EventScheduleFragment.newInstance(3);
+			case 3:
+				return EventScheduleFragment.newInstance(4);
+			case 4:
+				return EventScheduleFragment.newInstance(5);
+			default:
+				return EventScheduleFragment.newInstance(6);
+		}
 	}
 
 	@Override
