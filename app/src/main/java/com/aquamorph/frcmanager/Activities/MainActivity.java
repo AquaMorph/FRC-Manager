@@ -1,13 +1,18 @@
-package com.aquamorph.frcmanager;
+package com.aquamorph.frcmanager.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
+import com.aquamorph.frcmanager.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +24,10 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar.setSubtitle("NC Regional Team #" + prefs.getString("teamNumber","0000"));
 		setSupportActionBar(toolbar);
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.

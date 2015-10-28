@@ -1,9 +1,12 @@
-package com.aquamorph.frcmanager;
+package com.aquamorph.frcmanager.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import com.aquamorph.frcmanager.fragments.SettingsFragment;
+import com.aquamorph.frcmanager.R;
 
 public class Settings extends AppCompatActivity {
 	@Override

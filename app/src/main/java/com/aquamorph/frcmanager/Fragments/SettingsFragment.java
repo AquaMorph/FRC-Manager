@@ -1,6 +1,8 @@
-package com.aquamorph.frcmanager;
+package com.aquamorph.frcmanager.fragments;
 
 import android.os.Bundle;
+
+import com.aquamorph.frcmanager.R;
 
 public class SettingsFragment  extends android.preference.PreferenceFragment {
 	@Override

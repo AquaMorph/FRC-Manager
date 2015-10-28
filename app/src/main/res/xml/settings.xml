@@ -3,7 +3,7 @@
 
     <intent
         android:action="android.intent.action.VIEW"
-        android:targetClass="com.aquamorph.frcmanager.Settings"
+        android:targetClass="com.aquamorph.frcmanager.activities.Settings"
         android:targetPackage="com.aquamorph"/>
 
     <PreferenceCategory
@@ -21,10 +21,10 @@
         android:summary="About"
         android:title="About">
         <PreferenceScreen
-            android:key="preferencescreen_about"
+            android:key="settings_version"
             android:title="Version 1.0.0"/>
         <PreferenceScreen
-            android:key="preferencescreen_about"
+            android:key="settings_creator"
             android:title="Created by Christian Colglazier"/>
     </PreferenceCategory>
 

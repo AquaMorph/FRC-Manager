@@ -1,4 +1,4 @@
-package com.aquamorph.frcmanager;
+package com.aquamorph.frcmanager.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
+import com.aquamorph.frcmanager.R;
 
 public class TeamScheduleFragment extends Fragment {
 

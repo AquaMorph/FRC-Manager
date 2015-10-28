@@ -1,4 +1,4 @@
-package com.aquamorph.frcmanager;
+package com.aquamorph.frcmanager.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.aquamorph.frcmanager.R;
 
 import static android.view.LayoutInflater.from;
 
