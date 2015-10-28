@@ -15,6 +15,8 @@ public class Settings extends AppCompatActivity {
 		toolbar.setTitle("Settings");
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsFragment()).commit();
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
