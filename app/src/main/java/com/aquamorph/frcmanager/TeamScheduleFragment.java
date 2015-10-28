@@ -1,12 +1,12 @@
 package com.aquamorph.frcmanager;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +32,7 @@ public class TeamScheduleFragment extends Fragment {
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				mSwipeRefreshLayout.setRefreshing(false);
+				refresh();
 			}
 		});
 
@@ -45,6 +45,30 @@ public class TeamScheduleFragment extends Fragment {
 		recyclerView.setLayoutManager(llm);
 
 		return view;
+	}
+
+	private void refresh() {
+		final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
+		loadTeamSchedule.execute();
+	}
+
+	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected void onPreExecute() {
+			mSwipeRefreshLayout.setRefreshing(true);
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			adapter.notifyDataSetChanged();
+			mSwipeRefreshLayout.setRefreshing(false);
+		}
 	}
 
 }

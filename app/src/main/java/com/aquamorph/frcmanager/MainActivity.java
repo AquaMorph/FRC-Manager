@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -50,9 +51,15 @@ public class MainActivity extends AppCompatActivity {
 
 		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_settings) {
+			openSettings();
 			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	public void openSettings() {
+		Intent intent = new Intent(this, Settings.class);
+		startActivity(intent);
 	}
 }
