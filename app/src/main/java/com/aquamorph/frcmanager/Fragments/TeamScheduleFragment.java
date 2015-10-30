@@ -11,8 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
+import com.aquamorph.frcmanager.parsers.TeamEventMatchesParsers;
 
 public class TeamScheduleFragment extends Fragment {
 
@@ -20,7 +21,7 @@ public class TeamScheduleFragment extends Fragment {
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private Adapter adapter;
-	public String[] data = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"};
+	public String[] data = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
 
 	public static TeamScheduleFragment newInstance() {
 		TeamScheduleFragment fragment = new TeamScheduleFragment();
@@ -47,12 +48,19 @@ public class TeamScheduleFragment extends Fragment {
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
+		parse();
+
 		return view;
 	}
 
 	private void refresh() {
 		final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
 		loadTeamSchedule.execute();
+	}
+
+	private void parse() {
+		TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
+		teamEventMatchesParsers.fetchJSON();
 	}
 
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
@@ -64,6 +72,7 @@ public class TeamScheduleFragment extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
+			parse();
 			return null;
 		}
 
