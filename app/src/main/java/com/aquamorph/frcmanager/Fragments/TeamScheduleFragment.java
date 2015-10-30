@@ -7,13 +7,17 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
+import com.aquamorph.frcmanager.models.TeamEventMatches;
 import com.aquamorph.frcmanager.parsers.TeamEventMatchesParsers;
+
+import java.util.ArrayList;
 
 public class TeamScheduleFragment extends Fragment {
 
@@ -21,7 +25,8 @@ public class TeamScheduleFragment extends Fragment {
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private Adapter adapter;
-	public String[] data = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+	private ArrayList<TeamEventMatches> teamEventMatches = new ArrayList<>();
+	TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
 
 	public static TeamScheduleFragment newInstance() {
 		TeamScheduleFragment fragment = new TeamScheduleFragment();
@@ -40,15 +45,14 @@ public class TeamScheduleFragment extends Fragment {
 			}
 		});
 
-
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-		adapter = new TeamScheduleAdapter(getContext(), data);
+		adapter = new TeamScheduleAdapter(getContext(), teamEventMatches);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
-		parse();
+		refresh();
 
 		return view;
 	}
@@ -56,11 +60,6 @@ public class TeamScheduleFragment extends Fragment {
 	private void refresh() {
 		final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
 		loadTeamSchedule.execute();
-	}
-
-	private void parse() {
-		TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
-		teamEventMatchesParsers.fetchJSON();
 	}
 
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
@@ -72,12 +71,17 @@ public class TeamScheduleFragment extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parse();
+			teamEventMatchesParsers.fetchJSON();
+			while (teamEventMatchesParsers.parsingComplete) ;
+
+			teamEventMatches.clear();
+			teamEventMatches.addAll(teamEventMatchesParsers.getTeamEventMatches());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			Log.i(TAG, "Test: " + teamEventMatches.size());
 			adapter.notifyDataSetChanged();
 			mSwipeRefreshLayout.setRefreshing(false);
 		}

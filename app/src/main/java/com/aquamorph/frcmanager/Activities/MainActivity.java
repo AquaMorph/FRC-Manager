@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
+	public String teamNumber = "0000";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,9 +26,10 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		teamNumber = prefs.getString("teamNumber","0000");
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		toolbar.setSubtitle("NC Regional Team #" + prefs.getString("teamNumber","0000"));
+		toolbar.setSubtitle("NC Regional (" + teamNumber + ")");
 		setSupportActionBar(toolbar);
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.

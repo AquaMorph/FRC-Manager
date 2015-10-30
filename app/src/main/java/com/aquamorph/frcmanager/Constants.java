@@ -5,7 +5,6 @@ public class Constants {
 	public static final String URL = "http://www.thebluealliance.com/api/v2/";
 	public static final String API_HEADER = "christian_colglazier:frc_manager:dev";
 	public static final String YEAR = "2015";
-	public static final String TEAM = "2059";
 	public static final String TBA_HEADER = "X-TBA-App-Id";
 
 	public static String getEventURL(String team) {
