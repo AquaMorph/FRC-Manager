@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		toolbar.setSubtitle("NC Regional (" + teamNumber + ")");
+		toolbar.setSubtitle(getSubTitle());
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
@@ -84,11 +84,15 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		return "frc" + teamNumber;
 	}
 
+	public String getSubTitle() {
+		return String.format("North Carolina Regional (%s)", teamNumber);
+	}
+
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		teamNumber = sharedPreferences.getString("teamNumber", "0000");
 		if (getSupportActionBar() != null) {
-			getSupportActionBar().setSubtitle("NC Regional (" + teamNumber + ")");
+			getSupportActionBar().setSubtitle(getSubTitle());
 		}
 	}
 }
