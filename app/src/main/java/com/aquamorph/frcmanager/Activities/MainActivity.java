@@ -42,7 +42,9 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.container);
+		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
 		mViewPager.setAdapter(mSectionsPagerAdapter);
+
 
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(mViewPager);
