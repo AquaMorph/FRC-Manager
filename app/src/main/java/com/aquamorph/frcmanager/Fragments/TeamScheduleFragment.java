@@ -20,6 +20,7 @@ import com.aquamorph.frcmanager.models.TeamEventMatches;
 import com.aquamorph.frcmanager.parsers.TeamEventMatchesParsers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TeamScheduleFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
@@ -88,6 +89,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			while (teamEventMatchesParsers.parsingComplete) ;
 			teamEventMatches.clear();
 			teamEventMatches.addAll(teamEventMatchesParsers.getTeamEventMatches());
+			Collections.sort(teamEventMatches);
 			return null;
 		}
 
@@ -97,5 +99,4 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}
-
 }
