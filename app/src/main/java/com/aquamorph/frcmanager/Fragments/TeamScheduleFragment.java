@@ -1,13 +1,14 @@
 package com.aquamorph.frcmanager.fragments;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class TeamScheduleFragment extends Fragment {
 	private RecyclerView recyclerView;
 	private Adapter adapter;
 	private ArrayList<TeamEventMatches> teamEventMatches = new ArrayList<>();
+	private String teamNumber;
 	TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
 
 	public static TeamScheduleFragment newInstance() {
@@ -52,6 +54,9 @@ public class TeamScheduleFragment extends Fragment {
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		teamNumber = prefs.getString("teamNumber", "0000");
+
 		refresh();
 
 		return view;
@@ -71,7 +76,7 @@ public class TeamScheduleFragment extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			teamEventMatchesParsers.fetchJSON();
+			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, "ncre");
 			while (teamEventMatchesParsers.parsingComplete) ;
 
 			teamEventMatches.clear();
@@ -81,7 +86,6 @@ public class TeamScheduleFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Log.i(TAG, "Test: " + teamEventMatches.size());
 			adapter.notifyDataSetChanged();
 			mSwipeRefreshLayout.setRefreshing(false);
 		}

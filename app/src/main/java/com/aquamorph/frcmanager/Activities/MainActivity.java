@@ -2,6 +2,7 @@ package com.aquamorph.frcmanager.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
@@ -11,11 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener {
 
+
+	private String TAG = "MainActivity";
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
 	public String teamNumber = "0000";
@@ -26,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		teamNumber = prefs.getString("teamNumber","0000");
+		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
+		teamNumber = prefs.getString("teamNumber", "0000");
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		toolbar.setSubtitle("NC Regional (" + teamNumber + ")");
 		setSupportActionBar(toolbar);
+		toolbar.setSubtitle("NC Regional (" + teamNumber + ")");
+
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -71,5 +76,17 @@ public class MainActivity extends AppCompatActivity {
 	public void openSettings() {
 		Intent intent = new Intent(this, Settings.class);
 		startActivity(intent);
+	}
+
+	public String getTeamNumber() {
+		return "frc" + teamNumber;
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		teamNumber = sharedPreferences.getString("teamNumber", "0000");
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setSubtitle("NC Regional (" + teamNumber + ")");
+		}
 	}
 }
