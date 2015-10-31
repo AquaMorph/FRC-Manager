@@ -1,6 +1,7 @@
 package com.aquamorph.frcmanager.fragments;
 
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,7 +21,7 @@ import com.aquamorph.frcmanager.parsers.TeamEventMatchesParsers;
 
 import java.util.ArrayList;
 
-public class TeamScheduleFragment extends Fragment {
+public class TeamScheduleFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
 	private String TAG = "TeamScheduleFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -28,7 +29,6 @@ public class TeamScheduleFragment extends Fragment {
 	private Adapter adapter;
 	private ArrayList<TeamEventMatches> teamEventMatches = new ArrayList<>();
 	private String teamNumber;
-	TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
 
 	public static TeamScheduleFragment newInstance() {
 		TeamScheduleFragment fragment = new TeamScheduleFragment();
@@ -55,6 +55,7 @@ public class TeamScheduleFragment extends Fragment {
 		recyclerView.setLayoutManager(llm);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
 		teamNumber = prefs.getString("teamNumber", "0000");
 
 		refresh();
@@ -67,6 +68,12 @@ public class TeamScheduleFragment extends Fragment {
 		loadTeamSchedule.execute();
 	}
 
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		teamNumber = sharedPreferences.getString("teamNumber", "0000");
+		refresh();
+	}
+
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
 
 		@Override
@@ -76,9 +83,9 @@ public class TeamScheduleFragment extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
+			TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
 			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, "ncre");
 			while (teamEventMatchesParsers.parsingComplete) ;
-
 			teamEventMatches.clear();
 			teamEventMatches.addAll(teamEventMatchesParsers.getTeamEventMatches());
 			return null;
