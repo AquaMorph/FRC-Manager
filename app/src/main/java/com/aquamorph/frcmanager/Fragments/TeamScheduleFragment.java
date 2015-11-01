@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
-import com.aquamorph.frcmanager.models.TeamEventMatches;
+import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.parsers.TeamEventMatchesParsers;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private Adapter adapter;
-	private ArrayList<TeamEventMatches> teamEventMatches = new ArrayList<>();
+	private ArrayList<Match> teamEventMatches = new ArrayList<>();
 	private String teamNumber;
 
 	public static TeamScheduleFragment newInstance() {

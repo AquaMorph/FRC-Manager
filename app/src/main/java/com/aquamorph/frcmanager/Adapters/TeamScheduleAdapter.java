@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.models.TeamEventMatches;
+import com.aquamorph.frcmanager.models.Match;
 
 import java.util.ArrayList;
 
@@ -19,9 +19,9 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 	private String TAG = "TeamScheduleAdapter";
 	private LayoutInflater inflater;
 	private Context context;
-	private ArrayList<TeamEventMatches> data;
+	private ArrayList<Match> data;
 
-	public TeamScheduleAdapter(Context context, ArrayList<TeamEventMatches> data) {
+	public TeamScheduleAdapter(Context context, ArrayList<Match> data) {
 		inflater = from(context);
 		this.data = data;
 		this.context = context;

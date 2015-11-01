@@ -10,14 +10,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class TeamEventMatchesParsers {
-
-	public String TAG = "TeamEventMatchesParsers";
+public class EventMatchesParsers {
+	public String TAG = "EventMatchesParsers";
 	public volatile boolean parsingComplete = true;
-	private Match[] teamEventMatches;
+	private Match[] eventMatches;
 	private ArrayList<Match> teamArray = new ArrayList<>();
 
-	public void fetchJSON(final String team, final String event) {
+	public void fetchJSON(final String event) {
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -25,9 +24,9 @@ public class TeamEventMatchesParsers {
 					Gson gson = new Gson();
 					BlueAlliance blueAlliance = new BlueAlliance();
 					BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
-							.connect(Constants.getEventTeamMatches(team, event))));
-					teamEventMatches = gson.fromJson(reader, Match[].class);
-					teamArray = new ArrayList<>(Arrays.asList(teamEventMatches));
+							.connect(Constants.getEventMatches(event))));
+					eventMatches = gson.fromJson(reader, Match[].class);
+					teamArray = new ArrayList<>(Arrays.asList(eventMatches));
 					blueAlliance.close();
 					parsingComplete = false;
 				} catch (Exception e) {
@@ -38,7 +37,7 @@ public class TeamEventMatchesParsers {
 		thread.start();
 	}
 
-	public ArrayList<Match> getTeamEventMatches() {
+	public ArrayList<Match> getEventMatches() {
 		return teamArray;
 	}
 }

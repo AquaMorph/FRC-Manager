@@ -8,15 +8,15 @@ public class Constants {
 	public static final String TBA_HEADER = "X-TBA-App-Id";
 
 	public static String getEventURL(String team) {
-		return URL + "team/frc" + team + "/" + YEAR + "/events" + getURLParameter();
+		return URL + "team/" + team + "/" + YEAR + "/events";
 	}
 
 	public static String getEventTeamMatches(String team, String event) {
-		return URL + "team/" + team + "/event/" + YEAR + event + "/matches";
+		return String.format("%steam/%s/event/%s%s/matches", URL, team, YEAR, event);
 	}
 
 	public static String getEventMatches(String event) {
-		return URL + "/event/" + YEAR + event + "/matches";
+		return String.format("%sevent/%s%s/matches", URL, YEAR, event);
 	}
 
 	public static String getEventStats(String event) {
@@ -35,7 +35,4 @@ public class Constants {
 		return API_HEADER;
 	}
 
-	public static String getURLParameter() {
-		return "?" + TBA_HEADER + "=" + API_HEADER;
-	}
 }

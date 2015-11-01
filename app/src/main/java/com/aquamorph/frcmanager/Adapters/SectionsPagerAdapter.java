@@ -25,15 +25,15 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 			case 0:
 				return TeamScheduleFragment.newInstance();
 			case 1:
-				return TeamScheduleFragment.newInstance();
+				return EventScheduleFragment.newInstance();
 			case 2:
-				return EventScheduleFragment.newInstance(3);
+				return EventScheduleFragment.newInstance();
 			case 3:
-				return EventScheduleFragment.newInstance(4);
+				return EventScheduleFragment.newInstance();
 			case 4:
-				return EventScheduleFragment.newInstance(5);
+				return EventScheduleFragment.newInstance();
 			default:
-				return EventScheduleFragment.newInstance(6);
+				return EventScheduleFragment.newInstance();
 		}
 	}
 
