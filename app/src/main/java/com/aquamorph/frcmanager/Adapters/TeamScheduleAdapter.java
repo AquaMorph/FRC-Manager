@@ -36,7 +36,7 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
-		holder.matchNumber.setText(String.format("%s-%s",data.get(position).comp_level,data.get(position).match_number));
+		holder.matchNumber.setText(String.format("%S-%s",data.get(position).comp_level,data.get(position).match_number));
 		holder.redTeam1.setText(ParseTeamNumber(true,0,position));
 		holder.redTeam2.setText(ParseTeamNumber(true,1,position));
 		holder.redTeam3.setText(ParseTeamNumber(true,2,position));
