@@ -43,7 +43,7 @@ public class RankFragment  extends Fragment {
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-//		adapter = new TeamScheduleAdapter(getContext(), ranks);
+//		adapter = new RankFragment(getContext(), ranks);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);

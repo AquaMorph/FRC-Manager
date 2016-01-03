@@ -70,9 +70,17 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		if (id == R.id.action_settings) {
 			openSettings();
 			return true;
+		} if (id == R.id.action_setup) {
+			openSetup();
+			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void openSetup() {
+		Intent intent = new Intent(this, Setup.class);
+		startActivity(intent);
 	}
 
 	public void openSettings() {
