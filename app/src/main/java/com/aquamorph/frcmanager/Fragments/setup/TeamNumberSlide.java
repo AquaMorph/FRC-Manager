@@ -19,7 +19,7 @@ public class TeamNumberSlide extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.slide2, container, false);
+		View view = inflater.inflate(R.layout.team_number_slide, container, false);
 
 		teamNumber = (EditText) view.findViewById(R.id.teamNumberEditText);
 		return view;

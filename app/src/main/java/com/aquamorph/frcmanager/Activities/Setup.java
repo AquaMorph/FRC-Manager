@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.fragments.setup.EventSlide;
 import com.aquamorph.frcmanager.fragments.setup.FirstSlide;
 import com.aquamorph.frcmanager.fragments.setup.TeamNumberSlide;
 import com.github.paolorotolo.appintro.AppIntro;
@@ -13,6 +14,7 @@ public class Setup extends AppIntro {
 
 	private String TAG = "Setup";
 	private TeamNumberSlide teamNumberSlide;
+	private EventSlide eventSlide;
 
 	// Please DO NOT override onCreate. Use init.
 	@Override
@@ -20,12 +22,13 @@ public class Setup extends AppIntro {
 		getSupportActionBar().hide();
 
 		teamNumberSlide = new TeamNumberSlide();
+		eventSlide = new EventSlide();
 
 		// Add your slide's fragments here.
 		// AppIntro will automatically generate the dots indicator and buttons.
-		addSlide(FirstSlide.newInstance(R.layout.slide1));
+		addSlide(FirstSlide.newInstance(R.layout.first_slide));
 		addSlide(teamNumberSlide);
-		addSlide(FirstSlide.newInstance(R.layout.slide1));
+		addSlide(eventSlide);
 
 //		secondSlide.getTeamNum
 
