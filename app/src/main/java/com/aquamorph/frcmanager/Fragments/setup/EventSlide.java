@@ -9,10 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.adapters.EventSpinnerAdapter;
 import com.aquamorph.frcmanager.models.Events;
 import com.aquamorph.frcmanager.parsers.EventParsers;
 
@@ -22,7 +23,7 @@ public class EventSlide extends Fragment {
 
 	String TAG = "EventSlide";
 	Spinner eventSpinnder;
-	private ArrayAdapter dataAdapter;
+	private EventSpinnerAdapter dataAdapter;
 	ArrayList<Events> eventList = new ArrayList<>();
 	ArrayList<String> eventListString = new ArrayList<>();
 	private String teamNumber;
@@ -34,15 +35,13 @@ public class EventSlide extends Fragment {
 		View view = inflater.inflate(R.layout.event_slide, container, false);
 
 		eventSpinnder = (Spinner) view.findViewById(R.id.event_spinner);
-		dataAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item,
-				eventListString);
-		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		dataAdapter = new EventSpinnerAdapter(eventList, getActivity());
 		eventSpinnder.setAdapter(dataAdapter);
+		eventSpinnder.setOnItemSelectedListener(new EventSpinnerListener());
 		return view;
 	}
 
 	public void load() {
-		Log.i(TAG, "load is running");
 		final LoadTeamEvents loadTeamEvents = new LoadTeamEvents();
 		loadTeamEvents.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
@@ -57,7 +56,6 @@ public class EventSlide extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			Log.i(TAG, "doInBackground is running");
 			EventParsers eventParsers = new EventParsers();
 			eventParsers.fetchJSON("frc" + teamNumber);
 			while (eventParsers.parsingComplete) ;
@@ -77,4 +75,44 @@ public class EventSlide extends Fragment {
 			dataAdapter.notifyDataSetChanged();
 		}
 	}
+
+	/**
+	 * setEventKey set the shared variable of the event key.
+	 *
+	 * @param key identification key of an event
+	 */
+	public void setEventKey(String key) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString("eventKey", key);
+		editor.commit();
+	}
+
+	/**
+	 * setEventShortName set the shared variable of the events name.
+	 *
+	 * @param name event name
+	 */
+	public void setEventShortName(String name) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString("eventShortName", name);
+		editor.commit();
+	}
+
+	private class EventSpinnerListener implements android.widget.AdapterView.OnItemSelectedListener {
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+			Log.i(TAG, "Key:" + eventList.get(position).key);
+			setEventKey(eventList.get(position).key);
+			Log.i(TAG, "Short Name:" + eventList.get(position).short_name);
+			setEventShortName(eventList.get(position).short_name);
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+
+		}
+	}
+
 }

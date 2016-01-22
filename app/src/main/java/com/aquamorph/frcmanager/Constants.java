@@ -31,7 +31,7 @@ public class Constants {
 	 * @return url to team matches for an event
 	 */
 	public static String getEventTeamMatches(String team, String event) {
-		return String.format("%steam/%s/event/%s%s/matches", URL, team, YEAR, event);
+		return String.format("%steam/%s/event/%s/matches", URL, team, event);
 	}
 
 	/**

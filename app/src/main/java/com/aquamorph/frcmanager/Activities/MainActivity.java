@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	private String TAG = "MainActivity";
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
-	public String teamNumber = "0000";
+	public String teamNumber, eventName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
 		teamNumber = prefs.getString("teamNumber", "0000");
+		eventName = prefs.getString("eventShortName", "North Carolina");
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -93,12 +94,13 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	}
 
 	public String getSubTitle() {
-		return String.format("North Carolina Regional (%s)", teamNumber);
+		return String.format("%s (%s)", eventName, teamNumber);
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		teamNumber = sharedPreferences.getString("teamNumber", "0000");
+		eventName = sharedPreferences.getString("eventShortName", "North Carolina");
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setSubtitle(getSubTitle());
 		}

@@ -10,7 +10,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private RecyclerView recyclerView;
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
-	private String teamNumber;
+	private String teamNumber, eventKey;
 
 	public static TeamScheduleFragment newInstance() {
 		TeamScheduleFragment fragment = new TeamScheduleFragment();
@@ -60,6 +59,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
 		teamNumber = prefs.getString("teamNumber", "0000");
+		eventKey = prefs.getString("eventKey", "ncre");
 
 		refresh();
 
@@ -74,7 +74,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		teamNumber = sharedPreferences.getString("teamNumber", "0000");
-		Log.i(TAG, "Team Number Updated");
+		eventKey = sharedPreferences.getString("eventKey", "ncre");
 		refresh();
 	}
 
@@ -88,7 +88,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		@Override
 		protected Void doInBackground(Void... params) {
 			TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
-			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, "ncre");
+			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, eventKey);
 			while (teamEventMatchesParsers.parsingComplete) ;
 			teamEventMatches.clear();
 			teamEventMatches.addAll(teamEventMatchesParsers.getTeamEventMatches());
