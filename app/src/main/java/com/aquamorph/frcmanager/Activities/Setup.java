@@ -70,7 +70,7 @@ public class Setup extends AppIntro {
 		if(teamNumberSlide != null) {
 			if (!teamNumberSlide.getTeamNumber().equals(null)) {
 				teamNumberSlide.setTeamNumber(teamNumberSlide.getTeamNumber());
-				Log.i(TAG, "Team Number changed");
+				eventSlide.load();
 			}
 		}
 	}
