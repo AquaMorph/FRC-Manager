@@ -58,7 +58,7 @@ public class EventScheduleFragment extends Fragment {
 
 	private void refresh() {
 		final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
-		loadTeamSchedule.execute();
+		loadTeamSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {

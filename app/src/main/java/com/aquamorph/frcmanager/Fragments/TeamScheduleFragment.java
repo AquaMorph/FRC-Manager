@@ -68,12 +68,13 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 	private void refresh() {
 		final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
-		loadTeamSchedule.execute();
+		loadTeamSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		teamNumber = sharedPreferences.getString("teamNumber", "0000");
+		Log.i(TAG, "Team Number Updated");
 		refresh();
 	}
 
