@@ -18,6 +18,7 @@ import com.aquamorph.frcmanager.models.Events;
 import com.aquamorph.frcmanager.parsers.EventParsers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class EventSlide extends Fragment {
 
@@ -25,7 +26,6 @@ public class EventSlide extends Fragment {
 	Spinner eventSpinnder;
 	private EventSpinnerAdapter dataAdapter;
 	ArrayList<Events> eventList = new ArrayList<>();
-	ArrayList<String> eventListString = new ArrayList<>();
 	private String teamNumber;
 
 
@@ -61,12 +61,7 @@ public class EventSlide extends Fragment {
 			while (eventParsers.parsingComplete) ;
 			eventList.clear();
 			eventList.addAll(eventParsers.getEvents());
-			eventListString.clear();
-			for (Events eventlist : eventList) {
-				if (eventlist.short_name != null) {
-					eventListString.add(eventlist.short_name);
-				}
-			}
+			Collections.sort(eventList);
 			return null;
 		}
 

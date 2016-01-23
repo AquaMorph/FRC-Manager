@@ -13,7 +13,7 @@ import com.aquamorph.frcmanager.models.Events;
 import java.util.ArrayList;
 
 /**
- * <p></p>
+ * Populates the spinner for the setup screen with a list of events a team is registered for.
  *
  * @author Christian Colglazier
  * @version 1/22/2016
