@@ -41,7 +41,7 @@ public class Constants {
 	 * @return url to matches at en event
 	 */
 	public static String getEventMatches(String event) {
-		return String.format("%sevent/%s%s/matches", URL, YEAR, event);
+		return String.format("%sevent/%s/matches", URL, event);
 	}
 
 	/**
