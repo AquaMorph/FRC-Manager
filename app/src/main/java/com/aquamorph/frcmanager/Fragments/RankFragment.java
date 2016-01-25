@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.models.Rank;
-import com.aquamorph.frcmanager.parsers.EventMatchesParsers;
+import com.aquamorph.frcmanager.adapters.RankAdapter;
+import com.aquamorph.frcmanager.parsers.RankParser;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class RankFragment  extends Fragment {
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Rank> ranks = new ArrayList<>();
+	private ArrayList<String[]> ranks = new ArrayList<>();
 
 	public static RankFragment newInstance() {
 		RankFragment fragment = new RankFragment();
@@ -43,7 +43,7 @@ public class RankFragment  extends Fragment {
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-//		adapter = new RankFragment(getContext(), ranks);
+		adapter = new RankAdapter(getContext(), ranks);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -68,11 +68,11 @@ public class RankFragment  extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			EventMatchesParsers eventMatchesParsers = new EventMatchesParsers();
-			eventMatchesParsers.fetchJSON("ncre");
-			while (eventMatchesParsers.parsingComplete) ;
+			RankParser rankParser = new RankParser();
+			rankParser.fetchJSON("2015ncre");
+			while (rankParser.parsingComplete) ;
 			ranks.clear();
-//			ranks.addAll(eventMatchesParsers.getEventMatches());
+			ranks.addAll(rankParser.getRankings());
 //			Collections.sort(ranks);
 			return null;
 		}

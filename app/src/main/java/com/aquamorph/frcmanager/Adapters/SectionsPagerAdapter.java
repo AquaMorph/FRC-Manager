@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
 import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
+import com.aquamorph.frcmanager.fragments.RankFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -27,7 +28,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 			case 1:
 				return EventScheduleFragment.newInstance();
 			case 2:
-				return EventScheduleFragment.newInstance();
+				return RankFragment.newInstance();
 			case 3:
 				return EventScheduleFragment.newInstance();
 			case 4:
