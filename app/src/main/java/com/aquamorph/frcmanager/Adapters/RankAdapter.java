@@ -24,7 +24,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 	 * RankAdapter constructor
 	 *
 	 * @param context context of the fragment
-	 * @param data ranking data in an array
+	 * @param data    ranking data in an array
 	 */
 	public RankAdapter(Context context, ArrayList<String[]> data) {
 		inflater = from(context);
@@ -41,15 +41,15 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
-		holder.teamNumber.setText(data.get(position)[0]);
+		holder.teamNumber.setText(data.get(position + 1)[0]);
 		holder.teamName.setText("Team Robobotics");
-		holder.rankNumber.setText(data.get(position)[1]);
-		holder.details.setText(data.get(position)[2]);
+		holder.rankNumber.setText(data.get(position + 1)[1]);
+		holder.details.setText(data.get(position + 1)[2]);
 	}
 
 	@Override
 	public int getItemCount() {
-		return data.size();
+		return data.size() - 1;
 	}
 
 	public class MyViewHolder extends RecyclerView.ViewHolder {
