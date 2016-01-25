@@ -15,7 +15,7 @@ import static android.view.LayoutInflater.from;
 
 public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> {
 
-	private String TAG = "RankAdapter";
+	private String TAG = "RankAdapter", info;
 	private LayoutInflater inflater;
 	private Context context;
 	private ArrayList<String[]> data;
@@ -41,10 +41,14 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
+		info = "";
+		for (int i = 2; i < data.get(position).length; i++) {
+			info += data.get(0)[i] + ": " + data.get(position + 1)[i] + " ";
+		}
 		holder.teamNumber.setText(data.get(position + 1)[0]);
 		holder.teamName.setText("Team Robobotics");
 		holder.rankNumber.setText(data.get(position + 1)[1]);
-		holder.details.setText(data.get(position + 1)[2]);
+		holder.details.setText(info);
 	}
 
 	@Override
