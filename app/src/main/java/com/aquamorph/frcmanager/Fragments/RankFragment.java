@@ -1,7 +1,9 @@
 package com.aquamorph.frcmanager.fragments;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,13 +18,14 @@ import com.aquamorph.frcmanager.parsers.RankParser;
 
 import java.util.ArrayList;
 
-public class RankFragment  extends Fragment {
+public class RankFragment  extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private String TAG = "RankFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<String[]> ranks = new ArrayList<>();
+	private String eventKey;
 
 	public static RankFragment newInstance() {
 		RankFragment fragment = new RankFragment();
@@ -49,6 +52,10 @@ public class RankFragment  extends Fragment {
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs.registerOnSharedPreferenceChangeListener(RankFragment.this);
+		eventKey = prefs.getString("eventKey", "2016ncre");
+
 		refresh();
 
 		return view;
@@ -57,6 +64,12 @@ public class RankFragment  extends Fragment {
 	private void refresh() {
 		final LaodRanks laodRanks = new LaodRanks();
 		laodRanks.execute();
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		eventKey = sharedPreferences.getString("eventKey", "2016ncre");
+		refresh();
 	}
 
 	class LaodRanks extends AsyncTask<Void, Void, Void> {
@@ -69,7 +82,7 @@ public class RankFragment  extends Fragment {
 		@Override
 		protected Void doInBackground(Void... params) {
 			RankParser rankParser = new RankParser();
-			rankParser.fetchJSON("2015ncre");
+			rankParser.fetchJSON(eventKey);
 			while (rankParser.parsingComplete) ;
 			ranks.clear();
 			ranks.addAll(rankParser.getRankings());
