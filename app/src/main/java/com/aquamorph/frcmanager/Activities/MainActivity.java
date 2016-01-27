@@ -15,6 +15,9 @@ import android.view.MenuItem;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener {
 
 
@@ -27,6 +30,14 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		//Load ads
+		AdView mAdView = (AdView) findViewById(R.id.adView);
+		AdRequest adRequest = new AdRequest.Builder()
+				.addTestDevice(getResources().getString(R.string.nexus_5_test_id))
+				.addTestDevice(getResources().getString(R.string.moto_g_test_id))
+				.build();
+		mAdView.loadAd(adRequest);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
