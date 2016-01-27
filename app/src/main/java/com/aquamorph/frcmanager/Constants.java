@@ -69,7 +69,7 @@ public class Constants {
 	 * @return url to event awards
 	 */
 	public static String getEventAwards(String event) {
-		return URL + "event/" + YEAR + event + "/awards";
+		return String.format("%sevent/%s/awards", URL, event);
 	}
 
 	/**

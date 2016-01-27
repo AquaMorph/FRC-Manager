@@ -8,27 +8,34 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.adapters.RankAdapter;
-import com.aquamorph.frcmanager.parsers.RankParser;
+import com.aquamorph.frcmanager.adapters.AwardAdapter;
+import com.aquamorph.frcmanager.models.Award;
+import com.aquamorph.frcmanager.parsers.AwardParser;
 
 import java.util.ArrayList;
 
-public class RankFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-	private String TAG = "RankFragment";
-	private SwipeRefreshLayout mSwipeRefreshLayout;
+/**
+ * Displays a list of awards at a event
+ *
+ * @author Christian Colglazier
+ * @version 1/26/2016
+ */
+public class AwardFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+	private String TAG = "AwardFragment";
+	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<String[]> ranks = new ArrayList<>();
+	private ArrayList<Award> awards = new ArrayList<>();
 	private String eventKey;
 
-	public static RankFragment newInstance() {
-		RankFragment fragment = new RankFragment();
+	public static AwardFragment newInstance() {
+		AwardFragment fragment = new AwardFragment();
 		return fragment;
 	}
 
@@ -36,9 +43,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
-		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
-		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+		swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+		swipeRefreshLayout.setColorSchemeResources(R.color.accent);
+		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
 				refresh();
@@ -46,24 +53,23 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-		adapter = new RankAdapter(getContext(), ranks);
+		adapter = new AwardAdapter(getContext(), awards);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(RankFragment.this);
+		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 		eventKey = prefs.getString("eventKey", "2016ncre");
 
 		refresh();
-
 		return view;
 	}
 
 	private void refresh() {
-		final LaodRanks laodRanks = new LaodRanks();
-		laodRanks.execute();
+		final LoadAwards loadAwards = new LoadAwards();
+		loadAwards.execute();
 	}
 
 	@Override
@@ -72,28 +78,28 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		refresh();
 	}
 
-	class LaodRanks extends AsyncTask<Void, Void, Void> {
+	class LoadAwards extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected void onPreExecute() {
-			mSwipeRefreshLayout.setRefreshing(true);
+			swipeRefreshLayout.setRefreshing(true);
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			RankParser rankParser = new RankParser();
-			rankParser.fetchJSON(eventKey);
-			while (rankParser.parsingComplete) ;
-			ranks.clear();
-			ranks.addAll(rankParser.getRankings());
-//			Collections.sort(ranks);
+			AwardParser awardParser = new AwardParser();
+			awardParser.fetchJSON(eventKey);
+			while (awardParser.parsingComplete) ;
+			awards.clear();
+			awards.addAll(awardParser.getAwards());
+			Log.i(TAG, "Award: " + awards.size());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			adapter.notifyDataSetChanged();
-			mSwipeRefreshLayout.setRefreshing(false);
+			swipeRefreshLayout.setRefreshing(false);
 		}
 	}
 }

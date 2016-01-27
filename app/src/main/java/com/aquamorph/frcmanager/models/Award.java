@@ -11,7 +11,7 @@ public class Award {
 	public String event_key;
 	public int award_type;
 	public String name;
-	public RecipientList recipient_list;
+	public RecipientList[] recipient_list;
 	public String year;
 
 	public class RecipientList {
