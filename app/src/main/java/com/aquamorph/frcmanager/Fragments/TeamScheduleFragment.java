@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,8 +59,8 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
-		teamNumber = prefs.getString("teamNumber", "0000");
-		eventKey = prefs.getString("eventKey", "ncre");
+		teamNumber = prefs.getString("teamNumber", "");
+		eventKey = prefs.getString("eventKey", "");
 
 		refresh();
 
@@ -67,14 +68,18 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	}
 
 	private void refresh() {
-		final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
-		loadTeamSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		if (!teamNumber.equals("") && !eventKey.equals("")) {
+			final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
+			loadTeamSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		} else {
+			Log.i(TAG, "Not set");
+		}
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		teamNumber = sharedPreferences.getString("teamNumber", "0000");
-		eventKey = sharedPreferences.getString("eventKey", "ncre");
+		teamNumber = sharedPreferences.getString("teamNumber", "");
+		eventKey = sharedPreferences.getString("eventKey", "");
 		refresh();
 	}
 

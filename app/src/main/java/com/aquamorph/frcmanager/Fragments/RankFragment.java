@@ -54,7 +54,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(RankFragment.this);
-		eventKey = prefs.getString("eventKey", "2016ncre");
+		eventKey = prefs.getString("eventKey", "");
 
 		refresh();
 
@@ -62,13 +62,15 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	}
 
 	private void refresh() {
-		final LaodRanks laodRanks = new LaodRanks();
-		laodRanks.execute();
+		if (!eventKey.equals("")) {
+			final LaodRanks laodRanks = new LaodRanks();
+			laodRanks.execute();
+		}
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		eventKey = sharedPreferences.getString("eventKey", "2016ncre");
+		eventKey = sharedPreferences.getString("eventKey", "");
 		refresh();
 	}
 
@@ -81,6 +83,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected Void doInBackground(Void... params) {
+
 			RankParser rankParser = new RankParser();
 			rankParser.fetchJSON(eventKey);
 			while (rankParser.parsingComplete) ;

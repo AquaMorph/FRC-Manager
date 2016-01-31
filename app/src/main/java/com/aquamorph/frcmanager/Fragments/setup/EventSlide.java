@@ -44,6 +44,7 @@ public class EventSlide extends Fragment {
 	public void load() {
 		final LoadTeamEvents loadTeamEvents = new LoadTeamEvents();
 		loadTeamEvents.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//		loadTeamEvents.execute();
 	}
 
 	class LoadTeamEvents extends AsyncTask<Void, Void, Void> {
@@ -51,17 +52,20 @@ public class EventSlide extends Fragment {
 		@Override
 		protected void onPreExecute() {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-			teamNumber = prefs.getString("teamNumber", "0000");
+			teamNumber = prefs.getString("teamNumber", "");
+			Log.i(TAG, "Team Number: " + teamNumber);
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
+			Log.i(TAG, "Event size: " + eventList.size());
 			EventParsers eventParsers = new EventParsers();
 			eventParsers.fetchJSON("frc" + teamNumber);
 			while (eventParsers.parsingComplete) ;
 			eventList.clear();
 			eventList.addAll(eventParsers.getEvents());
 			Collections.sort(eventList);
+			Log.i(TAG, "Event size: " + eventList.size());
 			return null;
 		}
 

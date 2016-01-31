@@ -19,25 +19,19 @@ public class EventParsers {
 	private ArrayList<Events> eventArray = new ArrayList<>();
 
 	public void fetchJSON(final String number) {
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Gson gson = new Gson();
-					BlueAlliance blueAlliance = new BlueAlliance();
-					BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
-							.connect(Constants.getEventURL(number))));
-					events = gson.fromJson(reader, Events[].class);
-					eventArray = new ArrayList<>(Arrays.asList(events));
-					blueAlliance.close();
-					Log.i(TAG, "URL: " + Constants.getEventURL(number));
-					parsingComplete = false;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		thread.start();
+		try {
+			Gson gson = new Gson();
+			BlueAlliance blueAlliance = new BlueAlliance();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
+					.connect(Constants.getEventURL(number))));
+			events = gson.fromJson(reader, Events[].class);
+			eventArray = new ArrayList<>(Arrays.asList(events));
+			blueAlliance.close();
+			Log.i(TAG, "URL: " + Constants.getEventURL(number));
+			parsingComplete = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public ArrayList<Events> getEvents() {

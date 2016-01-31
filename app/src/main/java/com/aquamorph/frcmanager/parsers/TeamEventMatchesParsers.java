@@ -18,24 +18,18 @@ public class TeamEventMatchesParsers {
 	private ArrayList<Match> teamArray = new ArrayList<>();
 
 	public void fetchJSON(final String team, final String event) {
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Gson gson = new Gson();
-					BlueAlliance blueAlliance = new BlueAlliance();
-					BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
-							.connect(Constants.getEventTeamMatches(team, event))));
-					teamEventMatches = gson.fromJson(reader, Match[].class);
-					teamArray = new ArrayList<>(Arrays.asList(teamEventMatches));
-					blueAlliance.close();
-					parsingComplete = false;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		thread.start();
+		try {
+			Gson gson = new Gson();
+			BlueAlliance blueAlliance = new BlueAlliance();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
+					.connect(Constants.getEventTeamMatches(team, event))));
+			teamEventMatches = gson.fromJson(reader, Match[].class);
+			teamArray = new ArrayList<>(Arrays.asList(teamEventMatches));
+			blueAlliance.close();
+			parsingComplete = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public ArrayList<Match> getTeamEventMatches() {

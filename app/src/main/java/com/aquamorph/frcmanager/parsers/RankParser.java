@@ -17,24 +17,18 @@ public class RankParser {
 	private ArrayList<String[]> rankArray = new ArrayList<>();
 
 	public void fetchJSON(final String event) {
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Gson gson = new Gson();
-					BlueAlliance blueAlliance = new BlueAlliance();
-					BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
-							.connect(Constants.getEventRanks(event))));
-					ranks = gson.fromJson(reader, String[][].class);
-					rankArray = new ArrayList<>(Arrays.asList(ranks));
-					blueAlliance.close();
-					parsingComplete = false;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		thread.start();
+		try {
+			Gson gson = new Gson();
+			BlueAlliance blueAlliance = new BlueAlliance();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
+					.connect(Constants.getEventRanks(event))));
+			ranks = gson.fromJson(reader, String[][].class);
+			rankArray = new ArrayList<>(Arrays.asList(ranks));
+			blueAlliance.close();
+			parsingComplete = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public ArrayList<String[]> getRankings() {

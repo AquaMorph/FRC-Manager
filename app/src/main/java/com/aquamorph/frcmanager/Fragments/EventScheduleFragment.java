@@ -61,7 +61,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(EventScheduleFragment.this);
-		eventKey = prefs.getString("eventKey", "ncre");
+		eventKey = prefs.getString("eventKey", "");
 
 		refresh();
 
@@ -72,13 +72,15 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	 * refresh reloads the event schedule and repopulates the listview
 	 */
 	private void refresh() {
-		final LoadEventSchedule loadEventSchedule = new LoadEventSchedule();
-		loadEventSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		if (!eventKey.equals("")) {
+			final LoadEventSchedule loadEventSchedule = new LoadEventSchedule();
+			loadEventSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		}
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		eventKey = sharedPreferences.getString("eventKey", "ncre");
+		eventKey = sharedPreferences.getString("eventKey", "");
 		refresh();
 	}
 
@@ -94,6 +96,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 		@Override
 		protected Void doInBackground(Void... params) {
+
 			EventMatchesParsers eventMatchesParsers = new EventMatchesParsers();
 			eventMatchesParsers.fetchJSON(eventKey);
 			while (eventMatchesParsers.parsingComplete) ;

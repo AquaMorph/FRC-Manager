@@ -34,8 +34,10 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
-		teamNumber = prefs.getString("teamNumber", "0000");
-		eventName = prefs.getString("eventShortName", "North Carolina");
+		teamNumber = prefs.getString("teamNumber", "");
+		eventName = prefs.getString("eventShortName", "");
+
+		if (teamNumber.equals("")) openSetup();
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -58,12 +60,13 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		//Load ads
 		AdView mAdView = (AdView) findViewById(R.id.adView);
-		if(paidUser) {
+		if (paidUser) {
 			mAdView.setVisibility(View.GONE);
 		} else {
 			AdRequest adRequest = new AdRequest.Builder()
 					.addTestDevice(getResources().getString(R.string.nexus_5_test_id))
 					.addTestDevice(getResources().getString(R.string.moto_g_test_id))
+					.addTestDevice(getResources().getString(R.string.neux_6p_test_id))
 					.build();
 			mAdView.loadAd(adRequest);
 		}
@@ -88,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		if (id == R.id.action_settings) {
 			openSettings();
 			return true;
-		} if (id == R.id.action_setup) {
+		}
+		if (id == R.id.action_setup) {
 			openSetup();
 			return true;
 		}

@@ -61,20 +61,23 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
-		eventKey = prefs.getString("eventKey", "2016ncre");
+		eventKey = prefs.getString("eventKey", "");
 
 		refresh();
 		return view;
 	}
 
 	private void refresh() {
-		final LoadAwards loadAwards = new LoadAwards();
-		loadAwards.execute();
+		if (!eventKey.equals("")) {
+			final LoadAwards loadAwards = new LoadAwards();
+			loadAwards.execute();
+		}
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		eventKey = sharedPreferences.getString("eventKey", "2016ncre");
+
+		eventKey = sharedPreferences.getString("eventKey", "");
 		refresh();
 	}
 
