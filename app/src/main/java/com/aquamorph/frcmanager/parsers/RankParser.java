@@ -35,7 +35,7 @@ public class RankParser {
 						getLastModified(context));
 
 				//Checks for change in data
-				if (blueAlliance.getStatus() == 200 || getData(context).length == 0) {
+				if (blueAlliance.getStatus() == 200 || getData(context) == null) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					ranks = gson.fromJson(reader, String[][].class);
 					setLastModified(context, blueAlliance.getLastUpdated());

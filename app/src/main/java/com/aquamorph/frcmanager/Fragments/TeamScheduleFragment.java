@@ -33,6 +33,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
 	private String teamNumber, eventKey;
+	private TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
 
 	public static TeamScheduleFragment newInstance() {
 		TeamScheduleFragment fragment = new TeamScheduleFragment();
@@ -80,14 +81,15 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		teamNumber = sharedPreferences.getString("teamNumber", "");
-		eventKey = sharedPreferences.getString("eventKey", "");
-		refresh();
+		if (key.equals("teamNumber") || key.equals("eventKey")) {
+			teamNumber = sharedPreferences.getString("teamNumber", "");
+			eventKey = sharedPreferences.getString("eventKey", "");
+			teamEventMatchesParsers.storeData(getContext(), "");
+			refresh();
+		}
 	}
 
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
-
-		TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
 
 		@Override
 		protected void onPreExecute() {
@@ -106,7 +108,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if(!teamEventMatchesParsers.online) {
+			if (!teamEventMatchesParsers.online) {
 				Toast.makeText(getContext(), Constants.NOT_ONLINE_MESSAGE, Toast.LENGTH_SHORT).show();
 			}
 			adapter.notifyDataSetChanged();

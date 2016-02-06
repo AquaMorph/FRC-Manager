@@ -76,9 +76,10 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-		eventKey = sharedPreferences.getString("eventKey", "");
-		refresh();
+		if (key.equals("eventKey")) {
+			eventKey = sharedPreferences.getString("eventKey", "");
+			refresh();
+		}
 	}
 
 	class LoadAwards extends AsyncTask<Void, Void, Void> {
@@ -91,7 +92,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		@Override
 		protected Void doInBackground(Void... params) {
 			AwardParser awardParser = new AwardParser();
-			awardParser.fetchJSON(eventKey);
+			awardParser.fetchJSON(eventKey, getContext());
 			while (awardParser.parsingComplete) ;
 			awards.clear();
 			awards.addAll(awardParser.getAwards());

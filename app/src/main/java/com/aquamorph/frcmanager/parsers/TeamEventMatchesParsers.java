@@ -25,20 +25,21 @@ public class TeamEventMatchesParsers {
 	public Boolean online;
 	Gson gson = new Gson();
 
-
 	public void fetchJSON(final String team, final String event, final Context context) {
 		try {
+			Log.d(TAG, "Loading");
 			online = Constants.isNetworkAvailable(context);
 
 			//Checks for internet connection
 			if (online) {
+				Log.d(TAG, "Online");
 				BlueAlliance blueAlliance = new BlueAlliance();
 				InputStream stream = blueAlliance.connect(Constants.getEventTeamMatches(team, event),
 						getLastModified(context));
 
 				//Checks for change in data
-				if (blueAlliance.getStatus() == 200) {
-					Log.d(TAG, "Loading from web");
+				if (blueAlliance.getStatus() == 200 ||  getData(context) == null) {
+					Log.d(TAG, "Loading new data");
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					teamEventMatches = gson.fromJson(reader, Match[].class);
 					storeLastModified(context, blueAlliance.getLastUpdated());

@@ -28,6 +28,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Match> eventMatches = new ArrayList<>();
 	private String eventKey;
+	private EventMatchesParsers eventMatchesParsers = new EventMatchesParsers();
 
 	/**
 	 * newInstance creates and returns a new EventScheduleFragment
@@ -80,8 +81,10 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		eventKey = sharedPreferences.getString("eventKey", "");
-		refresh();
+		if (key.equals("eventKey")) {
+			eventKey = sharedPreferences.getString("eventKey", "");
+			refresh();
+		}
 	}
 
 	/**
@@ -96,9 +99,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 		@Override
 		protected Void doInBackground(Void... params) {
-
-			EventMatchesParsers eventMatchesParsers = new EventMatchesParsers();
-			eventMatchesParsers.fetchJSON(eventKey);
+			eventMatchesParsers.fetchJSON(eventKey, getContext());
 			while (eventMatchesParsers.parsingComplete) ;
 			eventMatches.clear();
 			eventMatches.addAll(eventMatchesParsers.getEventMatches());

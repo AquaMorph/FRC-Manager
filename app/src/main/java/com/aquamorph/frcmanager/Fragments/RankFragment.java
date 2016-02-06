@@ -64,21 +64,21 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 	private void refresh() {
 		if (!eventKey.equals("")) {
-			final LaodRanks laodRanks = new LaodRanks();
-			laodRanks.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			final LoadRanks loadRanks = new LoadRanks();
+			loadRanks.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		eventKey = sharedPreferences.getString("eventKey", "");
-		rankParser.setData(getContext(), "");
-		refresh();
+		if (key.equals("eventKey")) {
+			eventKey = sharedPreferences.getString("eventKey", "");
+			rankParser.setData(getContext(), "");
+			refresh();
+		}
 	}
 
-	class LaodRanks extends AsyncTask<Void, Void, Void> {
-
-
+	class LoadRanks extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected void onPreExecute() {
