@@ -23,11 +23,11 @@ public class TeamEventMatchesParsers {
 	private Match[] teamEventMatches;
 	private ArrayList<Match> teamArray = new ArrayList<>();
 	public Boolean online;
+	Gson gson = new Gson();
 
 
 	public void fetchJSON(final String team, final String event, final Context context) {
 		try {
-			Gson gson = new Gson();
 			online = Constants.isNetworkAvailable(context);
 
 			//Checks for internet connection
@@ -44,9 +44,7 @@ public class TeamEventMatchesParsers {
 					storeLastModified(context, blueAlliance.getLastUpdated());
 					storeData(context, gson.toJson(teamEventMatches));
 					blueAlliance.close();
-				}
-
-				else {
+				} else {
 					teamEventMatches = getData(context);
 				}
 			} else {
@@ -64,7 +62,7 @@ public class TeamEventMatchesParsers {
 	}
 
 	/**
-	 * storeLastModified() stores the last modified date
+	 * setLastModified() stores the last modified date
 	 *
 	 * @param context
 	 * @param date
@@ -88,7 +86,7 @@ public class TeamEventMatchesParsers {
 	}
 
 	/**
-	 * storeData() stores the date to a json string
+	 * setData() stores the date to a json string
 	 *
 	 * @param context
 	 * @param data
@@ -107,9 +105,7 @@ public class TeamEventMatchesParsers {
 	 * @return
 	 */
 	public Match[] getData(Context context) {
-		Log.d(TAG, "Loading from save");
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		Gson gson = new Gson();
 		String json = prefs.getString("teamEventMatches", "");
 		return gson.fromJson(json, Match[].class);
 	}

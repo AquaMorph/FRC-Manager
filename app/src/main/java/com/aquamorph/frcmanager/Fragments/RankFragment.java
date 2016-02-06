@@ -20,12 +20,13 @@ import java.util.ArrayList;
 
 public class RankFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private String TAG = "RankFragment";
+	private static String TAG = "RankFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<String[]> ranks = new ArrayList<>();
 	private String eventKey;
+	RankParser rankParser = new RankParser();
 
 	public static RankFragment newInstance() {
 		RankFragment fragment = new RankFragment();
@@ -64,17 +65,20 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private void refresh() {
 		if (!eventKey.equals("")) {
 			final LaodRanks laodRanks = new LaodRanks();
-			laodRanks.execute();
+			laodRanks.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		eventKey = sharedPreferences.getString("eventKey", "");
+		rankParser.setData(getContext(), "");
 		refresh();
 	}
 
 	class LaodRanks extends AsyncTask<Void, Void, Void> {
+
+
 
 		@Override
 		protected void onPreExecute() {
@@ -83,9 +87,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected Void doInBackground(Void... params) {
-
-			RankParser rankParser = new RankParser();
-			rankParser.fetchJSON(eventKey);
+			rankParser.fetchJSON(eventKey, getContext());
 			while (rankParser.parsingComplete) ;
 			ranks.clear();
 			ranks.addAll(rankParser.getRankings());

@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
 	public String teamNumber, eventName;
-	public Boolean paidUser = false;
+	public Boolean paidUser = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
