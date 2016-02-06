@@ -21,7 +21,7 @@ public class RankParser {
 			Gson gson = new Gson();
 			BlueAlliance blueAlliance = new BlueAlliance();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
-					.connect(Constants.getEventRanks(event))));
+					.connect(Constants.getEventRanks(event), "")));
 			ranks = gson.fromJson(reader, String[][].class);
 			rankArray = new ArrayList<>(Arrays.asList(ranks));
 			blueAlliance.close();

@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
 import com.aquamorph.frcmanager.models.Match;
@@ -85,6 +87,8 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
 
+		TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
+
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
@@ -92,8 +96,8 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
-			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, eventKey);
+
+			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, eventKey, getContext());
 			while (teamEventMatchesParsers.parsingComplete) ;
 			teamEventMatches.clear();
 			teamEventMatches.addAll(teamEventMatchesParsers.getTeamEventMatches());
@@ -103,6 +107,9 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected void onPostExecute(Void result) {
+			if(!teamEventMatchesParsers.online) {
+				Toast.makeText(getContext(), Constants.NOT_ONLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+			}
 			adapter.notifyDataSetChanged();
 			mSwipeRefreshLayout.setRefreshing(false);
 		}

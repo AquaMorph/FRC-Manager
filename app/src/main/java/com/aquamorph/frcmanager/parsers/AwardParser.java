@@ -6,6 +6,7 @@ import com.aquamorph.frcmanager.network.BlueAlliance;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,9 +27,14 @@ public class AwardParser {
 		try {
 			Gson gson = new Gson();
 			BlueAlliance blueAlliance = new BlueAlliance();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
-					.connect(Constants.getEventAwards(event))));
-			awards = gson.fromJson(reader, Award[].class);
+			InputStream stream = blueAlliance.connect(Constants.getEventAwards(event), "");
+			if (blueAlliance.getStatus() != 304) {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+				awards = gson.fromJson(reader, Award[].class);
+
+			} else {
+
+			}
 			awardsList = new ArrayList<>(Arrays.asList(awards));
 			blueAlliance.close();
 			parsingComplete = false;

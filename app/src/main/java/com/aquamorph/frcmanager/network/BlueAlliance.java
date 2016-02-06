@@ -10,24 +10,26 @@ import java.net.URL;
 public class BlueAlliance {
 
 	HttpURLConnection conn;
+	public String lastUpdated = "";
+	public int status;
 
-	public InputStream connect(String address) {
+	public InputStream connect(String address, String updated) {
 
 		try {
 			URL url = new URL(address);
 			conn = (HttpURLConnection) url.openConnection();
-
 			conn.setReadTimeout(10000);
 			conn.setConnectTimeout(15000);
 			conn.setRequestMethod("GET");
 			conn.setDoInput(true);
 			conn.setRequestProperty(Constants.TBA_HEADER, Constants.API_HEADER);
+			conn.setRequestProperty("If-Modified-Since", updated);
 			conn.connect();
-
-
+			status = conn.getResponseCode();
+			if (status != 304) lastUpdated = conn.getHeaderField("last-modified");
 			return conn.getInputStream();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		return null;
@@ -39,5 +41,13 @@ public class BlueAlliance {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String getLastUpdated() {
+		return lastUpdated;
+	}
+
+	public int getStatus() {
+		return status;
 	}
 }

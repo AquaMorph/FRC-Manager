@@ -1,5 +1,9 @@
 package com.aquamorph.frcmanager;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 /**
  * A collection of constants needed to interact with the Blue Alliance.
  *
@@ -12,6 +16,7 @@ public class Constants {
 	public static final String API_HEADER = "christian_colglazier:frc_manager:dev";
 	public static final String YEAR = "2015";
 	public static final String TBA_HEADER = "X-TBA-App-Id";
+	public static final String NOT_ONLINE_MESSAGE = "No Connection";
 
 	/**
 	 * getEventURL returns the url for a list of events a team is registered.
@@ -79,5 +84,12 @@ public class Constants {
 	 */
 	public static String getApiHeader() {
 		return API_HEADER;
+	}
+
+	public static boolean isNetworkAvailable(Context context) {
+		ConnectivityManager connectivityManager
+				= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 }

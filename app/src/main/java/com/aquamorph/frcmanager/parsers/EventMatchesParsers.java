@@ -21,7 +21,7 @@ public class EventMatchesParsers {
 			Gson gson = new Gson();
 			BlueAlliance blueAlliance = new BlueAlliance();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
-					.connect(Constants.getEventMatches(event))));
+					.connect(Constants.getEventMatches(event), "")));
 			eventMatches = gson.fromJson(reader, Match[].class);
 			teamArray = new ArrayList<>(Arrays.asList(eventMatches));
 			blueAlliance.close();

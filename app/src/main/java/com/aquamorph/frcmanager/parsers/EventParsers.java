@@ -1,7 +1,5 @@
 package com.aquamorph.frcmanager.parsers;
 
-import android.util.Log;
-
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.models.Events;
 import com.aquamorph.frcmanager.network.BlueAlliance;
@@ -23,11 +21,10 @@ public class EventParsers {
 			Gson gson = new Gson();
 			BlueAlliance blueAlliance = new BlueAlliance();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
-					.connect(Constants.getEventURL(number))));
+					.connect(Constants.getEventURL(number), "")));
 			events = gson.fromJson(reader, Events[].class);
 			eventArray = new ArrayList<>(Arrays.asList(events));
 			blueAlliance.close();
-			Log.i(TAG, "URL: " + Constants.getEventURL(number));
 			parsingComplete = false;
 		} catch (Exception e) {
 			e.printStackTrace();
