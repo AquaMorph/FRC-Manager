@@ -156,8 +156,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/sample_team"
-                        android:textSize="@dimen/team_number_text"
-                        android:textStyle="bold"/>
+                        android:textSize="@dimen/team_number_text"/>
 
                 </TableRow>
 
@@ -176,8 +175,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/sample_team"
-                        android:textSize="@dimen/team_number_text"
-                        android:textStyle="bold"/>
+                        android:textSize="@dimen/team_number_text"/>
 
                 </TableRow>
 

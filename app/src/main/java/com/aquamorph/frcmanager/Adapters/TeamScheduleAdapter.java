@@ -1,6 +1,7 @@
 package com.aquamorph.frcmanager.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
+		holder.setIsRecyclable(false);
 		holder.matchNumber.setText(String.format("%S-%s", data.get(position).comp_level, data
 				.get(position).match_number));
 		holder.redTeam1.setText(ParseTeamNumber(true, 0, position));
@@ -48,6 +50,15 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 		holder.blueTeam1.setText(ParseTeamNumber(false, 0, position));
 		holder.blueTeam2.setText(ParseTeamNumber(false, 1, position));
 		holder.blueTeam3.setText(ParseTeamNumber(false, 2, position));
+
+		if (data.get(position).alliances.red.score == data.get(position).alliances.blue.score) {
+			holder.redScore.setTypeface(null, Typeface.BOLD);
+			holder.blueScore.setTypeface(null, Typeface.BOLD);
+		} else if (data.get(position).alliances.red.score > data.get(position).alliances.blue.score) {
+			holder.redScore.setTypeface(null, Typeface.BOLD);
+		} else {
+			holder.blueScore.setTypeface(null, Typeface.BOLD);
+		}
 
 		if (data.get(position).alliances.red.score != -1) {
 			holder.matchTime.setVisibility(View.GONE);
