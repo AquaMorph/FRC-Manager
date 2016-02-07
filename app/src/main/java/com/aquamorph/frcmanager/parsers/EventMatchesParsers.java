@@ -34,7 +34,8 @@ public class EventMatchesParsers {
 						getLastModified(context));
 
 				//Checks for change in data
-				if (blueAlliance.getStatus() == 200 || getData(context) == null) {
+				if (blueAlliance.getStatus() == 200 || getData(context) == null
+						|| Constants.FORCE_DATA_RELOAD) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					eventMatches = gson.fromJson(reader, Match[].class);
 					setLastModified(context, blueAlliance.getLastUpdated());

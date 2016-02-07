@@ -38,7 +38,8 @@ public class TeamEventMatchesParsers {
 						getLastModified(context));
 
 				//Checks for change in data
-				if (blueAlliance.getStatus() == 200 ||  getData(context) == null) {
+				if (blueAlliance.getStatus() == 200 ||  getData(context) == null
+						|| Constants.FORCE_DATA_RELOAD) {
 					Log.d(TAG, "Loading new data");
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					teamEventMatches = gson.fromJson(reader, Match[].class);

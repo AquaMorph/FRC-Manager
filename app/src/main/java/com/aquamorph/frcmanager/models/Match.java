@@ -5,9 +5,11 @@ public class Match implements Comparable {
 	public String TAG = "Match";
 	public String comp_level;
 	public int match_number;
+	public long time = 1428162360;
 	public String time_string;
 	public String set_number;
 	public String key;
+
 	public Alliances alliances;
 
 	public class Alliances {

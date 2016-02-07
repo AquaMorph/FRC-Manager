@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +95,6 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 			while (awardParser.parsingComplete) ;
 			awards.clear();
 			awards.addAll(awardParser.getAwards());
-			Log.i(TAG, "Award: " + awards.size());
 			return null;
 		}
 
