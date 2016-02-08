@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_weight="10"
-              android:background="@color/cardview_light_background"
+              android:background="@color/blue_primary"
               android:orientation="vertical">
 
     <TextView
@@ -16,8 +16,8 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="Please enter your team number"
-        android:textColor="@color/accent"
+        android:text="@string/team_number_prompt"
+        android:textColor="@color/icons"
         android:textSize="28sp"/>
 
     <EditText
@@ -26,21 +26,24 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:ems="10"
-        android:inputType="number"/>
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textColor="@color/icons"
+        android:textSize="48sp"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:gravity="center"
         android:paddingLeft="64dp"
         android:paddingRight="64dp"
-        android:text="An FRC score tracking app based around your team"
-        android:textColor="#ffffff"
+        android:textColor="@color/icons"
         android:textSize="16sp"/>
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="64dp"/>
+
 </LinearLayout>

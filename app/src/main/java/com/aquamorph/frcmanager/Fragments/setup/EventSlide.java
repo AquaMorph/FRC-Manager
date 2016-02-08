@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventSpinnerAdapter;
@@ -44,7 +45,6 @@ public class EventSlide extends Fragment {
 	public void load() {
 		final LoadTeamEvents loadTeamEvents = new LoadTeamEvents();
 		loadTeamEvents.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//		loadTeamEvents.execute();
 	}
 
 	class LoadTeamEvents extends AsyncTask<Void, Void, Void> {
@@ -106,6 +106,7 @@ public class EventSlide extends Fragment {
 			setEventKey(eventList.get(position).key);
 			Log.i(TAG, "Short Name:" + eventList.get(position).short_name);
 			setEventShortName(eventList.get(position).short_name);
+			((TextView) eventSpinnder.getSelectedView()).setTextColor(getResources().getColor(R.color.icons));
 		}
 
 		@Override

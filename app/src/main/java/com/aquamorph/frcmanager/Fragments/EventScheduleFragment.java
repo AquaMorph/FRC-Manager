@@ -54,7 +54,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-		adapter = new TeamScheduleAdapter(getContext(), eventMatches);
+		adapter = new TeamScheduleAdapter(getContext(), eventMatches, "45");
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);

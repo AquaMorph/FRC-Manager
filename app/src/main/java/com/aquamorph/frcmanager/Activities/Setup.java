@@ -19,36 +19,21 @@ public class Setup extends AppIntro {
 	// Please DO NOT override onCreate. Use init.
 	@Override
 	public void init(Bundle savedInstanceState) {
-		getSupportActionBar().hide();
-
 		teamNumberSlide = new TeamNumberSlide();
 		eventSlide = new EventSlide();
 
-		// Add your slide's fragments here.
-		// AppIntro will automatically generate the dots indicator and buttons.
 		addSlide(FirstSlide.newInstance(R.layout.first_slide));
 		addSlide(teamNumberSlide);
 		addSlide(eventSlide);
 
-//		secondSlide.getTeamNum
-
-//		Log.i(TAG, secondSlide.getTeamNumber());
-
-		// Instead of fragments, you can also use our default slide
-		// Just set a title, description, background and image. AppIntro will do the rest.
-//		addSlide(AppIntroFragment.newInstance(title, description, image, background_colour));
-
-		// OPTIONAL METHODS
-		// Override bar/separator color.
-		setBarColor(ContextCompat.getColor(this ,R.color.accent));
-		setSeparatorColor(ContextCompat.getColor(this ,R.color.accent));
+		setBarColor(ContextCompat.getColor(this ,R.color.blue_primary));
+		setSeparatorColor(ContextCompat.getColor(this ,R.color.blue_primary));
 
 		// Hide Skip/Done button.
 		showSkipButton(false);
 		setProgressButtonEnabled(true);
 
 		// Turn vibration on and set intensity.
-		// NOTE: you will probably need to ask VIBRATE permisssion in Manifest.
 		setVibrate(true);
 		setVibrateIntensity(30);
 	}

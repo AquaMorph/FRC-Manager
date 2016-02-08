@@ -25,11 +25,13 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 	private LayoutInflater inflater;
 	private Context context;
 	private ArrayList<Match> data;
+	private String team;
 
-	public TeamScheduleAdapter(Context context, ArrayList<Match> data) {
+	public TeamScheduleAdapter(Context context, ArrayList<Match> data, String team) {
 		inflater = from(context);
 		this.data = data;
 		this.context = context;
+		this.team = team;
 	}
 
 	@Override
@@ -51,6 +53,18 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 		holder.blueTeam2.setText(ParseTeamNumber(false, 1, position));
 		holder.blueTeam3.setText(ParseTeamNumber(false, 2, position));
 
+		if (ParseTeamNumber(true, 0, position).equals(team) || ParseTeamNumber(true, 1, position)
+				.equals(team) || ParseTeamNumber(true, 2, position).equals(team)) {
+			holder.matchNumber.setBackgroundColor(context.getResources()
+					.getColor(R.color.red_alliance_light));
+		} else if (ParseTeamNumber(false, 0, position).equals(team)
+				|| ParseTeamNumber(false, 1, position).equals(team)
+				|| ParseTeamNumber(false, 2, position).equals(team)) {
+			holder.matchNumber.setBackgroundColor(context.getResources()
+					.getColor(R.color.blue_alliance_light));
+		}
+
+		//Bolds winning score
 		if (data.get(position).alliances.red.score == data.get(position).alliances.blue.score) {
 			holder.redScore.setTypeface(null, Typeface.BOLD);
 			holder.blueScore.setTypeface(null, Typeface.BOLD);

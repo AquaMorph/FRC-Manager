@@ -1,7 +1,6 @@
 package com.aquamorph.frcmanager.adapters;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -46,7 +45,7 @@ public class EventSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView text;
-		if (convertView != null){
+		if (convertView != null) {
 			// Re-use the recycled view here!
 			text = (TextView) convertView;
 		} else {
@@ -55,9 +54,11 @@ public class EventSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 					android.R.layout.simple_dropdown_item_1line, parent, false
 			);
 		}
-		text.setTextColor(Color.BLACK);
+//		text.setTextColor(activity.getResources().getColor(R.color.icons));
 		text.setText(eventList.get(position).name);
 		return text;
 	}
+
+
 }
 

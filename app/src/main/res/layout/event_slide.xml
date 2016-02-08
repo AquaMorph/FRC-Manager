@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_weight="10"
-              android:background="@color/cardview_light_background"
+              android:background="@color/blue_primary"
               android:orientation="vertical">
 
     <TextView
@@ -16,18 +16,23 @@
         android:gravity="center"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:text="the Hitchhikers...that's an intersting name"
-        android:textColor="@color/accent"
+        android:text="@string/event_prompt"
+        android:textColor="@color/icons"
         android:textSize="28sp"/>
 
     <Spinner
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/event_spinner"/>
+        android:id="@+id/event_spinner"
+        />
 
     <TextView
         android:layout_weight="3"
+        android:layout_width="fill_parent"
+        android:layout_height="64dp"/>
+
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="64dp"/>
 

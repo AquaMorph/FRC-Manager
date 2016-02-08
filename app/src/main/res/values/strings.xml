@@ -8,4 +8,10 @@
     <string name="nexus_5_test_id">467B40B4730D0C3A11B13A410B8E7EFC</string>
     <string name="moto_g_test_id">DF6094713C3BDC6831BF580ADC637369</string>
     <string name="neux_6p_test_id">C008804CE753EA7A8EF2BC814AEB4555</string>
+    <string name="event_slide">S</string>
+    <string name="welcome_slide_text">Welcome to FRC Manager</string>
+    <string name="app_description">An FRC score tracking app based around your team</string>
+    <string name="icon_description">FRC Manager App Icon</string>
+    <string name="team_number_prompt">Please enter your team number</string>
+    <string name="event_prompt">Please select your event</string>
 </resources>
