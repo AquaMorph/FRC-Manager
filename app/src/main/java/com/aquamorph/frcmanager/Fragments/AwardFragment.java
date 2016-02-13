@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aquamorph.frcmanager.Divider;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AwardAdapter;
 import com.aquamorph.frcmanager.models.Award;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
  * Displays a list of awards at a event
  *
  * @author Christian Colglazier
- * @version 1/26/2016
+ * @version 2/13/2016
  */
 public class AwardFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private String TAG = "AwardFragment";
@@ -57,6 +58,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
+		recyclerView.addItemDecoration(new Divider(getContext()));
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);

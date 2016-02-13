@@ -8,16 +8,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * Divider for recyclerview
+ * Divider for recyclerview with a 72dp indent
  *
  * @author Christian Colglazier
  * @version 2/13/2016
  */
-public class Divider extends RecyclerView.ItemDecoration {
+
+public class DividerIndented extends RecyclerView.ItemDecoration {
 	private Drawable mDivider;
 
-	public Divider(Context context) {
-		mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider);
+	public DividerIndented(Context context) {
+		mDivider = ContextCompat.getDrawable(context,R.drawable.line_divider_indented);
 	}
 
 	@Override

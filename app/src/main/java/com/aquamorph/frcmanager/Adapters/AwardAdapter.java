@@ -26,6 +26,7 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 	private LayoutInflater inflater;
 	private ArrayList<Award> data;
 	private String team = "";
+	private String awardee = "";
 
 	public AwardAdapter(Context context, ArrayList<Award> data) {
 		inflater = from(context);
@@ -41,10 +42,24 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
+		holder.setIsRecyclable(false);
 		team = "";
-		for(int i = 0; data.get(position).recipient_list.length > i; i++) {
-			if(i > 0) team += "\n";
-			team += data.get(position).recipient_list[i].team_number;
+		awardee = "";
+
+		for (int i = 0; data.get(position).recipient_list.length > i; i++) {
+			if (data.get(position).recipient_list[i].team_number != null) {
+				if (i > 0) team += "\n";
+				team += data.get(position).recipient_list[i].team_number;
+			}
+			if (data.get(position).recipient_list[i].awardee != null) {
+				if (i > 0) awardee += "\n";
+				awardee += data.get(position).recipient_list[i].awardee;
+			}
+		}
+		if(awardee.equals("")) {
+			holder.details.setVisibility(View.GONE);
+		} else {
+			holder.details.setText(awardee);
 		}
 		holder.teamNumber.setText(team);
 		holder.award.setText(data.get(position).name);
@@ -59,11 +74,13 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 
 		TextView teamNumber;
 		TextView award;
+		TextView details;
 
 		public MyViewHolder(View itemView) {
 			super(itemView);
 			teamNumber = (TextView) itemView.findViewById(R.id.team_number);
 			award = (TextView) itemView.findViewById(R.id.award_name);
+			details = (TextView) itemView.findViewById(R.id.award_details);
 		}
 	}
 }

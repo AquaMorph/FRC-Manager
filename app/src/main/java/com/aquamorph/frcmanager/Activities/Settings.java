@@ -5,8 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.aquamorph.frcmanager.fragments.SettingsFragment;
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.fragments.SettingsFragment;
 
 public class Settings extends AppCompatActivity {
 	@Override
