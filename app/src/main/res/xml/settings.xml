@@ -15,6 +15,12 @@
             android:key="teamNumber"
             android:summary="Your teams number"
             android:title="Team Number"/>
+        <EditTextPreference
+            android:inputType="number"
+            android:defaultValue="2015"
+            android:key="year"
+            android:summary="Select the year"
+            android:title="Competition Year"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -22,10 +28,8 @@
         android:title="About">
         <PreferenceScreen
             android:key="settings_version"
-            android:title="Version 1.0.0"/>
-        <PreferenceScreen
-            android:key="settings_creator"
-            android:title="Created by Christian Colglazier"/>
+            android:title="Version 0.1.0"
+            android:summary="Created by Christian Colglazier"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

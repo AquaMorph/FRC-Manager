@@ -27,7 +27,7 @@ public class EventSlide extends Fragment {
 	Spinner eventSpinnder;
 	private EventSpinnerAdapter dataAdapter;
 	ArrayList<Events> eventList = new ArrayList<>();
-	private String teamNumber;
+	private String teamNumber, year;
 
 
 	@Override
@@ -53,6 +53,7 @@ public class EventSlide extends Fragment {
 		protected void onPreExecute() {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 			teamNumber = prefs.getString("teamNumber", "");
+			year = prefs.getString("year", "");
 			Log.i(TAG, "Team Number: " + teamNumber);
 		}
 
@@ -60,7 +61,7 @@ public class EventSlide extends Fragment {
 		protected Void doInBackground(Void... params) {
 			Log.i(TAG, "Event size: " + eventList.size());
 			EventParsers eventParsers = new EventParsers();
-			eventParsers.fetchJSON("frc" + teamNumber);
+			eventParsers.fetchJSON("frc" + teamNumber, year);
 			while (eventParsers.parsingComplete) ;
 			eventList.clear();
 			eventList.addAll(eventParsers.getEvents());

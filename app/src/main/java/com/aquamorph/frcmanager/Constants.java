@@ -14,7 +14,6 @@ public class Constants {
 	public static final String TAG = "FRC Regional";
 	public static final String URL = "http://www.thebluealliance.com/api/v2/";
 	public static final String API_HEADER = "christian_colglazier:frc_manager:dev";
-	public static final String YEAR = "2015";
 	public static final String TBA_HEADER = "X-TBA-App-Id";
 	public static final String NOT_ONLINE_MESSAGE = "No Connection";
 	public static final Boolean FORCE_DATA_RELOAD = false;
@@ -25,8 +24,8 @@ public class Constants {
 	 * @param team team identification "frc####"
 	 * @return url to team events
 	 */
-	public static String getEventURL(String team) {
-		return String.format("%steam/%s/%s/events", URL, team, YEAR);
+	public static String getEventURL(String team, String year) {
+		return String.format("%steam/%s/%s/events", URL, team, year);
 	}
 
 	/**
@@ -56,8 +55,8 @@ public class Constants {
 	 * @param event event identification number
 	 * @return url to event statistics
 	 */
-	public static String getEventStats(String event) {
-		return URL + "/event/" + YEAR + event + "/stats";
+	public static String getEventStats(String event, String year) {
+		return URL + "/event/" + year + event + "/stats";
 	}
 
 	/**

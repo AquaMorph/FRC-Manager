@@ -16,12 +16,12 @@ public class EventParsers {
 	private Events[] events;
 	private ArrayList<Events> eventArray = new ArrayList<>();
 
-	public void fetchJSON(final String number) {
+	public void fetchJSON(final String number, final String year) {
 		try {
 			Gson gson = new Gson();
 			BlueAlliance blueAlliance = new BlueAlliance();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(blueAlliance
-					.connect(Constants.getEventURL(number), "")));
+					.connect(Constants.getEventURL(number, year), "")));
 			events = gson.fromJson(reader, Events[].class);
 			eventArray = new ArrayList<>(Arrays.asList(events));
 			blueAlliance.close();

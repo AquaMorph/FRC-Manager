@@ -8,21 +8,26 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.fragments.setup.EventSlide;
 import com.aquamorph.frcmanager.fragments.setup.FirstSlide;
 import com.aquamorph.frcmanager.fragments.setup.TeamNumberSlide;
+import com.aquamorph.frcmanager.fragments.setup.YearSlide;
 import com.github.paolorotolo.appintro.AppIntro;
 
 public class Setup extends AppIntro {
 
 	private String TAG = "Setup";
+	private YearSlide yearSlide;
 	private TeamNumberSlide teamNumberSlide;
 	private EventSlide eventSlide;
+	private int counter = 0;
 
 	// Please DO NOT override onCreate. Use init.
 	@Override
 	public void init(Bundle savedInstanceState) {
+		yearSlide = new YearSlide();
 		teamNumberSlide = new TeamNumberSlide();
 		eventSlide = new EventSlide();
 
 		addSlide(FirstSlide.newInstance(R.layout.first_slide));
+		addSlide(yearSlide);
 		addSlide(teamNumberSlide);
 		addSlide(eventSlide);
 
@@ -51,8 +56,9 @@ public class Setup extends AppIntro {
 
 	@Override
 	public void onSlideChanged() {
+		counter++;
 		// Do something when the slide changes.
-		if(teamNumberSlide != null) {
+		if(teamNumberSlide != null && counter > 2) {
 			if (teamNumberSlide.getTeamNumber() != (null)) {
 				teamNumberSlide.setTeamNumber(teamNumberSlide.getTeamNumber());
 				eventSlide.load();

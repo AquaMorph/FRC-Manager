@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	private ViewPager mViewPager;
 	public String teamNumber, eventName;
 	public Boolean paidUser = true;
+	public String year = "2015";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
 		teamNumber = prefs.getString("teamNumber", "");
 		eventName = prefs.getString("eventShortName", "");
+		year = prefs.getString("teamNumber", "2015");
 
 		if (teamNumber.equals("")) openSetup();
 

@@ -14,6 +14,7 @@ import com.aquamorph.frcmanager.R;
 public class TeamNumberSlide extends Fragment {
 
 	private String TAG = "TeamNumberSlide";
+	private Boolean numberSet = false;
 	private static EditText teamNumber;
 
 	@Override
@@ -32,5 +33,10 @@ public class TeamNumberSlide extends Fragment {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("teamNumber", team);
 		editor.commit();
+		numberSet = false;
+	}
+
+	public Boolean isNumberSet() {
+		return numberSet;
 	}
 }

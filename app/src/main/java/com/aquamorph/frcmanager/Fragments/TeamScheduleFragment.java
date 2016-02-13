@@ -25,6 +25,8 @@ import com.aquamorph.frcmanager.parsers.TeamEventMatchesParsers;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+
 public class TeamScheduleFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
 	private String TAG = "TeamScheduleFragment";
@@ -59,6 +61,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
+		recyclerView.setItemAnimator(new SlideInUpAnimator());
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);

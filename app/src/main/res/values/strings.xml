@@ -14,4 +14,9 @@
     <string name="icon_description">FRC Manager App Icon</string>
     <string name="team_number_prompt">Please enter your team number</string>
     <string name="event_prompt">Please select your event</string>
+    <string name="year_prompt">Please select the desired year</string>
+    <string-array name="year_array">
+        <item>2015</item>
+        <item>2016</item>
+    </string-array>
 </resources>
