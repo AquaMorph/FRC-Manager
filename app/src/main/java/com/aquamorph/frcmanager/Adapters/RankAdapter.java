@@ -46,7 +46,6 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 			info += data.get(0)[i] + ": " + data.get(position + 1)[i] + " ";
 		}
 		holder.teamNumber.setText(data.get(position + 1)[0]);
-		holder.teamName.setText("Team Robobotics");
 		holder.rankNumber.setText(data.get(position + 1)[1]);
 		holder.details.setText(info);
 	}
@@ -59,14 +58,12 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 	public class MyViewHolder extends RecyclerView.ViewHolder {
 
 		TextView teamNumber;
-		TextView teamName;
 		TextView rankNumber;
 		TextView details;
 
 		public MyViewHolder(View itemView) {
 			super(itemView);
 			teamNumber = (TextView) itemView.findViewById(R.id.team_number);
-			teamName = (TextView) itemView.findViewById(R.id.team_name);
 			rankNumber = (TextView) itemView.findViewById(R.id.rank);
 			details = (TextView) itemView.findViewById(R.id.details);
 		}

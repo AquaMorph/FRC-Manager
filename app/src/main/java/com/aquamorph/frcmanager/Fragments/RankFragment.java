@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aquamorph.frcmanager.Divider;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
 import com.aquamorph.frcmanager.parsers.RankParser;
@@ -52,6 +53,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
+		recyclerView.addItemDecoration(new Divider(getContext()) {
+		});
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(RankFragment.this);
