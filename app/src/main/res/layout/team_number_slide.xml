@@ -5,7 +5,9 @@
               android:layout_height="match_parent"
               android:layout_weight="10"
               android:background="@color/blue_primary"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,8 +16,6 @@
         android:layout_weight="3"
         android:fontFamily="sans-serif-thin"
         android:gravity="center"
-        android:paddingLeft="32dp"
-        android:paddingRight="32dp"
         android:text="@string/team_number_prompt"
         android:textColor="@color/icons"
         android:textSize="28sp"/>
@@ -34,13 +34,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="4"
-        android:gravity="center"
-        android:paddingLeft="64dp"
-        android:paddingRight="64dp"
-        android:textColor="@color/icons"
-        android:textSize="16sp"/>
+        android:layout_weight="4"/>
 
     <TextView
         android:layout_width="fill_parent"
