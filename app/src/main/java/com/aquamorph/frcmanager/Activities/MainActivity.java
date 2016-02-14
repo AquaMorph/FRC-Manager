@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
 	public String teamNumber, eventName;
-	public Boolean paidUser = true;
+	public Boolean paidUser = false;
 	public String year = "2015";
 
 	@Override
@@ -94,11 +94,6 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 			openSettings();
 			return true;
 		}
-		if (id == R.id.action_setup) {
-			openSetup();
-			return true;
-		}
-
 		return super.onOptionsItemSelected(item);
 	}
 

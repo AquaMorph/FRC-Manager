@@ -8,7 +8,6 @@
               android:paddingRight="16dp"
               android:paddingTop="8dp">
 
-
     <TextView
         android:id="@+id/team_number"
         android:layout_width="56dp"

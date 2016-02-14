@@ -6,7 +6,7 @@
         android:title="General">
         <PreferenceScreen
             android:summary=""
-            android:title="Relaunch Setup">
+            android:title="Launch Setup">
             <intent android:action="com.aquamorph.frcmanager.activities.Setup"/>
         </PreferenceScreen>
         <EditTextPreference

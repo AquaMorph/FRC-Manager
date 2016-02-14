@@ -4,7 +4,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="sample_team">0000</string>
     <string name="banner_ad_unit_id">ca-app-pub-9342941618723647/7329052431</string>
-    <string name="banner_ad_unit_dummy">ca-app-pub-3940256099942544/6300978111</string>
     <string name="nexus_5_test_id">467B40B4730D0C3A11B13A410B8E7EFC</string>
     <string name="moto_g_test_id">DF6094713C3BDC6831BF580ADC637369</string>
     <string name="neux_6p_test_id">C008804CE753EA7A8EF2BC814AEB4555</string>
