@@ -33,6 +33,7 @@ public class Setup extends AppIntro {
 
 		setBarColor(ContextCompat.getColor(this ,R.color.blue_primary));
 		setSeparatorColor(ContextCompat.getColor(this ,R.color.blue_primary));
+		setOffScreenPageLimit(4);
 
 		// Hide Skip/Done button.
 		showSkipButton(false);
@@ -71,5 +72,6 @@ public class Setup extends AppIntro {
 		// Do something when users tap on Next button.
 
 	}
+
 
 }
