@@ -29,7 +29,7 @@
         <PreferenceScreen
             android:key="settings_version"
             android:summary="Created by Christian Colglazier"
-            android:title="Version 0.1.0"/>
+            android:title="Version 0.1.1"/>
         <Preference
             android:summary="www.thebluealliance.com"
             android:title="Data from the Blue Alliance">
