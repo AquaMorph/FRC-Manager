@@ -8,7 +8,7 @@ import android.net.NetworkInfo;
  * A collection of constants needed to interact with the Blue Alliance.
  *
  * @author Christian Colglazier
- * @version 1-22-16
+ * @version 2-16-16
  */
 public class Constants {
 	public static final String TAG = "FRC Regional";
