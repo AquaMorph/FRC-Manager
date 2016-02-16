@@ -2,11 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:summary="General"
-        android:title="General">
+        android:summary="@string/general_summary"
+        android:title="@string/general_title">
         <PreferenceScreen
-            android:summary=""
-            android:title="Launch Setup">
+            android:summary="Relaunches the setup screen"
+            android:title="Reset team and event">
             <intent android:action="com.aquamorph.frcmanager.activities.Setup"/>
         </PreferenceScreen>
         <EditTextPreference
@@ -30,6 +30,13 @@
             android:key="settings_version"
             android:summary="Created by Christian Colglazier"
             android:title="Version 0.1.0"/>
+        <Preference
+            android:summary="www.thebluealliance.com"
+            android:title="Data from the Blue Alliance">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.thebluealliance.com"/>
+        </Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>
