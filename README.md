@@ -4,7 +4,6 @@ FRC Manager provides live competition data from the Blue Alliance based around y
 This is just the initial release of the app and I plan on adding more features as competition season progresses. Feel free to email me with features you would like added or problems with that app you are experiencing. I am an alumni of FRC® Team 2059 The Hitchhikers and mentor for 2059, 2642, and 2682.
 
 Features:
-
  - Material Design
  - Offline Mode
  - Team Schedule
