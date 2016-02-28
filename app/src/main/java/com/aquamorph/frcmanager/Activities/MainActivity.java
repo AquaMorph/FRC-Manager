@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
@@ -41,39 +42,15 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		if (teamNumber.equals("")) openSetup();
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
-		toolbar.setSubtitle(getSubTitle());
-
-		// Create the adapter that will return a fragment for each of the three
-		// primary sections of the activity.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.container);
-		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
-		mViewPager.setAdapter(mSectionsPagerAdapter);
-
-
-		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-		tabLayout.setupWithViewPager(mViewPager);
-		tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-
-
-		//Load ads
-		AdView mAdView = (AdView) findViewById(R.id.adView);
-		if (paidUser) {
-			mAdView.setVisibility(View.GONE);
-		} else {
-			AdRequest adRequest = new AdRequest.Builder()
-					.addTestDevice(getResources().getString(R.string.nexus_5_test_id))
-					.addTestDevice(getResources().getString(R.string.moto_g_test_id))
-					.addTestDevice(getResources().getString(R.string.neux_6p_test_id))
-					.build();
-			mAdView.loadAd(adRequest);
-		}
+		listener();
 	}
 
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		setContentView(R.layout.activity_main);
+		listener();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -121,6 +98,38 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		eventName = sharedPreferences.getString("eventShortName", "North Carolina");
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setSubtitle(getSubTitle());
+		}
+	}
+
+	private void listener() {
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		toolbar.setSubtitle(getSubTitle());
+
+		// Create the adapter that will return a fragment for each of the three
+		// primary sections of the activity.
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+		// Set up the ViewPager with the sections adapter.
+		mViewPager = (ViewPager) findViewById(R.id.container);
+		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
+		mViewPager.setAdapter(mSectionsPagerAdapter);
+
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+		tabLayout.setupWithViewPager(mViewPager);
+		tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+		//Load ads
+		AdView mAdView = (AdView) findViewById(R.id.adView);
+		if (paidUser) {
+			mAdView.setVisibility(View.GONE);
+		} else {
+			AdRequest adRequest = new AdRequest.Builder()
+					.addTestDevice(getResources().getString(R.string.nexus_5_test_id))
+					.addTestDevice(getResources().getString(R.string.moto_g_test_id))
+					.addTestDevice(getResources().getString(R.string.neux_6p_test_id))
+					.build();
+			mAdView.loadAd(adRequest);
 		}
 	}
 }

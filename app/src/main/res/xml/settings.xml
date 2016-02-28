@@ -21,6 +21,13 @@
             android:key="year"
             android:summary="Select the year"
             android:title="Competition Year"/>
+        <ListPreference
+            android:key="theme"
+            android:title="App Theme"
+            android:summary="Choose between there different color schemes"
+            android:defaultValue="light"
+            android:entries="@array/theme"
+            android:entryValues="@array/theme_values"/>
     </PreferenceCategory>
 
     <PreferenceCategory
