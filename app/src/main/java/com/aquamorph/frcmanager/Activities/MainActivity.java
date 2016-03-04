@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -28,13 +29,15 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	public String teamNumber, eventName;
 	public Boolean paidUser = false;
 	public String year = "2015";
+	Toolbar toolbar;
+	SharedPreferences prefs;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
 		teamNumber = prefs.getString("teamNumber", "");
 		eventName = prefs.getString("eventShortName", "");
@@ -42,7 +45,24 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		if (teamNumber.equals("")) openSetup();
 
+
 		listener();
+		theme(this);
+	}
+
+	public static void theme(Activity activity) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+		switch (prefs.getString("theme", "")) {
+			case "amoled":
+				activity.setTheme(R.style.OMOLEDTheme);
+				break;
+			case "dark":
+				activity.setTheme(R.style.DarkTheme);
+				break;
+			default:
+				activity.setTheme(R.style.LightTheme);
+				break;
+		}
 	}
 
 	@Override
@@ -99,10 +119,13 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setSubtitle(getSubTitle());
 		}
+		if (key.equals("theme")) {
+			this.recreate();
+		}
 	}
 
 	private void listener() {
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		toolbar.setSubtitle(getSubTitle());
 

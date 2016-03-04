@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="backgroundColor" format="reference|color"/>
+    <attr name="redAllianceBackground" format="reference|color"/>
+    <attr name="blueAllianceBackground" format="reference|color"/>
+    <attr name="redAllianceText" format="reference|color"/>
+    <attr name="blueAllianceText" format="reference|color"/>
+    <attr name="text" format="reference|color"/>
+    <attr name="cardBackground" format="reference|color"/>
+</resources>

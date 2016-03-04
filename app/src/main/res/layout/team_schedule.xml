@@ -15,6 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        card_view:cardBackgroundColor="?cardBackground"
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="2dp"
         card_view:cardUseCompatPadding="true">
@@ -33,7 +34,7 @@
                 android:gravity="center"
                 android:text="QF-123"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/primary_text"/>
+                android:textColor="?text"/>
 
             <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
                          android:layout_width="0dp"
@@ -45,7 +46,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@color/red_alliance_light"
+                    android:background="?redAllianceBackground"
                     android:paddingBottom="4dp"
                     android:paddingTop="4dp">
 
@@ -56,6 +57,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/sample_team"
+                        android:textColor="?redAllianceText"
                         android:textSize="@dimen/team_number_text"/>
 
                     <TextView
@@ -65,6 +67,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/sample_team"
+                        android:textColor="?redAllianceText"
                         android:textSize="@dimen/team_number_text"/>
 
                     <TextView
@@ -74,6 +77,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/sample_team"
+                        android:textColor="?redAllianceText"
                         android:textSize="@dimen/team_number_text"/>
 
                 </TableRow>
@@ -82,7 +86,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@color/blue_alliance_light"
+                    android:background="?blueAllianceBackground"
                     android:paddingBottom="4dp"
                     android:paddingTop="4dp">
 
@@ -93,6 +97,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/sample_team"
+                        android:textColor="?blueAllianceText"
                         android:textSize="@dimen/team_number_text"/>
 
                     <TextView
@@ -102,6 +107,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/sample_team"
+                        android:textColor="?blueAllianceText"
                         android:textSize="@dimen/team_number_text"/>
 
                     <TextView
@@ -109,8 +115,10 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
+
                         android:gravity="center"
                         android:text="@string/sample_team"
+                        android:textColor="?blueAllianceText"
                         android:textSize="@dimen/team_number_text"/>
 
                 </TableRow>
@@ -128,7 +136,7 @@
                 android:paddingRight="2dp"
                 android:text="08:59 PM"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/primary_text"
+                android:textColor="?text"
                 android:textSize="18sp"
                 android:visibility="visible"/>
 
@@ -145,7 +153,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@color/red_alliance_light"
+                    android:background="?redAllianceBackground"
                     android:paddingBottom="4dp"
                     android:paddingTop="4dp">
 
@@ -156,6 +164,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/sample_team"
+                        android:textColor="?redAllianceText"
                         android:textSize="@dimen/team_number_text"/>
 
                 </TableRow>
@@ -164,7 +173,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
-                    android:background="@color/blue_alliance_light"
+                    android:background="?blueAllianceBackground"
                     android:paddingBottom="4dp"
                     android:paddingTop="4dp">
 
@@ -175,6 +184,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/sample_team"
+                        android:textColor="?blueAllianceText"
                         android:textSize="@dimen/team_number_text"/>
 
                 </TableRow>
