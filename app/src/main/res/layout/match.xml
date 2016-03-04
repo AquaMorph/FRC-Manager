@@ -34,7 +34,7 @@
                 android:gravity="center"
                 android:text="QF-123"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="?text"/>
+                android:textColor="?textOnBackground"/>
 
             <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
                          android:layout_width="0dp"
@@ -136,7 +136,7 @@
                 android:paddingRight="2dp"
                 android:text="08:59 PM"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="?text"
+                android:textColor="?textOnBackground"
                 android:textSize="18sp"
                 android:visibility="visible"/>
 

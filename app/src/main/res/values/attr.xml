@@ -6,5 +6,7 @@
     <attr name="redAllianceText" format="reference|color"/>
     <attr name="blueAllianceText" format="reference|color"/>
     <attr name="text" format="reference|color"/>
+    <attr name="textOnBackground" format="reference|color"/>
+    <attr name="bubbleText" format="reference|color"/>
     <attr name="cardBackground" format="reference|color"/>
 </resources>

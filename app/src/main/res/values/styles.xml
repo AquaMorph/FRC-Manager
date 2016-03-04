@@ -11,6 +11,8 @@
         <item name="redAllianceText">@color/primary_text</item>
         <item name="blueAllianceText">@color/primary_text</item>
         <item name="text">@color/primary_text</item>
+        <item name="textOnBackground">@color/primary_text</item>
+        <item name="bubbleText">@color/icons</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
@@ -19,11 +21,13 @@
         <item name="colorAccent">@color/accent</item>
         <item name="backgroundColor">#424242</item>
         <item name="cardBackground">#616161</item>
-        <item name="redAllianceBackground">@color/red_alliance_light</item>
-        <item name="blueAllianceBackground">@color/blue_alliance_light</item>
-        <item name="redAllianceText">@color/primary_text</item>
-        <item name="blueAllianceText">@color/primary_text</item>
+        <item name="redAllianceBackground">#806161</item>
+        <item name="blueAllianceBackground">#616180</item>
+        <item name="redAllianceText">#F5F5F5</item>
+        <item name="blueAllianceText">#F5F5F5</item>
         <item name="text">@color/primary_text</item>
+        <item name="textOnBackground">#F5F5F5</item>
+        <item name="bubbleText">#F5F5F5</item>
     </style>
 
     <style name="OMOLEDTheme" parent="Theme.AppCompat.NoActionBar">
@@ -37,6 +41,8 @@
         <item name="redAllianceText">@color/red_alliance</item>
         <item name="blueAllianceText">@color/blue_alliance</item>
         <item name="text">@color/icons</item>
+        <item name="textOnBackground">@color/icons</item>
+        <item name="bubbleText">@color/icons</item>
     </style>
 
 

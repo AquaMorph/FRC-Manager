@@ -26,7 +26,7 @@
                 android:background="@drawable/bg_cir"
                 android:gravity="center"
                 android:text="9999"
-                android:textColor="@color/icons"
+                android:textColor="?bubbleText"
                 android:textSize="13sp"/>
         </LinearLayout>
 
@@ -41,6 +41,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:text="@string/sample_team"
+                android:textColor="?textOnBackground"
                 android:textSize="@dimen/team_number_text"
                 android:textStyle="bold"/>
 
@@ -49,6 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tot: 92, Played: 9, Auto: 10, Coopertition: 340, Container: 96, Litter: 88, Qual Avg: 69.55"
+                android:textColor="?textOnBackground"
                 android:textSize="16sp"/>
 
         </LinearLayout>
