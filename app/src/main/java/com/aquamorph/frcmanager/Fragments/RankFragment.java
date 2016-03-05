@@ -27,6 +27,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private RecyclerView.Adapter adapter;
 	private ArrayList<String[]> ranks = new ArrayList<>();
 	private String eventKey;
+	private String teamNumber;
 	RankParser rankParser = new RankParser();
 
 	public static RankFragment newInstance() {
@@ -59,6 +60,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(RankFragment.this);
 		eventKey = prefs.getString("eventKey", "");
+		teamNumber = prefs.getString("teamNumber", "0000");
 
 		refresh();
 
@@ -77,6 +79,10 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		if (key.equals("eventKey")) {
 			eventKey = sharedPreferences.getString("eventKey", "");
 			rankParser.setData(getContext(), "");
+			refresh();
+		}
+		if (key.equals("teamNumber")) {
+			teamNumber = sharedPreferences.getString("teamNumber", "");
 			refresh();
 		}
 	}
@@ -100,6 +106,15 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected void onPostExecute(Void result) {
+			for (int i = 0; i < ranks.size(); i++) {
+				if (ranks.get(i)[1].equals(teamNumber)) {
+					SharedPreferences prefs = PreferenceManager
+							.getDefaultSharedPreferences(getContext());
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putString("teamRank", ranks.get(i)[0]);
+					editor.commit();
+				}
+			}
 			adapter.notifyDataSetChanged();
 			mSwipeRefreshLayout.setRefreshing(false);
 		}

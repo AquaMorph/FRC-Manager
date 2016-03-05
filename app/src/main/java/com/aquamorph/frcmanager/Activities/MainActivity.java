@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	public String teamNumber, eventName;
 	public Boolean paidUser = false;
 	public String year = "2015";
+	public String teamRank;
 	Toolbar toolbar;
 	SharedPreferences prefs;
 
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		teamNumber = prefs.getString("teamNumber", "");
 		eventName = prefs.getString("eventShortName", "");
 		year = prefs.getString("teamNumber", "2015");
+		teamRank = prefs.getString("teamRank", "");
 
 		if (teamNumber.equals("")) openSetup();
 
@@ -109,13 +111,18 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	}
 
 	public String getSubTitle() {
-		return String.format("%s (%s)", eventName, teamNumber);
+		if(teamRank.equals("")) {
+			return String.format("%s (%s)", eventName, teamNumber);
+		} else {
+			return String.format("%s (%s) Rank #%s", eventName, teamNumber, teamRank);
+		}
 	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		teamNumber = sharedPreferences.getString("teamNumber", "0000");
 		eventName = sharedPreferences.getString("eventShortName", "North Carolina");
+		teamRank = sharedPreferences.getString("teamRank", "");
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setSubtitle(getSubTitle());
 		}
