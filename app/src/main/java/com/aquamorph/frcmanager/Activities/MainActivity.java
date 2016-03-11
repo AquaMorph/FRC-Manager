@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	private ViewPager mViewPager;
 	public String teamNumber, eventName;
 	public Boolean paidUser = false;
-	public String year = "2015";
+	public String year = "2016";
 	public String teamRank;
 	Toolbar toolbar;
 	SharedPreferences prefs;
