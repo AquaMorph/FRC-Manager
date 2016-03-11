@@ -17,8 +17,8 @@
     <string name="general_summary">General</string>
     <string name="general_title">General</string>
     <string-array name="year_array">
-        <item>2015</item>
         <item>2016</item>
+        <item>2015</item>
     </string-array>
     <string-array name="theme_values">
         <item>light</item>
