@@ -7,11 +7,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.aquamorph.frcmanager.fragments.AwardFragment;
 import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
 import com.aquamorph.frcmanager.fragments.RankFragment;
+import com.aquamorph.frcmanager.fragments.TeamEventFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Awards"};//, "OPR", "DPR"};
+	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Awards", "Teams"};//, "OPR", "DPR"};
 
 	public SectionsPagerAdapter(FragmentManager fm) {
 		super(fm);
@@ -28,6 +29,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 				return RankFragment.newInstance();
 			case 3:
 				return AwardFragment.newInstance();
+			case 4:
+				return TeamEventFragment.newInstance();
 			default:
 				return AwardFragment.newInstance();
 		}
