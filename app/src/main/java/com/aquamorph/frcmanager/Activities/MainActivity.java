@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	}
 
 	public String getSubTitle() {
-		if(teamRank.equals("")) {
+		if (teamRank.equals("")) {
 			return String.format("%s (%s)", eventName, teamNumber);
 		} else {
 			return String.format("%s (%s) Rank #%s", eventName, teamNumber, teamRank);
@@ -146,20 +146,26 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-		tabLayout.setupWithViewPager(mViewPager);
-		tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+		if (tabLayout != null) {
+			tabLayout.setupWithViewPager(mViewPager);
+			tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+		}
 
 		//Load ads
 		AdView mAdView = (AdView) findViewById(R.id.adView);
 		if (paidUser) {
-			mAdView.setVisibility(View.GONE);
+			if (mAdView != null) {
+				mAdView.setVisibility(View.GONE);
+			}
 		} else {
 			AdRequest adRequest = new AdRequest.Builder()
 					.addTestDevice(getResources().getString(R.string.nexus_5_test_id))
 					.addTestDevice(getResources().getString(R.string.moto_g_test_id))
 					.addTestDevice(getResources().getString(R.string.neux_6p_test_id))
 					.build();
-			mAdView.loadAd(adRequest);
+			if (mAdView != null) {
+				mAdView.loadAd(adRequest);
+			}
 		}
 	}
 }

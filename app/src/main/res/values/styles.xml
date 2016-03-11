@@ -15,7 +15,7 @@
         <item name="bubbleText">@color/icons</item>
     </style>
 
-    <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
@@ -30,7 +30,7 @@
         <item name="bubbleText">#F5F5F5</item>
     </style>
 
-    <style name="OMOLEDTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="OMOLEDTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
