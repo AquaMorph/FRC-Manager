@@ -10,6 +10,7 @@ package com.aquamorph.frcmanager.fragments.setup;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,13 @@ public class YearSlide extends Fragment implements AdapterView.OnItemSelectedLis
 
 	String TAG = "YearSlide";
 	Spinner yearSpinnder;
+	private SharedPreferences prefs;
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,7 +50,6 @@ public class YearSlide extends Fragment implements AdapterView.OnItemSelectedLis
 	 */
 
 	public void setYear(String year) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("year", year);
 		Log.i(TAG, "Year set to: " + year);

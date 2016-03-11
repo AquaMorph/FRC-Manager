@@ -106,14 +106,15 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected void onPostExecute(Void result) {
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(getContext());
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putString("teamRank", "");
 			for (int i = 0; i < ranks.size(); i++) {
 				if (ranks.get(i)[1].equals(teamNumber)) {
-					SharedPreferences prefs = PreferenceManager
-							.getDefaultSharedPreferences(getContext());
-					SharedPreferences.Editor editor = prefs.edit();
 					editor.putString("teamRank", ranks.get(i)[0]);
-					editor.commit();
 				}
+				editor.apply();
 			}
 			adapter.notifyDataSetChanged();
 			mSwipeRefreshLayout.setRefreshing(false);

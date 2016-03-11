@@ -38,8 +38,8 @@
         <item name="cardBackground">@color/black</item>
         <item name="redAllianceBackground">@color/black</item>
         <item name="blueAllianceBackground">@color/black</item>
-        <item name="redAllianceText">@color/red_alliance</item>
-        <item name="blueAllianceText">@color/blue_alliance</item>
+        <item name="redAllianceText">#B71C1C</item>
+        <item name="blueAllianceText">#1976D2</item>
         <item name="text">@color/icons</item>
         <item name="textOnBackground">@color/icons</item>
         <item name="bubbleText">@color/icons</item>
