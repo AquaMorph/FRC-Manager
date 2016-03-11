@@ -1,10 +1,14 @@
 package com.aquamorph.frcmanager;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 
 /**
@@ -18,6 +22,14 @@ public class Divider extends RecyclerView.ItemDecoration {
 
 	public Divider(Context context) {
 		mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider);
+		if (mDivider != null) {
+			TypedValue typedValue = new TypedValue();
+			Resources.Theme theme = context.getTheme();
+			theme.resolveAttribute(R.attr.textOnBackground, typedValue, true);
+			int color = typedValue.data;
+			ColorFilter filter = new LightingColorFilter( color, color);
+			mDivider.setColorFilter(filter);
+		}
 	}
 
 	@Override

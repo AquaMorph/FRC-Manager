@@ -17,7 +17,17 @@
     <string name="general_summary">General</string>
     <string name="general_title">General</string>
     <string-array name="year_array">
-        <item>2015</item>
         <item>2016</item>
+        <item>2015</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>light</item>
+        <item>dark</item>
+        <item>amoled</item>
+    </string-array>
+    <string-array name="theme">
+        <item>Light Theme</item>
+        <item>Dark Theme</item>
+        <item>AMOLED Theme</item>
     </string-array>
 </resources>

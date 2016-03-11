@@ -14,11 +14,14 @@ public class Settings extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 
+		MainActivity.theme(this);
+
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		toolbar.setTitle("Settings");
+		if (toolbar != null) {
+			toolbar.setTitle("Settings");
+		}
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 		getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsFragment()).commit();
 	}
 

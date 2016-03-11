@@ -36,7 +36,7 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 
 	@Override
 	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		View view = inflater.inflate(R.layout.team_schedule, parent, false);
+		View view = inflater.inflate(R.layout.match, parent, false);
 		MyViewHolder holder = new MyViewHolder(view);
 		return holder;
 	}

@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +29,13 @@ public class EventSlide extends Fragment {
 	private EventSpinnerAdapter dataAdapter;
 	ArrayList<Events> eventList = new ArrayList<>();
 	private String teamNumber, year;
+	private SharedPreferences prefs;
 
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,7 +58,6 @@ public class EventSlide extends Fragment {
 
 		@Override
 		protected void onPreExecute() {
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 			teamNumber = prefs.getString("teamNumber", "");
 			year = prefs.getString("year", "");
 			Log.i(TAG, "Team Number: " + teamNumber);
@@ -82,7 +88,6 @@ public class EventSlide extends Fragment {
 	 * @param key identification key of an event
 	 */
 	public void setEventKey(String key) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("eventKey", key);
 		editor.commit();
@@ -94,7 +99,6 @@ public class EventSlide extends Fragment {
 	 * @param name event name
 	 */
 	public void setEventShortName(String name) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("eventShortName", name);
 		editor.commit();

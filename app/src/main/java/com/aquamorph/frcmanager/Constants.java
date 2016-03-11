@@ -8,7 +8,7 @@ import android.net.NetworkInfo;
  * A collection of constants needed to interact with the Blue Alliance.
  *
  * @author Christian Colglazier
- * @version 2-16-16
+ * @version 3-11-16
  */
 public class Constants {
 	public static final String TAG = "FRC Regional";
@@ -26,6 +26,16 @@ public class Constants {
 	 */
 	public static String getEventURL(String team, String year) {
 		return String.format("%steam/%s/%s/events", URL, team, year);
+	}
+
+	/**
+	 * getEventURL returns the url for a list of events a team is registered.
+	 *
+	 * @param event vent identification number
+	 * @return url to list of teams at an event
+	 */
+	public static String getEventTeams(String event) {
+		return String.format("%sevent/%s/teams", URL, event);
 	}
 
 	/**

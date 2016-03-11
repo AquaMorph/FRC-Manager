@@ -14,25 +14,30 @@ import android.view.ViewGroup;
 
 import com.aquamorph.frcmanager.DividerIndented;
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.adapters.RankAdapter;
-import com.aquamorph.frcmanager.parsers.RankParser;
+import com.aquamorph.frcmanager.adapters.EventTeamAdapter;
+import com.aquamorph.frcmanager.models.EventTeam;
+import com.aquamorph.frcmanager.parsers.TeamEventParser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class RankFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-	private static String TAG = "RankFragment";
+/**
+ * Displays a list of teams at an event.
+ *
+ * @author Christian Colglazier
+ * @version 3/11/2016
+ */
+public class TeamEventFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+	private static String TAG = "TeamEventFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<String[]> ranks = new ArrayList<>();
+	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey;
-	private String teamNumber;
-	RankParser rankParser = new RankParser();
+	TeamEventParser teamEventParser = new TeamEventParser();
 
-	public static RankFragment newInstance() {
-		RankFragment fragment = new RankFragment();
-		return fragment;
+	public static TeamEventFragment newInstance() {
+		return new TeamEventFragment();
 	}
 
 	@Override
@@ -49,7 +54,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-		adapter = new RankAdapter(getContext(), ranks);
+		adapter = new EventTeamAdapter(getContext(), teams);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -58,9 +63,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		});
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(RankFragment.this);
+		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);
 		eventKey = prefs.getString("eventKey", "");
-		teamNumber = prefs.getString("teamNumber", "0000");
 
 		refresh();
 
@@ -69,8 +73,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 	private void refresh() {
 		if (!eventKey.equals("")) {
-			final LoadRanks loadRanks = new LoadRanks();
-			loadRanks.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			final LoadEventTeams loadEventTeams = new LoadEventTeams();
+			loadEventTeams.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
@@ -78,16 +82,11 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("eventKey")) {
 			eventKey = sharedPreferences.getString("eventKey", "");
-			rankParser.setData(getContext(), "");
-			refresh();
-		}
-		if (key.equals("teamNumber")) {
-			teamNumber = sharedPreferences.getString("teamNumber", "");
 			refresh();
 		}
 	}
 
-	class LoadRanks extends AsyncTask<Void, Void, Void> {
+	class LoadEventTeams extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected void onPreExecute() {
@@ -96,11 +95,11 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			rankParser.fetchJSON(eventKey, getContext());
-			while (rankParser.parsingComplete) ;
-			ranks.clear();
-			ranks.addAll(rankParser.getRankings());
-//			Collections.sort(ranks);
+			teamEventParser.fetchJSON(eventKey, getContext());
+			while (teamEventParser.parsingComplete) ;
+			teams.clear();
+			teams.addAll(teamEventParser.getTeams());
+			Collections.sort(teams);
 			return null;
 		}
 
@@ -110,12 +109,6 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 					.getDefaultSharedPreferences(getContext());
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString("teamRank", "");
-			for (int i = 0; i < ranks.size(); i++) {
-				if (ranks.get(i)[1].equals(teamNumber)) {
-					editor.putString("teamRank", ranks.get(i)[0]);
-				}
-				editor.apply();
-			}
 			adapter.notifyDataSetChanged();
 			mSwipeRefreshLayout.setRefreshing(false);
 		}

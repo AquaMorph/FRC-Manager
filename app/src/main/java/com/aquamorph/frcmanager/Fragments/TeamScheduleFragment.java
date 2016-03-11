@@ -1,7 +1,9 @@
 package com.aquamorph.frcmanager.fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -34,6 +36,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
 	private String teamNumber, eventKey;
 	private TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
+	private View view;
 
 	public static TeamScheduleFragment newInstance() {
 		TeamScheduleFragment fragment = new TeamScheduleFragment();
@@ -43,31 +46,18 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
-		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
-		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				refresh();
-			}
-		});
-
-		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-		adapter = new TeamScheduleAdapter(getContext(), teamEventMatches, teamNumber);
-		LinearLayoutManager llm = new LinearLayoutManager(getContext());
-		llm.setOrientation(LinearLayoutManager.VERTICAL);
-		recyclerView.setAdapter(adapter);
-		recyclerView.setLayoutManager(llm);
-
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
-		teamNumber = prefs.getString("teamNumber", "");
-		eventKey = prefs.getString("eventKey", "");
-
+		view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
+		listener();
 		refresh();
-
 		return view;
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		view = inflater.inflate(R.layout.fragment_team_schedule, null);
+		listener();
 	}
 
 	private void refresh() {
@@ -114,5 +104,28 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			adapter.notifyDataSetChanged();
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
+	}
+
+	public void listener() {
+		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
+		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				refresh();
+			}
+		});
+
+		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		adapter = new TeamScheduleAdapter(getContext(), teamEventMatches, teamNumber);
+		LinearLayoutManager llm = new LinearLayoutManager(getContext());
+		llm.setOrientation(LinearLayoutManager.VERTICAL);
+		recyclerView.setAdapter(adapter);
+		recyclerView.setLayoutManager(llm);
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
+		teamNumber = prefs.getString("teamNumber", "");
+		eventKey = prefs.getString("eventKey", "");
 	}
 }

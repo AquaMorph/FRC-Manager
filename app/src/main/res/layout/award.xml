@@ -16,6 +16,7 @@
         android:paddingEnd="16dp"
         android:paddingRight="16dp"
         android:text="@string/sample_team"
+        android:textColor="?textOnBackground"
         android:textSize="16sp"
         android:textStyle="bold"/>
 
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="The Hitchhikers"
+            android:textColor="?textOnBackground"
             android:textSize="@dimen/team_number_text"
             android:textStyle="bold"/>
 
@@ -40,6 +42,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text=""
+            android:textColor="?textOnBackground"
             android:textSize="@dimen/team_number_text"/>
     </LinearLayout>
 
