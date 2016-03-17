@@ -1,7 +1,10 @@
 package com.aquamorph.frcmanager.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +51,10 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		holder.details.setVisibility(View.GONE);
 		holder.table.removeAllViews();
 
+		TypedValue typedValue = new TypedValue();
+		Resources.Theme theme = context.getTheme();
+		theme.resolveAttribute(R.attr.textOnBackground, typedValue, true);
+
 		for (int i = 2; i < data.get(position).length; i+=2) {
 			TextView column1 = new TextView(context);
 			TextView column2 = new TextView(context);
@@ -59,7 +66,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 			column2.setText(data.get(position + 1)[i]);
 
 			if(i+1 < data.get(position).length) {
-				column3.setText(data.get(0)[i+1] + ": ");
+				column3.setText(data.get(0)[i+1] + ":");
 				column4.setText(data.get(position + 1)[i+1]);
 			} else {
 				column3.setText("");
@@ -67,9 +74,15 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 			}
 
 			column1.setTextSize(context.getResources().getDimension(R.dimen.text_size));
+			column1.setTextColor(typedValue.data);
 			column2.setTextSize(context.getResources().getDimension(R.dimen.text_size));
+			column2.setTypeface(null, Typeface.ITALIC);
+			column2.setTextColor(typedValue.data);
 			column3.setTextSize(context.getResources().getDimension(R.dimen.text_size));
+			column3.setTextColor(typedValue.data);
 			column4.setTextSize(context.getResources().getDimension(R.dimen.text_size));
+			column4.setTypeface(null, Typeface.ITALIC);
+			column4.setTextColor(typedValue.data);
 			rowHeader.addView(column1);
 			rowHeader.addView(column2);
 			rowHeader.addView(column3);
