@@ -17,6 +17,7 @@ public class Constants {
 	public static final String TBA_HEADER = "X-TBA-App-Id";
 	public static final String NOT_ONLINE_MESSAGE = "No Connection";
 	public static final Boolean FORCE_DATA_RELOAD = false;
+	public static int TRACTING_LEVEL = 1;
 
 	/**
 	 * getEventURL returns the url for a list of events a team is registered.

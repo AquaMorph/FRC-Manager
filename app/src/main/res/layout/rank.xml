@@ -49,9 +49,17 @@
                 android:id="@+id/details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tot: 92, Played: 9, Auto: 10, Coopertition: 340, Container: 96, Litter: 88, Qual Avg: 69.55"
+                android:text=""
                 android:textColor="?textOnBackground"
                 android:textSize="16sp"/>
+
+            <TableLayout
+                android:id="@+id/table"
+                android:stretchColumns="*"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </TableLayout>
+
 
         </LinearLayout>
 

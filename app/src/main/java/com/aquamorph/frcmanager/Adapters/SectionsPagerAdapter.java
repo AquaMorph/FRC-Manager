@@ -12,7 +12,7 @@ import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Awards", "Teams"};//, "OPR", "DPR"};
+	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Awards", "Teams"};
 
 	public SectionsPagerAdapter(FragmentManager fm) {
 		super(fm);
