@@ -71,11 +71,9 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 	}
 
 	public class MyViewHolder extends RecyclerView.ViewHolder {
-
 		TextView teamNumber;
 		TextView award;
 		TextView details;
-
 		public MyViewHolder(View itemView) {
 			super(itemView);
 			teamNumber = (TextView) itemView.findViewById(R.id.team_number);

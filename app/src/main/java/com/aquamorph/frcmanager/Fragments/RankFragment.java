@@ -15,9 +15,12 @@ import android.view.ViewGroup;
 import com.aquamorph.frcmanager.DividerIndented;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
+import com.aquamorph.frcmanager.models.EventTeam;
 import com.aquamorph.frcmanager.parsers.RankParser;
+import com.aquamorph.frcmanager.parsers.TeamEventParser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class RankFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -26,9 +29,11 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<String[]> ranks = new ArrayList<>();
+	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey;
 	private String teamNumber;
 	RankParser rankParser = new RankParser();
+	TeamEventParser teamEventParser = new TeamEventParser();
 
 	public static RankFragment newInstance() {
 		RankFragment fragment = new RankFragment();
@@ -49,7 +54,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-		adapter = new RankAdapter(getContext(), ranks);
+		adapter = new RankAdapter(getContext(), ranks, teams);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -101,6 +106,13 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 			ranks.clear();
 			ranks.addAll(rankParser.getRankings());
 //			Collections.sort(ranks);
+
+			teamEventParser.fetchJSON(eventKey, getContext());
+			while (teamEventParser.parsingComplete) ;
+			teams.clear();
+			teams.addAll(teamEventParser.getTeams());
+			Collections.sort(teams);
+
 			return null;
 		}
 
