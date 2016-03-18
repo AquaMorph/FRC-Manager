@@ -13,6 +13,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.models.EventTeam;
 
 import java.util.ArrayList;
 
@@ -24,17 +25,19 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 	private LayoutInflater inflater;
 	private Context context;
 	private ArrayList<String[]> data;
+	private ArrayList<EventTeam> teams;
 
 	/**
 	 * RankAdapter constructor
-	 *
-	 * @param context context of the fragment
+	 *  @param context context of the fragment
 	 * @param data    ranking data in an array
+	 * @param teams
 	 */
-	public RankAdapter(Context context, ArrayList<String[]> data) {
+	public RankAdapter(Context context, ArrayList<String[]> data, ArrayList<EventTeam> teams) {
 		inflater = from(context);
 		this.data = data;
 		this.context = context;
+		this.teams = teams;
 	}
 
 	@Override
@@ -46,7 +49,8 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
-		holder.teamNumber.setText(data.get(position + 1)[0]);
+		holder.teamNumber.setText(data.get(position + 1)[0] + ". "
+				+ getTeamName(data.get(position + 1)[1]));
 		holder.rankNumber.setText(data.get(position + 1)[1]);
 		holder.details.setVisibility(View.GONE);
 		holder.table.removeAllViews();
@@ -110,5 +114,14 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 			rankNumber = (TextView) itemView.findViewById(R.id.rank);
 			details = (TextView) itemView.findViewById(R.id.details);
 		}
+	}
+
+	public String getTeamName(String number) {
+		for(int i = 0; i < teams.size(); i++) {
+			if(number.equals(Integer.toString(teams.get(i).team_number))) {
+				return teams.get(i).nickname;
+			}
+		}
+		return "";
 	}
 }
