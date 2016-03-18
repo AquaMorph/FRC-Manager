@@ -107,6 +107,11 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	}
 
 	public void listener() {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
+		teamNumber = prefs.getString("teamNumber", "");
+		eventKey = prefs.getString("eventKey", "");
+
 		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -122,10 +127,5 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
-
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
-		teamNumber = prefs.getString("teamNumber", "");
-		eventKey = prefs.getString("eventKey", "");
 	}
 }

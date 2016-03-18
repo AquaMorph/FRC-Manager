@@ -20,7 +20,7 @@ import static android.view.LayoutInflater.from;
 
 public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> {
 
-	private String TAG = "RankAdapter", info;
+	private String TAG = "RankAdapter";
 	private LayoutInflater inflater;
 	private Context context;
 	private ArrayList<String[]> data;

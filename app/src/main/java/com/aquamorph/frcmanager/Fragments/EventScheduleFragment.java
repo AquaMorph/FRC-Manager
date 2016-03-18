@@ -27,7 +27,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Match> eventMatches = new ArrayList<>();
-	private String eventKey;
+	private String teamNumber, eventKey;
 	private EventMatchesParsers eventMatchesParsers = new EventMatchesParsers();
 
 	/**
@@ -43,6 +43,11 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs.registerOnSharedPreferenceChangeListener(EventScheduleFragment.this);
+		teamNumber = prefs.getString("teamNumber", "");
+		eventKey = prefs.getString("eventKey", "");
+
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
 		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
@@ -54,15 +59,11 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-		adapter = new TeamScheduleAdapter(getContext(), eventMatches, "45");
+		adapter = new TeamScheduleAdapter(getContext(), eventMatches, teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
-
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(EventScheduleFragment.this);
-		eventKey = prefs.getString("eventKey", "");
 
 		refresh();
 
@@ -81,7 +82,8 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (key.equals("eventKey")) {
+		if (key.equals("teamNumber") || key.equals("eventKey")) {
+			teamNumber = sharedPreferences.getString("teamNumber", "");
 			eventKey = sharedPreferences.getString("eventKey", "");
 			refresh();
 		}

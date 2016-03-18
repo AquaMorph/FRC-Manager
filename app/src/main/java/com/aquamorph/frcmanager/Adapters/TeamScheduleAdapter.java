@@ -1,6 +1,7 @@
 package com.aquamorph.frcmanager.adapters;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -53,15 +54,19 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 		holder.blueTeam2.setText(ParseTeamNumber(false, 1, position));
 		holder.blueTeam3.setText(ParseTeamNumber(false, 2, position));
 
-		if (ParseTeamNumber(true, 0, position).equals(team) || ParseTeamNumber(true, 1, position)
-				.equals(team) || ParseTeamNumber(true, 2, position).equals(team)) {
-			holder.matchNumber.setBackgroundColor(context.getResources()
-					.getColor(R.color.red_alliance_light));
-		} else if (ParseTeamNumber(false, 0, position).equals(team)
-				|| ParseTeamNumber(false, 1, position).equals(team)
-				|| ParseTeamNumber(false, 2, position).equals(team)) {
-			holder.matchNumber.setBackgroundColor(context.getResources()
-					.getColor(R.color.blue_alliance_light));
+		// Underlines team number
+		if (ParseTeamNumber(true, 0, position).equals(team)) {
+			holder.redTeam1.setPaintFlags(holder.redTeam1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+		} else if (ParseTeamNumber(true, 1, position).equals(team)) {
+			holder.redTeam2.setPaintFlags(holder.redTeam2.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+		} else if (ParseTeamNumber(true, 2, position).equals(team)) {
+			holder.redTeam3.setPaintFlags(holder.redTeam3.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+		} else if (ParseTeamNumber(false, 0, position).equals(team)) {
+			holder.blueTeam1.setPaintFlags(holder.blueTeam1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+		} else if (ParseTeamNumber(false, 1, position).equals(team)) {
+			holder.blueTeam2.setPaintFlags(holder.blueTeam2.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+		} else if (ParseTeamNumber(false, 2, position).equals(team)) {
+			holder.blueTeam3.setPaintFlags(holder.blueTeam3.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 		}
 
 		//Bolds winning score
