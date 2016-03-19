@@ -35,6 +35,8 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey;
 	TeamEventParser teamEventParser = new TeamEventParser();
+	SharedPreferences prefs;
+	SharedPreferences.Editor editor;
 
 	public static TeamEventFragment newInstance() {
 		return new TeamEventFragment();
@@ -62,7 +64,8 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		recyclerView.addItemDecoration(new DividerIndented(getContext()) {
 		});
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		editor = prefs.edit();
 		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
@@ -105,9 +108,6 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 
 		@Override
 		protected void onPostExecute(Void result) {
-			SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(getContext());
-			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString("teamRank", "");
 			adapter.notifyDataSetChanged();
 			mSwipeRefreshLayout.setRefreshing(false);
