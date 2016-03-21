@@ -13,26 +13,39 @@ import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Awards", "Teams"};
+	TeamScheduleFragment teamScheduleFragment = TeamScheduleFragment.newInstance();
+	EventScheduleFragment eventScheduleFragment = EventScheduleFragment.newInstance();
+	RankFragment rankFragment = RankFragment.newInstance();
+	AwardFragment awardFragment = AwardFragment.newInstance();
+	TeamEventFragment teamEventFragment = TeamEventFragment.newInstance();
 
 	public SectionsPagerAdapter(FragmentManager fm) {
 		super(fm);
+	}
+
+	public void refreshAll() {
+		teamScheduleFragment.refresh();
+		eventScheduleFragment.refresh();
+		rankFragment.refresh();
+		awardFragment.refresh();
+		teamEventFragment.refresh();
 	}
 
 	@Override
 	public Fragment getItem(int position) {
 		switch (position) {
 			case 0:
-				return TeamScheduleFragment.newInstance();
+				return teamScheduleFragment;
 			case 1:
-				return EventScheduleFragment.newInstance();
+				return eventScheduleFragment;
 			case 2:
-				return RankFragment.newInstance();
+				return rankFragment;
 			case 3:
-				return AwardFragment.newInstance();
+				return awardFragment;
 			case 4:
-				return TeamEventFragment.newInstance();
+				return teamEventFragment;
 			default:
-				return AwardFragment.newInstance();
+				return teamEventFragment;
 		}
 	}
 

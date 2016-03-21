@@ -74,7 +74,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		return view;
 	}
 
-	private void refresh() {
+	public void refresh() {
 		if (!eventKey.equals("")) {
 			final LoadEventTeams loadEventTeams = new LoadEventTeams();
 			loadEventTeams.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

@@ -86,12 +86,14 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
 
-		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
-			openSettings();
-			return true;
+		switch (item.getItemId()) {
+			case R.id.action_settings:
+				openSettings();
+				break;
+			case R.id.refresh_all:
+				mSectionsPagerAdapter.refreshAll();
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

@@ -68,7 +68,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		return view;
 	}
 
-	private void refresh() {
+	public void refresh() {
 		if (!eventKey.equals("")) {
 			final LoadAwards loadAwards = new LoadAwards();
 			loadAwards.execute();

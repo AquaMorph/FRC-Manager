@@ -72,7 +72,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		return view;
 	}
 
-	private void refresh() {
+	public void refresh() {
 		if (!eventKey.equals("")) {
 			final LoadRanks loadRanks = new LoadRanks();
 			loadRanks.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

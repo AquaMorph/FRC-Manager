@@ -60,7 +60,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		listener();
 	}
 
-	private void refresh() {
+	public void refresh() {
 		if (!teamNumber.equals("") && !eventKey.equals("")) {
 			final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
 			loadTeamSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
