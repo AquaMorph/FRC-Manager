@@ -34,9 +34,10 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private RecyclerView recyclerView;
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
-	private String teamNumber, eventKey;
+	private String teamNumber = "", eventKey= "";
 	private TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
 	private View view;
+	SharedPreferences prefs;
 
 	public static TeamScheduleFragment newInstance() {
 		TeamScheduleFragment fragment = new TeamScheduleFragment();
@@ -107,7 +108,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	}
 
 	public void listener() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
 		teamNumber = prefs.getString("teamNumber", "");
 		eventKey = prefs.getString("eventKey", "");

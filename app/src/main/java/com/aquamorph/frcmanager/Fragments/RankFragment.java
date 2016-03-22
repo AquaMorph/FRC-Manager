@@ -34,6 +34,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private String teamNumber;
 	RankParser rankParser = new RankParser();
 	TeamEventParser teamEventParser = new TeamEventParser();
+	SharedPreferences prefs;
+	SharedPreferences.Editor editor;
 
 	public static RankFragment newInstance() {
 		RankFragment fragment = new RankFragment();
@@ -44,6 +46,10 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
+
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		editor = prefs.edit();
+
 		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -62,7 +68,6 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		recyclerView.addItemDecoration(new DividerIndented(getContext()) {
 		});
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(RankFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 		teamNumber = prefs.getString("teamNumber", "0000");
@@ -118,9 +123,6 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected void onPostExecute(Void result) {
-			SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(getContext());
-			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString("teamRank", "");
 			for (int i = 0; i < ranks.size(); i++) {
 				if (ranks.get(i)[1].equals(teamNumber)) {

@@ -33,6 +33,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Award> awards = new ArrayList<>();
 	private String eventKey;
+	SharedPreferences prefs;
 
 	public static AwardFragment newInstance() {
 		AwardFragment fragment = new AwardFragment();
@@ -60,7 +61,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		recyclerView.setLayoutManager(llm);
 		recyclerView.addItemDecoration(new Divider(getContext()));
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 

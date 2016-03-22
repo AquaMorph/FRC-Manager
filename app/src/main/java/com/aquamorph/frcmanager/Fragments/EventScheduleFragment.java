@@ -27,8 +27,9 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Match> eventMatches = new ArrayList<>();
-	private String teamNumber, eventKey;
+	private String teamNumber = "", eventKey = "";
 	private EventMatchesParsers eventMatchesParsers = new EventMatchesParsers();
+	SharedPreferences prefs;
 
 	/**
 	 * newInstance creates and returns a new EventScheduleFragment
@@ -43,7 +44,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(EventScheduleFragment.this);
 		teamNumber = prefs.getString("teamNumber", "");
 		eventKey = prefs.getString("eventKey", "");
