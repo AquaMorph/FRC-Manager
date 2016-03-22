@@ -12,7 +12,7 @@ import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Awards", "Teams"};
+	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams", "Awards"};
 	TeamScheduleFragment teamScheduleFragment = TeamScheduleFragment.newInstance();
 	EventScheduleFragment eventScheduleFragment = EventScheduleFragment.newInstance();
 	RankFragment rankFragment = RankFragment.newInstance();
@@ -41,9 +41,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 			case 2:
 				return rankFragment;
 			case 3:
-				return awardFragment;
-			case 4:
 				return teamEventFragment;
+			case 4:
+				return awardFragment;
 			default:
 				return teamEventFragment;
 		}
