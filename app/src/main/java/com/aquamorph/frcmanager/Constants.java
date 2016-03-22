@@ -8,12 +8,11 @@ import android.net.NetworkInfo;
  * A collection of constants needed to interact with the Blue Alliance.
  *
  * @author Christian Colglazier
- * @version 3-11-16
+ * @version 3-21-16
  */
 public class Constants {
 	public static final String TAG = "FRC Regional";
 	public static final String URL = "http://www.thebluealliance.com/api/v2/";
-	public static final String API_HEADER = "christian_colglazier:frc_manager:0-1-1";
 	public static final String TBA_HEADER = "X-TBA-App-Id";
 	public static final String NOT_ONLINE_MESSAGE = "No Connection";
 	public static final Boolean FORCE_DATA_RELOAD = false;
@@ -93,8 +92,8 @@ public class Constants {
 	 *
 	 * @return the Blue Alliance header
 	 */
-	public static String getApiHeader() {
-		return API_HEADER;
+	public static String getApiHeader(Context context) {
+		return "christian_colglazier:frc_manager:" + context.getResources().getString(R.string.version);
 	}
 
 	public static boolean isNetworkAvailable(Context context) {

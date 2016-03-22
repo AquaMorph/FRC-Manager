@@ -35,7 +35,7 @@ public class TeamEventMatchesParsers {
 				Log.d(TAG, "Online");
 				BlueAlliance blueAlliance = new BlueAlliance();
 				InputStream stream = blueAlliance.connect(Constants.getEventTeamMatches(team, event),
-						getLastModified(context));
+						getLastModified(context), context);
 
 				//Checks for change in data
 				if (blueAlliance.getStatus() == 200 ||  getData(context) == null

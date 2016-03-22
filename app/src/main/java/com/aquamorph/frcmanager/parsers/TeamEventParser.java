@@ -37,7 +37,7 @@ public class TeamEventParser {
 			if (online) {
 				BlueAlliance blueAlliance = new BlueAlliance();
 				InputStream stream = blueAlliance.connect(Constants.getEventTeams(event),
-						getLastModified(context));
+						getLastModified(context), context);
 
 				//Checks for change in data
 				if (blueAlliance.getStatus() == 200 ||  getData(context) == null
