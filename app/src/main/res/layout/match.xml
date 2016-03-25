@@ -57,7 +57,8 @@
                         android:layout_weight="1"
                         android:text="@string/sample_team"
                         android:textColor="?redAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                     <TextView
                         android:id="@+id/red_team_2"
@@ -66,7 +67,8 @@
                         android:layout_weight="1"
                         android:text="@string/sample_team"
                         android:textColor="?redAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                     <TextView
                         android:id="@+id/red_team_3"
@@ -75,7 +77,8 @@
                         android:layout_weight="1"
                         android:text="@string/sample_team"
                         android:textColor="?redAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                 </TableRow>
 
@@ -94,7 +97,8 @@
                         android:layout_weight="1"
                         android:text="@string/sample_team"
                         android:textColor="?blueAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                     <TextView
                         android:id="@+id/blue_team_2"
@@ -103,7 +107,8 @@
                         android:layout_weight="1"
                         android:text="@string/sample_team"
                         android:textColor="?blueAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                     <TextView
                         android:id="@+id/blue_team_3"
@@ -112,7 +117,8 @@
                         android:layout_weight="1"
                         android:text="@string/sample_team"
                         android:textColor="?blueAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                 </TableRow>
 

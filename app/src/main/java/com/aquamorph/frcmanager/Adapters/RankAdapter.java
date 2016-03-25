@@ -67,11 +67,11 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 			TableRow rowHeader = new TableRow(context);
 
 			column1.setText(data.get(0)[i] + ": ");
-			column2.setText(data.get(position + 1)[i]);
+			column2.setText(data.get(position + 1)[i].replaceAll("\\.0*$", ""));
 
 			if(i+1 < data.get(position).length) {
 				column3.setText(data.get(0)[i+1] + ":");
-				column4.setText(data.get(position + 1)[i+1]);
+				column4.setText(data.get(position + 1)[i+1].replaceAll("\\.0*$", ""));
 			} else {
 				column3.setText("");
 				column4.setText("");

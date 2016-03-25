@@ -55,14 +55,14 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 		holder.blueTeam3.setText(ParseTeamNumber(false, 2, position));
 
 		// Underlines team number
-		holder.redTeam1.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-		holder.redTeam2.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-		holder.redTeam3.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-		holder.blueTeam1.setPaintFlags(holder.blueTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-		holder.blueTeam2.setPaintFlags(holder.blueTeam2.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-		holder.blueTeam3.setPaintFlags(holder.blueTeam3.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+//		holder.redTeam1.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+//		holder.redTeam2.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+//		holder.redTeam3.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+//		holder.blueTeam1.setPaintFlags(holder.blueTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+//		holder.blueTeam2.setPaintFlags(holder.blueTeam2.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+//		holder.blueTeam3.setPaintFlags(holder.blueTeam3.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
 		if (ParseTeamNumber(true, 0, position).equals(team)) {
-			holder.redTeam1.setPaintFlags(holder.redTeam1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+			holder.redTeam1.setText(holder.redTeam1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 		} else if (ParseTeamNumber(true, 1, position).equals(team)) {
 			holder.redTeam2.setPaintFlags(holder.redTeam2.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 		} else if (ParseTeamNumber(true, 2, position).equals(team)) {
@@ -146,9 +146,9 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 
 	private String ParseTeamNumber(Boolean red, int robot, int position) {
 		if (red) {
-			return data.get(position).alliances.red.teams[robot].replaceAll("\\D+", "");
+			return String.format("%4s", data.get(position).alliances.red.teams[robot].replaceAll("\\D+", ""));
 		} else {
-			return data.get(position).alliances.blue.teams[robot].replaceAll("\\D+", "");
+			return String.format("%4s", data.get(position).alliances.blue.teams[robot].replaceAll("\\D+", ""));
 		}
 
 	}
