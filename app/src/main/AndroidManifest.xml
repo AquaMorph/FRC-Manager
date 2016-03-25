@@ -28,6 +28,10 @@
             android:theme="@style/LightTheme">
         </activity>
         <activity
+            android:name=".activities.TeamSummary"
+            android:theme="@style/LightTheme">
+        </activity>
+        <activity
             android:name=".activities.Setup"
             android:label="@string/app_name"
             android:theme="@style/Setup">

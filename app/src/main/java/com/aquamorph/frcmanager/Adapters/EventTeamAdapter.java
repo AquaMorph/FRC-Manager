@@ -1,6 +1,7 @@
 package com.aquamorph.frcmanager.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.activities.TeamSummary;
 import com.aquamorph.frcmanager.models.EventTeam;
 
 import java.util.ArrayList;
@@ -51,7 +53,7 @@ public class EventTeamAdapter extends RecyclerView.Adapter<EventTeamAdapter.MyVi
 		return data.size() - 1;
 	}
 
-	public class MyViewHolder extends RecyclerView.ViewHolder {
+	public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 		TextView teamNumber;
 		TextView rankNumber;
@@ -59,9 +61,17 @@ public class EventTeamAdapter extends RecyclerView.Adapter<EventTeamAdapter.MyVi
 
 		public MyViewHolder(View itemView) {
 			super(itemView);
+			itemView.setOnClickListener(this);
 			teamNumber = (TextView) itemView.findViewById(R.id.team_number);
 			rankNumber = (TextView) itemView.findViewById(R.id.rank);
 			details = (TextView) itemView.findViewById(R.id.details);
+		}
+
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(context, TeamSummary.class);
+			intent.putExtra("teamNumber", rankNumber.getText().toString());
+			context.startActivity(intent);
 		}
 	}
 }

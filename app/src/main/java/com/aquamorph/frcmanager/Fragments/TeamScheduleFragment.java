@@ -38,10 +38,16 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private String teamNumber = "", eventKey= "";
 	private TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
 	private View view;
+	private Boolean getTeamFromSettings = true;
 	SharedPreferences prefs;
 
 	public static TeamScheduleFragment newInstance() {
 		return new TeamScheduleFragment();
+	}
+
+	public void setTeamNumber(String teamNumber) {
+		this.teamNumber = teamNumber;
+		getTeamFromSettings = false;
 	}
 
 	@Override
@@ -58,7 +64,9 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	                         Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
 		if(savedInstanceState != null) {
-			teamNumber = savedInstanceState.getString("teamNumber");
+			if(getTeamFromSettings) {
+				teamNumber = savedInstanceState.getString("teamNumber");
+			}
 			eventKey = savedInstanceState.getString("eventKey");
 			if(Constants.TRACTING_LEVEL >= 2) {
 				Log.i(TAG, "savedInstanceState teamNumber: " + teamNumber);
@@ -105,7 +113,9 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
-			teamNumber = sharedPreferences.getString("teamNumber", "");
+			if(getTeamFromSettings) {
+				teamNumber = sharedPreferences.getString("teamNumber", "");
+			}
 			eventKey = sharedPreferences.getString("eventKey", "");
 			teamEventMatchesParsers.storeData(getContext(), "");
 			adapter = new TeamScheduleAdapter(getContext(), teamEventMatches, teamNumber);
@@ -147,7 +157,9 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	public void listener() {
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
-		teamNumber = prefs.getString("teamNumber", "");
+		if(getTeamFromSettings) {
+			teamNumber = prefs.getString("teamNumber", "");
+		}
 		eventKey = prefs.getString("eventKey", "");
 
 		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
