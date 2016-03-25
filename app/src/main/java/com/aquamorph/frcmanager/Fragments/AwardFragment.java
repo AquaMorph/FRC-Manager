@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,12 +33,18 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Award> awards = new ArrayList<>();
-	private String eventKey;
+	private String eventKey = "";
 	SharedPreferences prefs;
 
 	public static AwardFragment newInstance() {
 		AwardFragment fragment = new AwardFragment();
 		return fragment;
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 	}
 
 	@Override

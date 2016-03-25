@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
-		holder.setIsRecyclable(false);
+		holder.setIsRecyclable(true);
 		holder.matchNumber.setText(String.format("%S-%s", data.get(position).comp_level, data
 				.get(position).match_number));
 		holder.redTeam1.setText(ParseTeamNumber(true, 0, position));
@@ -54,7 +55,20 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 		holder.blueTeam2.setText(ParseTeamNumber(false, 1, position));
 		holder.blueTeam3.setText(ParseTeamNumber(false, 2, position));
 
+		holder.redTeam1.setGravity(Gravity.CENTER);
+		holder.redTeam2.setGravity(Gravity.CENTER);
+		holder.redTeam3.setGravity(Gravity.CENTER);
+		holder.blueTeam1.setGravity(Gravity.CENTER);
+		holder.blueTeam2.setGravity(Gravity.CENTER);
+		holder.blueTeam3.setGravity(Gravity.CENTER);
+
 		// Underlines team number
+		holder.redTeam1.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+		holder.redTeam2.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+		holder.redTeam3.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+		holder.blueTeam1.setPaintFlags(holder.blueTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+		holder.blueTeam2.setPaintFlags(holder.blueTeam2.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+		holder.blueTeam3.setPaintFlags(holder.blueTeam3.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
 		if (ParseTeamNumber(true, 0, position).equals(team)) {
 			holder.redTeam1.setPaintFlags(holder.redTeam1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 		} else if (ParseTeamNumber(true, 1, position).equals(team)) {
@@ -75,7 +89,9 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 			holder.blueScore.setTypeface(null, Typeface.BOLD);
 		} else if (data.get(position).alliances.red.score > data.get(position).alliances.blue.score) {
 			holder.redScore.setTypeface(null, Typeface.BOLD);
+			holder.blueScore.setTypeface(null, Typeface.NORMAL);
 		} else {
+			holder.redScore.setTypeface(null, Typeface.NORMAL);
 			holder.blueScore.setTypeface(null, Typeface.BOLD);
 		}
 
