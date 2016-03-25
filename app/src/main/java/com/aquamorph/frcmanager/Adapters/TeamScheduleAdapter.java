@@ -1,9 +1,9 @@
 package com.aquamorph.frcmanager.adapters;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,24 +55,19 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 		holder.blueTeam3.setText(ParseTeamNumber(false, 2, position));
 
 		// Underlines team number
-//		holder.redTeam1.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-//		holder.redTeam2.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-//		holder.redTeam3.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-//		holder.blueTeam1.setPaintFlags(holder.blueTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-//		holder.blueTeam2.setPaintFlags(holder.blueTeam2.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
-//		holder.blueTeam3.setPaintFlags(holder.blueTeam3.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+		team = String.format("%4s",team);
 		if (ParseTeamNumber(true, 0, position).equals(team)) {
-			holder.redTeam1.setText(holder.redTeam1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+			holder.redTeam1.setText(Html.fromHtml(underlineText(team)));
 		} else if (ParseTeamNumber(true, 1, position).equals(team)) {
-			holder.redTeam2.setPaintFlags(holder.redTeam2.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+			holder.redTeam2.setText(Html.fromHtml(underlineText(team)));
 		} else if (ParseTeamNumber(true, 2, position).equals(team)) {
-			holder.redTeam3.setPaintFlags(holder.redTeam3.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+			holder.redTeam3.setText(Html.fromHtml(underlineText(team)));
 		} else if (ParseTeamNumber(false, 0, position).equals(team)) {
-			holder.blueTeam1.setPaintFlags(holder.blueTeam1.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+			holder.blueTeam1.setText(Html.fromHtml(underlineText(team)));
 		} else if (ParseTeamNumber(false, 1, position).equals(team)) {
-			holder.blueTeam2.setPaintFlags(holder.blueTeam2.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+			holder.blueTeam2.setText(Html.fromHtml(underlineText(team)));
 		} else if (ParseTeamNumber(false, 2, position).equals(team)) {
-			holder.blueTeam3.setPaintFlags(holder.blueTeam3.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+			holder.blueTeam3.setText(Html.fromHtml(underlineText(team)));
 		}
 
 		//Bolds winning score
@@ -150,6 +145,15 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 		} else {
 			return String.format("%4s", data.get(position).alliances.blue.teams[robot].replaceAll("\\D+", ""));
 		}
+	}
 
+	private String underlineText(String text) {
+		text = text.replace(" ", "");
+		int spaces = 4-text.length();
+		String spacesText = "";
+		for(int i = 0; i < spaces; i++) {
+			spacesText += "&nbsp;";
+		}
+		return String.format("<pre>%s<u>%s</u></pre>", spacesText, text);
 	}
 }

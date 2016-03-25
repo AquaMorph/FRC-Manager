@@ -93,6 +93,11 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
 			teamNumber = sharedPreferences.getString("teamNumber", "");
 			eventKey = sharedPreferences.getString("eventKey", "");
+			adapter = new TeamScheduleAdapter(getContext(), eventMatches, teamNumber);
+			LinearLayoutManager llm = new LinearLayoutManager(getContext());
+			llm.setOrientation(LinearLayoutManager.VERTICAL);
+			recyclerView.setAdapter(adapter);
+			recyclerView.setLayoutManager(llm);
 			refresh();
 		}
 	}
