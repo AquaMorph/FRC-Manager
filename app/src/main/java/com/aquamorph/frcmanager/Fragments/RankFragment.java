@@ -112,18 +112,16 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			rankParser.fetchJSON(eventKey, getContext());
-			while (rankParser.parsingComplete) ;
-			ranks.clear();
-			ranks.addAll(rankParser.getRankings());
-//			Collections.sort(ranks);
-
 			teamEventParser.fetchJSON(eventKey, getContext());
 			while (teamEventParser.parsingComplete) ;
 			teams.clear();
 			teams.addAll(teamEventParser.getTeams());
 			Collections.sort(teams);
 
+			rankParser.fetchJSON(eventKey, getContext());
+			while (rankParser.parsingComplete) ;
+			ranks.clear();
+			ranks.addAll(rankParser.getRankings());
 			return null;
 		}
 
