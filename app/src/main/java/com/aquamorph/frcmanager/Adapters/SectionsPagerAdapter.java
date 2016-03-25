@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 
 import com.aquamorph.frcmanager.fragments.AwardFragment;
 import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
@@ -13,57 +14,43 @@ import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams", "Awards"};
-	TeamScheduleFragment teamScheduleFragment;
-	EventScheduleFragment eventScheduleFragment;
-	RankFragment rankFragment;
-	AwardFragment awardFragment;
-	TeamEventFragment teamEventFragment;
 	FragmentManager fragmentManager;
+	ViewPager viewPager;
 
-	public SectionsPagerAdapter(FragmentManager fm) {
+	public SectionsPagerAdapter(FragmentManager fm, ViewPager mViewPager) {
 		super(fm);
 		fragmentManager = fm;
-		teamScheduleFragment = TeamScheduleFragment.newInstance();
-		eventScheduleFragment = EventScheduleFragment.newInstance();
-		rankFragment = RankFragment.newInstance();
-		awardFragment = AwardFragment.newInstance();
-		teamEventFragment = TeamEventFragment.newInstance();
+		viewPager = mViewPager;
 	}
 
 	public void refreshAll() {
-//		teamScheduleFragment = TeamScheduleFragment.newInstance();
-//		eventScheduleFragment = EventScheduleFragment.newInstance();
-//		rankFragment = RankFragment.newInstance();
-//		awardFragment = AwardFragment.newInstance();
-//		teamEventFragment = TeamEventFragment.newInstance();
-		teamScheduleFragment.refresh();
-		eventScheduleFragment.refresh();
-		rankFragment.refresh();
-		awardFragment.refresh();
-		teamEventFragment.refresh();
+		final TeamScheduleFragment tab1 = (TeamScheduleFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 0));
+		tab1.refresh();
+		final EventScheduleFragment tab2 = (EventScheduleFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 1));
+		tab2.refresh();
+		final RankFragment tab3 = (RankFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 2));
+		tab3.refresh();
+		final TeamEventFragment tab4 = (TeamEventFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 3));
+		tab4.refresh();
+		final AwardFragment tab5 = (AwardFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 4));
+		tab5.refresh();
 	}
 
 	@Override
 	public Fragment getItem(int position) {
 		switch (position) {
 			case 0:
-//				teamScheduleFragment = TeamScheduleFragment.newInstance();
-				return teamScheduleFragment;
+				return TeamScheduleFragment.newInstance();
 			case 1:
-//				eventScheduleFragment = EventScheduleFragment.newInstance();
-				return eventScheduleFragment;
+				return EventScheduleFragment.newInstance();
 			case 2:
-//				rankFragment = RankFragment.newInstance();
-				return rankFragment;
+				return RankFragment.newInstance();
 			case 3:
-//				teamEventFragment = TeamEventFragment.newInstance();
-				return teamEventFragment;
+				return TeamEventFragment.newInstance();
 			case 4:
-//				awardFragment = AwardFragment.newInstance();
-				return awardFragment;
+				return AwardFragment.newInstance();
 			default:
-//				teamEventFragment = TeamEventFragment.newInstance();
-				return teamEventFragment;
+				return TeamEventFragment.newInstance();
 		}
 	}
 
@@ -77,5 +64,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 		return tabNames[position];
 	}
 
-
+	private static String makeFragmentName(int viewPagerId, int index) {
+		return "android:switcher:" + viewPagerId + ":" + index;
+	}
 }

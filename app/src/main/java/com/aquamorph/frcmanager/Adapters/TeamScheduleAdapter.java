@@ -45,7 +45,6 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
-		holder.setIsRecyclable(true);
 		holder.matchNumber.setText(String.format("%S-%s", data.get(position).comp_level, data
 				.get(position).match_number));
 		holder.redTeam1.setText(ParseTeamNumber(true, 0, position));
@@ -54,13 +53,6 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 		holder.blueTeam1.setText(ParseTeamNumber(false, 0, position));
 		holder.blueTeam2.setText(ParseTeamNumber(false, 1, position));
 		holder.blueTeam3.setText(ParseTeamNumber(false, 2, position));
-
-		holder.redTeam1.setGravity(Gravity.CENTER);
-		holder.redTeam2.setGravity(Gravity.CENTER);
-		holder.redTeam3.setGravity(Gravity.CENTER);
-		holder.blueTeam1.setGravity(Gravity.CENTER);
-		holder.blueTeam2.setGravity(Gravity.CENTER);
-		holder.blueTeam3.setGravity(Gravity.CENTER);
 
 		// Underlines team number
 		holder.redTeam1.setPaintFlags(holder.redTeam1.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
@@ -108,6 +100,13 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 			time.setTime(data.get(position).time * 1000);
 			holder.matchTime.setText(df.format(time));
 		}
+
+		holder.redTeam1.setGravity(Gravity.CENTER);
+		holder.redTeam2.setGravity(Gravity.CENTER);
+		holder.redTeam3.setGravity(Gravity.CENTER);
+		holder.blueTeam1.setGravity(Gravity.CENTER);
+		holder.blueTeam2.setGravity(Gravity.CENTER);
+		holder.blueTeam3.setGravity(Gravity.CENTER);
 	}
 
 	@Override
