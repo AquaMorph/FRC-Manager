@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.aquamorph.frcmanager.DividerIndented;
 import com.aquamorph.frcmanager.R;
@@ -32,6 +33,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 	private static String TAG = "TeamEventFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
+	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey = "";
@@ -63,6 +65,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new EventTeamAdapter(getContext(), teams);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -117,6 +120,14 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		protected void onPostExecute(Void result) {
 			editor.putString("teamRank", "");
 			adapter.notifyDataSetChanged();
+			if (teams.isEmpty()) {
+				recyclerView.setVisibility(View.GONE);
+				emptyView.setVisibility(View.VISIBLE);
+			}
+			else {
+				recyclerView.setVisibility(View.VISIBLE);
+				emptyView.setVisibility(View.GONE);
+			}
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

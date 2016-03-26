@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
@@ -26,6 +27,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	private String TAG = "TeamScheduleFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
+	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Match> eventMatches = new ArrayList<>();
 	private String teamNumber = "", eventKey = "";
@@ -67,6 +69,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new TeamScheduleAdapter(getContext(), eventMatches, teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -125,6 +128,14 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		@Override
 		protected void onPostExecute(Void result) {
 			adapter.notifyDataSetChanged();
+			if (eventMatches.isEmpty()) {
+				recyclerView.setVisibility(View.GONE);
+				emptyView.setVisibility(View.VISIBLE);
+			}
+			else {
+				recyclerView.setVisibility(View.VISIBLE);
+				emptyView.setVisibility(View.GONE);
+			}
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}
