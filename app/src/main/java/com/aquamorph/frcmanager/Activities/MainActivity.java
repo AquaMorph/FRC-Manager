@@ -113,10 +113,11 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	}
 
 	public String getSubTitle() {
+		int titleMax = 20;
 		if (teamRank.equals("")) {
-			return String.format("%s (%s)", eventName, teamNumber);
+			return String.format("%s (%s)", eventName.substring(0,titleMax), teamNumber);
 		} else {
-			return String.format("%s (%s) Rank #%s", eventName, teamNumber, teamRank);
+			return String.format("%s (%s) Rank #%s", eventName.substring(0,titleMax), teamNumber, teamRank);
 		}
 	}
 
