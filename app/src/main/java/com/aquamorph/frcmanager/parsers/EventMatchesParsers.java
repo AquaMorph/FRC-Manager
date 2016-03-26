@@ -31,7 +31,7 @@ public class EventMatchesParsers {
 			if (online) {
 				BlueAlliance blueAlliance = new BlueAlliance();
 				InputStream stream = blueAlliance.connect(Constants.getEventMatches(event),
-						getLastModified(context));
+						getLastModified(context), context);
 
 				//Checks for change in data
 				if (blueAlliance.getStatus() == 200 || getData(context) == null

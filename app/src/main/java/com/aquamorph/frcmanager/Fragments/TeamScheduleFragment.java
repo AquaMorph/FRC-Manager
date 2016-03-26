@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,22 +35,56 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private RecyclerView recyclerView;
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
-	private String teamNumber, eventKey;
+	private String teamNumber = "", eventKey= "";
 	private TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
 	private View view;
+	private Boolean getTeamFromSettings = true;
+	SharedPreferences prefs;
 
 	public static TeamScheduleFragment newInstance() {
-		TeamScheduleFragment fragment = new TeamScheduleFragment();
-		return fragment;
+		return new TeamScheduleFragment();
+	}
+
+	public void setTeamNumber(String teamNumber) {
+		this.teamNumber = teamNumber;
+		getTeamFromSettings = false;
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+		if(Constants.TRACTING_LEVEL >= 3) {
+			Log.i(TAG, "TeamScheduleFragment created");
+		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
+		if(savedInstanceState != null) {
+			if(getTeamFromSettings) {
+				teamNumber = savedInstanceState.getString("teamNumber");
+			}
+			eventKey = savedInstanceState.getString("eventKey");
+			if(Constants.TRACTING_LEVEL >= 2) {
+				Log.i(TAG, "savedInstanceState teamNumber: " + teamNumber);
+			}
+		}
 		listener();
 		refresh();
 		return view;
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString("teamNumber", teamNumber);
+		outState.putString("eventKey", eventKey);
+		if(Constants.TRACTING_LEVEL >= 3) {
+			Log.i(TAG, "onSaveInstanceState");
+		}
 	}
 
 	@Override
@@ -58,9 +93,15 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.fragment_team_schedule, null);
 		listener();
+		if(Constants.TRACTING_LEVEL >= 3) {
+			Log.i(TAG, "Configuration Changed");
+		}
 	}
 
-	private void refresh() {
+	public void refresh() {
+		if(Constants.TRACTING_LEVEL >= 2) {
+			Log.i(TAG, "teamNumber: " + teamNumber);
+		}
 		if (!teamNumber.equals("") && !eventKey.equals("")) {
 			final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
 			loadTeamSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -72,9 +113,16 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
-			teamNumber = sharedPreferences.getString("teamNumber", "");
+			if(getTeamFromSettings) {
+				teamNumber = sharedPreferences.getString("teamNumber", "");
+			}
 			eventKey = sharedPreferences.getString("eventKey", "");
 			teamEventMatchesParsers.storeData(getContext(), "");
+			adapter = new TeamScheduleAdapter(getContext(), teamEventMatches, teamNumber);
+			LinearLayoutManager llm = new LinearLayoutManager(getContext());
+			llm.setOrientation(LinearLayoutManager.VERTICAL);
+			recyclerView.setAdapter(adapter);
+			recyclerView.setLayoutManager(llm);
 			refresh();
 		}
 	}
@@ -107,9 +155,11 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	}
 
 	public void listener() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
-		teamNumber = prefs.getString("teamNumber", "");
+		if(getTeamFromSettings) {
+			teamNumber = prefs.getString("teamNumber", "");
+		}
 		eventKey = prefs.getString("eventKey", "");
 
 		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);

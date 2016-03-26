@@ -67,7 +67,7 @@ public class EventSlide extends Fragment {
 		protected Void doInBackground(Void... params) {
 			Log.i(TAG, "Event size: " + eventList.size());
 			EventParsers eventParsers = new EventParsers();
-			eventParsers.fetchJSON("frc" + teamNumber, year);
+			eventParsers.fetchJSON("frc" + teamNumber, year, getContext());
 			while (eventParsers.parsingComplete) ;
 			eventList.clear();
 			eventList.addAll(eventParsers.getEvents());

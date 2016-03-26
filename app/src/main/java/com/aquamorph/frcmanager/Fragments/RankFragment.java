@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,10 +31,11 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private RecyclerView.Adapter adapter;
 	private ArrayList<String[]> ranks = new ArrayList<>();
 	private ArrayList<EventTeam> teams = new ArrayList<>();
-	private String eventKey;
-	private String teamNumber;
+	private String eventKey = "", teamNumber = "";
 	RankParser rankParser = new RankParser();
 	TeamEventParser teamEventParser = new TeamEventParser();
+	SharedPreferences prefs;
+	SharedPreferences.Editor editor;
 
 	public static RankFragment newInstance() {
 		RankFragment fragment = new RankFragment();
@@ -41,9 +43,19 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	}
 
 	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
+
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		editor = prefs.edit();
+
 		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -62,7 +74,6 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		recyclerView.addItemDecoration(new DividerIndented(getContext()) {
 		});
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(RankFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 		teamNumber = prefs.getString("teamNumber", "0000");
@@ -72,8 +83,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		return view;
 	}
 
-	private void refresh() {
-		if (!eventKey.equals("")) {
+	public void refresh() {
+		if (!eventKey.equals("") && !teamNumber.equals("")) {
 			final LoadRanks loadRanks = new LoadRanks();
 			loadRanks.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
@@ -101,26 +112,21 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			rankParser.fetchJSON(eventKey, getContext());
-			while (rankParser.parsingComplete) ;
-			ranks.clear();
-			ranks.addAll(rankParser.getRankings());
-//			Collections.sort(ranks);
-
 			teamEventParser.fetchJSON(eventKey, getContext());
 			while (teamEventParser.parsingComplete) ;
 			teams.clear();
 			teams.addAll(teamEventParser.getTeams());
 			Collections.sort(teams);
 
+			rankParser.fetchJSON(eventKey, getContext());
+			while (rankParser.parsingComplete) ;
+			ranks.clear();
+			ranks.addAll(rankParser.getRankings());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(getContext());
-			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString("teamRank", "");
 			for (int i = 0; i < ranks.size(); i++) {
 				if (ranks.get(i)[1].equals(teamNumber)) {

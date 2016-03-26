@@ -55,30 +55,30 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
                         android:text="@string/sample_team"
                         android:textColor="?redAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                     <TextView
                         android:id="@+id/red_team_2"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
                         android:text="@string/sample_team"
                         android:textColor="?redAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                     <TextView
                         android:id="@+id/red_team_3"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
                         android:text="@string/sample_team"
                         android:textColor="?redAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                 </TableRow>
 
@@ -95,31 +95,30 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
                         android:text="@string/sample_team"
                         android:textColor="?blueAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                     <TextView
                         android:id="@+id/blue_team_2"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
                         android:text="@string/sample_team"
                         android:textColor="?blueAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                     <TextView
                         android:id="@+id/blue_team_3"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
-
-                        android:gravity="center"
                         android:text="@string/sample_team"
                         android:textColor="?blueAllianceText"
-                        android:textSize="@dimen/team_number_text"/>
+                        android:textSize="@dimen/team_number_text"
+                        android:typeface="monospace"/>
 
                 </TableRow>
 

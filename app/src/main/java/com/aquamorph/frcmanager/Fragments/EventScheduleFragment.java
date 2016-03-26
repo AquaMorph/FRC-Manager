@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,8 +28,9 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	private RecyclerView recyclerView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Match> eventMatches = new ArrayList<>();
-	private String teamNumber, eventKey;
+	private String teamNumber = "", eventKey = "";
 	private EventMatchesParsers eventMatchesParsers = new EventMatchesParsers();
+	SharedPreferences prefs;
 
 	/**
 	 * newInstance creates and returns a new EventScheduleFragment
@@ -41,9 +43,15 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	}
 
 	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(EventScheduleFragment.this);
 		teamNumber = prefs.getString("teamNumber", "");
 		eventKey = prefs.getString("eventKey", "");
@@ -73,7 +81,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	/**
 	 * refresh reloads the event schedule and repopulates the listview
 	 */
-	private void refresh() {
+	public void refresh() {
 		if (!eventKey.equals("")) {
 			final LoadEventSchedule loadEventSchedule = new LoadEventSchedule();
 			loadEventSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -85,6 +93,11 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
 			teamNumber = sharedPreferences.getString("teamNumber", "");
 			eventKey = sharedPreferences.getString("eventKey", "");
+			adapter = new TeamScheduleAdapter(getContext(), eventMatches, teamNumber);
+			LinearLayoutManager llm = new LinearLayoutManager(getContext());
+			llm.setOrientation(LinearLayoutManager.VERTICAL);
+			recyclerView.setAdapter(adapter);
+			recyclerView.setLayoutManager(llm);
 			refresh();
 		}
 	}

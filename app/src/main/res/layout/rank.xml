@@ -2,6 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp">
 
@@ -55,9 +58,9 @@
 
             <TableLayout
                 android:id="@+id/table"
-                android:stretchColumns="*"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
             </TableLayout>
 
 
