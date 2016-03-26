@@ -136,7 +136,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, eventKey, getContext());
+			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, eventKey, getContext(), getTeamFromSettings);
 			while (teamEventMatchesParsers.parsingComplete) ;
 			teamEventMatches.clear();
 			teamEventMatches.addAll(teamEventMatchesParsers.getTeamEventMatches());
