@@ -23,6 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:textSize="24sp"
+        android:padding="8dp"
+        android:textColor="?textOnBackground"
         android:text="No Data"/>
 
 </RelativeLayout>
