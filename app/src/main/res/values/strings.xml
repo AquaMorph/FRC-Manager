@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE resources [
-    <!ENTITY appversion "3-0-0">
+    <!ENTITY appversion "0-3-1">
     ]>
 
 <resources>
@@ -23,6 +23,7 @@
     <string name="refresh_icon">Refresh</string>
     <string name="version">&appversion;</string>
     <string name="version_text">Version &appversion;</string>
+    <string name="no_data">No Data</string>
     <string-array name="year_array">
         <item>2016</item>
         <item>2015</item>
