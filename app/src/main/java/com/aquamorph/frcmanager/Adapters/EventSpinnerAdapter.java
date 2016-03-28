@@ -34,7 +34,7 @@ public class EventSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		return eventList.get(position).name;
+		return eventList.get(position).short_name;
 	}
 
 	@Override
