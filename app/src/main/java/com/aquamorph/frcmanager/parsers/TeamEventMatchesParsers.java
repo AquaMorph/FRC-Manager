@@ -23,9 +23,11 @@ public class TeamEventMatchesParsers {
 	private Match[] teamEventMatches;
 	private ArrayList<Match> teamArray = new ArrayList<>();
 	public Boolean online;
+	private Boolean isTeamNumber = false;
 	Gson gson = new Gson();
 
-	public void fetchJSON(final String team, final String event, final Context context) {
+	public void fetchJSON(final String team, final String event, final Context context, final Boolean isTeamNumber) {
+		this.isTeamNumber = isTeamNumber;
 		try {
 			Log.d(TAG, "Loading");
 			online = Constants.isNetworkAvailable(context);
@@ -39,12 +41,14 @@ public class TeamEventMatchesParsers {
 
 				//Checks for change in data
 				if (blueAlliance.getStatus() == 200 ||  getData(context) == null
-						|| Constants.FORCE_DATA_RELOAD) {
+						|| Constants.FORCE_DATA_RELOAD || !isTeamNumber) {
 					Log.d(TAG, "Loading new data");
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					teamEventMatches = gson.fromJson(reader, Match[].class);
-					storeLastModified(context, blueAlliance.getLastUpdated());
-					storeData(context, gson.toJson(teamEventMatches));
+					if(!isTeamNumber) {
+						storeLastModified(context, blueAlliance.getLastUpdated());
+						storeData(context, gson.toJson(teamEventMatches));
+					}
 					blueAlliance.close();
 				} else {
 					teamEventMatches = getData(context);

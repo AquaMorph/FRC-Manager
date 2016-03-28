@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.aquamorph.frcmanager.Divider;
 import com.aquamorph.frcmanager.R;
@@ -31,6 +32,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	private String TAG = "AwardFragment";
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;
+	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Award> awards = new ArrayList<>();
 	private String eventKey = "";
@@ -61,6 +63,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new AwardAdapter(getContext(), awards);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -111,6 +114,14 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		@Override
 		protected void onPostExecute(Void result) {
 			adapter.notifyDataSetChanged();
+			if (awards.isEmpty()) {
+				recyclerView.setVisibility(View.GONE);
+				emptyView.setVisibility(View.VISIBLE);
+			}
+			else {
+				recyclerView.setVisibility(View.VISIBLE);
+				emptyView.setVisibility(View.GONE);
+			}
 			swipeRefreshLayout.setRefreshing(false);
 		}
 	}

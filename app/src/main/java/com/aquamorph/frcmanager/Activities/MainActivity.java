@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
 import com.google.android.gms.ads.AdRequest;
@@ -113,10 +114,21 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	}
 
 	public String getSubTitle() {
+
 		if (teamRank.equals("")) {
-			return String.format("%s (%s)", eventName, teamNumber);
+			return String.format("%s (%s)", shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH),
+					teamNumber);
 		} else {
-			return String.format("%s (%s) Rank #%s", eventName, teamNumber, teamRank);
+			return String.format("%s (%s) Rank #%s",
+					shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH), teamNumber, teamRank);
+		}
+	}
+
+	public String shorten(String text, int amount) {
+		if(text.length() > amount) {
+			return text.substring(0, amount) + "...";
+		} else {
+			return text;
 		}
 	}
 

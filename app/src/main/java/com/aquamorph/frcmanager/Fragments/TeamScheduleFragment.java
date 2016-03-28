@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aquamorph.frcmanager.Constants;
@@ -33,6 +34,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private String TAG = "TeamScheduleFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
+	private TextView emptyView;
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
 	private String teamNumber = "", eventKey= "";
@@ -136,7 +138,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, eventKey, getContext());
+			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, eventKey, getContext(), getTeamFromSettings);
 			while (teamEventMatchesParsers.parsingComplete) ;
 			teamEventMatches.clear();
 			teamEventMatches.addAll(teamEventMatchesParsers.getTeamEventMatches());
@@ -150,6 +152,14 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 				Toast.makeText(getContext(), Constants.NOT_ONLINE_MESSAGE, Toast.LENGTH_SHORT).show();
 			}
 			adapter.notifyDataSetChanged();
+			if (teamEventMatches.isEmpty()) {
+				recyclerView.setVisibility(View.GONE);
+				emptyView.setVisibility(View.VISIBLE);
+			}
+			else {
+				recyclerView.setVisibility(View.VISIBLE);
+				emptyView.setVisibility(View.GONE);
+			}
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}
@@ -172,6 +182,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new TeamScheduleAdapter(getContext(), teamEventMatches, teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
