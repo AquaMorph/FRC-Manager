@@ -15,6 +15,7 @@ import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
  * @version 3/29/2016
  */
 public class TeamSummary extends AppCompatActivity {
+
 	private String teamNumber = "";
 
 	@Override

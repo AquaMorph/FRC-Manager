@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventSpinnerAdapter;
 import com.aquamorph.frcmanager.models.Events;
@@ -94,7 +95,7 @@ public class EventSlide extends Fragment {
 	}
 
 	/**
-	 * setEventShortName set the shared variable of the events name.
+	 * setEventShortName() set the shared variable of the events name.
 	 *
 	 * @param name event name
 	 */
@@ -105,19 +106,19 @@ public class EventSlide extends Fragment {
 	}
 
 	private class EventSpinnerListener implements android.widget.AdapterView.OnItemSelectedListener {
+
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-			Log.i(TAG, "Key:" + eventList.get(position).key);
 			setEventKey(eventList.get(position).key);
-			Log.i(TAG, "Short Name:" + eventList.get(position).short_name);
+			if(Constants.TRACTING_LEVEL > 0) {
+				Log.i(TAG, "Key:" + eventList.get(position).key);
+				Log.i(TAG, "Short Name:" + eventList.get(position).short_name);
+			}
 			setEventShortName(eventList.get(position).short_name);
 			((TextView) eventSpinnder.getSelectedView()).setTextColor(getResources().getColor(R.color.icons));
 		}
 
 		@Override
-		public void onNothingSelected(AdapterView<?> parent) {
-
-		}
+		public void onNothingSelected(AdapterView<?> parent) {}
 	}
-
 }

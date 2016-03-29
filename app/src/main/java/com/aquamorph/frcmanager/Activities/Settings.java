@@ -16,6 +16,7 @@ import com.aquamorph.frcmanager.fragments.SettingsFragment;
  * @version 3/29/2016
  */
 public class Settings extends AppCompatActivity {
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

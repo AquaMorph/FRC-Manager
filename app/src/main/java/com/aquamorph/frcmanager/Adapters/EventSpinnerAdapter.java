@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Populates the spinner for the setup screen with a list of events a team is registered for.
  *
  * @author Christian Colglazier
- * @version 1/22/2016
+ * @version 3/29/2016
  */
 public class EventSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 
@@ -54,7 +54,6 @@ public class EventSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 					android.R.layout.simple_dropdown_item_1line, parent, false
 			);
 		}
-//		text.setTextColor(activity.getResources().getColor(R.color.icons));
 		text.setText(eventList.get(position).name);
 		return text;
 	}

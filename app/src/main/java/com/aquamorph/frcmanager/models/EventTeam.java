@@ -7,6 +7,7 @@ package com.aquamorph.frcmanager.models;
  * @version 3/11/2016
  */
 public class EventTeam implements Comparable {
+
 	public String website;
 	public String name;
 	public String locality;

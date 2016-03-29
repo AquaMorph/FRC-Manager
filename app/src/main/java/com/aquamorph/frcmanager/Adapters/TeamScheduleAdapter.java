@@ -21,6 +21,12 @@ import java.util.Date;
 
 import static android.view.LayoutInflater.from;
 
+/**
+ * Populates a RecyclerView with the schedule for a team.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapter.MyViewHolder> {
 
 	private String TAG = "TeamScheduleAdapter";
@@ -47,26 +53,26 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 	public void onBindViewHolder(MyViewHolder holder, int position) {
 		holder.matchNumber.setText(String.format("%S-%s", data.get(position).comp_level, data
 				.get(position).match_number));
-		holder.redTeam1.setText(ParseTeamNumber(true, 0, position));
-		holder.redTeam2.setText(ParseTeamNumber(true, 1, position));
-		holder.redTeam3.setText(ParseTeamNumber(true, 2, position));
-		holder.blueTeam1.setText(ParseTeamNumber(false, 0, position));
-		holder.blueTeam2.setText(ParseTeamNumber(false, 1, position));
-		holder.blueTeam3.setText(ParseTeamNumber(false, 2, position));
+		holder.redTeam1.setText(parseTeamNumber(true, 0, position));
+		holder.redTeam2.setText(parseTeamNumber(true, 1, position));
+		holder.redTeam3.setText(parseTeamNumber(true, 2, position));
+		holder.blueTeam1.setText(parseTeamNumber(false, 0, position));
+		holder.blueTeam2.setText(parseTeamNumber(false, 1, position));
+		holder.blueTeam3.setText(parseTeamNumber(false, 2, position));
 
 		// Underlines team number
-		team = String.format("%4s",team);
-		if (ParseTeamNumber(true, 0, position).equals(team)) {
+		team = String.format("%4s", team);
+		if (parseTeamNumber(true, 0, position).equals(team)) {
 			holder.redTeam1.setText(Html.fromHtml(underlineText(team)));
-		} else if (ParseTeamNumber(true, 1, position).equals(team)) {
+		} else if (parseTeamNumber(true, 1, position).equals(team)) {
 			holder.redTeam2.setText(Html.fromHtml(underlineText(team)));
-		} else if (ParseTeamNumber(true, 2, position).equals(team)) {
+		} else if (parseTeamNumber(true, 2, position).equals(team)) {
 			holder.redTeam3.setText(Html.fromHtml(underlineText(team)));
-		} else if (ParseTeamNumber(false, 0, position).equals(team)) {
+		} else if (parseTeamNumber(false, 0, position).equals(team)) {
 			holder.blueTeam1.setText(Html.fromHtml(underlineText(team)));
-		} else if (ParseTeamNumber(false, 1, position).equals(team)) {
+		} else if (parseTeamNumber(false, 1, position).equals(team)) {
 			holder.blueTeam2.setText(Html.fromHtml(underlineText(team)));
-		} else if (ParseTeamNumber(false, 2, position).equals(team)) {
+		} else if (parseTeamNumber(false, 2, position).equals(team)) {
 			holder.blueTeam3.setText(Html.fromHtml(underlineText(team)));
 		}
 
@@ -139,7 +145,15 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 		}
 	}
 
-	private String ParseTeamNumber(Boolean red, int robot, int position) {
+	/**
+	 * parseTeamNumber returns a formatted team number.
+	 *
+	 * @param red is the robot red or blue
+	 * @param robot position of the team
+	 * @param position data position
+	 * @return team number
+	 */
+	private String parseTeamNumber(Boolean red, int robot, int position) {
 		if (red) {
 			return String.format("%4s", data.get(position).alliances.red.teams[robot].replaceAll("\\D+", ""));
 		} else {
@@ -147,11 +161,17 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 		}
 	}
 
+	/**
+	 * underlineText() returns a string with formatting in HTML that is underlined.
+	 *
+	 * @param text team number
+	 * @return returns formatted team number
+	 */
 	private String underlineText(String text) {
 		text = text.replace(" ", "");
-		int spaces = 4-text.length();
+		int spaces = 4 - text.length();
 		String spacesText = "";
-		for(int i = 0; i < spaces; i++) {
+		for (int i = 0; i < spaces; i++) {
 			spacesText += "&nbsp;";
 		}
 		return String.format("<pre>%s<u>%s</u></pre>", spacesText, text);

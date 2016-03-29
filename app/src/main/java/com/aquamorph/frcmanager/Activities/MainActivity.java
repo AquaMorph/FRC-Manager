@@ -28,6 +28,7 @@ import com.google.android.gms.ads.AdView;
  * @version 3/29/2016
  */
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener {
+
 	private String TAG = "MainActivity";
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;

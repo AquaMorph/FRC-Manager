@@ -11,6 +11,7 @@ import java.util.Locale;
  * @version 3/29/2016
  */
 public class Events implements Comparable {
+
 	public String key;
 	public String website;
 	public Boolean official;

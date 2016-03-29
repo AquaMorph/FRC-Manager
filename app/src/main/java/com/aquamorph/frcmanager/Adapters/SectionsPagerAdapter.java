@@ -11,6 +11,12 @@ import com.aquamorph.frcmanager.fragments.RankFragment;
 import com.aquamorph.frcmanager.fragments.TeamEventFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 
+/**
+ * Populates a tab layout with fragments.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams", "Awards"};
@@ -23,6 +29,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 		viewPager = mViewPager;
 	}
 
+	/**
+	 * refreshAll() reloads all data in the fragments.
+	 */
 	public void refreshAll() {
 		final TeamScheduleFragment tab1 = (TeamScheduleFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 0));
 		tab1.refresh();
@@ -64,6 +73,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 		return tabNames[position];
 	}
 
+	/**
+	 * makeFragmentName() returns the tag for a desired fragment.
+	 *
+	 * @param viewPagerId pager id
+	 * @param index fragment number
+	 * @return fragment tag
+	 */
 	private static String makeFragmentName(int viewPagerId, int index) {
 		return "android:switcher:" + viewPagerId + ":" + index;
 	}

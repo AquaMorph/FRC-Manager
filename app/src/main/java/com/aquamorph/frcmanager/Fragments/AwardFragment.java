@@ -29,6 +29,7 @@ import java.util.ArrayList;
  * @version 2/13/2016
  */
 public class AwardFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
 	private String TAG = "AwardFragment";
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;

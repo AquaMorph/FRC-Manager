@@ -19,6 +19,7 @@ import com.github.paolorotolo.appintro.AppIntro;
  * @version 3/29/2016
  */
 public class Setup extends AppIntro {
+
 	private String TAG = "Setup";
 	private YearSlide yearSlide;
 	private TeamNumberSlide teamNumberSlide;
