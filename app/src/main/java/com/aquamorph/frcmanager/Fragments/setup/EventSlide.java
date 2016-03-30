@@ -23,6 +23,12 @@ import com.aquamorph.frcmanager.parsers.EventParsers;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Loads events a team is signed up for and allows for the selection of that event.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class EventSlide extends Fragment {
 
 	String TAG = "EventSlide";
@@ -50,6 +56,9 @@ public class EventSlide extends Fragment {
 		return view;
 	}
 
+	/**
+	 * load() loads the team events
+	 */
 	public void load() {
 		final LoadTeamEvents loadTeamEvents = new LoadTeamEvents();
 		loadTeamEvents.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -91,7 +100,7 @@ public class EventSlide extends Fragment {
 	public void setEventKey(String key) {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("eventKey", key);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
@@ -102,23 +111,25 @@ public class EventSlide extends Fragment {
 	public void setEventShortName(String name) {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("eventShortName", name);
-		editor.commit();
+		editor.apply();
 	}
 
-	private class EventSpinnerListener implements android.widget.AdapterView.OnItemSelectedListener {
+	private class EventSpinnerListener implements AdapterView.OnItemSelectedListener {
 
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 			setEventKey(eventList.get(position).key);
-			if(Constants.TRACTING_LEVEL > 0) {
+			if (Constants.TRACTING_LEVEL > 0) {
 				Log.i(TAG, "Key:" + eventList.get(position).key);
 				Log.i(TAG, "Short Name:" + eventList.get(position).short_name);
 			}
 			setEventShortName(eventList.get(position).short_name);
-			((TextView) eventSpinnder.getSelectedView()).setTextColor(getResources().getColor(R.color.icons));
+			((TextView) eventSpinnder.getSelectedView()).setTextColor(getResources()
+					.getColor(R.color.icons));
 		}
 
 		@Override
-		public void onNothingSelected(AdapterView<?> parent) {}
+		public void onNothingSelected(AdapterView<?> parent) {
+		}
 	}
 }

@@ -22,6 +22,12 @@ import com.aquamorph.frcmanager.parsers.EventMatchesParsers;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Displays a list of matches at an event.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class EventScheduleFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private String TAG = "TeamScheduleFragment";
@@ -40,8 +46,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	 * @return EventScheduleFragment
 	 */
 	public static EventScheduleFragment newInstance() {
-		EventScheduleFragment fragment = new EventScheduleFragment();
-		return fragment;
+		return new EventScheduleFragment();
 	}
 
 	@Override
@@ -105,9 +110,6 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		}
 	}
 
-	/**
-	 *
-	 */
 	class LoadEventSchedule extends AsyncTask<Void, Void, Void> {
 
 		@Override

@@ -30,6 +30,7 @@ import java.util.Collections;
  * @version 3/11/2016
  */
 public class TeamEventFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
 	private static String TAG = "TeamEventFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
@@ -41,6 +42,11 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 	SharedPreferences prefs;
 	SharedPreferences.Editor editor;
 
+	/**
+	 * newInstance creates and returns a new TeamEventFragment
+	 *
+	 * @return TeamEventFragment
+	 */
 	public static TeamEventFragment newInstance() {
 		return new TeamEventFragment();
 	}
@@ -75,7 +81,6 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		});
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		editor = prefs.edit();
 		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
@@ -84,6 +89,9 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		return view;
 	}
 
+	/**
+	 * refrest() loads data needed for this fragment.
+	 */
 	public void refresh() {
 		if (!eventKey.equals("")) {
 			final LoadEventTeams loadEventTeams = new LoadEventTeams();
@@ -118,7 +126,9 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 
 		@Override
 		protected void onPostExecute(Void result) {
+			editor = prefs.edit();
 			editor.putString("teamRank", "");
+			editor.apply();
 			adapter.notifyDataSetChanged();
 			if (teams.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);

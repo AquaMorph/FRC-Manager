@@ -39,9 +39,13 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	private String eventKey = "";
 	SharedPreferences prefs;
 
+	/**
+	 * newInstance creates and returns a new AwardFragment
+	 *
+	 * @return AwardFragment
+	 */
 	public static AwardFragment newInstance() {
-		AwardFragment fragment = new AwardFragment();
-		return fragment;
+		return new AwardFragment();
 	}
 
 	@Override
@@ -80,6 +84,9 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		return view;
 	}
 
+	/**
+	 * refrest() loads data needed for this fragment.
+	 */
 	public void refresh() {
 		if (!eventKey.equals("")) {
 			final LoadAwards loadAwards = new LoadAwards();

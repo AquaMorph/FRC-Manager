@@ -7,7 +7,7 @@ import android.util.Log;
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.fragments.setup.EventSlide;
-import com.aquamorph.frcmanager.fragments.setup.FirstSlide;
+import com.aquamorph.frcmanager.fragments.setup.Slide;
 import com.aquamorph.frcmanager.fragments.setup.TeamNumberSlide;
 import com.aquamorph.frcmanager.fragments.setup.YearSlide;
 import com.github.paolorotolo.appintro.AppIntro;
@@ -33,7 +33,7 @@ public class Setup extends AppIntro {
 		teamNumberSlide = new TeamNumberSlide();
 		eventSlide = new EventSlide();
 
-		addSlide(FirstSlide.newInstance(R.layout.first_slide));
+		addSlide(Slide.newInstance(R.layout.first_slide));
 		addSlide(yearSlide);
 		addSlide(teamNumberSlide);
 		addSlide(eventSlide);
@@ -77,6 +77,4 @@ public class Setup extends AppIntro {
 
 	@Override
 	public void onNextPressed() {}
-
-
 }
