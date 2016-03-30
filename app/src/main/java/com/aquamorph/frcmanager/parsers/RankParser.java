@@ -14,6 +14,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Fetches and parses rank data for an event.
+ *
+ * @author Christian Colglazier
+ * @version 3/26/2016
+ */
 public class RankParser {
 
 	public String TAG = "RankParser";
@@ -22,7 +28,6 @@ public class RankParser {
 	private ArrayList<String[]> rankArray = new ArrayList<>();
 	public Boolean online;
 	Gson gson = new Gson();
-
 
 	public void fetchJSON(final String event, final Context context) {
 		try {
@@ -55,12 +60,17 @@ public class RankParser {
 		}
 	}
 
+	/**
+	 * getRankings() return rank data as an arraylist.
+	 *
+	 * @return String of rankings
+	 */
 	public ArrayList<String[]> getRankings() {
 		return rankArray;
 	}
 
 	/**
-	 * setLastModified() stores the last modified date
+	 * setLastModified() stores the last modified date.
 	 *
 	 * @param context
 	 * @param date
@@ -69,14 +79,14 @@ public class RankParser {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("rankLast", date);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getLastModified() returns the last modified date
+	 * getLastModified() returns the last modified date.
 	 *
 	 * @param context
-	 * @return
+	 * @return last modified
 	 */
 	public String getLastModified(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -84,7 +94,7 @@ public class RankParser {
 	}
 
 	/**
-	 * setData() stores the date to a json string
+	 * setData() stores the date to a json string.
 	 *
 	 * @param context
 	 * @param data
@@ -93,14 +103,14 @@ public class RankParser {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("ranks", data);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getData() returns data from a stored json string
+	 * getData() returns data from a stored json string.
 	 *
 	 * @param context
-	 * @return
+	 * @return ranking data
 	 */
 	public String[][] getData(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

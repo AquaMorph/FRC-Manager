@@ -16,12 +16,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * <p></p>
+ * Fetches and parses award data for an event.
  *
  * @author Christian Colglazier
- * @version 1/26/2016
+ * @version 3/26/2016
  */
 public class AwardParser {
+
 	public String TAG = "AwardParser";
 	public volatile boolean parsingComplete = true;
 	private Award[] awards;
@@ -60,12 +61,17 @@ public class AwardParser {
 		}
 	}
 
+	/**
+	 * getAwards returns populated arraylist of awards.
+	 *
+	 * @return awards
+	 */
 	public ArrayList<Award> getAwards() {
 		return awardsList;
 	}
 
 	/**
-	 * setLastModified() stores the last modified date
+	 * setLastModified() stores the last modified date.
 	 *
 	 * @param context
 	 * @param date
@@ -78,10 +84,10 @@ public class AwardParser {
 	}
 
 	/**
-	 * getLastModified() returns the last modified date
+	 * getLastModified() returns the last modified date.
 	 *
 	 * @param context
-	 * @return
+	 * @return last modified
 	 */
 	public String getLastModified(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -89,7 +95,7 @@ public class AwardParser {
 	}
 
 	/**
-	 * setData() stores the date to a json string
+	 * setData() stores the date to a json string.
 	 *
 	 * @param context
 	 * @param data
@@ -98,11 +104,11 @@ public class AwardParser {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("awards", data);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getData() returns data from a stored json string
+	 * getData() returns data from a stored json string.
 	 *
 	 * @param context
 	 * @return

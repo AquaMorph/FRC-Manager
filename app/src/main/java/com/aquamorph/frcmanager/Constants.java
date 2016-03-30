@@ -8,7 +8,7 @@ import android.net.NetworkInfo;
  * A collection of constants needed to interact with the Blue Alliance.
  *
  * @author Christian Colglazier
- * @version 3-21-16
+ * @version 3/29/16
  */
 public class Constants {
 	public static final String TAG = "FRC Regional";
@@ -20,7 +20,7 @@ public class Constants {
 	public static int MAX_EVENT_TITLE_LENGTH = 20;
 
 	/**
-	 * getEventURL returns the url for a list of events a team is registered.
+	 * getEventURL() returns the url for a list of events a team is registered.
 	 *
 	 * @param team team identification "frc####"
 	 * @return url to team events
@@ -30,7 +30,7 @@ public class Constants {
 	}
 
 	/**
-	 * getEventURL returns the url for a list of events a team is registered.
+	 * getEventURL() returns the url for a list of events a team is registered.
 	 *
 	 * @param event vent identification number
 	 * @return url to list of teams at an event
@@ -40,7 +40,7 @@ public class Constants {
 	}
 
 	/**
-	 * getEventTeamMatches returns the url for a team's matches at a specific event.
+	 * getEventTeamMatches() returns the url for a team's matches at a specific event.
 	 *
 	 * @param team team identification "frc####"
 	 * @param event event identification number
@@ -51,7 +51,7 @@ public class Constants {
 	}
 
 	/**
-	 * getEventMatches returns the url for all matches at an event
+	 * getEventMatches() returns the url for all matches at an event.
 	 *
 	 * @param event event identification number
 	 * @return url to matches at en event
@@ -61,7 +61,7 @@ public class Constants {
 	}
 
 	/**
-	 * getEventStats returns the url for event statistics
+	 * getEventStats() returns the url for event statistics
 	 *
 	 * @param event event identification number
 	 * @return url to event statistics
@@ -71,7 +71,8 @@ public class Constants {
 	}
 
 	/**
-	 * getEventRanks returns the url for event team rankings
+	 * getEventRanks() returns the url for event team rankings.
+	 *
 	 * @param event event identification number
 	 * @return url to event rankings
 	 */
@@ -80,7 +81,8 @@ public class Constants {
 	}
 
 	/**
-	 * getEventAwards returns the url awards given at
+	 * getEventAwards() returns the url awards given at.
+	 *
 	 * @param event event identification number
 	 * @return url to event awards
 	 */
@@ -89,7 +91,7 @@ public class Constants {
 	}
 
 	/**
-	 * getApiHeader returns the header needed to get access to the Blue Alliance
+	 * getApiHeader() returns the header needed to get access to the Blue Alliance.
 	 *
 	 * @return the Blue Alliance header
 	 */
@@ -97,6 +99,12 @@ public class Constants {
 		return "christian_colglazier:frc_manager:" + context.getResources().getString(R.string.version);
 	}
 
+	/**
+	 * isNetworkAvailable() returns if a connection to the internet is available.
+	 *
+	 * @param context fragment or activity the request takes place from
+	 * @return is internet available
+	 */
 	public static boolean isNetworkAvailable(Context context) {
 		ConnectivityManager connectivityManager
 				= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

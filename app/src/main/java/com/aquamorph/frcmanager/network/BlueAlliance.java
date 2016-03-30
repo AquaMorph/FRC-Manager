@@ -9,6 +9,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Established a connection to the Blue Alliance and fetches JSON data.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class BlueAlliance {
 
 	HttpURLConnection conn;
@@ -33,7 +39,6 @@ public class BlueAlliance {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 
@@ -45,10 +50,20 @@ public class BlueAlliance {
 		}
 	}
 
+	/**
+	 * getLastUpdated() returns when the request was last updated from the server.
+	 *
+	 * @return last updated
+	 */
 	public String getLastUpdated() {
 		return lastUpdated;
 	}
 
+	/**
+	 * getStatus() returns the status of the connection to the Blue Alliance.
+	 *
+	 * @return connection status
+	 */
 	public int getStatus() {
 		return status;
 	}

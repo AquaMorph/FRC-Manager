@@ -15,6 +15,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Fetches and parses match data for an event.
+ *
+ * @author Christian Colglazier
+ * @version 3/26/2016
+ */
 public class EventMatchesParsers {
 	public String TAG = "EventMatchesParsers";
 	public volatile boolean parsingComplete = true;
@@ -54,12 +60,17 @@ public class EventMatchesParsers {
 		}
 	}
 
+	/**
+	 * getEventMatches() returns the match data as an arraylist.
+	 *
+	 * @return Match
+	 */
 	public ArrayList<Match> getEventMatches() {
 		return teamArray;
 	}
 
 	/**
-	 * setLastModified() stores the last modified date
+	 * setLastModified() stores the last modified date.
 	 *
 	 * @param context
 	 * @param date
@@ -68,14 +79,14 @@ public class EventMatchesParsers {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("eventMatchesLast", date);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getLastModified() returns the last modified date
+	 * getLastModified() returns the last modified date.
 	 *
 	 * @param context
-	 * @return
+	 * @return last modified
 	 */
 	public String getLastModified(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -83,7 +94,7 @@ public class EventMatchesParsers {
 	}
 
 	/**
-	 * setData() stores the date to a json string
+	 * setData() stores the date to a json string.
 	 *
 	 * @param context
 	 * @param data
@@ -92,11 +103,11 @@ public class EventMatchesParsers {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("eventMatches", data);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getData() returns data from a stored json string
+	 * getData() returns data from a stored json string.
 	 *
 	 * @param context
 	 * @return

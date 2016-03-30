@@ -12,7 +12,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 /**
- * Divider for recyclerview
+ * Divider for recyclerview.
  *
  * @author Christian Colglazier
  * @version 2/13/2016
