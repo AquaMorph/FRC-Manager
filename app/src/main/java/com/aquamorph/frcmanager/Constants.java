@@ -17,7 +17,7 @@ public class Constants {
 	public static final String TBA_HEADER = "X-TBA-App-Id";
 	public static final String NOT_ONLINE_MESSAGE = "No Connection";
 	public static final Boolean FORCE_DATA_RELOAD = false;
-	public static int TRACTING_LEVEL = 0;
+	public static int TRACTING_LEVEL = 4;
 	public static int MAX_EVENT_TITLE_LENGTH = 20;
 
 	/**
