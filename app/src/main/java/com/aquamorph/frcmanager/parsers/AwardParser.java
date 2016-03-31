@@ -84,7 +84,7 @@ public class AwardParser {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("awardsLast", date);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
