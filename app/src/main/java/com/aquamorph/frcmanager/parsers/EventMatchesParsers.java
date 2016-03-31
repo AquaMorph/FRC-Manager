@@ -22,7 +22,8 @@ import java.util.Arrays;
  * @version 3/26/2016
  */
 public class EventMatchesParsers {
-	public String TAG = "EventMatchesParsers";
+
+	private String TAG = "EventMatchesParsers";
 	public volatile boolean parsingComplete = true;
 	private Match[] eventMatches;
 	private ArrayList<Match> teamArray = new ArrayList<>();

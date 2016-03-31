@@ -36,8 +36,7 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 	@Override
 	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = inflater.inflate(R.layout.award, parent, false);
-		MyViewHolder holder = new MyViewHolder(view);
-		return holder;
+		return new MyViewHolder(view);
 	}
 
 	@Override

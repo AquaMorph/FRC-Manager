@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
+import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.parsers.TeamEventMatchesParsers;
 
@@ -134,7 +134,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			}
 			eventKey = sharedPreferences.getString("eventKey", "");
 			teamEventMatchesParsers.storeData(getContext(), "");
-			adapter = new TeamScheduleAdapter(getContext(), teamEventMatches, teamNumber);
+			adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
 			recyclerView.setAdapter(adapter);
@@ -199,7 +199,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
-		adapter = new TeamScheduleAdapter(getContext(), teamEventMatches, teamNumber);
+		adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);

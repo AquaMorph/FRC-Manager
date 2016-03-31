@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.models.Match;
 
@@ -27,15 +28,15 @@ import static android.view.LayoutInflater.from;
  * @author Christian Colglazier
  * @version 3/29/2016
  */
-public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapter.MyViewHolder> {
+public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyViewHolder> {
 
-	private String TAG = "TeamScheduleAdapter";
+	private String TAG = "ScheduleAdapter";
 	private LayoutInflater inflater;
 	private Context context;
 	private ArrayList<Match> data;
 	private String team;
 
-	public TeamScheduleAdapter(Context context, ArrayList<Match> data, String team) {
+	public ScheduleAdapter(Context context, ArrayList<Match> data, String team) {
 		inflater = from(context);
 		this.data = data;
 		this.context = context;
@@ -155,9 +156,9 @@ public class TeamScheduleAdapter extends RecyclerView.Adapter<TeamScheduleAdapte
 	 */
 	private String parseTeamNumber(Boolean red, int robot, int position) {
 		if (red) {
-			return String.format("%4s", data.get(position).alliances.red.teams[robot].replaceAll("\\D+", ""));
+			return Constants.formatTeamNumber(data.get(position).alliances.red.teams[robot]);
 		} else {
-			return String.format("%4s", data.get(position).alliances.blue.teams[robot].replaceAll("\\D+", ""));
+			return Constants.formatTeamNumber(data.get(position).alliances.blue.teams[robot]);
 		}
 	}
 

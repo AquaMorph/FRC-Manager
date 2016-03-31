@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.aquamorph.frcmanager.fragments.AllianceFragment;
 import com.aquamorph.frcmanager.fragments.AwardFragment;
 import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
 import com.aquamorph.frcmanager.fragments.RankFragment;
@@ -19,7 +20,7 @@ import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams", "Awards"};
+	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams", "Alliances", "Awards"};
 	FragmentManager fragmentManager;
 	ViewPager viewPager;
 
@@ -33,16 +34,24 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 	 * refreshAll() reloads all data in the fragments.
 	 */
 	public void refreshAll() {
-		final TeamScheduleFragment tab1 = (TeamScheduleFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 0));
+		final TeamScheduleFragment tab1 = (TeamScheduleFragment) fragmentManager
+				.findFragmentByTag(makeFragmentName(viewPager.getId(), 0));
 		tab1.refresh();
-		final EventScheduleFragment tab2 = (EventScheduleFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 1));
+		final EventScheduleFragment tab2 = (EventScheduleFragment) fragmentManager
+				.findFragmentByTag(makeFragmentName(viewPager.getId(), 1));
 		tab2.refresh();
-		final RankFragment tab3 = (RankFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 2));
+		final RankFragment tab3 = (RankFragment) fragmentManager
+				.findFragmentByTag(makeFragmentName(viewPager.getId(), 2));
 		tab3.refresh();
-		final TeamEventFragment tab4 = (TeamEventFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 3));
+		final TeamEventFragment tab4 = (TeamEventFragment) fragmentManager
+				.findFragmentByTag(makeFragmentName(viewPager.getId(), 3));
 		tab4.refresh();
-		final AwardFragment tab5 = (AwardFragment) fragmentManager.findFragmentByTag(makeFragmentName(viewPager.getId(), 4));
+		final AllianceFragment tab5 = (AllianceFragment) fragmentManager
+				.findFragmentByTag(makeFragmentName(viewPager.getId(), 4));
 		tab5.refresh();
+		final AwardFragment tab6 = (AwardFragment) fragmentManager
+				.findFragmentByTag(makeFragmentName(viewPager.getId(), 5));
+		tab6.refresh();
 	}
 
 	@Override
@@ -57,6 +66,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 			case 3:
 				return TeamEventFragment.newInstance();
 			case 4:
+				return AllianceFragment.newInstance();
+			case 5:
 				return AwardFragment.newInstance();
 			default:
 				return TeamEventFragment.newInstance();

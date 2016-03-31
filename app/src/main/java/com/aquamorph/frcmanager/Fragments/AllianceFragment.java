@@ -14,38 +14,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.adapters.AwardAdapter;
-import com.aquamorph.frcmanager.models.Award;
-import com.aquamorph.frcmanager.parsers.AwardParser;
+import com.aquamorph.frcmanager.adapters.AllianceAdapter;
+import com.aquamorph.frcmanager.decoration.DividerIndented;
+import com.aquamorph.frcmanager.models.Events;
+import com.aquamorph.frcmanager.parsers.AllianceParser;
 
 import java.util.ArrayList;
 
 /**
- * Displays a list of awards at a event
+ * Displays a list of alliance for eliminations.
  *
  * @author Christian Colglazier
- * @version 2/13/2016
+ * @version 3/31/2016
  */
-public class AwardFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AllianceFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
-	private String TAG = "AwardFragment";
+	private String TAG = "AllianceFragment";
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Award> awards = new ArrayList<>();
+	private ArrayList<Events.Alliances> alliances = new ArrayList<>();
 	private String eventKey = "";
-	SharedPreferences prefs;
+	private SharedPreferences prefs;
 
 	/**
-	 * newInstance creates and returns a new AwardFragment
+	 * newInstance creates and returns a new AllianceFragment
 	 *
-	 * @return AwardFragment
+	 * @return AllianceFragment
 	 */
-	public static AwardFragment newInstance() {
-		return new AwardFragment();
+	public static AllianceFragment newInstance() {
+		return new AllianceFragment();
 	}
 
 	@Override
@@ -69,15 +69,15 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
-		adapter = new AwardAdapter(getContext(), awards);
+		adapter = new AllianceAdapter(getContext(), alliances);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
-		recyclerView.addItemDecoration(new Divider(getContext()));
+		recyclerView.addItemDecoration(new DividerIndented(getContext()));
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
+		prefs.registerOnSharedPreferenceChangeListener(AllianceFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
 		refresh();
@@ -89,8 +89,8 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	 */
 	public void refresh() {
 		if (!eventKey.equals("")) {
-			final LoadAwards loadAwards = new LoadAwards();
-			loadAwards.execute();
+			final LoadAlliances loadAlliances = new LoadAlliances();
+			loadAlliances.execute();
 		}
 	}
 
@@ -102,7 +102,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		}
 	}
 
-	class LoadAwards extends AsyncTask<Void, Void, Void> {
+	class LoadAlliances extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected void onPreExecute() {
@@ -111,18 +111,18 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			AwardParser awardParser = new AwardParser();
-			awardParser.fetchJSON(eventKey, getContext());
-			while (awardParser.parsingComplete) ;
-			awards.clear();
-			awards.addAll(awardParser.getAwards());
+			AllianceParser allianceParser = new AllianceParser();
+			allianceParser.fetchJSON(eventKey, getContext());
+			while (allianceParser.parsingComplete) ;
+			alliances.clear();
+			alliances.addAll(allianceParser.getAlliances());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			adapter.notifyDataSetChanged();
-			if (awards.isEmpty()) {
+			if (alliances.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);
 				emptyView.setVisibility(View.VISIBLE);
 			}

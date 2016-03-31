@@ -8,15 +8,16 @@ import android.net.NetworkInfo;
  * A collection of constants needed to interact with the Blue Alliance.
  *
  * @author Christian Colglazier
- * @version 3/29/16
+ * @version 3/31/16
  */
 public class Constants {
+
 	public static final String TAG = "FRC Regional";
 	public static final String URL = "http://www.thebluealliance.com/api/v2/";
 	public static final String TBA_HEADER = "X-TBA-App-Id";
 	public static final String NOT_ONLINE_MESSAGE = "No Connection";
 	public static final Boolean FORCE_DATA_RELOAD = false;
-	public static int TRACTING_LEVEL = 3;
+	public static int TRACTING_LEVEL = 0;
 	public static int MAX_EVENT_TITLE_LENGTH = 20;
 
 	/**
@@ -27,6 +28,16 @@ public class Constants {
 	 */
 	public static String getEventURL(String team, String year) {
 		return String.format("%steam/%s/%s/events", URL, team, year);
+	}
+
+	/**
+	 * getEvent() returns the url for an event.
+	 *
+	 * @param event event tag
+	 * @return url to event
+	 */
+	public static String getEvent(String event) {
+		return String.format("%sevent/%s", URL, event);
 	}
 
 	/**
@@ -110,5 +121,16 @@ public class Constants {
 				= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+	/**
+	 * formatTeamNumber() removes all text from the team string and adds padding to create a string
+	 * of length 4.
+	 *
+	 * @param team string
+	 * @return formatted string
+	 */
+	public static String formatTeamNumber(String team) {
+		return String.format("%4s", team.replaceAll("\\D+", ""));
 	}
 }

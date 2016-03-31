@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
+import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.parsers.EventMatchesParsers;
 
@@ -75,7 +75,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
-		adapter = new TeamScheduleAdapter(getContext(), eventMatches, teamNumber);
+		adapter = new ScheduleAdapter(getContext(), eventMatches, teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -101,7 +101,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
 			teamNumber = sharedPreferences.getString("teamNumber", "");
 			eventKey = sharedPreferences.getString("eventKey", "");
-			adapter = new TeamScheduleAdapter(getContext(), eventMatches, teamNumber);
+			adapter = new ScheduleAdapter(getContext(), eventMatches, teamNumber);
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
 			recyclerView.setAdapter(adapter);

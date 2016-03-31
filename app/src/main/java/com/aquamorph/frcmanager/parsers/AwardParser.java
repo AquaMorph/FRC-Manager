@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.parsers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.models.Award;
@@ -34,6 +35,9 @@ public class AwardParser {
 		try {
 			online = Constants.isNetworkAvailable(context);
 
+			if (Constants.TRACTING_LEVEL > 3) {
+				Log.i(TAG, "URL: " + Constants.getEventAwards(event));
+			}
 			//Checks for internet connection
 			if (online) {
 				BlueAlliance blueAlliance = new BlueAlliance();
