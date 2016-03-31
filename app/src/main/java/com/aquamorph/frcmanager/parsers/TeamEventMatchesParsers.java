@@ -37,6 +37,7 @@ public class TeamEventMatchesParsers {
 		try {
 			if(Constants.TRACTING_LEVEL > 0) {
 				Log.d(TAG, "Loading");
+				Log.d(TAG, "isTeamNumber " + isTeamNumber);
 			}
 			online = Constants.isNetworkAvailable(context);
 
@@ -57,7 +58,7 @@ public class TeamEventMatchesParsers {
 					}
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					teamEventMatches = gson.fromJson(reader, Match[].class);
-					if(!isTeamNumber) {
+					if(isTeamNumber) {
 						storeLastModified(context, blueAlliance.getLastUpdated());
 						storeData(context, gson.toJson(teamEventMatches));
 					}
@@ -115,6 +116,9 @@ public class TeamEventMatchesParsers {
 	 * @param data
 	 */
 	public void storeData(Context context, String data) {
+		if(Constants.TRACTING_LEVEL > 0) {
+			Log.d(TAG, "Storing Data");
+		}
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("teamEventMatches", data);
@@ -128,6 +132,9 @@ public class TeamEventMatchesParsers {
 	 * @return Match
 	 */
 	public Match[] getData(Context context) {
+		if(Constants.TRACTING_LEVEL > 0) {
+			Log.d(TAG, "Loading Data from a save");
+		}
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String json = prefs.getString("teamEventMatches", "");
 		return gson.fromJson(json, Match[].class);
