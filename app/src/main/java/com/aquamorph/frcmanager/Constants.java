@@ -133,4 +133,20 @@ public class Constants {
 	public static String formatTeamNumber(String team) {
 		return String.format("%4s", team.replaceAll("\\D+", ""));
 	}
+
+	/**
+	 * underlineText() returns a string with formatting in HTML that is underlined.
+	 *
+	 * @param text team number
+	 * @return returns formatted team number
+	 */
+	public static String underlineText(String text) {
+		text = text.replace(" ", "");
+		int spaces = 4 - text.length();
+		String spacesText = "";
+		for (int i = 0; i < spaces; i++) {
+			spacesText += "&nbsp;";
+		}
+		return String.format("<pre>%s<u>%s</u></pre>", spacesText, text);
+	}
 }

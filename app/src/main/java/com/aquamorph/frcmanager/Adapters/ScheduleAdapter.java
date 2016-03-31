@@ -64,17 +64,17 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 		// Underlines team number
 		team = String.format("%4s", team);
 		if (parseTeamNumber(true, 0, position).equals(team)) {
-			holder.redTeam1.setText(Html.fromHtml(underlineText(team)));
+			holder.redTeam1.setText(Html.fromHtml(Constants.underlineText(team)));
 		} else if (parseTeamNumber(true, 1, position).equals(team)) {
-			holder.redTeam2.setText(Html.fromHtml(underlineText(team)));
+			holder.redTeam2.setText(Html.fromHtml(Constants.underlineText(team)));
 		} else if (parseTeamNumber(true, 2, position).equals(team)) {
-			holder.redTeam3.setText(Html.fromHtml(underlineText(team)));
+			holder.redTeam3.setText(Html.fromHtml(Constants.underlineText(team)));
 		} else if (parseTeamNumber(false, 0, position).equals(team)) {
-			holder.blueTeam1.setText(Html.fromHtml(underlineText(team)));
+			holder.blueTeam1.setText(Html.fromHtml(Constants.underlineText(team)));
 		} else if (parseTeamNumber(false, 1, position).equals(team)) {
-			holder.blueTeam2.setText(Html.fromHtml(underlineText(team)));
+			holder.blueTeam2.setText(Html.fromHtml(Constants.underlineText(team)));
 		} else if (parseTeamNumber(false, 2, position).equals(team)) {
-			holder.blueTeam3.setText(Html.fromHtml(underlineText(team)));
+			holder.blueTeam3.setText(Html.fromHtml(Constants.underlineText(team)));
 		}
 
 		//Bolds winning score
@@ -160,21 +160,5 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 		} else {
 			return Constants.formatTeamNumber(data.get(position).alliances.blue.teams[robot]);
 		}
-	}
-
-	/**
-	 * underlineText() returns a string with formatting in HTML that is underlined.
-	 *
-	 * @param text team number
-	 * @return returns formatted team number
-	 */
-	private String underlineText(String text) {
-		text = text.replace(" ", "");
-		int spaces = 4 - text.length();
-		String spacesText = "";
-		for (int i = 0; i < spaces; i++) {
-			spacesText += "&nbsp;";
-		}
-		return String.format("<pre>%s<u>%s</u></pre>", spacesText, text);
 	}
 }
