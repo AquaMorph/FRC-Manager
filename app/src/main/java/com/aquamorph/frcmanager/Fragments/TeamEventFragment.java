@@ -126,9 +126,6 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 
 		@Override
 		protected void onPostExecute(Void result) {
-			editor = prefs.edit();
-			editor.putString("teamRank", "");
-			editor.apply();
 			adapter.notifyDataSetChanged();
 			if (teams.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);
