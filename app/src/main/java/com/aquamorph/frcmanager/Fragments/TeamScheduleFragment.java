@@ -22,13 +22,19 @@ import android.widget.Toast;
 
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
+import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.parsers.TeamEventMatchesParsers;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Displays a list of matches at an event for a given team.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class TeamScheduleFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
 	private String TAG = "TeamScheduleFragment";
@@ -37,12 +43,17 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private TextView emptyView;
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
-	private String teamNumber = "", eventKey= "";
+	private String teamNumber = "", eventKey = "";
 	private TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
 	private View view;
 	private Boolean getTeamFromSettings = true;
 	SharedPreferences prefs;
 
+	/**
+	 * newInstance creates and returns a new TeamScheduleFragment
+	 *
+	 * @return TeamScheduleFragment
+	 */
 	public static TeamScheduleFragment newInstance() {
 		return new TeamScheduleFragment();
 	}
@@ -56,7 +67,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		if(Constants.TRACTING_LEVEL >= 3) {
+		if (Constants.TRACTING_LEVEL >= 3) {
 			Log.i(TAG, "TeamScheduleFragment created");
 		}
 	}
@@ -65,12 +76,12 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
-		if(savedInstanceState != null) {
-			if(getTeamFromSettings) {
+		if (savedInstanceState != null) {
+			if (getTeamFromSettings) {
 				teamNumber = savedInstanceState.getString("teamNumber");
 			}
 			eventKey = savedInstanceState.getString("eventKey");
-			if(Constants.TRACTING_LEVEL >= 2) {
+			if (Constants.TRACTING_LEVEL >= 2) {
 				Log.i(TAG, "savedInstanceState teamNumber: " + teamNumber);
 			}
 		}
@@ -84,7 +95,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		super.onSaveInstanceState(outState);
 		outState.putString("teamNumber", teamNumber);
 		outState.putString("eventKey", eventKey);
-		if(Constants.TRACTING_LEVEL >= 3) {
+		if (Constants.TRACTING_LEVEL >= 3) {
 			Log.i(TAG, "onSaveInstanceState");
 		}
 	}
@@ -95,13 +106,16 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.fragment_team_schedule, null);
 		listener();
-		if(Constants.TRACTING_LEVEL >= 3) {
+		if (Constants.TRACTING_LEVEL >= 3) {
 			Log.i(TAG, "Configuration Changed");
 		}
 	}
 
+	/**
+	 * refrest() loads data needed for this fragment.
+	 */
 	public void refresh() {
-		if(Constants.TRACTING_LEVEL >= 2) {
+		if (Constants.TRACTING_LEVEL >= 2) {
 			Log.i(TAG, "teamNumber: " + teamNumber);
 		}
 		if (!teamNumber.equals("") && !eventKey.equals("")) {
@@ -115,12 +129,12 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
-			if(getTeamFromSettings) {
+			if (getTeamFromSettings) {
 				teamNumber = sharedPreferences.getString("teamNumber", "");
 			}
 			eventKey = sharedPreferences.getString("eventKey", "");
 			teamEventMatchesParsers.storeData(getContext(), "");
-			adapter = new TeamScheduleAdapter(getContext(), teamEventMatches, teamNumber);
+			adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
 			recyclerView.setAdapter(adapter);
@@ -155,8 +169,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			if (teamEventMatches.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);
 				emptyView.setVisibility(View.VISIBLE);
-			}
-			else {
+			} else {
 				recyclerView.setVisibility(View.VISIBLE);
 				emptyView.setVisibility(View.GONE);
 			}
@@ -164,10 +177,13 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		}
 	}
 
+	/**
+	 * listener() initializes all needed types on creation
+	 */
 	public void listener() {
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
-		if(getTeamFromSettings) {
+		if (getTeamFromSettings) {
 			teamNumber = prefs.getString("teamNumber", "");
 		}
 		eventKey = prefs.getString("eventKey", "");
@@ -183,7 +199,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
-		adapter = new TeamScheduleAdapter(getContext(), teamEventMatches, teamNumber);
+		adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);

@@ -21,8 +21,13 @@ import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+/**
+ * Default activity of the app.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener {
-
 
 	private String TAG = "MainActivity";
 	private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -48,11 +53,15 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		if (teamNumber.equals("")) openSetup();
 
-
 		listener();
 		theme(this);
 	}
 
+	/**
+	 * theme() sets the app theme based on user selection from settings.
+	 *
+	 * @param activity
+	 */
 	public static void theme(Activity activity) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 		switch (prefs.getString("theme", "")) {
@@ -77,17 +86,12 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_main, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-
 		switch (item.getItemId()) {
 			case R.id.action_settings:
 				openSettings();
@@ -99,22 +103,39 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		return super.onOptionsItemSelected(item);
 	}
 
+	/**
+	 * openSetup() launches the set up activity.
+	 */
 	private void openSetup() {
 		Intent intent = new Intent(this, Setup.class);
 		startActivity(intent);
 	}
 
+	/**
+	 * openSettings() launches the settings activity.
+	 */
 	public void openSettings() {
 		Intent intent = new Intent(this, Settings.class);
 		startActivity(intent);
 	}
 
+	/**
+	 * getTeamNumber() returns the string tag for Blue Alliance requests of the current
+	 * team number.
+	 *
+	 * @return team number string
+	 */
 	public String getTeamNumber() {
 		return "frc" + teamNumber;
 	}
 
+	/**
+	 * getSubTitle() returns the subtitle string for the toolbar with the event name,
+	 * team number and current rank if available.
+	 *
+	 * @return subtitle string
+	 */
 	public String getSubTitle() {
-
 		if (teamRank.equals("")) {
 			return String.format("%s (%s)", shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH),
 					teamNumber);
@@ -124,8 +145,15 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		}
 	}
 
+	/**
+	 * shorten() returns a shortened string with ... at the end.
+	 *
+	 * @param text to be shortened
+	 * @param amount length to shorten
+	 * @return shorten string with ... at the end
+	 */
 	public String shorten(String text, int amount) {
-		if(text.length() > amount) {
+		if (text.length() > amount) {
 			return text.substring(0, amount) + "...";
 		} else {
 			return text;
@@ -145,14 +173,13 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		}
 	}
 
+	/**
+	 * listener() connects layout to view.
+	 */
 	private void listener() {
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		toolbar.setSubtitle(getSubTitle());
-
-		// Create the adapter that will return a fragment for each of the three
-		// primary sections of the activity.
-
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.container);

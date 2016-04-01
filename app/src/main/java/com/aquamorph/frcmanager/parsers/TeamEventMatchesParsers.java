@@ -16,6 +16,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Fetches and parses team match data for an event.
+ *
+ * @author Christian Colglazier
+ * @version 4/1/2016
+ */
 public class TeamEventMatchesParsers {
 
 	public String TAG = "TeamEventMatchesParsers";
@@ -23,29 +29,40 @@ public class TeamEventMatchesParsers {
 	private Match[] teamEventMatches;
 	private ArrayList<Match> teamArray = new ArrayList<>();
 	public Boolean online;
-	private Boolean isTeamNumber = false;
+	InputStream stream;
 	Gson gson = new Gson();
 
 	public void fetchJSON(final String team, final String event, final Context context, final Boolean isTeamNumber) {
-		this.isTeamNumber = isTeamNumber;
 		try {
-			Log.d(TAG, "Loading");
+			if (Constants.TRACTING_LEVEL > 0) {
+				Log.d(TAG, "Loading");
+				Log.d(TAG, "isTeamNumber " + isTeamNumber);
+			}
 			online = Constants.isNetworkAvailable(context);
 
 			//Checks for internet connection
 			if (online) {
-				Log.d(TAG, "Online");
+				if (Constants.TRACTING_LEVEL > 0) {
+					Log.d(TAG, "Online");
+				}
 				BlueAlliance blueAlliance = new BlueAlliance();
-				InputStream stream = blueAlliance.connect(Constants.getEventTeamMatches(team, event),
-						getLastModified(context), context);
+				if (isTeamNumber) {
+					stream = blueAlliance.connect(Constants.getEventTeamMatches(team, event),
+							getLastModified(context), context);
+				} else {
+					stream = blueAlliance.connect(Constants.getEventTeamMatches(team, event),
+							"", context);
+				}
 
 				//Checks for change in data
-				if (blueAlliance.getStatus() == 200 ||  getData(context) == null
+				if (blueAlliance.getStatus() == 200 || getData(context) == null
 						|| Constants.FORCE_DATA_RELOAD || !isTeamNumber) {
-					Log.d(TAG, "Loading new data");
+					if (Constants.TRACTING_LEVEL > 0) {
+						Log.d(TAG, "Loading new data");
+					}
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					teamEventMatches = gson.fromJson(reader, Match[].class);
-					if(!isTeamNumber) {
+					if (isTeamNumber) {
 						storeLastModified(context, blueAlliance.getLastUpdated());
 						storeData(context, gson.toJson(teamEventMatches));
 					}
@@ -63,12 +80,17 @@ public class TeamEventMatchesParsers {
 		}
 	}
 
+	/**
+	 * getTeamEventMatches() returns match data as an arraylist.
+	 *
+	 * @return Match
+	 */
 	public ArrayList<Match> getTeamEventMatches() {
 		return teamArray;
 	}
 
 	/**
-	 * setLastModified() stores the last modified date
+	 * setLastModified() stores the last modified date.
 	 *
 	 * @param context
 	 * @param date
@@ -77,14 +99,14 @@ public class TeamEventMatchesParsers {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("teamEventMatchesLast", date);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getLastModified() returns the last modified date
+	 * getLastModified() returns the last modified date.
 	 *
 	 * @param context
-	 * @return
+	 * @return last modified
 	 */
 	public String getLastModified(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -92,25 +114,31 @@ public class TeamEventMatchesParsers {
 	}
 
 	/**
-	 * setData() stores the date to a json string
+	 * setData() stores the date to a json string.
 	 *
 	 * @param context
 	 * @param data
 	 */
 	public void storeData(Context context, String data) {
+		if (Constants.TRACTING_LEVEL > 0) {
+			Log.d(TAG, "Storing Data");
+		}
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("teamEventMatches", data);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getData() returns data from a stored json string
+	 * getData() returns data from a stored json string.
 	 *
 	 * @param context
-	 * @return
+	 * @return Match
 	 */
 	public Match[] getData(Context context) {
+		if (Constants.TRACTING_LEVEL > 0) {
+			Log.d(TAG, "Loading Data from a save");
+		}
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String json = prefs.getString("teamEventMatches", "");
 		return gson.fromJson(json, Match[].class);

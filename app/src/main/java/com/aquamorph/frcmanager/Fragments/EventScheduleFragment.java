@@ -15,13 +15,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.adapters.TeamScheduleAdapter;
+import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.parsers.EventMatchesParsers;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Displays a list of matches at an event.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class EventScheduleFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private String TAG = "TeamScheduleFragment";
@@ -40,8 +46,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	 * @return EventScheduleFragment
 	 */
 	public static EventScheduleFragment newInstance() {
-		EventScheduleFragment fragment = new EventScheduleFragment();
-		return fragment;
+		return new EventScheduleFragment();
 	}
 
 	@Override
@@ -70,7 +75,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
-		adapter = new TeamScheduleAdapter(getContext(), eventMatches, teamNumber);
+		adapter = new ScheduleAdapter(getContext(), eventMatches, teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -96,7 +101,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
 			teamNumber = sharedPreferences.getString("teamNumber", "");
 			eventKey = sharedPreferences.getString("eventKey", "");
-			adapter = new TeamScheduleAdapter(getContext(), eventMatches, teamNumber);
+			adapter = new ScheduleAdapter(getContext(), eventMatches, teamNumber);
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
 			recyclerView.setAdapter(adapter);
@@ -105,9 +110,6 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		}
 	}
 
-	/**
-	 *
-	 */
 	class LoadEventSchedule extends AsyncTask<Void, Void, Void> {
 
 		@Override

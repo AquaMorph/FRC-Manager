@@ -14,41 +14,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.decoration.DividerIndented;
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.adapters.EventTeamAdapter;
-import com.aquamorph.frcmanager.models.EventTeam;
-import com.aquamorph.frcmanager.parsers.TeamEventParser;
+import com.aquamorph.frcmanager.adapters.AllianceAdapter;
+import com.aquamorph.frcmanager.decoration.DividerIndented;
+import com.aquamorph.frcmanager.models.Events;
+import com.aquamorph.frcmanager.parsers.AllianceParser;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
- * Displays a list of teams at an event.
+ * Displays a list of alliance for eliminations.
  *
  * @author Christian Colglazier
- * @version 3/11/2016
+ * @version 3/31/2016
  */
-public class TeamEventFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AllianceFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
-	private static String TAG = "TeamEventFragment";
-	private SwipeRefreshLayout mSwipeRefreshLayout;
+	private String TAG = "AllianceFragment";
+	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<EventTeam> teams = new ArrayList<>();
+	private ArrayList<Events.Alliances> alliances = new ArrayList<>();
 	private String eventKey = "";
-	TeamEventParser teamEventParser = new TeamEventParser();
-	SharedPreferences prefs;
-	SharedPreferences.Editor editor;
+	private SharedPreferences prefs;
 
 	/**
-	 * newInstance creates and returns a new TeamEventFragment
+	 * newInstance creates and returns a new AllianceFragment
 	 *
-	 * @return TeamEventFragment
+	 * @return AllianceFragment
 	 */
-	public static TeamEventFragment newInstance() {
-		return new TeamEventFragment();
+	public static AllianceFragment newInstance() {
+		return new AllianceFragment();
 	}
 
 	@Override
@@ -61,9 +58,9 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
-		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
-		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+		swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+		swipeRefreshLayout.setColorSchemeResources(R.color.accent);
+		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
 				refresh();
@@ -72,20 +69,18 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
-		adapter = new EventTeamAdapter(getContext(), teams);
+		adapter = new AllianceAdapter(getContext(), alliances);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
-		recyclerView.addItemDecoration(new DividerIndented(getContext()) {
-		});
+		recyclerView.addItemDecoration(new DividerIndented(getContext()));
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);
+		prefs.registerOnSharedPreferenceChangeListener(AllianceFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
 		refresh();
-
 		return view;
 	}
 
@@ -94,8 +89,8 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 	 */
 	public void refresh() {
 		if (!eventKey.equals("")) {
-			final LoadEventTeams loadEventTeams = new LoadEventTeams();
-			loadEventTeams.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			final LoadAlliances loadAlliances = new LoadAlliances();
+			loadAlliances.execute();
 		}
 	}
 
@@ -107,27 +102,27 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		}
 	}
 
-	class LoadEventTeams extends AsyncTask<Void, Void, Void> {
+	class LoadAlliances extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected void onPreExecute() {
-			mSwipeRefreshLayout.setRefreshing(true);
+			swipeRefreshLayout.setRefreshing(true);
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			teamEventParser.fetchJSON(eventKey, getContext());
-			while (teamEventParser.parsingComplete) ;
-			teams.clear();
-			teams.addAll(teamEventParser.getTeams());
-			Collections.sort(teams);
+			AllianceParser allianceParser = new AllianceParser();
+			allianceParser.fetchJSON(eventKey, getContext());
+			while (allianceParser.parsingComplete) ;
+			alliances.clear();
+			alliances.addAll(allianceParser.getAlliances());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			adapter.notifyDataSetChanged();
-			if (teams.isEmpty()) {
+			if (alliances.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);
 				emptyView.setVisibility(View.VISIBLE);
 			}
@@ -135,7 +130,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 				recyclerView.setVisibility(View.VISIBLE);
 				emptyView.setVisibility(View.GONE);
 			}
-			mSwipeRefreshLayout.setRefreshing(false);
+			swipeRefreshLayout.setRefreshing(false);
 		}
 	}
 }

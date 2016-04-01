@@ -8,13 +8,19 @@ import android.view.MenuItem;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.fragments.SettingsFragment;
 
+/**
+ * Settings activity to take users input about how the app should be set up as well as
+ * general information about the app.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class Settings extends AppCompatActivity {
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
-
-		MainActivity.theme(this);
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		if (toolbar != null) {
@@ -22,14 +28,12 @@ public class Settings extends AppCompatActivity {
 		}
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsFragment()).commit();
+		getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsFragment())
+				.commit();
+		MainActivity.theme(this);
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-
 		switch (item.getItemId()) {
 			case android.R.id.home:
 				this.finish();

@@ -8,9 +8,10 @@ import java.util.Locale;
  * Store information about an event.
  *
  * @author Christian Colglazier
- * @version 1/22/2016
+ * @version 3/29/2016
  */
 public class Events implements Comparable {
+
 	public String key;
 	public String website;
 	public Boolean official;
@@ -24,9 +25,15 @@ public class Events implements Comparable {
 	public String location;
 	public String event_code;
 	public String year;
+	public Alliances[] alliances;
 	public String event_type_string;
 	public String start_date;
 	public String event_type;
+
+	public class Alliances {
+		public String[] declines;
+		public String[] picks;
+	}
 
 	@Override
 	public int compareTo(Object another) {

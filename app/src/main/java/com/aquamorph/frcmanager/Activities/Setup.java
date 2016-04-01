@@ -4,13 +4,20 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.fragments.setup.EventSlide;
-import com.aquamorph.frcmanager.fragments.setup.FirstSlide;
+import com.aquamorph.frcmanager.fragments.setup.Slide;
 import com.aquamorph.frcmanager.fragments.setup.TeamNumberSlide;
 import com.aquamorph.frcmanager.fragments.setup.YearSlide;
 import com.github.paolorotolo.appintro.AppIntro;
 
+/**
+ * App set up activity gets the desired year, team, and event.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class Setup extends AppIntro {
 
 	private String TAG = "Setup";
@@ -26,7 +33,7 @@ public class Setup extends AppIntro {
 		teamNumberSlide = new TeamNumberSlide();
 		eventSlide = new EventSlide();
 
-		addSlide(FirstSlide.newInstance(R.layout.first_slide));
+		addSlide(Slide.newInstance(R.layout.first_slide));
 		addSlide(yearSlide);
 		addSlide(teamNumberSlide);
 		addSlide(eventSlide);
@@ -45,13 +52,13 @@ public class Setup extends AppIntro {
 	}
 
 	@Override
-	public void onSkipPressed() {
-		// Do something when users tap on Skip button.
-	}
+	public void onSkipPressed() {}
 
 	@Override
 	public void onDonePressed() {
-		Log.i(TAG, "Team Number: " + teamNumberSlide.getTeamNumber());
+		if(Constants.TRACTING_LEVEL > 0) {
+			Log.i(TAG, "Team Number: " + teamNumberSlide.getTeamNumber());
+		}
 		this.finish();
 	}
 
@@ -69,10 +76,5 @@ public class Setup extends AppIntro {
 	}
 
 	@Override
-	public void onNextPressed() {
-		// Do something when users tap on Next button.
-
-	}
-
-
+	public void onNextPressed() {}
 }

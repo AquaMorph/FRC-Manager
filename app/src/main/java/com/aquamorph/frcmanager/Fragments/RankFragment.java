@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.DividerIndented;
+import com.aquamorph.frcmanager.decoration.DividerIndented;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
 import com.aquamorph.frcmanager.models.EventTeam;
@@ -24,6 +24,12 @@ import com.aquamorph.frcmanager.parsers.TeamEventParser;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Displays the ranks of all the teams at an event.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class RankFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private static String TAG = "RankFragment";
@@ -39,9 +45,13 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	SharedPreferences prefs;
 	SharedPreferences.Editor editor;
 
+	/**
+	 * newInstance creates and returns a new RankFragment
+	 *
+	 * @return RankFragment
+	 */
 	public static RankFragment newInstance() {
-		RankFragment fragment = new RankFragment();
-		return fragment;
+		return new RankFragment();
 	}
 
 	@Override
@@ -56,7 +66,6 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		editor = prefs.edit();
 
 		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
@@ -86,6 +95,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		return view;
 	}
 
+	/**
+	 * refrest() loads data needed for this fragment.
+	 */
 	public void refresh() {
 		if (!eventKey.equals("") && !teamNumber.equals("")) {
 			final LoadRanks loadRanks = new LoadRanks();
@@ -130,6 +142,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected void onPostExecute(Void result) {
+			editor = prefs.edit();
 			editor.putString("teamRank", "");
 			for (int i = 0; i < ranks.size(); i++) {
 				if (ranks.get(i)[1].equals(teamNumber)) {

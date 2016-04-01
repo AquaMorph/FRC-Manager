@@ -17,12 +17,13 @@ import java.util.ArrayList;
 import static android.view.LayoutInflater.from;
 
 /**
- * <p></p>
+ * Populates a RecyclerView with teams at an event.
  *
  * @author Christian Colglazier
- * @version 3/11/2016
+ * @version 3/19/2016
  */
 public class EventTeamAdapter extends RecyclerView.Adapter<EventTeamAdapter.MyViewHolder> {
+
 	private String TAG = "EventTeamAdapter", info;
 	private LayoutInflater inflater;
 	private Context context;

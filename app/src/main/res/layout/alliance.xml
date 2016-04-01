@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/alliance_number"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_cir"
+                android:gravity="center"
+                android:text="16"
+                android:textColor="?bubbleText"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal"
+            android:paddingRight="16dp">
+
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp">
+
+                <TextView
+                    android:id="@+id/team_1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/sample_team"
+                    android:textColor="?textOnBackground"
+                    android:textSize="@dimen/team_number_text"
+                    android:typeface="monospace"/>
+
+                <TextView
+                    android:id="@+id/team_2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/sample_team"
+                    android:textColor="?textOnBackground"
+                    android:textSize="@dimen/team_number_text"
+                    android:typeface="monospace"/>
+
+                <TextView
+                    android:id="@+id/team_3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/sample_team"
+                    android:textColor="?textOnBackground"
+                    android:textSize="@dimen/team_number_text"
+                    android:typeface="monospace"/>
+
+                <TextView
+                    android:id="@+id/team_4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/sample_team"
+                    android:textColor="?textOnBackground"
+                    android:textSize="@dimen/team_number_text"
+                    android:typeface="monospace"/>
+
+            </TableRow>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

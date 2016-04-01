@@ -12,6 +12,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Fetches and parses event data for a team.
+ *
+ * @author Christian Colglazier
+ * @version 3/26/2016
+ */
 public class EventParsers {
 	public String TAG = "EventParsers";
 	public volatile boolean parsingComplete = true;
@@ -33,6 +39,11 @@ public class EventParsers {
 		}
 	}
 
+	/**
+	 * getEvents() returns the events as an arraylist.
+	 *
+	 * @return events
+	 */
 	public ArrayList<Events> getEvents() {
 		return eventArray;
 	}

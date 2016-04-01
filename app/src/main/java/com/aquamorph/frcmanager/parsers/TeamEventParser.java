@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * <p></p>
+ * Fetches and parses teams at an event.
  *
  * @author Christian Colglazier
- * @version 3/11/2016
+ * @version 3/29/2016
  */
 public class TeamEventParser {
 	public String TAG = "TeamEventParser";
@@ -60,12 +60,17 @@ public class TeamEventParser {
 		}
 	}
 
+	/**
+	 * getTeams() returns teams at an event.
+	 *
+	 * @return EventTeam
+	 */
 	public ArrayList<EventTeam> getTeams() {
 		return teamArray;
 	}
 
 	/**
-	 * setLastModified() stores the last modified date
+	 * setLastModified() stores the last modified date.
 	 *
 	 * @param context
 	 * @param date
@@ -74,14 +79,14 @@ public class TeamEventParser {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("eventTeamsLast", date);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getLastModified() returns the last modified date
+	 * getLastModified() returns the last modified date.
 	 *
 	 * @param context
-	 * @return
+	 * @return last modified
 	 */
 	public String getLastModified(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -89,7 +94,7 @@ public class TeamEventParser {
 	}
 
 	/**
-	 * setData() stores the date to a json string
+	 * setData() stores the date to a json string.
 	 *
 	 * @param context
 	 * @param data
@@ -98,11 +103,11 @@ public class TeamEventParser {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("eventTeams", data);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getData() returns data from a stored json string
+	 * getData() returns data from a stored json string.
 	 *
 	 * @param context
 	 * @return

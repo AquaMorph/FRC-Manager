@@ -1,5 +1,11 @@
 package com.aquamorph.frcmanager.models;
 
+/**
+ * Stores match information at an event.
+ *
+ * @author Christian Colglazier
+ * @version 3/31/2016
+ */
 public class Match implements Comparable {
 
 	public String TAG = "Match";
@@ -42,14 +48,16 @@ public class Match implements Comparable {
 		switch (comp_level) {
 			case "qm":
 				return 1;
-			case "qf":
+			case "ef":
 				return 2;
-			case "sf":
+			case "qf":
 				return 3;
-			case "f":
+			case "sf":
 				return 4;
-			default:
+			case "f":
 				return 5;
+			default:
+				return 6;
 		}
 	}
 }

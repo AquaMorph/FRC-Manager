@@ -21,6 +21,12 @@ import java.util.ArrayList;
 
 import static android.view.LayoutInflater.from;
 
+/**
+ * Populates a RecyclerView with the ranks and team names and number for an event.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> {
 
 	private String TAG = "RankAdapter";
@@ -29,12 +35,6 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 	private ArrayList<String[]> data;
 	private ArrayList<EventTeam> teams;
 
-	/**
-	 * RankAdapter constructor
-	 *  @param context context of the fragment
-	 * @param data    ranking data in an array
-	 * @param teams
-	 */
 	public RankAdapter(Context context, ArrayList<String[]> data, ArrayList<EventTeam> teams) {
 		inflater = from(context);
 		this.data = data;
@@ -126,6 +126,12 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		}
 	}
 
+	/**
+	 * getTeamName() returns the name of a team.
+	 *
+	 * @param number of the team
+	 * @return name of the team
+	 */
 	public String getTeamName(String number) {
 		for(int i = 0; i < teams.size(); i++) {
 			if(number.equals(Integer.toString(teams.get(i).team_number))) {

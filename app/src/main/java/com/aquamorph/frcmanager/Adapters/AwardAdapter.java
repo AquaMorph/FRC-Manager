@@ -18,7 +18,7 @@ import static android.view.LayoutInflater.from;
  * Populates the recyclerview with award data
  *
  * @author Christian Colglazier
- * @version 1/26/2016
+ * @version 3/29/2016
  */
 public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder> {
 
@@ -36,8 +36,7 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 	@Override
 	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = inflater.inflate(R.layout.award, parent, false);
-		MyViewHolder holder = new MyViewHolder(view);
-		return holder;
+		return new MyViewHolder(view);
 	}
 
 	@Override
@@ -71,9 +70,11 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 	}
 
 	public class MyViewHolder extends RecyclerView.ViewHolder {
+
 		TextView teamNumber;
 		TextView award;
 		TextView details;
+
 		public MyViewHolder(View itemView) {
 			super(itemView);
 			teamNumber = (TextView) itemView.findViewById(R.id.team_number);

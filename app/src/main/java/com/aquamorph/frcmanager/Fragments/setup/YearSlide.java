@@ -1,7 +1,7 @@
 package com.aquamorph.frcmanager.fragments.setup;
 
 /**
- * Sets the year
+ * Asks the user for the year they want to get events from.
  *
  * @author Christian Colglazier
  * @version 2/13/2016
@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 
 public class YearSlide extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -48,12 +49,13 @@ public class YearSlide extends Fragment implements AdapterView.OnItemSelectedLis
 	 *
 	 * @param year
 	 */
-
 	public void setYear(String year) {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("year", year);
-		Log.i(TAG, "Year set to: " + year);
-		editor.commit();
+		if(Constants.TRACTING_LEVEL > 0) {
+			Log.i(TAG, "Year set to: " + year);
+		}
+		editor.apply();
 	}
 
 	@Override
@@ -63,7 +65,5 @@ public class YearSlide extends Fragment implements AdapterView.OnItemSelectedLis
 	}
 
 	@Override
-	public void onNothingSelected(AdapterView<?> parent) {
-
-	}
+	public void onNothingSelected(AdapterView<?> parent) {}
 }

@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.Divider;
+import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AwardAdapter;
 import com.aquamorph.frcmanager.models.Award;
@@ -29,6 +29,7 @@ import java.util.ArrayList;
  * @version 2/13/2016
  */
 public class AwardFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
 	private String TAG = "AwardFragment";
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;
@@ -38,9 +39,13 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	private String eventKey = "";
 	SharedPreferences prefs;
 
+	/**
+	 * newInstance creates and returns a new AwardFragment
+	 *
+	 * @return AwardFragment
+	 */
 	public static AwardFragment newInstance() {
-		AwardFragment fragment = new AwardFragment();
-		return fragment;
+		return new AwardFragment();
 	}
 
 	@Override
@@ -79,6 +84,9 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		return view;
 	}
 
+	/**
+	 * refrest() loads data needed for this fragment.
+	 */
 	public void refresh() {
 		if (!eventKey.equals("")) {
 			final LoadAwards loadAwards = new LoadAwards();

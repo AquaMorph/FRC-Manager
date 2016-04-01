@@ -8,19 +8,20 @@ import android.net.NetworkInfo;
  * A collection of constants needed to interact with the Blue Alliance.
  *
  * @author Christian Colglazier
- * @version 3-21-16
+ * @version 3/31/16
  */
 public class Constants {
+
 	public static final String TAG = "FRC Regional";
 	public static final String URL = "http://www.thebluealliance.com/api/v2/";
 	public static final String TBA_HEADER = "X-TBA-App-Id";
 	public static final String NOT_ONLINE_MESSAGE = "No Connection";
 	public static final Boolean FORCE_DATA_RELOAD = false;
-	public static int TRACTING_LEVEL = 3;
+	public static int TRACTING_LEVEL = 4;
 	public static int MAX_EVENT_TITLE_LENGTH = 20;
 
 	/**
-	 * getEventURL returns the url for a list of events a team is registered.
+	 * getEventURL() returns the url for a list of events a team is registered.
 	 *
 	 * @param team team identification "frc####"
 	 * @return url to team events
@@ -30,7 +31,17 @@ public class Constants {
 	}
 
 	/**
-	 * getEventURL returns the url for a list of events a team is registered.
+	 * getEvent() returns the url for an event.
+	 *
+	 * @param event event tag
+	 * @return url to event
+	 */
+	public static String getEvent(String event) {
+		return String.format("%sevent/%s", URL, event);
+	}
+
+	/**
+	 * getEventURL() returns the url for a list of events a team is registered.
 	 *
 	 * @param event vent identification number
 	 * @return url to list of teams at an event
@@ -40,7 +51,7 @@ public class Constants {
 	}
 
 	/**
-	 * getEventTeamMatches returns the url for a team's matches at a specific event.
+	 * getEventTeamMatches() returns the url for a team's matches at a specific event.
 	 *
 	 * @param team team identification "frc####"
 	 * @param event event identification number
@@ -51,7 +62,7 @@ public class Constants {
 	}
 
 	/**
-	 * getEventMatches returns the url for all matches at an event
+	 * getEventMatches() returns the url for all matches at an event.
 	 *
 	 * @param event event identification number
 	 * @return url to matches at en event
@@ -61,7 +72,7 @@ public class Constants {
 	}
 
 	/**
-	 * getEventStats returns the url for event statistics
+	 * getEventStats() returns the url for event statistics
 	 *
 	 * @param event event identification number
 	 * @return url to event statistics
@@ -71,7 +82,8 @@ public class Constants {
 	}
 
 	/**
-	 * getEventRanks returns the url for event team rankings
+	 * getEventRanks() returns the url for event team rankings.
+	 *
 	 * @param event event identification number
 	 * @return url to event rankings
 	 */
@@ -80,7 +92,8 @@ public class Constants {
 	}
 
 	/**
-	 * getEventAwards returns the url awards given at
+	 * getEventAwards() returns the url awards given at.
+	 *
 	 * @param event event identification number
 	 * @return url to event awards
 	 */
@@ -89,7 +102,7 @@ public class Constants {
 	}
 
 	/**
-	 * getApiHeader returns the header needed to get access to the Blue Alliance
+	 * getApiHeader() returns the header needed to get access to the Blue Alliance.
 	 *
 	 * @return the Blue Alliance header
 	 */
@@ -97,10 +110,43 @@ public class Constants {
 		return "christian_colglazier:frc_manager:" + context.getResources().getString(R.string.version);
 	}
 
+	/**
+	 * isNetworkAvailable() returns if a connection to the internet is available.
+	 *
+	 * @param context fragment or activity the request takes place from
+	 * @return is internet available
+	 */
 	public static boolean isNetworkAvailable(Context context) {
 		ConnectivityManager connectivityManager
 				= (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+
+	/**
+	 * formatTeamNumber() removes all text from the team string and adds padding to create a string
+	 * of length 4.
+	 *
+	 * @param team string
+	 * @return formatted string
+	 */
+	public static String formatTeamNumber(String team) {
+		return String.format("%4s", team.replaceAll("\\D+", ""));
+	}
+
+	/**
+	 * underlineText() returns a string with formatting in HTML that is underlined.
+	 *
+	 * @param text team number
+	 * @return returns formatted team number
+	 */
+	public static String underlineText(String text) {
+		text = text.replace(" ", "");
+		int spaces = 4 - text.length();
+		String spacesText = "";
+		for (int i = 0; i < spaces; i++) {
+			spacesText += "&nbsp;";
+		}
+		return String.format("<pre>%s<u>%s</u></pre>", spacesText, text);
 	}
 }

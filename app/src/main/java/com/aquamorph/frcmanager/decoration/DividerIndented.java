@@ -1,4 +1,4 @@
-package com.aquamorph.frcmanager;
+package com.aquamorph.frcmanager.decoration;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,8 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.aquamorph.frcmanager.R;
+
 /**
- * Divider for recyclerview with a 72dp indent
+ * Divider for recyclerview with a 72dp indent.
  *
  * @author Christian Colglazier
  * @version 2/13/2016

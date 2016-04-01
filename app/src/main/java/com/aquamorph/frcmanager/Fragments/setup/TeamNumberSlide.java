@@ -12,6 +12,12 @@ import android.widget.EditText;
 
 import com.aquamorph.frcmanager.R;
 
+/**
+ * Fragment slide that asks the user their team number.
+ *
+ * @author Christian Colglazier
+ * @version 3/29/2016
+ */
 public class TeamNumberSlide extends Fragment {
 
 	private String TAG = "TeamNumberSlide";
@@ -26,23 +32,39 @@ public class TeamNumberSlide extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.team_number_slide, container, false);
 		teamNumber = (EditText) view.findViewById(R.id.teamNumberEditText);
 		return view;
 	}
 
+	/**
+	 * getTeamNumber() gets the team number entered by the user.
+	 *
+	 * @return team number
+	 */
 	public String getTeamNumber() {
 		return teamNumber.getText().toString();
 	}
 
+	/**
+	 * setTeamNumber() saves the team number to shared preferences.
+	 *
+	 * @param team number
+	 */
 	public void setTeamNumber(String team) {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("teamNumber", team);
-		editor.commit();
+		editor.apply();
 		numberSet = false;
 	}
 
+	/**
+	 * isNumberSet() returns if the team number has been set.
+	 *
+	 * @return is team number set
+	 */
 	public Boolean isNumberSet() {
 		return numberSet;
 	}

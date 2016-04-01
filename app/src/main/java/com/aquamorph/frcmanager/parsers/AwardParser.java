@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.parsers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.models.Award;
@@ -16,12 +17,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * <p></p>
+ * Fetches and parses award data for an event.
  *
  * @author Christian Colglazier
- * @version 1/26/2016
+ * @version 3/26/2016
  */
 public class AwardParser {
+
 	public String TAG = "AwardParser";
 	public volatile boolean parsingComplete = true;
 	private Award[] awards;
@@ -33,6 +35,9 @@ public class AwardParser {
 		try {
 			online = Constants.isNetworkAvailable(context);
 
+			if (Constants.TRACTING_LEVEL > 3) {
+				Log.i(TAG, "URL: " + Constants.getEventAwards(event));
+			}
 			//Checks for internet connection
 			if (online) {
 				BlueAlliance blueAlliance = new BlueAlliance();
@@ -60,12 +65,17 @@ public class AwardParser {
 		}
 	}
 
+	/**
+	 * getAwards returns populated arraylist of awards.
+	 *
+	 * @return awards
+	 */
 	public ArrayList<Award> getAwards() {
 		return awardsList;
 	}
 
 	/**
-	 * setLastModified() stores the last modified date
+	 * setLastModified() stores the last modified date.
 	 *
 	 * @param context
 	 * @param date
@@ -74,14 +84,14 @@ public class AwardParser {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("awardsLast", date);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getLastModified() returns the last modified date
+	 * getLastModified() returns the last modified date.
 	 *
 	 * @param context
-	 * @return
+	 * @return last modified
 	 */
 	public String getLastModified(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -89,7 +99,7 @@ public class AwardParser {
 	}
 
 	/**
-	 * setData() stores the date to a json string
+	 * setData() stores the date to a json string.
 	 *
 	 * @param context
 	 * @param data
@@ -98,11 +108,11 @@ public class AwardParser {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("awards", data);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
-	 * getData() returns data from a stored json string
+	 * getData() returns data from a stored json string.
 	 *
 	 * @param context
 	 * @return
