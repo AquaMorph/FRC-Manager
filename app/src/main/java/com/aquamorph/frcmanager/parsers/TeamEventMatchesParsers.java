@@ -20,7 +20,7 @@ import java.util.Arrays;
  * Fetches and parses team match data for an event.
  *
  * @author Christian Colglazier
- * @version 3/26/2016
+ * @version 4/1/2016
  */
 public class TeamEventMatchesParsers {
 
@@ -29,13 +29,12 @@ public class TeamEventMatchesParsers {
 	private Match[] teamEventMatches;
 	private ArrayList<Match> teamArray = new ArrayList<>();
 	public Boolean online;
-	private Boolean isTeamNumber = false;
+	InputStream stream;
 	Gson gson = new Gson();
 
 	public void fetchJSON(final String team, final String event, final Context context, final Boolean isTeamNumber) {
-		this.isTeamNumber = isTeamNumber;
 		try {
-			if(Constants.TRACTING_LEVEL > 0) {
+			if (Constants.TRACTING_LEVEL > 0) {
 				Log.d(TAG, "Loading");
 				Log.d(TAG, "isTeamNumber " + isTeamNumber);
 			}
@@ -43,22 +42,27 @@ public class TeamEventMatchesParsers {
 
 			//Checks for internet connection
 			if (online) {
-				if(Constants.TRACTING_LEVEL > 0) {
+				if (Constants.TRACTING_LEVEL > 0) {
 					Log.d(TAG, "Online");
 				}
 				BlueAlliance blueAlliance = new BlueAlliance();
-				InputStream stream = blueAlliance.connect(Constants.getEventTeamMatches(team, event),
-						getLastModified(context), context);
+				if (isTeamNumber) {
+					stream = blueAlliance.connect(Constants.getEventTeamMatches(team, event),
+							getLastModified(context), context);
+				} else {
+					stream = blueAlliance.connect(Constants.getEventTeamMatches(team, event),
+							"", context);
+				}
 
 				//Checks for change in data
-				if (blueAlliance.getStatus() == 200 ||  getData(context) == null
+				if (blueAlliance.getStatus() == 200 || getData(context) == null
 						|| Constants.FORCE_DATA_RELOAD || !isTeamNumber) {
-					if(Constants.TRACTING_LEVEL > 0) {
+					if (Constants.TRACTING_LEVEL > 0) {
 						Log.d(TAG, "Loading new data");
 					}
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					teamEventMatches = gson.fromJson(reader, Match[].class);
-					if(isTeamNumber) {
+					if (isTeamNumber) {
 						storeLastModified(context, blueAlliance.getLastUpdated());
 						storeData(context, gson.toJson(teamEventMatches));
 					}
@@ -116,7 +120,7 @@ public class TeamEventMatchesParsers {
 	 * @param data
 	 */
 	public void storeData(Context context, String data) {
-		if(Constants.TRACTING_LEVEL > 0) {
+		if (Constants.TRACTING_LEVEL > 0) {
 			Log.d(TAG, "Storing Data");
 		}
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -132,7 +136,7 @@ public class TeamEventMatchesParsers {
 	 * @return Match
 	 */
 	public Match[] getData(Context context) {
-		if(Constants.TRACTING_LEVEL > 0) {
+		if (Constants.TRACTING_LEVEL > 0) {
 			Log.d(TAG, "Loading Data from a save");
 		}
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
