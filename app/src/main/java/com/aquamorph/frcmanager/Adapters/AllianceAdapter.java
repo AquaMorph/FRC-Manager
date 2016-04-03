@@ -1,6 +1,7 @@
 package com.aquamorph.frcmanager.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.activities.TeamSummary;
 import com.aquamorph.frcmanager.models.Events;
 
 import java.util.ArrayList;
@@ -26,10 +28,12 @@ public class AllianceAdapter extends RecyclerView.Adapter<AllianceAdapter.MyView
 	private String TAG = "AllianceAdapter";
 	private LayoutInflater inflater;
 	private ArrayList<Events.Alliances> data;
+	private Context context;
 
 	public AllianceAdapter(Context context, ArrayList<Events.Alliances> data) {
 		inflater = from(context);
 		this.data = data;
+		this.context = context;
 	}
 
 	@Override
@@ -71,6 +75,39 @@ public class AllianceAdapter extends RecyclerView.Adapter<AllianceAdapter.MyView
 			team3 = (TextView) itemView.findViewById(R.id.team_3);
 			team4 = (TextView) itemView.findViewById(R.id.team_4);
 			allianceNumber = (TextView) itemView.findViewById(R.id.alliance_number);
+
+			team1.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, TeamSummary.class);
+					intent.putExtra("teamNumber", team1.getText().toString());
+					context.startActivity(intent);
+				}
+			});
+			team2.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, TeamSummary.class);
+					intent.putExtra("teamNumber", team2.getText().toString());
+					context.startActivity(intent);
+				}
+			});
+			team3.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, TeamSummary.class);
+					intent.putExtra("teamNumber", team3.getText().toString());
+					context.startActivity(intent);
+				}
+			});
+			team4.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, TeamSummary.class);
+					intent.putExtra("teamNumber", team4.getText().toString());
+					context.startActivity(intent);
+				}
+			});
 		}
 	}
 }
