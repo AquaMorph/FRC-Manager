@@ -1,6 +1,7 @@
 package com.aquamorph.frcmanager.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.activities.TeamSummary;
 import com.aquamorph.frcmanager.models.Match;
 
 import java.text.DateFormat;
@@ -26,7 +28,7 @@ import static android.view.LayoutInflater.from;
  * Populates a RecyclerView with the schedule for a team.
  *
  * @author Christian Colglazier
- * @version 3/29/2016
+ * @version 4/3/2016
  */
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyViewHolder> {
 
@@ -143,7 +145,58 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 			blueScore = (TextView) itemView.findViewById(R.id.blue_score);
 			matchTime = (TextView) itemView.findViewById(R.id.match_time);
 			scoreTable = (TableLayout) itemView.findViewById(R.id.score_table);
+
+			redTeam1.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, TeamSummary.class);
+					intent.putExtra("teamNumber", redTeam1.getText().toString());
+					context.startActivity(intent);
+				}
+			});
+			redTeam2.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, TeamSummary.class);
+					intent.putExtra("teamNumber", redTeam2.getText().toString());
+					context.startActivity(intent);
+				}
+			});
+			redTeam3.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, TeamSummary.class);
+					intent.putExtra("teamNumber", redTeam3.getText().toString());
+					context.startActivity(intent);
+				}
+			});
+			blueTeam1.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, TeamSummary.class);
+					intent.putExtra("teamNumber", blueTeam1.getText().toString());
+					context.startActivity(intent);
+				}
+			});
+			blueTeam2.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, TeamSummary.class);
+					intent.putExtra("teamNumber", blueTeam2.getText().toString());
+					context.startActivity(intent);
+				}
+			});
+			blueTeam3.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(context, TeamSummary.class);
+					intent.putExtra("teamNumber", blueTeam3.getText().toString());
+					context.startActivity(intent);
+				}
+			});
 		}
+
+
 	}
 
 	/**
