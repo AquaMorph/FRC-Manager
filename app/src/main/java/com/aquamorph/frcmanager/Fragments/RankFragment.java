@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,9 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.decoration.DividerIndented;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
+import com.aquamorph.frcmanager.decoration.DividerIndented;
 import com.aquamorph.frcmanager.models.EventTeam;
 import com.aquamorph.frcmanager.parsers.RankParser;
 import com.aquamorph.frcmanager.parsers.TeamEventParser;
@@ -82,7 +83,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
-		recyclerView.setLayoutManager(llm);
+//		recyclerView.setLayoutManager(llm);
+		recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 		recyclerView.addItemDecoration(new DividerIndented(getContext()) {
 		});
 

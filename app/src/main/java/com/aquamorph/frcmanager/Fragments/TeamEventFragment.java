@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -76,7 +77,8 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
-		recyclerView.setLayoutManager(llm);
+//		recyclerView.setLayoutManager(llm);
+		recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 		recyclerView.addItemDecoration(new DividerIndented(getContext()) {
 		});
 

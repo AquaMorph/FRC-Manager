@@ -4,8 +4,8 @@ android:
   components:
     # The BuildTools version used by your project
     - tools
-    - build-tools-23.0.2
-    - android-23
+    - build-tools-24.0.0
+    - android-24
 
     # Additional components
     - extra-google-google_play_services
