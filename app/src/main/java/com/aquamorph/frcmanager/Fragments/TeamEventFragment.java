@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.decoration.DividerIndented;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventTeamAdapter;
@@ -77,8 +78,12 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
-//		recyclerView.setLayoutManager(llm);
-		recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+		if(Constants.isLargeScreen(getContext())) {
+			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+		}
+		else {
+			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+		}
 		recyclerView.addItemDecoration(new DividerIndented(getContext()) {
 		});
 

@@ -20,9 +20,9 @@ import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-	public String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams", "Alliances", "Awards"};
-	FragmentManager fragmentManager;
-	ViewPager viewPager;
+	private String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams", "Alliances", "Awards"};
+	private FragmentManager fragmentManager;
+	private ViewPager viewPager;
 
 	public SectionsPagerAdapter(FragmentManager fm, ViewPager mViewPager) {
 		super(fm);

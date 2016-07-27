@@ -37,7 +37,6 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Events.Alliances> alliances = new ArrayList<>();
 	private String eventKey = "";
-	private SharedPreferences prefs;
 
 	/**
 	 * newInstance creates and returns a new AllianceFragment
@@ -76,7 +75,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 		recyclerView.setLayoutManager(llm);
 		recyclerView.addItemDecoration(new DividerIndented(getContext()));
 
-		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(AllianceFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 

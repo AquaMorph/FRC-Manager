@@ -1,8 +1,11 @@
 package com.aquamorph.frcmanager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.DisplayMetrics;
+import android.view.Display;
 
 /**
  * A collection of constants needed to interact with the Blue Alliance.
@@ -148,5 +151,21 @@ public class Constants {
 			spacesText += "&nbsp;";
 		}
 		return String.format("<pre>%s<u>%s</u></pre>", spacesText, text);
+	}
+
+	/**
+	 * isLargeScreen returns if the screen is large or not
+	 *
+	 * @param context
+	 * @return screen size
+	 */
+	public static boolean isLargeScreen(Context context) {
+		Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		display.getMetrics(outMetrics);
+
+		float density  = context.getResources().getDisplayMetrics().density;
+		float dpWidth  = outMetrics.widthPixels / density;
+		return dpWidth >= 600;
 	}
 }

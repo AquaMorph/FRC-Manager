@@ -31,24 +31,19 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 	private String TAG = "MainActivity";
 	private SectionsPagerAdapter mSectionsPagerAdapter;
-	private ViewPager mViewPager;
-	public String teamNumber, eventName;
-	public Boolean paidUser = false;
-	public String year = "2016";
-	public String teamRank;
-	Toolbar toolbar;
-	SharedPreferences prefs;
+	private String teamNumber, eventName;
+	private String teamRank;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
 		teamNumber = prefs.getString("teamNumber", "");
 		eventName = prefs.getString("eventShortName", "");
-		year = prefs.getString("teamNumber", "2015");
+		String year = prefs.getString("teamNumber", "2015");
 		teamRank = prefs.getString("teamRank", "");
 
 		if (teamNumber.equals("")) openSetup();
@@ -177,12 +172,12 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	 * listener() connects layout to view.
 	 */
 	private void listener() {
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		toolbar.setSubtitle(getSubTitle());
 
 		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.container);
+		ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), mViewPager);
 		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
 		mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -195,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		//Load ads
 		AdView mAdView = (AdView) findViewById(R.id.adView);
+		Boolean paidUser = true;
 		if (paidUser) {
 			if (mAdView != null) {
 				mAdView.setVisibility(View.GONE);

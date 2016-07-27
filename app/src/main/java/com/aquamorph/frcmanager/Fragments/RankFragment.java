@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
 import com.aquamorph.frcmanager.decoration.DividerIndented;
@@ -41,10 +42,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private ArrayList<String[]> ranks = new ArrayList<>();
 	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey = "", teamNumber = "";
-	RankParser rankParser = new RankParser();
-	TeamEventParser teamEventParser = new TeamEventParser();
-	SharedPreferences prefs;
-	SharedPreferences.Editor editor;
+	private RankParser rankParser = new RankParser();
+	private TeamEventParser teamEventParser = new TeamEventParser();
+	private SharedPreferences prefs;
 
 	/**
 	 * newInstance creates and returns a new RankFragment
@@ -83,8 +83,12 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
-//		recyclerView.setLayoutManager(llm);
-		recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+		if(Constants.isLargeScreen(getContext())) {
+			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+		}
+		else {
+			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+		}
 		recyclerView.addItemDecoration(new DividerIndented(getContext()) {
 		});
 
@@ -120,7 +124,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		}
 	}
 
-	class LoadRanks extends AsyncTask<Void, Void, Void> {
+	private class LoadRanks extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected void onPreExecute() {
@@ -144,7 +148,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected void onPostExecute(Void result) {
-			editor = prefs.edit();
+			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString("teamRank", "");
 			for (int i = 0; i < ranks.size(); i++) {
 				if (ranks.get(i)[1].equals(teamNumber)) {
