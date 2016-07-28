@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
 import com.aquamorph.frcmanager.models.EventTeam;
@@ -27,7 +27,7 @@ import static android.view.LayoutInflater.from;
  * @author Christian Colglazier
  * @version 3/29/2016
  */
-public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> {
+public class RankAdapter extends MyRecyclerView.Adapter<RankAdapter.MyViewHolder> {
 
 	private String TAG = "RankAdapter";
 	private LayoutInflater inflater;
@@ -102,7 +102,22 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		return data.size() - 1;
 	}
 
-	public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+	/**
+	 * getTeamName() returns the name of a team.
+	 *
+	 * @param number of the team
+	 * @return name of the team
+	 */
+	public String getTeamName(String number) {
+		for (int i = 0; i < teams.size(); i++) {
+			if (number.equals(Integer.toString(teams.get(i).team_number))) {
+				return teams.get(i).nickname;
+			}
+		}
+		return "";
+	}
+
+	public class MyViewHolder extends MyRecyclerView.ViewHolder implements View.OnClickListener {
 
 		TextView teamNumber;
 		TextView rankNumber;
@@ -124,20 +139,5 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 			intent.putExtra("teamNumber", rankNumber.getText().toString());
 			context.startActivity(intent);
 		}
-	}
-
-	/**
-	 * getTeamName() returns the name of a team.
-	 *
-	 * @param number of the team
-	 * @return name of the team
-	 */
-	public String getTeamName(String number) {
-		for(int i = 0; i < teams.size(); i++) {
-			if(number.equals(Integer.toString(teams.get(i).team_number))) {
-				return teams.get(i).nickname;
-			}
-		}
-		return "";
 	}
 }

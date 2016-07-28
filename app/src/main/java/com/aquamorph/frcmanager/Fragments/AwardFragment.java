@@ -8,15 +8,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.decoration.Divider;
+import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AwardAdapter;
+import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.Award;
 import com.aquamorph.frcmanager.parsers.AwardParser;
 
@@ -30,14 +30,14 @@ import java.util.ArrayList;
  */
 public class AwardFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+	SharedPreferences prefs;
 	private String TAG = "AwardFragment";
 	private SwipeRefreshLayout swipeRefreshLayout;
-	private RecyclerView recyclerView;
+	private MyRecyclerView recyclerView;
 	private TextView emptyView;
-	private RecyclerView.Adapter adapter;
+	private MyRecyclerView.Adapter adapter;
 	private ArrayList<Award> awards = new ArrayList<>();
 	private String eventKey = "";
-	SharedPreferences prefs;
 
 	/**
 	 * newInstance creates and returns a new AwardFragment
@@ -67,7 +67,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 			}
 		});
 
-		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		recyclerView = (MyRecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new AwardAdapter(getContext(), awards);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());

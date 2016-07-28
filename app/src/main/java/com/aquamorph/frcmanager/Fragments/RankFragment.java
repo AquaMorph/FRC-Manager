@@ -9,13 +9,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.Constants;
+import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
 import com.aquamorph.frcmanager.decoration.DividerIndented;
@@ -36,9 +36,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 	private static String TAG = "RankFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
-	private RecyclerView recyclerView;
+	private MyRecyclerView recyclerView;
 	private TextView emptyView;
-	private RecyclerView.Adapter adapter;
+	private MyRecyclerView.Adapter adapter;
 	private ArrayList<String[]> ranks = new ArrayList<>();
 	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey = "", teamNumber = "";
@@ -77,7 +77,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 			}
 		});
 
-		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		recyclerView = (MyRecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new RankAdapter(getContext(), ranks, teams);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());

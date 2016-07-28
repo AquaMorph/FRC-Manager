@@ -9,16 +9,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.Constants;
-import com.aquamorph.frcmanager.decoration.DividerIndented;
+import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventTeamAdapter;
+import com.aquamorph.frcmanager.decoration.DividerIndented;
 import com.aquamorph.frcmanager.models.EventTeam;
 import com.aquamorph.frcmanager.parsers.TeamEventParser;
 
@@ -34,15 +34,15 @@ import java.util.Collections;
 public class TeamEventFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private static String TAG = "TeamEventFragment";
-	private SwipeRefreshLayout mSwipeRefreshLayout;
-	private RecyclerView recyclerView;
-	private TextView emptyView;
-	private RecyclerView.Adapter adapter;
-	private ArrayList<EventTeam> teams = new ArrayList<>();
-	private String eventKey = "";
 	TeamEventParser teamEventParser = new TeamEventParser();
 	SharedPreferences prefs;
 	SharedPreferences.Editor editor;
+	private SwipeRefreshLayout mSwipeRefreshLayout;
+	private MyRecyclerView recyclerView;
+	private TextView emptyView;
+	private MyRecyclerView.Adapter adapter;
+	private ArrayList<EventTeam> teams = new ArrayList<>();
+	private String eventKey = "";
 
 	/**
 	 * newInstance creates and returns a new TeamEventFragment
@@ -72,7 +72,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 			}
 		});
 
-		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		recyclerView = (MyRecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new EventTeamAdapter(getContext(), teams);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());

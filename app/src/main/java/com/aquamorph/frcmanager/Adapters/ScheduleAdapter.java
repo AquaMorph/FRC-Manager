@@ -3,7 +3,6 @@ package com.aquamorph.frcmanager.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.Constants;
+import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
 import com.aquamorph.frcmanager.models.Match;
@@ -30,7 +30,7 @@ import static android.view.LayoutInflater.from;
  * @author Christian Colglazier
  * @version 4/3/2016
  */
-public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyViewHolder> {
+public class ScheduleAdapter extends MyRecyclerView.Adapter<ScheduleAdapter.MyViewHolder> {
 
 	private String TAG = "ScheduleAdapter";
 	private LayoutInflater inflater;
@@ -118,7 +118,23 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 		return data.size();
 	}
 
-	public class MyViewHolder extends RecyclerView.ViewHolder {
+	/**
+	 * parseTeamNumber returns a formatted team number.
+	 *
+	 * @param red      is the robot red or blue
+	 * @param robot    position of the team
+	 * @param position data position
+	 * @return team number
+	 */
+	private String parseTeamNumber(Boolean red, int robot, int position) {
+		if (red) {
+			return Constants.formatTeamNumber(data.get(position).alliances.red.teams[robot]);
+		} else {
+			return Constants.formatTeamNumber(data.get(position).alliances.blue.teams[robot]);
+		}
+	}
+
+	public class MyViewHolder extends MyRecyclerView.ViewHolder {
 
 		protected TextView matchNumber;
 		protected TextView redTeam1;
@@ -197,21 +213,5 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 		}
 
 
-	}
-
-	/**
-	 * parseTeamNumber returns a formatted team number.
-	 *
-	 * @param red is the robot red or blue
-	 * @param robot position of the team
-	 * @param position data position
-	 * @return team number
-	 */
-	private String parseTeamNumber(Boolean red, int robot, int position) {
-		if (red) {
-			return Constants.formatTeamNumber(data.get(position).alliances.red.teams[robot]);
-		} else {
-			return Constants.formatTeamNumber(data.get(position).alliances.blue.teams[robot]);
-		}
 	}
 }

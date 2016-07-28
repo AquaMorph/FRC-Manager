@@ -8,12 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AllianceAdapter;
 import com.aquamorph.frcmanager.decoration.DividerIndented;
@@ -32,9 +32,9 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 
 	private String TAG = "AllianceFragment";
 	private SwipeRefreshLayout swipeRefreshLayout;
-	private RecyclerView recyclerView;
+	private MyRecyclerView recyclerView;
 	private TextView emptyView;
-	private RecyclerView.Adapter adapter;
+	private MyRecyclerView.Adapter adapter;
 	private ArrayList<Events.Alliances> alliances = new ArrayList<>();
 	private String eventKey = "";
 
@@ -66,7 +66,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 			}
 		});
 
-		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		recyclerView = (MyRecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new AllianceAdapter(getContext(), alliances);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
