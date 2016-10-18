@@ -7,10 +7,10 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,11 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aquamorph.frcmanager.Constants;
-import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.models.Match;
-import com.aquamorph.frcmanager.parsers.TeamEventMatchesParsers;
+import com.aquamorph.frcmanager.parsers.Parser;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,12 +39,12 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	SharedPreferences prefs;
 	private String TAG = "TeamScheduleFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
-	private MyRecyclerView recyclerView;
+	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
 	private String teamNumber = "", eventKey = "";
-	private TeamEventMatchesParsers teamEventMatchesParsers = new TeamEventMatchesParsers();
+	private Parser<Match> teamEventMatchesParsers;
 	private View view;
 	private Boolean getTeamFromSettings = true;
 
@@ -64,7 +63,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	}
 
 	@Override
-	public void onCreate(@Nullable Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		if (Constants.TRACTING_LEVEL >= 3) {
@@ -86,6 +85,8 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			}
 		}
 		listener();
+		teamEventMatchesParsers = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
+				("frc" + teamNumber, eventKey));
 		refresh();
 		return view;
 	}
@@ -163,13 +164,13 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			}
 		});
 
-		recyclerView = (MyRecyclerView) view.findViewById(R.id.rv);
+		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
-		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
+		recyclerView.setAdapter(adapter);
 	}
 
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
@@ -181,7 +182,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			teamEventMatchesParsers.fetchJSON("frc" + teamNumber, eventKey, getContext(), getTeamFromSettings);
+			teamEventMatchesParsers.fetchJSON(getContext(), getTeamFromSettings);
 			while (teamEventMatchesParsers.parsingComplete) ;
 			teamEventMatches.clear();
 			teamEventMatches.addAll(teamEventMatchesParsers.getTeamEventMatches());

@@ -25,17 +25,20 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 	private String TAG = "AwardAdapter";
 	private LayoutInflater inflater;
 	private ArrayList<Award> data;
+	private Context context;
 	private String team = "";
 	private String awardee = "";
+	private View view;
 
 	public AwardAdapter(Context context, ArrayList<Award> data) {
 		inflater = from(context);
 		this.data = data;
+		this.context = context;
 	}
 
 	@Override
 	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		View view = inflater.inflate(R.layout.award, parent, false);
+		view = inflater.inflate(R.layout.award, parent, false);
 		return new MyViewHolder(view);
 	}
 
@@ -62,6 +65,12 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 		}
 		holder.teamNumber.setText(team);
 		holder.award.setText(data.get(position).name);
+	}
+
+
+	@Override
+	public void onViewDetachedFromWindow(MyViewHolder holder) {
+		holder.itemView.clearAnimation();
 	}
 
 	@Override

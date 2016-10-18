@@ -3,10 +3,8 @@ package com.aquamorph.frcmanager.decoration;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.View;
@@ -20,36 +18,69 @@ import com.aquamorph.frcmanager.R;
  * @version 2/13/2016
  */
 public class Divider extends RecyclerView.ItemDecoration {
-	private Drawable mDivider;
 
-	public Divider(Context context) {
-		mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider);
-		if (mDivider != null) {
-			TypedValue typedValue = new TypedValue();
-			Resources.Theme theme = context.getTheme();
-			theme.resolveAttribute(R.attr.textOnBackground, typedValue, true);
-			int color = typedValue.data;
-			ColorFilter filter = new LightingColorFilter( color, color);
-			mDivider.setColorFilter(filter);
+	private final Paint mPaint;
+	private final int mAlpha;
+	private int indent;
+	private Context context;
+
+	public Divider(Context context, float width, int indent) {
+		this.context = context;
+		TypedValue typedValue = new TypedValue();
+		Resources.Theme theme = context.getTheme();
+		theme.resolveAttribute(R.attr.textOnBackground, typedValue, true);
+		int color = typedValue.data;
+		mPaint = new Paint();
+		mPaint.setColor(color);
+		mPaint.setStrokeWidth(width);
+		mAlpha = mPaint.getAlpha();
+		this.indent = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, indent,
+				context.getResources().getDisplayMetrics());
+	}
+
+	@Override
+	public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+		final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) view.getLayoutParams();
+
+		// we retrieve the position in the list
+		final int position = params.getViewAdapterPosition();
+
+		// add space for the separator to the bottom of every view but the last one
+		if (position < state.getItemCount()) {
+			outRect.set(0, 0, 0, (int) mPaint.getStrokeWidth()); // left, top, right, bottom
+		} else {
+			outRect.setEmpty(); // 0, 0, 0, 0
 		}
 	}
 
 	@Override
-	public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-		int left = parent.getPaddingLeft();
-		int right = parent.getWidth() - parent.getPaddingRight();
+	public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+		// a line will draw half its size to top and bottom,
+		// hence the offset to place it correctly
+		final int offset = (int) (mPaint.getStrokeWidth() / 2);
 
-		int childCount = parent.getChildCount();
-		for (int i = 0; i < childCount; i++) {
-			View child = parent.getChildAt(i);
 
-			RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+		// this will iterate over every visible view
+		for (int i = 0; i < parent.getChildCount(); i++) {
+			final View view = parent.getChildAt(i);
+			final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) view.getLayoutParams();
 
-			int top = child.getBottom() + params.bottomMargin;
-			int bottom = top + mDivider.getIntrinsicHeight();
+			// get the position
+			final int position = params.getViewAdapterPosition();
 
-			mDivider.setBounds(left, top, right, bottom);
-			mDivider.draw(c);
+			// and finally draw the separator
+			if (position < state.getItemCount()) {
+				// apply alpha to support animations
+				mPaint.setAlpha((int) (view.getAlpha() * mAlpha));
+
+				float positionY = view.getBottom() + offset + view.getTranslationY();
+				// do the drawing
+				c.drawLine(view.getLeft() + view.getTranslationX() + indent,
+						positionY,
+						view.getRight() + view.getTranslationX(),
+						positionY,
+						mPaint);
+			}
 		}
 	}
 }

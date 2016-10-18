@@ -2,13 +2,13 @@ package com.aquamorph.frcmanager.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.Constants;
-import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
 import com.aquamorph.frcmanager.models.Events;
@@ -23,7 +23,7 @@ import static android.view.LayoutInflater.from;
  * @author Christian Colglazier
  * @version 3/31/2016
  */
-public class AllianceAdapter extends MyRecyclerView.Adapter<AllianceAdapter.MyViewHolder> {
+public class AllianceAdapter extends RecyclerView.Adapter<AllianceAdapter.MyViewHolder> {
 
 	private String TAG = "AllianceAdapter";
 	private LayoutInflater inflater;
@@ -60,7 +60,7 @@ public class AllianceAdapter extends MyRecyclerView.Adapter<AllianceAdapter.MyVi
 		return data.size();
 	}
 
-	public class MyViewHolder extends MyRecyclerView.ViewHolder {
+	public class MyViewHolder extends RecyclerView.ViewHolder {
 
 		TextView team1;
 		TextView team2;

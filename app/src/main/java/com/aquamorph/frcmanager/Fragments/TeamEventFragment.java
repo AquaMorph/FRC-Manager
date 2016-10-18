@@ -9,21 +9,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.Constants;
-import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventTeamAdapter;
-import com.aquamorph.frcmanager.decoration.DividerIndented;
+import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.EventTeam;
 import com.aquamorph.frcmanager.parsers.TeamEventParser;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 /**
  * Displays a list of teams at an event.
@@ -38,9 +41,9 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 	SharedPreferences prefs;
 	SharedPreferences.Editor editor;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
-	private MyRecyclerView recyclerView;
+	private RecyclerView recyclerView;
 	private TextView emptyView;
-	private MyRecyclerView.Adapter adapter;
+	private RecyclerView.Adapter adapter;
 	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey = "";
 
@@ -72,20 +75,20 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 			}
 		});
 
-		recyclerView = (MyRecyclerView) view.findViewById(R.id.rv);
+		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		recyclerView.setItemAnimator(new SlideInLeftAnimator());
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new EventTeamAdapter(getContext(), teams);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
-		recyclerView.setAdapter(adapter);
+		recyclerView.setAdapter(new AlphaInAnimationAdapter(adapter));
 		if(Constants.isLargeScreen(getContext())) {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 		}
 		else {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
-		recyclerView.addItemDecoration(new DividerIndented(getContext()) {
-		});
+		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);

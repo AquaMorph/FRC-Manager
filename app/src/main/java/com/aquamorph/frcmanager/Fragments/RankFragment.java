@@ -9,16 +9,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.Constants;
-import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
-import com.aquamorph.frcmanager.decoration.DividerIndented;
+import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.EventTeam;
 import com.aquamorph.frcmanager.parsers.RankParser;
 import com.aquamorph.frcmanager.parsers.TeamEventParser;
@@ -36,9 +36,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 	private static String TAG = "RankFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
-	private MyRecyclerView recyclerView;
+	private RecyclerView recyclerView;
 	private TextView emptyView;
-	private MyRecyclerView.Adapter adapter;
+	private RecyclerView.Adapter adapter;
 	private ArrayList<String[]> ranks = new ArrayList<>();
 	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey = "", teamNumber = "";
@@ -77,7 +77,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 			}
 		});
 
-		recyclerView = (MyRecyclerView) view.findViewById(R.id.rv);
+		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new RankAdapter(getContext(), ranks, teams);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
@@ -89,8 +90,6 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		else {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
-		recyclerView.addItemDecoration(new DividerIndented(getContext()) {
-		});
 
 		prefs.registerOnSharedPreferenceChangeListener(RankFragment.this);
 		eventKey = prefs.getString("eventKey", "");

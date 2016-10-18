@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:drawable="@color/primary"/>
+        android:drawable="@color/blue_alliance"/>
 
-    <item
-        android:drawable="@drawable/app_icon"
-        android:gravity="center|center_vertical"
-        android:scaleType="fitXY">
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/splashscreen"/>
     </item>
-
 </layer-list>

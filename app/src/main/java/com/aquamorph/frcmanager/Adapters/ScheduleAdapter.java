@@ -3,16 +3,17 @@ package com.aquamorph.frcmanager.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.Constants;
-import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
 import com.aquamorph.frcmanager.models.Match;
@@ -30,13 +31,15 @@ import static android.view.LayoutInflater.from;
  * @author Christian Colglazier
  * @version 4/3/2016
  */
-public class ScheduleAdapter extends MyRecyclerView.Adapter<ScheduleAdapter.MyViewHolder> {
+public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyViewHolder> {
 
 	private String TAG = "ScheduleAdapter";
 	private LayoutInflater inflater;
 	private Context context;
 	private ArrayList<Match> data;
 	private String team;
+	private Boolean isAttached = true;
+	private int lastPosition = -1;
 
 	public ScheduleAdapter(Context context, ArrayList<Match> data, String team) {
 		inflater = from(context);
@@ -48,8 +51,7 @@ public class ScheduleAdapter extends MyRecyclerView.Adapter<ScheduleAdapter.MyVi
 	@Override
 	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = inflater.inflate(R.layout.match, parent, false);
-		MyViewHolder holder = new MyViewHolder(view);
-		return holder;
+		return new MyViewHolder(view);
 	}
 
 	@Override
@@ -134,7 +136,7 @@ public class ScheduleAdapter extends MyRecyclerView.Adapter<ScheduleAdapter.MyVi
 		}
 	}
 
-	public class MyViewHolder extends MyRecyclerView.ViewHolder {
+	public class MyViewHolder extends RecyclerView.ViewHolder {
 
 		protected TextView matchNumber;
 		protected TextView redTeam1;
@@ -147,6 +149,8 @@ public class ScheduleAdapter extends MyRecyclerView.Adapter<ScheduleAdapter.MyVi
 		protected TextView redScore;
 		protected TextView blueScore;
 		protected TableLayout scoreTable;
+		protected View itemView;
+		protected FrameLayout frameLayout;
 
 		public MyViewHolder(View itemView) {
 			super(itemView);
@@ -161,6 +165,8 @@ public class ScheduleAdapter extends MyRecyclerView.Adapter<ScheduleAdapter.MyVi
 			blueScore = (TextView) itemView.findViewById(R.id.blue_score);
 			matchTime = (TextView) itemView.findViewById(R.id.match_time);
 			scoreTable = (TableLayout) itemView.findViewById(R.id.score_table);
+			this.itemView = itemView;
+			frameLayout = (FrameLayout) itemView.findViewById(R.id.item_layout_container);
 
 			redTeam1.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -211,7 +217,5 @@ public class ScheduleAdapter extends MyRecyclerView.Adapter<ScheduleAdapter.MyVi
 				}
 			});
 		}
-
-
 	}
 }

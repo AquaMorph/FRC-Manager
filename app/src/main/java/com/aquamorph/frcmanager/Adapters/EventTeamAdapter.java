@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
 import com.aquamorph.frcmanager.models.EventTeam;
@@ -23,7 +22,7 @@ import static android.view.LayoutInflater.from;
  * @author Christian Colglazier
  * @version 3/19/2016
  */
-public class EventTeamAdapter extends MyRecyclerView.Adapter<EventTeamAdapter.MyViewHolder> {
+public class EventTeamAdapter extends RecyclerView.Adapter<EventTeamAdapter.MyViewHolder> {
 
 	private String TAG = "EventTeamAdapter", info;
 	private LayoutInflater inflater;

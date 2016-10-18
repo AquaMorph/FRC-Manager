@@ -6,6 +6,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 /**
  * A collection of constants needed to interact with the Blue Alliance.
@@ -160,12 +163,17 @@ public class Constants {
 	 * @return screen size
 	 */
 	public static boolean isLargeScreen(Context context) {
-		Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
 		DisplayMetrics outMetrics = new DisplayMetrics();
 		display.getMetrics(outMetrics);
 
-		float density  = context.getResources().getDisplayMetrics().density;
-		float dpWidth  = outMetrics.widthPixels / density;
+		float density = context.getResources().getDisplayMetrics().density;
+		float dpWidth = outMetrics.widthPixels / density;
 		return dpWidth >= 600;
+	}
+
+	public static void loadAnimation(Context context, View view) {
+		Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+		view.startAnimation(animation);
 	}
 }

@@ -8,12 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.MyRecyclerView;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AwardAdapter;
 import com.aquamorph.frcmanager.decoration.Divider;
@@ -33,9 +33,9 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	SharedPreferences prefs;
 	private String TAG = "AwardFragment";
 	private SwipeRefreshLayout swipeRefreshLayout;
-	private MyRecyclerView recyclerView;
+	private RecyclerView recyclerView;
 	private TextView emptyView;
-	private MyRecyclerView.Adapter adapter;
+	private RecyclerView.Adapter adapter;
 	private ArrayList<Award> awards = new ArrayList<>();
 	private String eventKey = "";
 
@@ -67,14 +67,14 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 			}
 		});
 
-		recyclerView = (MyRecyclerView) view.findViewById(R.id.rv);
+		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new AwardAdapter(getContext(), awards);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
-		recyclerView.addItemDecoration(new Divider(getContext()));
+		recyclerView.addItemDecoration(new Divider(getContext(), 2, 0));
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
@@ -125,8 +125,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 			if (awards.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);
 				emptyView.setVisibility(View.VISIBLE);
-			}
-			else {
+			} else {
 				recyclerView.setVisibility(View.VISIBLE);
 				emptyView.setVisibility(View.GONE);
 			}
