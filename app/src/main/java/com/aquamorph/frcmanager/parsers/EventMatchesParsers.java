@@ -8,12 +8,13 @@ import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.BlueAlliance;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Fetches and parses match data for an event.
@@ -25,9 +26,10 @@ public class EventMatchesParsers {
 
 	private String TAG = "EventMatchesParsers";
 	public volatile boolean parsingComplete = true;
-	private Match[] eventMatches;
-	private ArrayList<Match> teamArray = new ArrayList<>();
+//	private Match[] eventMatches;
+	private ArrayList<Match> teamArray;
 	public Boolean online;
+	private Type type = new TypeToken<ArrayList<Match>>(){}.getType();
 	Gson gson = new Gson();
 
 	public void fetchJSON(final String event, final Context context) {
@@ -44,17 +46,16 @@ public class EventMatchesParsers {
 				if (blueAlliance.getStatus() == 200 || getData(context) == null
 						|| Constants.FORCE_DATA_RELOAD) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-					eventMatches = gson.fromJson(reader, Match[].class);
+					teamArray = gson.fromJson(reader, type);
 					setLastModified(context, blueAlliance.getLastUpdated());
-					setData(context, gson.toJson(eventMatches));
+					setData(context, gson.toJson(teamArray));
 					blueAlliance.close();
 				} else {
-					eventMatches = getData(context);
+					teamArray = getData(context);
 				}
 			} else {
-				eventMatches = getData(context);
+				teamArray = getData(context);
 			}
-			teamArray = new ArrayList<>(Arrays.asList(eventMatches));
 			parsingComplete = false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,9 +114,9 @@ public class EventMatchesParsers {
 	 * @param context
 	 * @return
 	 */
-	public Match[] getData(Context context) {
+	public ArrayList<Match> getData(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String json = prefs.getString("eventMatches", "");
-		return gson.fromJson(json, Match[].class);
+		return gson.fromJson(json, type);
 	}
 }

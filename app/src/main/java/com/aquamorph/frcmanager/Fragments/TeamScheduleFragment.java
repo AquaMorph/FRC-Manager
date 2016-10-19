@@ -24,9 +24,9 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.parsers.Parser;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Displays a list of matches at an event for a given team.
@@ -44,7 +44,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
 	private String teamNumber = "", eventKey = "";
-	private Parser<Match> teamEventMatchesParsers;
+	private Parser<Match> parser;
 	private View view;
 	private Boolean getTeamFromSettings = true;
 
@@ -85,8 +85,8 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			}
 		}
 		listener();
-		teamEventMatchesParsers = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
-				("frc" + teamNumber, eventKey));
+		parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
+				("frc" + teamNumber, eventKey),  new TypeToken<ArrayList<Match>>(){}.getType());
 		refresh();
 		return view;
 	}
@@ -134,7 +134,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 				teamNumber = sharedPreferences.getString("teamNumber", "");
 			}
 			eventKey = sharedPreferences.getString("eventKey", "");
-			teamEventMatchesParsers.storeData(getContext(), "");
+			parser.storeData(getContext(), "");
 			adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -182,17 +182,17 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			teamEventMatchesParsers.fetchJSON(getContext(), getTeamFromSettings);
-			while (teamEventMatchesParsers.parsingComplete) ;
+			parser.fetchJSON(getContext(), getTeamFromSettings);
+			while (parser.parsingComplete) ;
 			teamEventMatches.clear();
-			teamEventMatches.addAll(teamEventMatchesParsers.getTeamEventMatches());
-			Collections.sort(teamEventMatches);
+			teamEventMatches.addAll(parser.getTeamEventMatches());
+//			sort(teamEventMatches);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (!teamEventMatchesParsers.online) {
+			if (!parser.online) {
 				Toast.makeText(getContext(), Constants.NOT_ONLINE_MESSAGE, Toast.LENGTH_SHORT).show();
 			}
 			adapter.notifyDataSetChanged();

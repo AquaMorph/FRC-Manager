@@ -6,15 +6,14 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.aquamorph.frcmanager.Constants;
-import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.BlueAlliance;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * <p></p>
@@ -27,16 +26,16 @@ public class Parser<T> {
 
 	public String TAG = "Parser";
 	public volatile boolean parsingComplete = true;
-	private Match[] teamEventMatches;
-	private ArrayList<Match> teamArray = new ArrayList<>();
+	private ArrayList<T> teamArray;
 	public Boolean online;
-	InputStream stream;
-	Gson gson = new Gson();
+	private Gson gson = new Gson();
+	private Type type;
 	private String name, url;
 
-	public Parser(String name, String url) {
+	public Parser(String name, String url, Type type) {
 		this.name = name;
 		this.url = url;
+		this.type = type;
 	}
 
 	public void fetchJSON(final Context context, final Boolean isTeamNumber) {
@@ -53,6 +52,7 @@ public class Parser<T> {
 					Log.d(TAG, "Online");
 				}
 				BlueAlliance blueAlliance = new BlueAlliance();
+				InputStream stream;
 				if (isTeamNumber) {
 					stream = blueAlliance.connect(url, getLastModified(context), context);
 				} else {
@@ -66,19 +66,18 @@ public class Parser<T> {
 						Log.d(TAG, "Loading new data");
 					}
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-					teamEventMatches = gson.fromJson(reader, Match[].class);
+					teamArray = gson.fromJson(reader, type);
 					if (isTeamNumber) {
 						storeLastModified(context, blueAlliance.getLastUpdated());
-						storeData(context, gson.toJson(teamEventMatches));
+						storeData(context, gson.toJson(teamArray));
 					}
 					blueAlliance.close();
 				} else {
-					teamEventMatches = getData(context);
+					teamArray = getData(context);
 				}
 			} else {
-				teamEventMatches = getData(context);
+				teamArray = getData(context);
 			}
-			teamArray = new ArrayList<>(Arrays.asList(teamEventMatches));
 			parsingComplete = false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -90,7 +89,7 @@ public class Parser<T> {
 	 *
 	 * @return Match
 	 */
-	public ArrayList<Match> getTeamEventMatches() {
+	public ArrayList<T> getTeamEventMatches() {
 		return teamArray;
 	}
 
@@ -100,7 +99,7 @@ public class Parser<T> {
 	 * @param context
 	 * @param date
 	 */
-	public void storeLastModified(Context context, String date) {
+	private void storeLastModified(Context context, String date) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(name + "Last", date);
@@ -113,7 +112,7 @@ public class Parser<T> {
 	 * @param context
 	 * @return last modified
 	 */
-	public String getLastModified(Context context) {
+	private String getLastModified(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		return prefs.getString(name + "Last", "");
 	}
@@ -137,15 +136,15 @@ public class Parser<T> {
 	/**
 	 * getData() returns data from a stored json string.
 	 *
-	 * @param context
+	 * @param context the context
 	 * @return Match
 	 */
-	public Match[] getData(Context context) {
+	private ArrayList<T> getData(Context context) {
 		if (Constants.TRACTING_LEVEL > 0) {
 			Log.d(TAG, "Loading Data from a save");
 		}
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String json = prefs.getString(name, "");
-		return gson.fromJson(json, Match[].class);
+		return gson.fromJson(json, type);
 	}
 }
