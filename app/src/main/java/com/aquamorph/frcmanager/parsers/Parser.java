@@ -16,67 +16,84 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * <p></p>
+ * Parses date of type T.
  *
  * @author Christian Colglazier
- * @version 10/18/2016
+ * @version 10/20/2016
  */
 
 public class Parser<T> {
 
-	public String TAG = "Parser";
 	public volatile boolean parsingComplete = true;
-	private ArrayList<T> teamArray;
 	public Boolean online;
+	private String TAG = "Parser";
+	private ArrayList<T> data;
 	private Gson gson = new Gson();
 	private Type type;
 	private String name, url;
+	private Context context;
+	private SharedPreferences prefs;
 
-	public Parser(String name, String url, Type type) {
+	/**
+	 * Initializes Parser.
+	 *
+	 * @param name    The name of date being collected
+	 * @param url     The url where the date will be parsed
+	 * @param type    The data type of the data to be collected
+	 * @param context The current state of the application
+	 */
+	public Parser(String name, String url, Type type, Context context) {
 		this.name = name;
 		this.url = url;
 		this.type = type;
+		this.context = context;
+		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	public void fetchJSON(final Context context, final Boolean isTeamNumber) {
+	/**
+	 * Updates data. Checks if data has already been collected and if it
+	 * had loads from saved data.
+	 *
+	 * @param storeData Determines if data should be stored in memory
+	 */
+	public void fetchJSON(final Boolean storeData) {
 		try {
 			if (Constants.TRACTING_LEVEL > 0) {
-				Log.d(TAG, "Loading");
-				Log.d(TAG, "isTeamNumber " + isTeamNumber);
+				Log.d(TAG, "Loading " + name);
 			}
 			online = Constants.isNetworkAvailable(context);
 
-			//Checks for internet connection
+			// Checks for internet connection
 			if (online) {
 				if (Constants.TRACTING_LEVEL > 0) {
 					Log.d(TAG, "Online");
 				}
 				BlueAlliance blueAlliance = new BlueAlliance();
 				InputStream stream;
-				if (isTeamNumber) {
-					stream = blueAlliance.connect(url, getLastModified(context), context);
+				if (storeData) {
+					stream = blueAlliance.connect(url, getLastModified(), context);
 				} else {
 					stream = blueAlliance.connect(url, "", context);
 				}
 
-				//Checks for change in data
-				if (blueAlliance.getStatus() == 200 || getData(context) == null
-						|| Constants.FORCE_DATA_RELOAD || !isTeamNumber) {
+				// Checks for change in data
+				if (blueAlliance.getStatus() == 200 || getStoredData() == null
+						|| Constants.FORCE_DATA_RELOAD || !storeData) {
 					if (Constants.TRACTING_LEVEL > 0) {
-						Log.d(TAG, "Loading new data");
+						Log.d(TAG, "Loading new data for " + name);
 					}
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-					teamArray = gson.fromJson(reader, type);
-					if (isTeamNumber) {
-						storeLastModified(context, blueAlliance.getLastUpdated());
-						storeData(context, gson.toJson(teamArray));
+					data = gson.fromJson(reader, type);
+					if (storeData) {
+						storeLastModified(blueAlliance.getLastUpdated());
+						storeData(gson.toJson(data));
 					}
 					blueAlliance.close();
 				} else {
-					teamArray = getData(context);
+					data = getStoredData();
 				}
 			} else {
-				teamArray = getData(context);
+				data = getStoredData();
 			}
 			parsingComplete = false;
 		} catch (Exception e) {
@@ -85,49 +102,43 @@ public class Parser<T> {
 	}
 
 	/**
-	 * getTeamEventMatches() returns match data as an arraylist.
+	 * Returns a list of parsed data.
 	 *
-	 * @return Match
+	 * @return data
 	 */
-	public ArrayList<T> getTeamEventMatches() {
-		return teamArray;
+	public ArrayList<T> getData() {
+		return data;
 	}
 
 	/**
-	 * setLastModified() stores the last modified date.
+	 * Stores the last modified date.
 	 *
-	 * @param context
-	 * @param date
+	 * @param date  last modified date
 	 */
-	private void storeLastModified(Context context, String date) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+	private void storeLastModified(String date) {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(name + "Last", date);
 		editor.apply();
 	}
 
 	/**
-	 * getLastModified() returns the last modified date.
+	 * Gets the last modified date.
 	 *
-	 * @param context
 	 * @return last modified
 	 */
-	private String getLastModified(Context context) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+	private String getLastModified() {
 		return prefs.getString(name + "Last", "");
 	}
 
 	/**
-	 * setData() stores the date to a json string.
+	 * Sets the date to a json string.
 	 *
-	 * @param context
-	 * @param data
+	 * @param data    parsed values
 	 */
-	public void storeData(Context context, String data) {
+	public void storeData(String data) {
 		if (Constants.TRACTING_LEVEL > 0) {
 			Log.d(TAG, "Storing Data");
 		}
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(name, data);
 		editor.apply();
@@ -136,14 +147,12 @@ public class Parser<T> {
 	/**
 	 * getData() returns data from a stored json string.
 	 *
-	 * @param context the context
-	 * @return Match
+	 * @return data
 	 */
-	private ArrayList<T> getData(Context context) {
+	private ArrayList<T> getStoredData() {
 		if (Constants.TRACTING_LEVEL > 0) {
 			Log.d(TAG, "Loading Data from a save");
 		}
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String json = prefs.getString(name, "");
 		return gson.fromJson(json, type);
 	}

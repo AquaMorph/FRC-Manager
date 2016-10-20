@@ -26,11 +26,11 @@ public class TeamEventMatchesParsers {
 
 	public String TAG = "TeamEventMatchesParsers";
 	public volatile boolean parsingComplete = true;
-	private Match[] teamEventMatches;
-	private ArrayList<Match> teamArray = new ArrayList<>();
 	public Boolean online;
 	InputStream stream;
 	Gson gson = new Gson();
+	private Match[] teamEventMatches;
+	private ArrayList<Match> teamArray = new ArrayList<>();
 
 	public void fetchJSON(final String team, final String event, final Context context, final Boolean isTeamNumber) {
 		try {
@@ -81,7 +81,7 @@ public class TeamEventMatchesParsers {
 	}
 
 	/**
-	 * getTeamEventMatches() returns match data as an arraylist.
+	 * getData() returns match data as an arraylist.
 	 *
 	 * @return Match
 	 */

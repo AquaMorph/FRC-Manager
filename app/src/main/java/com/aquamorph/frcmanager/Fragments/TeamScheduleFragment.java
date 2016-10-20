@@ -28,11 +28,13 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
+import static java.util.Collections.sort;
+
 /**
  * Displays a list of matches at an event for a given team.
  *
  * @author Christian Colglazier
- * @version 3/29/2016
+ * @version 10/19/2016
  */
 public class TeamScheduleFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
@@ -86,7 +88,9 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		}
 		listener();
 		parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
-				("frc" + teamNumber, eventKey),  new TypeToken<ArrayList<Match>>(){}.getType());
+				("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>() {
+		}.getType(),
+				getContext());
 		refresh();
 		return view;
 	}
@@ -134,7 +138,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 				teamNumber = sharedPreferences.getString("teamNumber", "");
 			}
 			eventKey = sharedPreferences.getString("eventKey", "");
-			parser.storeData(getContext(), "");
+			parser.storeData("");
 			adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -182,11 +186,11 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parser.fetchJSON(getContext(), getTeamFromSettings);
+			parser.fetchJSON(getTeamFromSettings);
 			while (parser.parsingComplete) ;
 			teamEventMatches.clear();
-			teamEventMatches.addAll(parser.getTeamEventMatches());
-//			sort(teamEventMatches);
+			teamEventMatches.addAll(parser.getData());
+			sort(teamEventMatches);
 			return null;
 		}
 
