@@ -14,11 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AwardAdapter;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.Award;
-import com.aquamorph.frcmanager.parsers.AwardParser;
+import com.aquamorph.frcmanager.parsers.Parser;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
@@ -38,6 +40,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Award> awards = new ArrayList<>();
 	private String eventKey = "";
+	private Parser parser;
 
 	/**
 	 * newInstance creates and returns a new AwardFragment
@@ -80,6 +83,9 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
+		parser = new Parser<>("eventAwards", Constants.getEventAwards(eventKey),
+				new TypeToken<ArrayList<Award>>(){}.getType(), getContext());
+
 		refresh();
 		return view;
 	}
@@ -111,11 +117,10 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			AwardParser awardParser = new AwardParser();
-			awardParser.fetchJSON(eventKey, getContext());
-			while (awardParser.parsingComplete) ;
+			parser.fetchJSON(true);
+			while (parser.parsingComplete) ;
 			awards.clear();
-			awards.addAll(awardParser.getAwards());
+			awards.addAll(parser.getData());
 			return null;
 		}
 

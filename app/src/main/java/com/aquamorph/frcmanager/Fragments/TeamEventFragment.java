@@ -20,7 +20,8 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventTeamAdapter;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.EventTeam;
-import com.aquamorph.frcmanager.parsers.TeamEventParser;
+import com.aquamorph.frcmanager.parsers.Parser;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +38,7 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 public class TeamEventFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private static String TAG = "TeamEventFragment";
-	TeamEventParser teamEventParser = new TeamEventParser();
+	Parser<EventTeam> parser;
 	SharedPreferences prefs;
 	SharedPreferences.Editor editor;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -94,6 +95,9 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
+		parser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
+				new TypeToken<ArrayList<EventTeam>>(){}.getType(), getContext());
+
 		refresh();
 
 		return view;
@@ -126,10 +130,10 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			teamEventParser.fetchJSON(eventKey, getContext());
-			while (teamEventParser.parsingComplete) ;
+			parser.fetchJSON(true);
+			while (parser.parsingComplete) ;
 			teams.clear();
-			teams.addAll(teamEventParser.getTeams());
+			teams.addAll(parser.getData());
 			Collections.sort(teams);
 			return null;
 		}

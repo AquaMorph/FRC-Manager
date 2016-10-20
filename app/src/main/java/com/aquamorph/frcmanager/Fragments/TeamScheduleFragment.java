@@ -88,8 +88,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		}
 		listener();
 		parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
-				("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>() {
-		}.getType(),
+				("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>(){}.getType(),
 				getContext());
 		refresh();
 		return view;

@@ -20,17 +20,18 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.EventTeam;
-import com.aquamorph.frcmanager.parsers.RankParser;
-import com.aquamorph.frcmanager.parsers.TeamEventParser;
+import com.aquamorph.frcmanager.parsers.Parser;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
+import static java.util.Collections.sort;
 
 /**
  * Displays the ranks of all the teams at an event.
  *
  * @author Christian Colglazier
- * @version 3/29/2016
+ * @version 10/20/2016
  */
 public class RankFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -42,8 +43,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private ArrayList<String[]> ranks = new ArrayList<>();
 	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey = "", teamNumber = "";
-	private RankParser rankParser = new RankParser();
-	private TeamEventParser teamEventParser = new TeamEventParser();
+	private Parser<String[]> parser;
+	private Parser<EventTeam> teamEventParser;
 	private SharedPreferences prefs;
 
 	/**
@@ -95,8 +96,12 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		eventKey = prefs.getString("eventKey", "");
 		teamNumber = prefs.getString("teamNumber", "0000");
 
-		refresh();
+		parser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
+				new TypeToken<ArrayList<String[]>>(){}.getType(), getContext());
+		teamEventParser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
+				new TypeToken<ArrayList<EventTeam>>(){}.getType(), getContext());
 
+		refresh();
 		return view;
 	}
 
@@ -114,7 +119,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("eventKey")) {
 			eventKey = sharedPreferences.getString("eventKey", "");
-			rankParser.setData(getContext(), "");
+			parser.storeData("");
 			refresh();
 		}
 		if (key.equals("teamNumber")) {
@@ -132,16 +137,16 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			teamEventParser.fetchJSON(eventKey, getContext());
+			teamEventParser.fetchJSON(true);
 			while (teamEventParser.parsingComplete) ;
 			teams.clear();
-			teams.addAll(teamEventParser.getTeams());
-			Collections.sort(teams);
+			teams.addAll(teamEventParser.getData());
+			sort(teams);
 
-			rankParser.fetchJSON(eventKey, getContext());
-			while (rankParser.parsingComplete) ;
+			parser.fetchJSON(true);
+			while (parser.parsingComplete) ;
 			ranks.clear();
-			ranks.addAll(rankParser.getRankings());
+			ranks.addAll(parser.getData());
 			return null;
 		}
 

@@ -14,10 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.models.Match;
-import com.aquamorph.frcmanager.parsers.EventMatchesParsers;
+import com.aquamorph.frcmanager.parsers.Parser;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,7 +40,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Match> eventMatches = new ArrayList<>();
 	private String teamNumber = "", eventKey = "";
-	private EventMatchesParsers eventMatchesParsers = new EventMatchesParsers();
+	private Parser<Match> parser;
 
 	/**
 	 * newInstance creates and returns a new EventScheduleFragment
@@ -81,6 +83,9 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
+		parser = new Parser<>("eventMatches", Constants.getEventMatches(eventKey), new TypeToken<ArrayList<Match>>() {
+		}.getType(), getContext());
+
 		refresh();
 
 		return view;
@@ -119,10 +124,10 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			eventMatchesParsers.fetchJSON(eventKey, getContext());
-			while (eventMatchesParsers.parsingComplete) ;
+			parser.fetchJSON(true);
+			while (parser.parsingComplete) ;
 			eventMatches.clear();
-			eventMatches.addAll(eventMatchesParsers.getEventMatches());
+			eventMatches.addAll(parser.getData());
 			Collections.sort(eventMatches);
 			return null;
 		}
@@ -133,8 +138,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 			if (eventMatches.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);
 				emptyView.setVisibility(View.VISIBLE);
-			}
-			else {
+			} else {
 				recyclerView.setVisibility(View.VISIBLE);
 				emptyView.setVisibility(View.GONE);
 			}
