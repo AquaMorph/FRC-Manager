@@ -95,13 +95,6 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		eventKey = prefs.getString("eventKey", "");
 		teamNumber = prefs.getString("teamNumber", "0000");
 
-		parser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
-				new TypeToken<ArrayList<String[]>>() {
-				}.getType(), getContext());
-		teamEventParser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
-				new TypeToken<ArrayList<EventTeam>>() {
-				}.getType(), getContext());
-
 		refresh();
 		return view;
 	}
@@ -138,6 +131,12 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
+			parser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
+					new TypeToken<ArrayList<String[]>>() {
+					}.getType(), getContext());
+			teamEventParser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
+					new TypeToken<ArrayList<EventTeam>>() {
+					}.getType(), getContext());
 		}
 
 		@Override

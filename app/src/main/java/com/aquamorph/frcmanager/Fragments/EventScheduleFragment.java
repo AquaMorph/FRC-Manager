@@ -83,9 +83,6 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
-		parser = new Parser<>("eventMatches", Constants.getEventMatches(eventKey), new TypeToken<ArrayList<Match>>() {
-		}.getType(), getContext());
-
 		refresh();
 
 		return view;
@@ -120,6 +117,8 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
+			parser = new Parser<>("eventMatches", Constants.getEventMatches(eventKey), new TypeToken<ArrayList<Match>>() {
+			}.getType(), getContext());
 		}
 
 		@Override

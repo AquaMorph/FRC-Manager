@@ -83,10 +83,6 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
-		parser = new Parser<>("eventAwards", Constants.getEventAwards(eventKey),
-				new TypeToken<ArrayList<Award>>() {
-				}.getType(), getContext());
-
 		refresh();
 		return view;
 	}
@@ -114,6 +110,9 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		@Override
 		protected void onPreExecute() {
 			swipeRefreshLayout.setRefreshing(true);
+			parser = new Parser<>("eventAwards", Constants.getEventAwards(eventKey),
+					new TypeToken<ArrayList<Award>>() {
+					}.getType(), getContext());
 		}
 
 		@Override

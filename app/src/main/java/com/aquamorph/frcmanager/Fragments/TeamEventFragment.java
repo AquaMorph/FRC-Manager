@@ -94,10 +94,6 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
-		parser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
-				new TypeToken<ArrayList<EventTeam>>() {
-				}.getType(), getContext());
-
 		refresh();
 
 		return view;
@@ -126,6 +122,9 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
+			parser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
+					new TypeToken<ArrayList<EventTeam>>() {
+					}.getType(), getContext());
 		}
 
 		@Override

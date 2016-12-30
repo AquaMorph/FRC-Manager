@@ -119,6 +119,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		if (Constants.TRACING_LEVEL >= 2) {
 			Log.i(TAG, "teamNumber: " + teamNumber);
 		}
+		Log.i(TAG, "Data is being refreshed");
 		if (!teamNumber.equals("") && !eventKey.equals("")) {
 			final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
 			loadTeamSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -135,11 +136,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			}
 			eventKey = sharedPreferences.getString("eventKey", "");
 			parser.storeData("");
-			adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
-			LinearLayoutManager llm = new LinearLayoutManager(getContext());
-			llm.setOrientation(LinearLayoutManager.VERTICAL);
-			recyclerView.setAdapter(adapter);
-			recyclerView.setLayoutManager(llm);
+			listener();
 			refresh();
 		}
 	}
@@ -171,11 +168,6 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setLayoutManager(llm);
 		recyclerView.setAdapter(adapter);
-
-		parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
-				("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>() {
-		}.getType(),
-				getContext());
 	}
 
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
@@ -183,10 +175,15 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
+			parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
+					("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>() {
+			}.getType(),
+					getContext());
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
+
 			parser.fetchJSON(getTeamFromSettings);
 			while (parser.parsingComplete) ;
 			if (parser.getData() != null) {
