@@ -26,9 +26,9 @@ import java.util.ArrayList;
  * Displays a list of alliance for eliminations.
  *
  * @author Christian Colglazier
- * @version 3/31/2016
+ * @version 10/20/2016
  */
-public class AllianceFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class AllianceFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private String TAG = "AllianceFragment";
 	private SwipeRefreshLayout swipeRefreshLayout;
@@ -110,11 +110,11 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			AllianceParser allianceParser = new AllianceParser();
-			allianceParser.fetchJSON(eventKey, getContext());
-			while (allianceParser.parsingComplete) ;
+			AllianceParser parser = new AllianceParser();
+			parser.fetchJSON(eventKey, getContext());
+			while (parser.parsingComplete) ;
 			alliances.clear();
-			alliances.addAll(allianceParser.getAlliances());
+			alliances.addAll(parser.getAlliances());
 			return null;
 		}
 
@@ -124,8 +124,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 			if (alliances.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);
 				emptyView.setVisibility(View.VISIBLE);
-			}
-			else {
+			} else {
 				recyclerView.setVisibility(View.VISIBLE);
 				emptyView.setVisibility(View.GONE);
 			}

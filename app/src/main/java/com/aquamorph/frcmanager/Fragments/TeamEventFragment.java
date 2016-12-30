@@ -83,10 +83,9 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(new AlphaInAnimationAdapter(adapter));
-		if(Constants.isLargeScreen(getContext())) {
+		if (Constants.isLargeScreen(getContext())) {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-		}
-		else {
+		} else {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
@@ -96,7 +95,8 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		eventKey = prefs.getString("eventKey", "");
 
 		parser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
-				new TypeToken<ArrayList<EventTeam>>(){}.getType(), getContext());
+				new TypeToken<ArrayList<EventTeam>>() {
+				}.getType(), getContext());
 
 		refresh();
 
@@ -144,8 +144,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 			if (teams.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);
 				emptyView.setVisibility(View.VISIBLE);
-			}
-			else {
+			} else {
 				recyclerView.setVisibility(View.VISIBLE);
 				emptyView.setVisibility(View.GONE);
 			}

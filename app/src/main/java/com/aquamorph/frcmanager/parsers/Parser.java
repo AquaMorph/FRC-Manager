@@ -27,7 +27,7 @@ public class Parser<T> {
 	public volatile boolean parsingComplete = true;
 	public Boolean online;
 	private String TAG = "Parser";
-	private ArrayList<T> data;
+	private ArrayList<T> data = new ArrayList<>();
 	private Gson gson = new Gson();
 	private Type type;
 	private String name, url;
@@ -48,6 +48,7 @@ public class Parser<T> {
 		this.type = type;
 		this.context = context;
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		TAG = name + "." + TAG;
 	}
 
 	/**
@@ -58,14 +59,14 @@ public class Parser<T> {
 	 */
 	public void fetchJSON(final Boolean storeData) {
 		try {
-			if (Constants.TRACTING_LEVEL > 0) {
+			if (Constants.TRACING_LEVEL > 0) {
 				Log.d(TAG, "Loading " + name);
 			}
 			online = Constants.isNetworkAvailable(context);
 
 			// Checks for internet connection
 			if (online) {
-				if (Constants.TRACTING_LEVEL > 0) {
+				if (Constants.TRACING_LEVEL > 0) {
 					Log.d(TAG, "Online");
 				}
 				BlueAlliance blueAlliance = new BlueAlliance();
@@ -79,7 +80,7 @@ public class Parser<T> {
 				// Checks for change in data
 				if (blueAlliance.getStatus() == 200 || getStoredData() == null
 						|| Constants.FORCE_DATA_RELOAD || !storeData) {
-					if (Constants.TRACTING_LEVEL > 0) {
+					if (Constants.TRACING_LEVEL > 0) {
 						Log.d(TAG, "Loading new data for " + name);
 					}
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -89,10 +90,14 @@ public class Parser<T> {
 						storeData(gson.toJson(data));
 					}
 					blueAlliance.close();
-				} else {
+				}
+				// Date Not Changed
+				else {
 					data = getStoredData();
 				}
-			} else {
+			}
+			// Not Online
+			else {
 				data = getStoredData();
 			}
 			parsingComplete = false;
@@ -113,7 +118,7 @@ public class Parser<T> {
 	/**
 	 * Stores the last modified date.
 	 *
-	 * @param date  last modified date
+	 * @param date last modified date
 	 */
 	private void storeLastModified(String date) {
 		SharedPreferences.Editor editor = prefs.edit();
@@ -133,10 +138,10 @@ public class Parser<T> {
 	/**
 	 * Sets the date to a json string.
 	 *
-	 * @param data    parsed values
+	 * @param data parsed values
 	 */
 	public void storeData(String data) {
-		if (Constants.TRACTING_LEVEL > 0) {
+		if (Constants.TRACING_LEVEL > 0) {
 			Log.d(TAG, "Storing Data");
 		}
 		SharedPreferences.Editor editor = prefs.edit();
@@ -150,7 +155,7 @@ public class Parser<T> {
 	 * @return data
 	 */
 	private ArrayList<T> getStoredData() {
-		if (Constants.TRACTING_LEVEL > 0) {
+		if (Constants.TRACING_LEVEL > 0) {
 			Log.d(TAG, "Loading Data from a save");
 		}
 		String json = prefs.getString(name, "");

@@ -68,7 +68,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		if (Constants.TRACTING_LEVEL >= 3) {
+		if (Constants.TRACING_LEVEL >= 3) {
 			Log.i(TAG, "TeamScheduleFragment created");
 		}
 	}
@@ -82,14 +82,11 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 				teamNumber = savedInstanceState.getString("teamNumber");
 			}
 			eventKey = savedInstanceState.getString("eventKey");
-			if (Constants.TRACTING_LEVEL >= 2) {
+			if (Constants.TRACING_LEVEL >= 2) {
 				Log.i(TAG, "savedInstanceState teamNumber: " + teamNumber);
 			}
 		}
 		listener();
-		parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
-				("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>(){}.getType(),
-				getContext());
 		refresh();
 		return view;
 	}
@@ -99,7 +96,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		super.onSaveInstanceState(outState);
 		outState.putString("teamNumber", teamNumber);
 		outState.putString("eventKey", eventKey);
-		if (Constants.TRACTING_LEVEL >= 3) {
+		if (Constants.TRACING_LEVEL >= 3) {
 			Log.i(TAG, "onSaveInstanceState");
 		}
 	}
@@ -110,7 +107,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.fragment_team_schedule, null);
 		listener();
-		if (Constants.TRACTING_LEVEL >= 3) {
+		if (Constants.TRACING_LEVEL >= 3) {
 			Log.i(TAG, "Configuration Changed");
 		}
 	}
@@ -119,7 +116,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	 * refrest() loads data needed for this fragment.
 	 */
 	public void refresh() {
-		if (Constants.TRACTING_LEVEL >= 2) {
+		if (Constants.TRACING_LEVEL >= 2) {
 			Log.i(TAG, "teamNumber: " + teamNumber);
 		}
 		if (!teamNumber.equals("") && !eventKey.equals("")) {
@@ -174,6 +171,11 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setLayoutManager(llm);
 		recyclerView.setAdapter(adapter);
+
+		parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
+				("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>() {
+		}.getType(),
+				getContext());
 	}
 
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
@@ -187,9 +189,11 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		protected Void doInBackground(Void... params) {
 			parser.fetchJSON(getTeamFromSettings);
 			while (parser.parsingComplete) ;
-			teamEventMatches.clear();
-			teamEventMatches.addAll(parser.getData());
-			sort(teamEventMatches);
+			if (parser.getData() != null) {
+				teamEventMatches.clear();
+				teamEventMatches.addAll(parser.getData());
+				sort(teamEventMatches);
+			}
 			return null;
 		}
 

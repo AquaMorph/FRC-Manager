@@ -84,7 +84,8 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		eventKey = prefs.getString("eventKey", "");
 
 		parser = new Parser<>("eventAwards", Constants.getEventAwards(eventKey),
-				new TypeToken<ArrayList<Award>>(){}.getType(), getContext());
+				new TypeToken<ArrayList<Award>>() {
+				}.getType(), getContext());
 
 		refresh();
 		return view;

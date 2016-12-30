@@ -56,7 +56,7 @@ public class Setup extends AppIntro {
 
 	@Override
 	public void onDonePressed() {
-		if(Constants.TRACTING_LEVEL > 0) {
+		if(Constants.TRACING_LEVEL > 0) {
 			Log.i(TAG, "Team Number: " + teamNumberSlide.getTeamNumber());
 		}
 		this.finish();

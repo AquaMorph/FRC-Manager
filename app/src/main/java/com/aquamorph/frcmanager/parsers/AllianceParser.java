@@ -35,7 +35,7 @@ public class AllianceParser {
 		try {
 			online = Constants.isNetworkAvailable(context);
 
-			if (Constants.TRACTING_LEVEL > 3) {
+			if (Constants.TRACING_LEVEL > 3) {
 				Log.i(TAG, "URL: " + Constants.getEvent(event));
 			}
 			//Checks for internet connection

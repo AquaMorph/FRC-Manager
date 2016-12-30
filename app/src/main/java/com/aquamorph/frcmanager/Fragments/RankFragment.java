@@ -39,7 +39,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
-	private RecyclerView.Adapter adapter;
+	private RecyclerView.Adapter<RankAdapter.MyViewHolder> adapter;
 	private ArrayList<String[]> ranks = new ArrayList<>();
 	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey = "", teamNumber = "";
@@ -85,10 +85,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
-		if(Constants.isLargeScreen(getContext())) {
+		if (Constants.isLargeScreen(getContext())) {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-		}
-		else {
+		} else {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
 
@@ -97,9 +96,11 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		teamNumber = prefs.getString("teamNumber", "0000");
 
 		parser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
-				new TypeToken<ArrayList<String[]>>(){}.getType(), getContext());
+				new TypeToken<ArrayList<String[]>>() {
+				}.getType(), getContext());
 		teamEventParser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
-				new TypeToken<ArrayList<EventTeam>>(){}.getType(), getContext());
+				new TypeToken<ArrayList<EventTeam>>() {
+				}.getType(), getContext());
 
 		refresh();
 		return view;
@@ -120,11 +121,15 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		if (key.equals("eventKey")) {
 			eventKey = sharedPreferences.getString("eventKey", "");
 			parser.storeData("");
-			refresh();
+			if (!eventKey.equals("")) {
+				refresh();
+			}
 		}
 		if (key.equals("teamNumber")) {
 			teamNumber = sharedPreferences.getString("teamNumber", "");
-			refresh();
+			if (!teamNumber.equals("")) {
+				refresh();
+			}
 		}
 	}
 
@@ -145,8 +150,10 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 			parser.fetchJSON(true);
 			while (parser.parsingComplete) ;
-			ranks.clear();
-			ranks.addAll(parser.getData());
+			if (parser.getData() != null) {
+				ranks.clear();
+				ranks.addAll(parser.getData());
+			}
 			return null;
 		}
 
@@ -164,8 +171,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 			if (ranks.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);
 				emptyView.setVisibility(View.VISIBLE);
-			}
-			else {
+			} else {
 				recyclerView.setVisibility(View.VISIBLE);
 				emptyView.setVisibility(View.GONE);
 			}

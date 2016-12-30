@@ -52,7 +52,7 @@ public class YearSlide extends Fragment implements AdapterView.OnItemSelectedLis
 	public void setYear(String year) {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("year", year);
-		if(Constants.TRACTING_LEVEL > 0) {
+		if(Constants.TRACING_LEVEL > 0) {
 			Log.i(TAG, "Year set to: " + year);
 		}
 		editor.apply();
