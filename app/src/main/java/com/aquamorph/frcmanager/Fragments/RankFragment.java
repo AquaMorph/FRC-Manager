@@ -113,7 +113,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("eventKey")) {
 			eventKey = sharedPreferences.getString("eventKey", "");
-			parser.storeData("");
+			if (parser != null) {
+				parser.storeData("");
+			}
 			if (!eventKey.equals("")) {
 				refresh();
 			}
