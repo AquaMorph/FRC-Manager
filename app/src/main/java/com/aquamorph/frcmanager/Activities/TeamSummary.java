@@ -25,7 +25,7 @@ public class TeamSummary extends AppCompatActivity {
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			teamNumber = extras.getString("teamNumber").replace(" ", "");
+			teamNumber = extras.getString("teamNumber").replaceAll("[^\\d.]", "");
 		}
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -185,6 +185,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		protected Void doInBackground(Void... params) {
 
 			parser.fetchJSON(getTeamFromSettings);
+//			parser.fetchJSON(false);
 			while (parser.parsingComplete) ;
 			if (parser.getData() != null) {
 				teamEventMatches.clear();
