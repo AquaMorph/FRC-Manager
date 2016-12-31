@@ -18,7 +18,7 @@ import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventSpinnerAdapter;
 import com.aquamorph.frcmanager.models.Events;
-import com.aquamorph.frcmanager.parsers.Parser;
+import com.aquamorph.frcmanager.network.Parser;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -77,12 +77,10 @@ public class EventSlide extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			Parser<Events> parser = new Parser<>("Events",
+			Parser<ArrayList<Events>> parser = new Parser<>("Events",
 					Constants.getEventURL("frc" + teamNumber, year), new
 					TypeToken<ArrayList<Events>>() {
 					}.getType(), getContext());
-			Log.i(TAG, "Event size: " + eventList.size() + " " + Constants.getEventURL("frc" +
-					teamNumber, year));
 			parser.fetchJSON(false);
 			while (parser.parsingComplete) ;
 			if (parser.getData() != null) {

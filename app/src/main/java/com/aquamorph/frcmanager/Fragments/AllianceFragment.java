@@ -9,18 +9,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AllianceAdapter;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.Events;
-import com.aquamorph.frcmanager.parsers.AllianceParser;
+import com.aquamorph.frcmanager.network.Parser;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Displays a list of alliance for eliminations.
@@ -37,6 +41,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Events.Alliances> alliances = new ArrayList<>();
 	private String eventKey = "";
+	private Parser<Events> parser;
 
 	/**
 	 * newInstance creates and returns a new AllianceFragment
@@ -110,11 +115,14 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			AllianceParser parser = new AllianceParser();
-			parser.fetchJSON(eventKey, getContext());
+			parser = new Parser<>("Events",
+					Constants.getEvent(eventKey), new
+					TypeToken<Events>() {
+					}.getType(), getContext());
+			parser.fetchJSON(true);
 			while (parser.parsingComplete) ;
 			alliances.clear();
-			alliances.addAll(parser.getAlliances());
+			alliances.addAll(new ArrayList<>(Arrays.asList(parser.getData().alliances)));
 			return null;
 		}
 
@@ -127,6 +135,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 			} else {
 				recyclerView.setVisibility(View.VISIBLE);
 				emptyView.setVisibility(View.GONE);
+
 			}
 			swipeRefreshLayout.setRefreshing(false);
 		}

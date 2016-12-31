@@ -19,7 +19,7 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AwardAdapter;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.Award;
-import com.aquamorph.frcmanager.parsers.Parser;
+import com.aquamorph.frcmanager.network.Parser;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Award> awards = new ArrayList<>();
 	private String eventKey = "";
-	private Parser parser;
+	private Parser<ArrayList<Award>> parser;
 
 	/**
 	 * newInstance creates and returns a new AwardFragment

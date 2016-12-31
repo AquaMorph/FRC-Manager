@@ -20,7 +20,7 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.EventTeam;
-import com.aquamorph.frcmanager.parsers.Parser;
+import com.aquamorph.frcmanager.network.Parser;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -43,8 +43,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private ArrayList<String[]> ranks = new ArrayList<>();
 	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey = "", teamNumber = "";
-	private Parser<String[]> parser;
-	private Parser<EventTeam> teamEventParser;
+	private Parser<ArrayList<String[]>> parser;
+	private Parser<ArrayList<EventTeam>> teamEventParser;
 	private SharedPreferences prefs;
 
 	/**

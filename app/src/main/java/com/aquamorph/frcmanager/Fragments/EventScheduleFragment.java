@@ -18,7 +18,7 @@ import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.models.Match;
-import com.aquamorph.frcmanager.parsers.Parser;
+import com.aquamorph.frcmanager.network.Parser;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	private RecyclerView.Adapter adapter;
 	private ArrayList<Match> eventMatches = new ArrayList<>();
 	private String teamNumber = "", eventKey = "";
-	private Parser<Match> parser;
+	private Parser<ArrayList<Match>> parser;
 
 	/**
 	 * newInstance creates and returns a new EventScheduleFragment

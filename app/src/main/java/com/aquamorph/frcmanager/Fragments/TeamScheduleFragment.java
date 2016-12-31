@@ -23,7 +23,7 @@ import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.models.Match;
-import com.aquamorph.frcmanager.parsers.Parser;
+import com.aquamorph.frcmanager.network.Parser;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
 	private String teamNumber = "", eventKey = "";
-	private Parser<Match> parser;
+	private Parser<ArrayList<Match>> parser;
 	private View view;
 	private Boolean getTeamFromSettings = true;
 

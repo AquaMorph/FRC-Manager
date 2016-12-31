@@ -1,4 +1,4 @@
-package com.aquamorph.frcmanager.parsers;
+package com.aquamorph.frcmanager.network;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,14 +6,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.aquamorph.frcmanager.Constants;
-import com.aquamorph.frcmanager.network.BlueAlliance;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 /**
  * Parses date of type T.
@@ -27,7 +25,7 @@ public class Parser<T> {
 	public volatile boolean parsingComplete = true;
 	public Boolean online;
 	private String TAG = "Parser";
-	private ArrayList<T> data = new ArrayList<>();
+	private T data;
 	private Gson gson = new Gson();
 	private Type type;
 	private String name, url;
@@ -111,7 +109,7 @@ public class Parser<T> {
 	 *
 	 * @return data
 	 */
-	public ArrayList<T> getData() {
+	public T getData() {
 		return data;
 	}
 
@@ -154,7 +152,7 @@ public class Parser<T> {
 	 *
 	 * @return data
 	 */
-	private ArrayList<T> getStoredData() {
+	private T getStoredData() {
 		if (Constants.TRACING_LEVEL > 0) {
 			Log.d(TAG, "Loading Data from a save");
 		}
