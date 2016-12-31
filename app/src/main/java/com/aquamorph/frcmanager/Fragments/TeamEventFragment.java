@@ -124,7 +124,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 			mSwipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
 					new TypeToken<ArrayList<EventTeam>>() {
-					}.getType(), getContext());
+					}.getType(), getActivity());
 		}
 
 		@Override

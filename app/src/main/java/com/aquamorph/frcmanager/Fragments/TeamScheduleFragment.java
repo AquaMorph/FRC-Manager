@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
@@ -180,7 +179,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
 					("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>() {
 			}.getType(),
-					getContext());
+					getActivity());
 		}
 
 		@Override
@@ -199,9 +198,6 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (!parser.online) {
-				Toast.makeText(getContext(), Constants.NOT_ONLINE_MESSAGE, Toast.LENGTH_SHORT).show();
-			}
 			adapter.notifyDataSetChanged();
 			if (teamEventMatches.isEmpty()) {
 				recyclerView.setVisibility(View.GONE);

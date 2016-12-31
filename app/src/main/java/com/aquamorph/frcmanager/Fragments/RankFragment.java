@@ -135,10 +135,10 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 			mSwipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
 					new TypeToken<ArrayList<String[]>>() {
-					}.getType(), getContext());
+					}.getType(), getActivity());
 			teamEventParser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
 					new TypeToken<ArrayList<EventTeam>>() {
-					}.getType(), getContext());
+					}.getType(), getActivity());
 		}
 
 		@Override

@@ -118,7 +118,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("eventMatches", Constants.getEventMatches(eventKey), new TypeToken<ArrayList<Match>>() {
-			}.getType(), getContext());
+			}.getType(), getActivity());
 		}
 
 		@Override

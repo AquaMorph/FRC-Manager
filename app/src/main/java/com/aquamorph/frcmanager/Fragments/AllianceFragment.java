@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,7 +117,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 			parser = new Parser<>("Events",
 					Constants.getEvent(eventKey), new
 					TypeToken<Events>() {
-					}.getType(), getContext());
+					}.getType(), getActivity());
 			parser.fetchJSON(true);
 			while (parser.parsingComplete) ;
 			alliances.clear();

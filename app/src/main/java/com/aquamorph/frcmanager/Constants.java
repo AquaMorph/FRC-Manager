@@ -21,7 +21,6 @@ public class Constants {
 	public static final String TAG = "FRC Regional";
 	private static final String URL = "https://www.thebluealliance.com/api/v2/";
 	public static final String TBA_HEADER = "X-TBA-App-Id";
-	public static final String NOT_ONLINE_MESSAGE = "No Connection";
 	public static final Boolean FORCE_DATA_RELOAD = false;
 	public static int TRACING_LEVEL = 3;
 	public static int MAX_EVENT_TITLE_LENGTH = 20;

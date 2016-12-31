@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private String teamNumber, eventName;
 	private String teamRank;
+	private Boolean paidUser = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	/**
 	 * shorten() returns a shortened string with ... at the end.
 	 *
-	 * @param text to be shortened
+	 * @param text   to be shortened
 	 * @param amount length to shorten
 	 * @return shorten string with ... at the end
 	 */
@@ -190,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		//Load ads
 		AdView mAdView = (AdView) findViewById(R.id.adView);
-		Boolean paidUser = true;
 		if (paidUser) {
 			if (mAdView != null) {
 				mAdView.setVisibility(View.GONE);

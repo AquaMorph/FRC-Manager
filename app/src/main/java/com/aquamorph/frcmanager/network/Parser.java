@@ -1,11 +1,14 @@
 package com.aquamorph.frcmanager.network;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import com.aquamorph.frcmanager.Constants;
+import com.aquamorph.frcmanager.R;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -31,20 +34,22 @@ public class Parser<T> {
 	private String name, url;
 	private Context context;
 	private SharedPreferences prefs;
+	private Activity activity;
 
 	/**
 	 * Initializes Parser.
 	 *
-	 * @param name    The name of date being collected
-	 * @param url     The url where the date will be parsed
-	 * @param type    The data type of the data to be collected
-	 * @param context The current state of the application
+	 * @param name     The name of date being collected
+	 * @param url      The url where the date will be parsed
+	 * @param type     The data type of the data to be collected
+	 * @param activity The current state of the application
 	 */
-	public Parser(String name, String url, Type type, Context context) {
+	public Parser(String name, String url, Type type, Activity activity) {
 		this.name = name;
 		this.url = url;
 		this.type = type;
-		this.context = context;
+		this.context = activity.getApplicationContext();
+		this.activity = activity;
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		TAG = name + "." + TAG;
 	}
@@ -61,6 +66,13 @@ public class Parser<T> {
 				Log.d(TAG, "Loading " + name);
 			}
 			online = Constants.isNetworkAvailable(context);
+
+			// Displays message saying there is no connection
+			if (!online) {
+				Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
+						R.string.no_connection_message,
+						Snackbar.LENGTH_LONG).show();
+			}
 
 			// Checks for internet connection
 			if (online) {

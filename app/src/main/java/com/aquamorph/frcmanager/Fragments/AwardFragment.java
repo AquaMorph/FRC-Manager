@@ -112,7 +112,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 			swipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("eventAwards", Constants.getEventAwards(eventKey),
 					new TypeToken<ArrayList<Award>>() {
-					}.getType(), getContext());
+					}.getType(), getActivity());
 		}
 
 		@Override
