@@ -9,12 +9,14 @@ import android.util.Log;
 
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.models.Status;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 
 /**
  * Parses date of type T.
@@ -73,6 +75,27 @@ public class Parser<T> {
 						R.string.no_connection_message,
 						Snackbar.LENGTH_LONG).show();
 			}
+
+			// Checks FIRST sever status
+			BlueAlliance statusBlueAlliance = new BlueAlliance();
+			InputStream statusStream = statusBlueAlliance.connect(Constants.getStatusURL(), "",
+					context);
+			if (statusBlueAlliance.getStatus() == 200) {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(statusStream));
+				Status status = gson.fromJson(reader, Status.class);
+				// Displays error message when the FIRST server is down
+				if (status.is_datafeed_down) {
+					Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
+							R.string.first_server_down, Snackbar.LENGTH_LONG).show();
+				}
+				String eventKey = prefs.getString("eventKey", "");
+				// Displays error message when the event server is down
+				if (Arrays.asList(status.down_events).contains(eventKey)) {
+					Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
+							R.string.event_server_down, Snackbar.LENGTH_LONG).show();
+				}
+			}
+			statusBlueAlliance.close();
 
 			// Checks for internet connection
 			if (online) {

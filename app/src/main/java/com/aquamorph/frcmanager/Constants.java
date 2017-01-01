@@ -107,6 +107,15 @@ public class Constants {
 	}
 
 	/**
+	 * getStatusURL() returns the url for the status of FIRST's server.
+	 *
+	 * @return url to server status
+	 */
+	public static String getStatusURL() {
+		return URL + "status";
+	}
+
+	/**
 	 * getApiHeader() returns the header needed to get access to the Blue Alliance.
 	 *
 	 * @return the Blue Alliance header
