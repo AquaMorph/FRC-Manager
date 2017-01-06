@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import java.util.ArrayList;
+
 /**
  * A collection of constants needed to interact with the Blue Alliance.
  *
@@ -162,6 +164,20 @@ public class Constants {
 			spacesText += "&nbsp;";
 		}
 		return String.format("<pre>%s<u>%s</u></pre>", spacesText, text);
+	}
+
+	/**
+	 * checkNoDataScreen() displays a no data screen if there is not any data to display. Else
+	 * displays data.
+	 */
+	public static void checkNoDataScreen(ArrayList data, View recyclerView, View emptyView) {
+		if (data.isEmpty()) {
+			recyclerView.setVisibility(View.GONE);
+			emptyView.setVisibility(View.VISIBLE);
+		} else {
+			recyclerView.setVisibility(View.VISIBLE);
+			emptyView.setVisibility(View.GONE);
+		}
 	}
 
 	/**

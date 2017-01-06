@@ -86,7 +86,8 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			}
 		}
 		listener();
-		refresh();
+		if (savedInstanceState == null)	refresh();
+		Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
 		return view;
 	}
 
@@ -103,7 +104,8 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) getContext()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		view = inflater.inflate(R.layout.fragment_team_schedule, null);
 		listener();
 		if (Constants.TRACING_LEVEL >= 3) {
@@ -126,6 +128,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			Log.i(TAG, "Not set");
 		}
 	}
+
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -199,13 +202,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		@Override
 		protected void onPostExecute(Void result) {
 			adapter.notifyDataSetChanged();
-			if (teamEventMatches.isEmpty()) {
-				recyclerView.setVisibility(View.GONE);
-				emptyView.setVisibility(View.VISIBLE);
-			} else {
-				recyclerView.setVisibility(View.VISIBLE);
-				emptyView.setVisibility(View.GONE);
-			}
+			Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

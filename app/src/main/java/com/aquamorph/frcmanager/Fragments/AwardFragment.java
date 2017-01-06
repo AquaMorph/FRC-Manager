@@ -83,7 +83,8 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
-		refresh();
+		if (savedInstanceState == null) refresh();
+		Constants.checkNoDataScreen(awards, recyclerView, emptyView);
 		return view;
 	}
 
@@ -127,13 +128,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		@Override
 		protected void onPostExecute(Void result) {
 			adapter.notifyDataSetChanged();
-			if (awards.isEmpty()) {
-				recyclerView.setVisibility(View.GONE);
-				emptyView.setVisibility(View.VISIBLE);
-			} else {
-				recyclerView.setVisibility(View.VISIBLE);
-				emptyView.setVisibility(View.GONE);
-			}
+			Constants.checkNoDataScreen(awards, recyclerView, emptyView);
 			swipeRefreshLayout.setRefreshing(false);
 		}
 	}

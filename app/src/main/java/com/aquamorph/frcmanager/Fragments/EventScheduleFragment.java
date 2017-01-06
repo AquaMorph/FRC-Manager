@@ -83,8 +83,8 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
-		refresh();
-
+		if (savedInstanceState == null) refresh();
+		Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
 		return view;
 	}
 
@@ -134,13 +134,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		@Override
 		protected void onPostExecute(Void result) {
 			adapter.notifyDataSetChanged();
-			if (eventMatches.isEmpty()) {
-				recyclerView.setVisibility(View.GONE);
-				emptyView.setVisibility(View.VISIBLE);
-			} else {
-				recyclerView.setVisibility(View.VISIBLE);
-				emptyView.setVisibility(View.GONE);
-			}
+			Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

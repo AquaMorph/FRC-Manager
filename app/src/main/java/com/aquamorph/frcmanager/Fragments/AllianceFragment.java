@@ -83,7 +83,8 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 		prefs.registerOnSharedPreferenceChangeListener(AllianceFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
-		refresh();
+		if (savedInstanceState == null) refresh();
+		Constants.checkNoDataScreen(alliances, recyclerView, emptyView);
 		return view;
 	}
 
@@ -128,14 +129,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 		@Override
 		protected void onPostExecute(Void result) {
 			adapter.notifyDataSetChanged();
-			if (alliances.isEmpty()) {
-				recyclerView.setVisibility(View.GONE);
-				emptyView.setVisibility(View.VISIBLE);
-			} else {
-				recyclerView.setVisibility(View.VISIBLE);
-				emptyView.setVisibility(View.GONE);
-
-			}
+			Constants.checkNoDataScreen(alliances, recyclerView, emptyView);
 			swipeRefreshLayout.setRefreshing(false);
 		}
 	}

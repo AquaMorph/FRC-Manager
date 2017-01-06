@@ -94,8 +94,8 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
-		refresh();
-
+		if (savedInstanceState == null) refresh();
+		Constants.checkNoDataScreen(teams, recyclerView, emptyView);
 		return view;
 	}
 
@@ -140,13 +140,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		@Override
 		protected void onPostExecute(Void result) {
 			adapter.notifyDataSetChanged();
-			if (teams.isEmpty()) {
-				recyclerView.setVisibility(View.GONE);
-				emptyView.setVisibility(View.VISIBLE);
-			} else {
-				recyclerView.setVisibility(View.VISIBLE);
-				emptyView.setVisibility(View.GONE);
-			}
+			Constants.checkNoDataScreen(teams, recyclerView, emptyView);
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

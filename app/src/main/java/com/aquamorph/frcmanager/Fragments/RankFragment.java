@@ -95,7 +95,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		eventKey = prefs.getString("eventKey", "");
 		teamNumber = prefs.getString("teamNumber", "0000");
 
-		refresh();
+		if (savedInstanceState == null) refresh();
+		Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
 		return view;
 	}
 
@@ -169,13 +170,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 				editor.apply();
 			}
 			adapter.notifyDataSetChanged();
-			if (ranks.isEmpty()) {
-				recyclerView.setVisibility(View.GONE);
-				emptyView.setVisibility(View.VISIBLE);
-			} else {
-				recyclerView.setVisibility(View.VISIBLE);
-				emptyView.setVisibility(View.GONE);
-			}
+			Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

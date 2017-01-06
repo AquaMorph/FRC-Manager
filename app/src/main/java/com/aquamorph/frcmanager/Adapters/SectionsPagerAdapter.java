@@ -2,8 +2,10 @@ package com.aquamorph.frcmanager.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.util.SparseArray;
+import android.view.ViewGroup;
 
 import com.aquamorph.frcmanager.fragments.AllianceFragment;
 import com.aquamorph.frcmanager.fragments.AwardFragment;
@@ -12,49 +14,66 @@ import com.aquamorph.frcmanager.fragments.RankFragment;
 import com.aquamorph.frcmanager.fragments.TeamEventFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 
+
 /**
  * Populates a tab layout with fragments.
  *
  * @author Christian Colglazier
  * @version 3/29/2016
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends PagerAdapter {
 
-	private String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams", "Alliances", "Awards"};
-	private FragmentManager fragmentManager;
-	private ViewPager viewPager;
+	private final FragmentManager mFragmentManager;
+	private SparseArray<Fragment> mFragments;
+	private FragmentTransaction mCurTransaction;
+	private String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams",
+			"Alliances", "Awards"};
 
-	public SectionsPagerAdapter(FragmentManager fm, ViewPager mViewPager) {
-		super(fm);
-		fragmentManager = fm;
-		viewPager = mViewPager;
+	public SectionsPagerAdapter(FragmentManager fragmentManager) {
+		mFragmentManager = fragmentManager;
+		mFragments = new SparseArray<>();
 	}
 
 	/**
 	 * refreshAll() reloads all data in the fragments.
 	 */
 	public void refreshAll() {
-		final TeamScheduleFragment tab1 = (TeamScheduleFragment) fragmentManager
-				.findFragmentByTag(makeFragmentName(viewPager.getId(), 0));
-		tab1.refresh();
-		final EventScheduleFragment tab2 = (EventScheduleFragment) fragmentManager
-				.findFragmentByTag(makeFragmentName(viewPager.getId(), 1));
-		tab2.refresh();
-		final RankFragment tab3 = (RankFragment) fragmentManager
-				.findFragmentByTag(makeFragmentName(viewPager.getId(), 2));
-		tab3.refresh();
-		final TeamEventFragment tab4 = (TeamEventFragment) fragmentManager
-				.findFragmentByTag(makeFragmentName(viewPager.getId(), 3));
-		tab4.refresh();
-		final AllianceFragment tab5 = (AllianceFragment) fragmentManager
-				.findFragmentByTag(makeFragmentName(viewPager.getId(), 4));
-		tab5.refresh();
-		final AwardFragment tab6 = (AwardFragment) fragmentManager
-				.findFragmentByTag(makeFragmentName(viewPager.getId(), 5));
-		tab6.refresh();
+		((TeamScheduleFragment) mFragmentManager.findFragmentByTag("fragment:0")).refresh();
+		((EventScheduleFragment) mFragmentManager.findFragmentByTag("fragment:1")).refresh();
+		((RankFragment) mFragmentManager.findFragmentByTag("fragment:2")).refresh();
+		((TeamEventFragment) mFragmentManager.findFragmentByTag("fragment:3")).refresh();
+		((AllianceFragment) mFragmentManager.findFragmentByTag("fragment:4")).refresh();
+		((AwardFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh();
 	}
 
 	@Override
+	public Object instantiateItem(ViewGroup container, int position) {
+
+		Fragment fragment = mFragmentManager.findFragmentByTag("fragment:" + position);
+		if (fragment == null) {
+			fragment = getItem(position);
+			if (mCurTransaction == null) {
+				mCurTransaction = mFragmentManager.beginTransaction();
+			}
+			mCurTransaction.add(container.getId(), fragment, "fragment:" + position);
+		}
+		return fragment;
+	}
+
+	@Override
+	public void destroyItem(ViewGroup container, int position, Object object) {
+		if (mCurTransaction == null) {
+			mCurTransaction = mFragmentManager.beginTransaction();
+		}
+		mCurTransaction.detach(mFragments.get(position));
+		mFragments.remove(position);
+	}
+
+	@Override
+	public CharSequence getPageTitle(int position) {
+		return tabNames[position];
+	}
+
 	public Fragment getItem(int position) {
 		switch (position) {
 			case 0:
@@ -75,23 +94,22 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 	}
 
 	@Override
+	public void finishUpdate(ViewGroup container) {
+		if (mCurTransaction != null) {
+			mCurTransaction.commitAllowingStateLoss();
+			mCurTransaction = null;
+			mFragmentManager.executePendingTransactions();
+		}
+	}
+
+	@Override
+	public boolean isViewFromObject(android.view.View view, Object object) {
+		return ((Fragment) object).getView() == view;
+	}
+
+	@Override
 	public int getCount() {
 		return tabNames.length;
 	}
 
-	@Override
-	public CharSequence getPageTitle(int position) {
-		return tabNames[position];
-	}
-
-	/**
-	 * makeFragmentName() returns the tag for a desired fragment.
-	 *
-	 * @param viewPagerId pager id
-	 * @param index fragment number
-	 * @return fragment tag
-	 */
-	private static String makeFragmentName(int viewPagerId, int index) {
-		return "android:switcher:" + viewPagerId + ":" + index;
-	}
 }

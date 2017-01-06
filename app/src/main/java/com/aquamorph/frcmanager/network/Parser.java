@@ -72,8 +72,7 @@ public class Parser<T> {
 			// Displays message saying there is no connection
 			if (!online) {
 				Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
-						R.string.no_connection_message,
-						Snackbar.LENGTH_LONG).show();
+						R.string.no_connection_message, Snackbar.LENGTH_LONG).show();
 			}
 
 			// Checks FIRST sever status

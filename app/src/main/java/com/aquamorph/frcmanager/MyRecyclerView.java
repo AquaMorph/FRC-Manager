@@ -5,8 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 /**
  * Custom loading animation.
@@ -54,9 +52,10 @@ public class MyRecyclerView extends RecyclerView {
 	}
 
 	private void animate(View view, final int pos) {
-		view.animate().cancel();
-		Animation animation = AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left);
-		view.startAnimation(animation);
+//		view.animate().cancel();
+//		Animation animation = AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left);
+//		view.startAnimation(animation);
+
 //		view.setTranslationY(200);
 //		view.setAlpha(0);
 //		view.animate().alpha(1.0f).translationY(0).setDuration(300).setStartDelay(pos * 125);
