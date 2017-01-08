@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Animations;
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
@@ -46,6 +47,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private Parser<ArrayList<String[]>> parser;
 	private Parser<ArrayList<EventTeam>> teamEventParser;
 	private SharedPreferences prefs;
+	private Boolean firstLoad = true;
 
 	/**
 	 * newInstance creates and returns a new RankFragment
@@ -169,8 +171,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 				}
 				editor.apply();
 			}
-			adapter.notifyDataSetChanged();
 			Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
+			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Animations;
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventTeamAdapter;
@@ -47,6 +48,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 	private RecyclerView.Adapter adapter;
 	private ArrayList<EventTeam> teams = new ArrayList<>();
 	private String eventKey = "";
+	private Boolean firstLoad = true;
 
 	/**
 	 * newInstance creates and returns a new TeamEventFragment
@@ -139,8 +141,9 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 
 		@Override
 		protected void onPostExecute(Void result) {
-			adapter.notifyDataSetChanged();
 			Constants.checkNoDataScreen(teams, recyclerView, emptyView);
+			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

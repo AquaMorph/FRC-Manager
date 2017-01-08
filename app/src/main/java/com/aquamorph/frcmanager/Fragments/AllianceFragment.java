@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Animations;
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AllianceAdapter;
@@ -41,6 +42,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	private ArrayList<Events.Alliances> alliances = new ArrayList<>();
 	private String eventKey = "";
 	private Parser<Events> parser;
+	private Boolean firstLoad = true;
 
 	/**
 	 * newInstance creates and returns a new AllianceFragment
@@ -128,8 +130,9 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 
 		@Override
 		protected void onPostExecute(Void result) {
-			adapter.notifyDataSetChanged();
 			Constants.checkNoDataScreen(alliances, recyclerView, emptyView);
+			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+			if (firstLoad) firstLoad = false;
 			swipeRefreshLayout.setRefreshing(false);
 		}
 	}

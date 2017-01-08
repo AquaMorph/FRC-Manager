@@ -7,8 +7,6 @@ import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import java.util.ArrayList;
 
@@ -194,10 +192,5 @@ public class Constants {
 		float density = context.getResources().getDisplayMetrics().density;
 		float dpWidth = outMetrics.widthPixels / density;
 		return dpWidth >= 600;
-	}
-
-	public static void loadAnimation(Context context, View view) {
-		Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
-		view.startAnimation(animation);
 	}
 }

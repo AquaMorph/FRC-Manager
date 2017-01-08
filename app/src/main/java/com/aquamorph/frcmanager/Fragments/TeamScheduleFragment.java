@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Animations;
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
@@ -48,6 +49,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private Parser<ArrayList<Match>> parser;
 	private View view;
 	private Boolean getTeamFromSettings = true;
+	private Boolean firstLoad = true;
 
 	/**
 	 * newInstance creates and returns a new TeamScheduleFragment
@@ -86,7 +88,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			}
 		}
 		listener();
-		if (savedInstanceState == null)	refresh();
+		if (savedInstanceState == null) refresh();
 		Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
 		return view;
 	}
@@ -189,7 +191,6 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		protected Void doInBackground(Void... params) {
 
 			parser.fetchJSON(getTeamFromSettings);
-//			parser.fetchJSON(false);
 			while (parser.parsingComplete) ;
 			if (parser.getData() != null) {
 				teamEventMatches.clear();
@@ -201,8 +202,9 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected void onPostExecute(Void result) {
-			adapter.notifyDataSetChanged();
 			Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
+			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

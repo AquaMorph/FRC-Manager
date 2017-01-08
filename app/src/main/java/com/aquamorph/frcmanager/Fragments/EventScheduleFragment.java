@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Animations;
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
@@ -41,6 +42,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	private ArrayList<Match> eventMatches = new ArrayList<>();
 	private String teamNumber = "", eventKey = "";
 	private Parser<ArrayList<Match>> parser;
+	private Boolean firstLoad = true;
 
 	/**
 	 * newInstance creates and returns a new EventScheduleFragment
@@ -133,8 +135,9 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 		@Override
 		protected void onPostExecute(Void result) {
-			adapter.notifyDataSetChanged();
 			Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
+			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

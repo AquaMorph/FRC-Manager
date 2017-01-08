@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.Animations;
 import com.aquamorph.frcmanager.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AwardAdapter;
@@ -41,6 +42,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	private ArrayList<Award> awards = new ArrayList<>();
 	private String eventKey = "";
 	private Parser<ArrayList<Award>> parser;
+	private Boolean firstLoad = true;
 
 	/**
 	 * newInstance creates and returns a new AwardFragment
@@ -83,7 +85,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
-		if (savedInstanceState == null) refresh();
+		if(savedInstanceState == null) refresh();
 		Constants.checkNoDataScreen(awards, recyclerView, emptyView);
 		return view;
 	}
@@ -127,8 +129,9 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 		@Override
 		protected void onPostExecute(Void result) {
-			adapter.notifyDataSetChanged();
 			Constants.checkNoDataScreen(awards, recyclerView, emptyView);
+			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+			if (firstLoad) firstLoad = false;
 			swipeRefreshLayout.setRefreshing(false);
 		}
 	}
