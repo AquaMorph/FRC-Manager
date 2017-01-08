@@ -2,7 +2,12 @@ package com.aquamorph.frcmanager.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,24 +33,42 @@ public class EventTeamAdapter extends RecyclerView.Adapter<EventTeamAdapter.MyVi
 	private LayoutInflater inflater;
 	private Context context;
 	private ArrayList<EventTeam> data;
+	private ArrayList<String[]> ranks;
 
-	public EventTeamAdapter(Context context, ArrayList<EventTeam> data) {
+	public EventTeamAdapter(Context context, ArrayList<EventTeam> data, ArrayList<String[]> ranks) {
 		inflater = from(context);
 		this.data = data;
 		this.context = context;
+		this.ranks = ranks;
+	}
+
+	private String getTeamRank(String teamNumber, ArrayList<String[]> ranks) {
+		for (int i = 1; i < ranks.size(); i++) {
+			if (ranks.get(i)[1].equals(teamNumber)) return " Ranked #" + ranks.get(i)[0];
+		}
+		return "";
 	}
 
 	@Override
 	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = inflater.inflate(R.layout.rank, parent, false);
-		MyViewHolder holder = new MyViewHolder(view);
-		return holder;
+		return new MyViewHolder(view);
 	}
 
 	@Override
 	public void onBindViewHolder(EventTeamAdapter.MyViewHolder holder, int position) {
-		holder.rankNumber.setText(Integer.toString(data.get(position).team_number));
-		holder.teamNumber.setText(data.get(position).nickname);
+		SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+		SpannableString teamName = new SpannableString(data.get(position).nickname);
+		teamName.setSpan(new StyleSpan(Typeface.BOLD), 0, teamName.length(), 0);
+		spannableStringBuilder.append(teamName);
+		SpannableString rank = new SpannableString(getTeamRank(String.valueOf(data.get(position)
+				.team_number), ranks));
+		rank.setSpan(new RelativeSizeSpan(0.75f), 0, rank.length(), 0);
+		rank.setSpan(new StyleSpan(Typeface.ITALIC), 0, rank.length(), 0);
+		spannableStringBuilder.append(rank);
+
+		holder.rankNumber.setText(String.valueOf(data.get(position).team_number));
+		holder.teamNumber.setText(spannableStringBuilder, TextView.BufferType.SPANNABLE);
 		holder.details.setText(data.get(position).location);
 	}
 

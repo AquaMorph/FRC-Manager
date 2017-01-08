@@ -30,6 +30,8 @@ import java.util.Collections;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
+import static java.util.Collections.sort;
+
 /**
  * Displays a list of teams at an event.
  *
@@ -39,15 +41,17 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 public class TeamEventFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private static String TAG = "TeamEventFragment";
-	Parser<ArrayList<EventTeam>> parser;
-	SharedPreferences prefs;
-	SharedPreferences.Editor editor;
+	private Parser<ArrayList<EventTeam>> parser;
+	private Parser<ArrayList<String[]>> rankParser;
+	private SharedPreferences prefs;
+	private SharedPreferences.Editor editor;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
 	private ArrayList<EventTeam> teams = new ArrayList<>();
-	private String eventKey = "";
+	private ArrayList<String[]> ranks = new ArrayList<>();
+	private String eventKey = "", teamNumber = "";
 	private Boolean firstLoad = true;
 
 	/**
@@ -81,7 +85,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
 		recyclerView.setItemAnimator(new SlideInLeftAnimator());
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
-		adapter = new EventTeamAdapter(getContext(), teams);
+		adapter = new EventTeamAdapter(getContext(), teams, ranks);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(new AlphaInAnimationAdapter(adapter));
@@ -95,6 +99,7 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);
 		eventKey = prefs.getString("eventKey", "");
+		teamNumber = prefs.getString("teamNumber", "0000");
 
 		if (savedInstanceState == null) refresh();
 		Constants.checkNoDataScreen(teams, recyclerView, emptyView);
@@ -105,9 +110,8 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 	 * refrest() loads data needed for this fragment.
 	 */
 	public void refresh() {
-		if (!eventKey.equals("")) {
-			final LoadEventTeams loadEventTeams = new LoadEventTeams();
-			loadEventTeams.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		if (!eventKey.equals("") && !teamNumber.equals("")) {
+			new LoadEventTeams().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
@@ -115,7 +119,18 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("eventKey")) {
 			eventKey = sharedPreferences.getString("eventKey", "");
-			refresh();
+			if (parser != null) {
+				parser.storeData("");
+			}
+			if (!eventKey.equals("")) {
+				refresh();
+			}
+		}
+		if (key.equals("teamNumber")) {
+			teamNumber = sharedPreferences.getString("teamNumber", "");
+			if (!teamNumber.equals("")) {
+				refresh();
+			}
 		}
 	}
 
@@ -127,6 +142,9 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 			parser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
 					new TypeToken<ArrayList<EventTeam>>() {
 					}.getType(), getActivity());
+			rankParser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
+					new TypeToken<ArrayList<String[]>>() {
+					}.getType(), getActivity());
 		}
 
 		@Override
@@ -135,7 +153,14 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 			while (parser.parsingComplete) ;
 			teams.clear();
 			teams.addAll(parser.getData());
-			Collections.sort(teams);
+			sort(teams);
+
+			rankParser.fetchJSON(true);
+			while (rankParser.parsingComplete) ;
+			if (rankParser.getData() != null) {
+				ranks.clear();
+				ranks.addAll(rankParser.getData());
+			}
 			return null;
 		}
 

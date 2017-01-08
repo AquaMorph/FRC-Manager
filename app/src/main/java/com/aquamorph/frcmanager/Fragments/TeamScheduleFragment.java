@@ -124,8 +124,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		}
 		Log.i(TAG, "Data is being refreshed");
 		if (!teamNumber.equals("") && !eventKey.equals("")) {
-			final LoadTeamSchedule loadTeamSchedule = new LoadTeamSchedule();
-			loadTeamSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new LoadTeamSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		} else {
 			Log.i(TAG, "Not set");
 		}
@@ -206,6 +205,8 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);
+			mSwipeRefreshLayout.destroyDrawingCache();
+			mSwipeRefreshLayout.clearAnimation();
 		}
 	}
 }

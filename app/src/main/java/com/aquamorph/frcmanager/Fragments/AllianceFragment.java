@@ -95,8 +95,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	 */
 	public void refresh() {
 		if (!eventKey.equals("")) {
-			final LoadAlliances loadAlliances = new LoadAlliances();
-			loadAlliances.execute();
+			new LoadAlliances().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 

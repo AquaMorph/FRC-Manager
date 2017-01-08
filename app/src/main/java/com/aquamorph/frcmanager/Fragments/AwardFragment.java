@@ -95,8 +95,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	 */
 	public void refresh() {
 		if (!eventKey.equals("")) {
-			final LoadAwards loadAwards = new LoadAwards();
-			loadAwards.execute();
+			new LoadAwards().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 

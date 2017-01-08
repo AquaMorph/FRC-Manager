@@ -53,6 +53,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 	public void onBindViewHolder(MyViewHolder holder, int position) {
 		holder.teamNumber.setText(data.get(position + 1)[0] + ". "
 				+ getTeamName(data.get(position + 1)[1]));
+		holder.teamNumber.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 		holder.rankNumber.setText(data.get(position + 1)[1]);
 		holder.details.setVisibility(View.GONE);
 		holder.table.removeAllViews();
@@ -61,7 +62,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		Resources.Theme theme = context.getTheme();
 		theme.resolveAttribute(R.attr.textOnBackground, typedValue, true);
 
-		for (int i = 2; i < data.get(position).length; i+=2) {
+		for (int i = 2; i < data.get(position).length; i += 2) {
 			TextView column1 = new TextView(context);
 			TextView column2 = new TextView(context);
 			TextView column3 = new TextView(context);
@@ -71,9 +72,9 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 			column1.setText(data.get(0)[i] + ": ");
 			column2.setText(data.get(position + 1)[i].replaceAll("\\.0*$", ""));
 
-			if(i+1 < data.get(position).length) {
-				column3.setText(data.get(0)[i+1] + ":");
-				column4.setText(data.get(position + 1)[i+1].replaceAll("\\.0*$", ""));
+			if (i + 1 < data.get(position).length) {
+				column3.setText(data.get(0)[i + 1] + ":");
+				column4.setText(data.get(position + 1)[i + 1].replaceAll("\\.0*$", ""));
 			} else {
 				column3.setText("");
 				column4.setText("");

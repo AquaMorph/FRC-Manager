@@ -95,8 +95,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	 */
 	public void refresh() {
 		if (!eventKey.equals("")) {
-			final LoadEventSchedule loadEventSchedule = new LoadEventSchedule();
-			loadEventSchedule.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new LoadEventSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 

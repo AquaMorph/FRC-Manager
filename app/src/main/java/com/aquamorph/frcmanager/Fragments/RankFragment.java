@@ -107,8 +107,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	 */
 	public void refresh() {
 		if (!eventKey.equals("") && !teamNumber.equals("")) {
-			final LoadRanks loadRanks = new LoadRanks();
-			loadRanks.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new LoadRanks().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
