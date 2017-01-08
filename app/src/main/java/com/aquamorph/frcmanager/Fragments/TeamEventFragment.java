@@ -25,10 +25,6 @@ import com.aquamorph.frcmanager.network.Parser;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Collections;
-
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 import static java.util.Collections.sort;
 
@@ -83,19 +79,17 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		});
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-		recyclerView.setItemAnimator(new SlideInLeftAnimator());
 		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new EventTeamAdapter(getContext(), teams, ranks);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
-		recyclerView.setAdapter(new AlphaInAnimationAdapter(adapter));
+		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
+		recyclerView.setAdapter(adapter);
 		if (Constants.isLargeScreen(getContext())) {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 		} else {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
-		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
-
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);
 		eventKey = prefs.getString("eventKey", "");
