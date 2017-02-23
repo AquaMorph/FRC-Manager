@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 25
@@ -12,7 +13,13 @@ android {
         versionName "0.4.0"
     }
     buildTypes {
+        debug {
+            testCoverageEnabled true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
+            testCoverageEnabled false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -24,6 +31,8 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile "org.robolectric:robolectric:3.2.2"
+    testCompile 'org.assertj:assertj-core:1.7.1'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:recyclerview-v7:25.2.0'
@@ -34,6 +43,25 @@ dependencies {
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
     compile 'com.marshalchen.ultimaterecyclerview:library:0.7.0'
     compile 'com.google.firebase:firebase-ads:10.2.0'
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = fileTree(dir: "$buildDir", includes: [
+            "jacoco/testDebugUnitTest.exec",
+            "outputs/code-coverage/connected/*coverage.ec"
+    ])
 }
 
 // Must be at the bottom
