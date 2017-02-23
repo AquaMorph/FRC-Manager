@@ -2,8 +2,8 @@ package com.aquamorph.frcmanager.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
@@ -21,7 +21,7 @@ import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
  * @author Christian Colglazier
  * @version 3/29/2016
  */
-public class SectionsPagerAdapter extends PagerAdapter {
+public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 	private final FragmentManager mFragmentManager;
 	private SparseArray<Fragment> mFragments;
@@ -30,6 +30,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
 			"Alliances", "Awards"};
 
 	public SectionsPagerAdapter(FragmentManager fragmentManager) {
+		super(fragmentManager);
 		mFragmentManager = fragmentManager;
 		mFragments = new SparseArray<>();
 	}

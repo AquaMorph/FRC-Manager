@@ -106,9 +106,8 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		LayoutInflater inflater = (LayoutInflater) getContext()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		view = inflater.inflate(R.layout.fragment_team_schedule, null);
+		view = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+				.inflate(R.layout.fragment_team_schedule, null);
 		listener();
 		if (Constants.TRACING_LEVEL >= 3) {
 			Log.i(TAG, "Configuration Changed");

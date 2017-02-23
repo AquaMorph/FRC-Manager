@@ -11,6 +11,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	private String teamNumber, eventName;
 	private String teamRank;
 	private Boolean paidUser = false;
+	private ViewPager mViewPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		setContentView(R.layout.activity_main);
+		Log.i(TAG, "onConfigurationChanged");
 		listener();
 	}
 
@@ -178,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		toolbar.setSubtitle(getSubTitle());
 
 		// Set up the ViewPager with the sections adapter.
-		ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
+		mViewPager = (ViewPager) findViewById(R.id.container);
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
 		mViewPager.setAdapter(mSectionsPagerAdapter);

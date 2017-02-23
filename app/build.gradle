@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "com.aquamorph.frcmanager"
@@ -10,7 +10,6 @@ android {
         targetSdkVersion 25
         versionCode 7
         versionName "0.4.0"
-        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -21,22 +20,21 @@ android {
     lintOptions {
         abortOnError false
     }
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:cardview-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:recyclerview-v7:25.2.0'
+    compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support:cardview-v7:25.2.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.github.paolorotolo:appintro:3.3.0'
-    compile 'com.google.android.gms:play-services:10.0.1'
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
     compile 'com.marshalchen.ultimaterecyclerview:library:0.7.0'
+    compile 'com.google.firebase:firebase-ads:10.2.0'
 }
+
+// Must be at the bottom
+apply plugin: 'com.google.gms.google-services'
