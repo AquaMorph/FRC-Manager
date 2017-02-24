@@ -19,6 +19,7 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventSpinnerAdapter;
 import com.aquamorph.frcmanager.models.Events;
 import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.utils.AppConfig;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -99,38 +100,16 @@ public class EventSlide extends Fragment {
 		}
 	}
 
-	/**
-	 * setEventKey set the shared variable of the event key.
-	 *
-	 * @param key identification key of an event
-	 */
-	public void setEventKey(String key) {
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("eventKey", key);
-		editor.apply();
-	}
-
-	/**
-	 * setEventShortName() set the shared variable of the events name.
-	 *
-	 * @param name event name
-	 */
-	public void setEventShortName(String name) {
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("eventShortName", name);
-		editor.apply();
-	}
-
 	private class EventSpinnerListener implements AdapterView.OnItemSelectedListener {
 
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-			setEventKey(eventList.get(position).key);
+			AppConfig.setEventKey(eventList.get(position).key, getContext());
 			if (Constants.TRACING_LEVEL > 0) {
 				Log.i(TAG, "Key:" + eventList.get(position).key);
 				Log.i(TAG, "Short Name:" + eventList.get(position).short_name);
 			}
-			setEventShortName(eventList.get(position).short_name);
+			AppConfig.setEventShortName(eventList.get(position).short_name, getContext());
 			((TextView) eventSpinnder.getSelectedView()).setTextColor(getResources()
 					.getColor(R.color.icons));
 		}

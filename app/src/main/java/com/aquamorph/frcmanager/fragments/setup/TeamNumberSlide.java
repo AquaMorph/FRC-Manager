@@ -1,8 +1,6 @@
 package com.aquamorph.frcmanager.fragments.setup;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.utils.AppConfig;
 
 /**
  * Fragment slide that asks the user their team number.
@@ -23,12 +22,10 @@ public class TeamNumberSlide extends Fragment {
 	private String TAG = "TeamNumberSlide";
 	private Boolean numberSet = false;
 	private static EditText teamNumber;
-	private SharedPreferences prefs;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 	}
 
 	@Override
@@ -54,9 +51,7 @@ public class TeamNumberSlide extends Fragment {
 	 * @param team number
 	 */
 	public void setTeamNumber(String team) {
-		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("teamNumber", team);
-		editor.apply();
+		AppConfig.setTeamNumber(team, getContext());
 		numberSet = false;
 	}
 
