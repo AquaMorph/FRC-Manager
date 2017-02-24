@@ -11,7 +11,6 @@ android {
         targetSdkVersion 25
         versionCode 7
         versionName "0.4.0"
-        multiDexEnabled = true
     }
     buildTypes {
         debug {
@@ -43,10 +42,10 @@ dependencies {
     compile 'com.android.support:design:25.2.0'
     compile 'com.android.support:cardview-v7:25.2.0'
     compile 'com.google.code.gson:gson:2.4'
+    compile 'com.google.android.gms:play-services-ads:10.2.0'
     compile 'com.github.paolorotolo:appintro:3.3.0'
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
     compile 'com.marshalchen.ultimaterecyclerview:library:0.7.0'
-    compile 'com.google.firebase:firebase-ads:10.2.0'
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
@@ -67,6 +66,3 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
             "outputs/code-coverage/connected/*coverage.ec"
     ])
 }
-
-// Must be at the bottom
-apply plugin: 'com.google.gms.google-services'
