@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class Constants {
 
 	public static final String TAG = "FRC Regional";
-	private static final String URL = "https://www.thebluealliance.com/api/v2/";
+	public static final String URL = "https://www.thebluealliance.com/api/v2/";
 	public static final String TBA_HEADER = "X-TBA-App-Id";
 	public static final Boolean FORCE_DATA_RELOAD = false;
 	public static int TRACING_LEVEL = 3;

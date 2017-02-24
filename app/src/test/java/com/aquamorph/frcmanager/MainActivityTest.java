@@ -53,8 +53,8 @@ public class MainActivityTest {
 	@Test
 	public void goToSettings() throws Exception {
 		// Tests the add habit menu button
-		MenuItem addHabit = new RoboMenuItem(R.id.action_settings);
-		activity.onOptionsItemSelected(addHabit);
+		MenuItem settings = new RoboMenuItem(R.id.action_settings);
+		activity.onOptionsItemSelected(settings);
 		Intent expectedIntent = new Intent(activity, Settings.class);
 		ShadowActivity shadowActivity = Shadows.shadowOf(activity);
 		Intent actualIntent = shadowActivity.getNextStartedActivity();
