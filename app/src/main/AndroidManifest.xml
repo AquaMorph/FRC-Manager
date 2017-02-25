@@ -7,21 +7,28 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/LightTheme">
+        <meta-data android:name="com.google.android.gms.version"
+                   android:value="@integer/google_play_services_version" />
+
         <activity
-            android:name=".activities.MainActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="@string/app_name"
-            android:theme="@style/LightTheme">
+            android:name=".activities.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.MainActivity"
+            android:configChanges="keyboardHidden"
+            android:label="@string/app_name"
+            android:theme="@style/LightTheme">
         </activity>
         <activity
             android:name=".activities.Settings"
@@ -40,5 +47,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+
     </application>
 </manifest>

@@ -1,8 +1,14 @@
 package com.aquamorph.frcmanager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.view.View;
+
+import java.util.ArrayList;
 
 /**
  * A collection of constants needed to interact with the Blue Alliance.
@@ -13,11 +19,10 @@ import android.net.NetworkInfo;
 public class Constants {
 
 	public static final String TAG = "FRC Regional";
-	public static final String URL = "http://www.thebluealliance.com/api/v2/";
+	public static final String URL = "https://www.thebluealliance.com/api/v2/";
 	public static final String TBA_HEADER = "X-TBA-App-Id";
-	public static final String NOT_ONLINE_MESSAGE = "No Connection";
 	public static final Boolean FORCE_DATA_RELOAD = false;
-	public static int TRACTING_LEVEL = 4;
+	public static int TRACING_LEVEL = 3;
 	public static int MAX_EVENT_TITLE_LENGTH = 20;
 
 	/**
@@ -53,7 +58,7 @@ public class Constants {
 	/**
 	 * getEventTeamMatches() returns the url for a team's matches at a specific event.
 	 *
-	 * @param team team identification "frc####"
+	 * @param team  team identification "frc####"
 	 * @param event event identification number
 	 * @return url to team matches for an event
 	 */
@@ -99,6 +104,15 @@ public class Constants {
 	 */
 	public static String getEventAwards(String event) {
 		return String.format("%sevent/%s/awards", URL, event);
+	}
+
+	/**
+	 * getStatusURL() returns the url for the status of FIRST's server.
+	 *
+	 * @return url to server status
+	 */
+	public static String getStatusURL() {
+		return URL + "status";
 	}
 
 	/**
@@ -148,5 +162,35 @@ public class Constants {
 			spacesText += "&nbsp;";
 		}
 		return String.format("<pre>%s<u>%s</u></pre>", spacesText, text);
+	}
+
+	/**
+	 * checkNoDataScreen() displays a no data screen if there is not any data to display. Else
+	 * displays data.
+	 */
+	public static void checkNoDataScreen(ArrayList data, View recyclerView, View emptyView) {
+		if (data.isEmpty()) {
+			recyclerView.setVisibility(View.GONE);
+			emptyView.setVisibility(View.VISIBLE);
+		} else {
+			recyclerView.setVisibility(View.VISIBLE);
+			emptyView.setVisibility(View.GONE);
+		}
+	}
+
+	/**
+	 * isLargeScreen returns if the screen is large or not
+	 *
+	 * @param context
+	 * @return screen size
+	 */
+	public static boolean isLargeScreen(Context context) {
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		display.getMetrics(outMetrics);
+
+		float density = context.getResources().getDisplayMetrics().density;
+		float dpWidth = outMetrics.widthPixels / density;
+		return dpWidth >= 600;
 	}
 }
