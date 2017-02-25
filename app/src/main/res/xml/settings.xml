@@ -15,7 +15,7 @@
             android:entries="@array/theme"
             android:entryValues="@array/theme_values"
             android:key="theme"
-            android:summary="Choose between there different color schemes"
+            android:summary="Choose between different color schemes"
             android:title="App Theme"/>
     </PreferenceCategory>
 
