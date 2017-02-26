@@ -28,6 +28,10 @@
         <item name="text">@color/primary_text</item>
         <item name="textOnBackground">#F5F5F5</item>
         <item name="bubbleText">#F5F5F5</item>
+        <item name="android:textColorPrimary">@color/icons</item>
+        <item name="android:textColorSecondary">#BDBDBD</item>
+        <item name="android:textColorTertiary">#BDBDBD</item>
+        <item name="android:listDivider">@color/icons</item>
     </style>
 
     <style name="OMOLEDTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -43,8 +47,11 @@
         <item name="text">@color/icons</item>
         <item name="textOnBackground">@color/icons</item>
         <item name="bubbleText">@color/icons</item>
+        <item name="android:textColorPrimary">@color/icons</item>
+        <item name="android:textColorSecondary">#616180</item>
+        <item name="android:textColorTertiary">#616180</item>
+        <item name="android:listDivider">@color/icons</item>
     </style>
-
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>

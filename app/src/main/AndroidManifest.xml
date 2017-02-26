@@ -31,8 +31,7 @@
             android:theme="@style/LightTheme">
         </activity>
         <activity
-            android:name=".activities.Settings"
-            android:theme="@style/LightTheme">
+            android:name=".activities.Settings">
         </activity>
         <activity
             android:name=".activities.TeamSummary"

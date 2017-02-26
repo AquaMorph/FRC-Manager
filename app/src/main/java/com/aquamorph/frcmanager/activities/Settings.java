@@ -1,8 +1,10 @@
 package com.aquamorph.frcmanager.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.aquamorph.frcmanager.R;
@@ -15,11 +17,13 @@ import com.aquamorph.frcmanager.fragments.SettingsFragment;
  * @author Christian Colglazier
  * @version 3/29/2016
  */
-public class Settings extends AppCompatActivity {
+public class Settings extends AppCompatActivity implements
+		SharedPreferences.OnSharedPreferenceChangeListener {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		MainActivity.theme(this);
 		setContentView(R.layout.settings);
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -40,5 +44,15 @@ public class Settings extends AppCompatActivity {
 				break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		Log.i("Settings", "Settings Changed");
+		if (key.equals("theme")) {
+			Log.i("Settings", "Theme Changed");
+			this.recreate();
+		}
 	}
 }
