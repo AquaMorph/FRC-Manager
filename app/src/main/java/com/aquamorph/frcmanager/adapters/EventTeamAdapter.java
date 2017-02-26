@@ -69,7 +69,7 @@ public class EventTeamAdapter extends RecyclerView.Adapter<EventTeamAdapter.MyVi
 
 		holder.rankNumber.setText(String.valueOf(data.get(position).team_number));
 		holder.teamNumber.setText(spannableStringBuilder, TextView.BufferType.SPANNABLE);
-		holder.details.setText(data.get(position).location);
+		holder.details.setText(data.get(position).location.replaceAll(" \\d{5}", ""));
 	}
 
 	@Override
