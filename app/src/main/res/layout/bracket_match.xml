@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_weight="1"
+    android:elevation="@dimen/cardview_default_elevation"
     app:cardCornerRadius="@dimen/cardview_default_radius">
 
     <LinearLayout
@@ -17,22 +18,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="?attr/redAllianceBackground"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/redRank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="1"
-                android:textColor="?redAllianceText"
-                android:textSize="24sp"
-                android:textStyle="normal|bold"/>
+            android:orientation="horizontal"
+            android:padding="4dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
                 android:orientation="vertical">
 
                 <TextView
@@ -63,6 +54,17 @@
                     android:text="@string/sample_team"
                     android:textColor="?redAllianceText"/>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/redRank"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="?redAllianceText"
+                android:textSize="24sp"
+                android:textStyle="normal|bold"/>
         </LinearLayout>
 
 
@@ -71,14 +73,16 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="?attr/blueAllianceBackground"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/blueRank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="1"
+                android:gravity="center"
+                android:text="8"
                 android:textColor="?blueAllianceText"
                 android:textSize="24sp"
                 android:textStyle="normal|bold"/>
@@ -86,7 +90,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
                 android:orientation="vertical">
 
                 <TextView
