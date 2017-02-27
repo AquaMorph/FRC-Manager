@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.aquamorph.frcmanager.fragments.AllianceFragment;
 import com.aquamorph.frcmanager.fragments.AwardFragment;
+import com.aquamorph.frcmanager.fragments.BracketFragment;
 import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
 import com.aquamorph.frcmanager.fragments.RankFragment;
 import com.aquamorph.frcmanager.fragments.TeamEventFragment;
@@ -26,7 +27,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	private final FragmentManager mFragmentManager;
 	private SparseArray<Fragment> mFragments;
 	private FragmentTransaction mCurTransaction;
-	private String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams",
+	private String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams", "Bracket",
 			"Alliances", "Awards"};
 
 	public SectionsPagerAdapter(FragmentManager fragmentManager) {
@@ -43,8 +44,9 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		((EventScheduleFragment) mFragmentManager.findFragmentByTag("fragment:1")).refresh();
 		((RankFragment) mFragmentManager.findFragmentByTag("fragment:2")).refresh();
 		((TeamEventFragment) mFragmentManager.findFragmentByTag("fragment:3")).refresh();
-		((AllianceFragment) mFragmentManager.findFragmentByTag("fragment:4")).refresh();
-		((AwardFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh();
+		((BracketFragment) mFragmentManager.findFragmentByTag("fragment:4")).refresh();
+		((AllianceFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh();
+		((AwardFragment) mFragmentManager.findFragmentByTag("fragment:6")).refresh();
 	}
 
 	@Override
@@ -86,8 +88,10 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 			case 3:
 				return TeamEventFragment.newInstance();
 			case 4:
-				return AllianceFragment.newInstance();
+				return BracketFragment.newInstance();
 			case 5:
+				return AllianceFragment.newInstance();
+			case 6:
 				return AwardFragment.newInstance();
 			default:
 				return TeamEventFragment.newInstance();
