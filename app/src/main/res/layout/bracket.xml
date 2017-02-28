@@ -1,224 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:ads="http://schemas.android.com/apk/res-auto"
-              android:fitsSystemWindows="true"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="?attr/backgroundColor"
-              android:orientation="vertical"
-              android:paddingBottom="@dimen/activity_horizontal_margin"
-              android:paddingLeft="@dimen/activity_vertical_margin"
-              android:paddingRight="@dimen/activity_vertical_margin"
-              android:paddingTop="@dimen/activity_horizontal_margin">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?backgroundColor"
+                android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="100">
+        android:layout_height="match_parent">
 
-        <include
-            layout="@layout/bracket_match"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="40"/>
+        <LinearLayout xmlns:ads="http://schemas.android.com/apk/res-auto"
+                      xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:fitsSystemWindows="true"
+                      android:orientation="vertical"
+                      android:paddingBottom="@dimen/activity_horizontal_margin"
+                      android:paddingLeft="@dimen/activity_vertical_margin"
+                      android:paddingRight="@dimen/activity_vertical_margin"
+                      android:paddingTop="@dimen/activity_horizontal_margin">
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="20"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-        <include
-            layout="@layout/bracket_match"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="40"/>
-    </LinearLayout>
+                <include
+                    layout="@layout/bracket_match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="40"
+                    android:id="@+id/qf18"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:weightSum="100">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"/>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="23"/>
+                <include
+                    layout="@layout/bracket_match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="40"
+                    android:id="@+id/qf45"/>
+            </LinearLayout>
 
-        <include
-            layout="@layout/bracket_left_right"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="15"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="23"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="23"/>
 
-        <include
-            layout="@layout/bracket_right_left"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="17"/>
-    </LinearLayout>
+                <include
+                    layout="@layout/bracket_left_right"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="15"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="100">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="23"/>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="40"/>
+                <include
+                    layout="@layout/bracket_right_left"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="17"/>
+            </LinearLayout>
 
-        <include
-            layout="@layout/bracket_match"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="20"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-    </LinearLayout>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="40"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:weightSum="100">
+                <include
+                    layout="@layout/bracket_match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="20"
+                    android:id="@+id/sf1"/>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="50"/>
+            </LinearLayout>
 
-        <include
-            layout="@layout/bracket_left_right"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="17"/>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="100">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"/>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="80"/>
+                <include
+                    layout="@layout/bracket_left_right"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="17"/>
+            </LinearLayout>
 
-        <include
-            layout="@layout/bracket_match"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="20"/>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:weightSum="100">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="80"/>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="50"/>
+                <include
+                    layout="@layout/bracket_match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="20"
+                    android:id="@+id/f"/>
+            </LinearLayout>
 
-        <include
-            layout="@layout/bracket_right_left"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="40"/>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="100">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"/>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="40"/>
+                <include
+                    layout="@layout/bracket_right_left"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="40"/>
+            </LinearLayout>
 
-        <include
-            layout="@layout/bracket_match"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="20"/>
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:weightSum="100">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="40"/>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="23"/>
+                <include
+                    layout="@layout/bracket_match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="20"
+                    android:id="@+id/sf2"/>
+            </LinearLayout>
 
-        <include
-            layout="@layout/bracket_right_left"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="15"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="23"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="23"/>
 
-        <include
-            layout="@layout/bracket_left_right"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="17"/>
-    </LinearLayout>
+                <include
+                    layout="@layout/bracket_right_left"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="15"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="100">
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="23"/>
 
-        <include
-            layout="@layout/bracket_match"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="40"/>
+                <include
+                    layout="@layout/bracket_left_right"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="17"/>
+            </LinearLayout>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="20"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="100">
 
-        <include
-            layout="@layout/bracket_match"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="40"/>
-    </LinearLayout>
+                <include
+                    layout="@layout/bracket_match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="40"
+                    android:id="@+id/qf27"/>
 
-    <com.google.android.gms.ads.AdView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id"/>
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"/>
 
-</LinearLayout>
+                <include
+                    layout="@layout/bracket_match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="40"
+                    android:id="@+id/qf36"/>
+            </LinearLayout>
+
+            <com.google.android.gms.ads.AdView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                ads:adSize="SMART_BANNER"
+                ads:adUnitId="@string/banner_ad_unit_id"/>
+
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</RelativeLayout>
