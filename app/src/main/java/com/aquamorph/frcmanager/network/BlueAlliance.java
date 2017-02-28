@@ -2,7 +2,7 @@ package com.aquamorph.frcmanager.network;
 
 import android.content.Context;
 
-import com.aquamorph.frcmanager.Constants;
+import com.aquamorph.frcmanager.utils.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 
-import com.aquamorph.frcmanager.Constants;
+import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.models.Status;
 import com.google.gson.Gson;

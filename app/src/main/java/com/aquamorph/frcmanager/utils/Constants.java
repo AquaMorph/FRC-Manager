@@ -1,4 +1,4 @@
-package com.aquamorph.frcmanager;
+package com.aquamorph.frcmanager.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
+
+import com.aquamorph.frcmanager.R;
 
 import java.util.ArrayList;
 

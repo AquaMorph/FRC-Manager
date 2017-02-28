@@ -1,4 +1,4 @@
-package com.aquamorph.frcmanager;
+package com.aquamorph.frcmanager.decoration;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

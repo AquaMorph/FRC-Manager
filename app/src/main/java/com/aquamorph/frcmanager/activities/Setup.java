@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.aquamorph.frcmanager.Constants;
+import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.fragments.setup.EventSlide;
 import com.aquamorph.frcmanager.fragments.setup.Slide;

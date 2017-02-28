@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.aquamorph.frcmanager.Constants;
-
 /**
  * <p></p>
  *
