@@ -64,7 +64,7 @@
                 android:text="1"
                 android:textColor="?redAllianceText"
                 android:textSize="24sp"
-                android:textStyle="normal|bold"/>
+                android:textStyle="normal"/>
         </LinearLayout>
 
 
@@ -85,7 +85,7 @@
                 android:text="8"
                 android:textColor="?blueAllianceText"
                 android:textSize="24sp"
-                android:textStyle="normal|bold"/>
+                android:textStyle="normal"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
