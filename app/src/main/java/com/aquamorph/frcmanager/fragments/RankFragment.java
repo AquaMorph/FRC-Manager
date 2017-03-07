@@ -15,16 +15,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.decoration.Animations;
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
+import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.EventTeam;
 import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.util.Collections.sort;
 
@@ -48,6 +50,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private Parser<ArrayList<EventTeam>> teamEventParser;
 	private SharedPreferences prefs;
 	private Boolean firstLoad = true;
+	private Pattern pattern = Pattern.compile("\\d+\\.\\d{2}");
 
 	/**
 	 * newInstance creates and returns a new RankFragment
@@ -167,8 +170,16 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 			for (int i = 0; i < ranks.size(); i++) {
 				if (ranks.get(i)[1].equals(teamNumber)) {
 					editor.putString("teamRank", ranks.get(i)[0]);
+					editor.apply();
 				}
-				editor.apply();
+				for (int j = 0; j < ranks.get(i).length; j++) {
+					if (ranks.get(i)[j].matches("\\d+\\.+\\d+")) {
+						Matcher matcher = pattern.matcher(ranks.get(i)[j]);
+						if (matcher.find())
+							ranks.get(i)[j] = matcher.group(0);
+					}
+				}
+
 			}
 			Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
