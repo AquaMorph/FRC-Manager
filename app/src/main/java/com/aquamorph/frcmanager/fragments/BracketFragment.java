@@ -93,10 +93,16 @@ public class BracketFragment extends Fragment implements
 		sf2 = view.findViewById(R.id.sf2);
 		f = view.findViewById(R.id.f);
 
-		if (savedInstanceState == null) refresh();
-		else populateBracket();
+		if (savedInstanceState != null) populateBracket();
 //		Constants.checkNoDataScreen(eventMatches, view, emptyView);
 		return view;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(alliances.size() == 0)
+			refresh();
 	}
 
 	public void refresh() {

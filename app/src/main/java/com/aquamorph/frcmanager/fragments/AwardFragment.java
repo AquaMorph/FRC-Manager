@@ -85,9 +85,15 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
-		if(savedInstanceState == null) refresh();
 		Constants.checkNoDataScreen(awards, recyclerView, emptyView);
 		return view;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(awards.size() == 0)
+			refresh();
 	}
 
 	/**

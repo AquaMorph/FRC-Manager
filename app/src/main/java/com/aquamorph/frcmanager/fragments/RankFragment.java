@@ -105,6 +105,13 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		return view;
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(ranks.size() == 0)
+			refresh();
+	}
+
 	/**
 	 * refrest() loads data needed for this fragment.
 	 */

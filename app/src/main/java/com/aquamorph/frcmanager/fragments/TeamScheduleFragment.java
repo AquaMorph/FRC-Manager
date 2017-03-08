@@ -18,12 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.decoration.Animations;
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
+import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -88,7 +88,6 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			}
 		}
 		listener();
-		if (savedInstanceState == null) refresh();
 		Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
 		return view;
 	}
@@ -112,6 +111,13 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		if (Constants.TRACING_LEVEL >= 3) {
 			Log.i(TAG, "Configuration Changed");
 		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(teamEventMatches.size() == 0)
+			refresh();
 	}
 
 	/**

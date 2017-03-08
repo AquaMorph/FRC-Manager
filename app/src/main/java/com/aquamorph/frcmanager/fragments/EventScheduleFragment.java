@@ -85,9 +85,15 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
-		if (savedInstanceState == null) refresh();
 		Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
 		return view;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(eventMatches.size() == 0)
+			refresh();
 	}
 
 	/**

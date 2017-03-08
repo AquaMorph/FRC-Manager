@@ -85,9 +85,15 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 		prefs.registerOnSharedPreferenceChangeListener(AllianceFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
-		if (savedInstanceState == null) refresh();
 		Constants.checkNoDataScreen(alliances, recyclerView, emptyView);
 		return view;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(alliances.size() == 0)
+			refresh();
 	}
 
 	/**

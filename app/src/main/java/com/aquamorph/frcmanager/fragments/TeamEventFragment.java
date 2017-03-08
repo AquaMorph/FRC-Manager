@@ -100,6 +100,13 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		return view;
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(teams.size() == 0)
+			refresh();
+	}
+
 	/**
 	 * refrest() loads data needed for this fragment.
 	 */
