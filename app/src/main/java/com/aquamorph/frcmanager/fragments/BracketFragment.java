@@ -263,28 +263,27 @@ public class BracketFragment extends Fragment implements
 			parserMatch = new Parser<>("eventMatches", Constants.getEventMatches(eventKey),
 					new TypeToken<ArrayList<Match>>() {
 					}.getType(), getActivity());
+			parserEvents = new Parser<>("Events",
+					Constants.getEvent(eventKey), new
+					TypeToken<Events>() {
+					}.getType(), getActivity());
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
 			parserMatch.fetchJSON(true);
 			while (parserMatch.parsingComplete) ;
-			eventMatches.clear();
-			eventMatches.addAll(parserMatch.getData());
-
-			parserEvents = new Parser<>("Events",
-					Constants.getEvent(eventKey), new
-					TypeToken<Events>() {
-					}.getType(), getActivity());
 			parserEvents.fetchJSON(true);
 			while (parserEvents.parsingComplete) ;
-			alliances.clear();
-			alliances.addAll(new ArrayList<>(Arrays.asList(parserEvents.getData().alliances)));
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			eventMatches.clear();
+			eventMatches.addAll(parserMatch.getData());
+			alliances.clear();
+			alliances.addAll(new ArrayList<>(Arrays.asList(parserEvents.getData().alliances)));
 //			Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
 			filterMatches();
 			mSwipeRefreshLayout.setRefreshing(false);

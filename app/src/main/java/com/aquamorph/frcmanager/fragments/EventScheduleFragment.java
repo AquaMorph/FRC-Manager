@@ -14,12 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.decoration.Animations;
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
+import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -132,14 +132,14 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		protected Void doInBackground(Void... params) {
 			parser.fetchJSON(true);
 			while (parser.parsingComplete) ;
-			eventMatches.clear();
-			eventMatches.addAll(parser.getData());
-			Collections.sort(eventMatches);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			eventMatches.clear();
+			eventMatches.addAll(parser.getData());
+			Collections.sort(eventMatches);
 			Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;

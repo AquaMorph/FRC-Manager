@@ -157,21 +157,22 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		protected Void doInBackground(Void... params) {
 			teamEventParser.fetchJSON(true);
 			while (teamEventParser.parsingComplete) ;
-			teams.clear();
-			teams.addAll(teamEventParser.getData());
-			sort(teams);
-
 			parser.fetchJSON(true);
 			while (parser.parsingComplete) ;
-			if (parser.getData() != null) {
-				ranks.clear();
-				ranks.addAll(parser.getData());
-			}
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			teams.clear();
+			teams.addAll(teamEventParser.getData());
+			sort(teams);
+
+			if (parser.getData() != null) {
+				ranks.clear();
+				ranks.addAll(parser.getData());
+			}
+
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString("teamRank", "");
 			for (int i = 0; i < ranks.size(); i++) {

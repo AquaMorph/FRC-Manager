@@ -21,32 +21,34 @@ public class Animations {
 	                                 final RecyclerView.Adapter adapter,
 	                                 final Boolean firstLoad,
 	                                 final Boolean isNewData) {
-		Animation slideOut = AnimationUtils.loadAnimation(context, android.R.anim
-				.slide_out_right);
-		final Animation slideIn = AnimationUtils.loadAnimation(context, android.R.anim
-				.slide_in_left);
-		slideOut.setAnimationListener(new Animation.AnimationListener() {
-			@Override
-			public void onAnimationStart(Animation animation) {
+		if (context != null && view != null && adapter != null) {
+			Animation slideOut = AnimationUtils.loadAnimation(context, android.R.anim
+					.slide_out_right);
+			final Animation slideIn = AnimationUtils.loadAnimation(context, android.R.anim
+					.slide_in_left);
+			slideOut.setAnimationListener(new Animation.AnimationListener() {
+				@Override
+				public void onAnimationStart(Animation animation) {
 
+				}
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					Log.d(TAG, "Animation Ended");
+					(adapter).notifyDataSetChanged();
+
+					view.startAnimation(slideIn);
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+
+				}
+			});
+			if (isNewData) {
+				if (firstLoad) view.startAnimation(slideIn);
+				else view.startAnimation(slideOut);
 			}
-
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				Log.d(TAG, "Animation Ended");
-				(adapter).notifyDataSetChanged();
-
-				view.startAnimation(slideIn);
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-
-			}
-		});
-		if(isNewData) {
-			if (firstLoad) view.startAnimation(slideIn);
-			else view.startAnimation(slideOut);
 		}
 	}
 }

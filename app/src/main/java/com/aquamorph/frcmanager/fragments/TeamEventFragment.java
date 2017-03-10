@@ -152,21 +152,20 @@ public class TeamEventFragment extends Fragment implements SharedPreferences.OnS
 		protected Void doInBackground(Void... params) {
 			parser.fetchJSON(true);
 			while (parser.parsingComplete) ;
-			teams.clear();
-			teams.addAll(parser.getData());
-			sort(teams);
-
 			rankParser.fetchJSON(true);
 			while (rankParser.parsingComplete) ;
-			if (rankParser.getData() != null) {
-				ranks.clear();
-				ranks.addAll(rankParser.getData());
-			}
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			teams.clear();
+			teams.addAll(parser.getData());
+			sort(teams);
+			if (rankParser.getData() != null) {
+				ranks.clear();
+				ranks.addAll(rankParser.getData());
+			}
 			Constants.checkNoDataScreen(teams, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;

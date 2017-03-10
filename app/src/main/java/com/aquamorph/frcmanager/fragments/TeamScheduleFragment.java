@@ -193,19 +193,18 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected Void doInBackground(Void... params) {
-
 			parser.fetchJSON(getTeamFromSettings);
 			while (parser.parsingComplete) ;
-			if (parser.getData() != null) {
-				teamEventMatches.clear();
-				teamEventMatches.addAll(parser.getData());
-				sort(teamEventMatches);
-			}
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			if (parser.getData() != null) {
+				teamEventMatches.clear();
+				teamEventMatches.addAll(parser.getData());
+				sort(teamEventMatches);
+			}
 			Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;

@@ -127,13 +127,13 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		protected Void doInBackground(Void... params) {
 			parser.fetchJSON(true);
 			while (parser.parsingComplete) ;
-			awards.clear();
-			awards.addAll(parser.getData());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			awards.clear();
+			awards.addAll(parser.getData());
 			Constants.checkNoDataScreen(awards, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;

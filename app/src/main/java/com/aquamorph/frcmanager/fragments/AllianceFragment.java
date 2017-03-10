@@ -14,13 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.decoration.Animations;
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AllianceAdapter;
+import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.Events;
 import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -118,23 +118,23 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 		@Override
 		protected void onPreExecute() {
 			swipeRefreshLayout.setRefreshing(true);
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
 			parser = new Parser<>("Events",
 					Constants.getEvent(eventKey), new
 					TypeToken<Events>() {
 					}.getType(), getActivity());
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
 			parser.fetchJSON(true);
 			while (parser.parsingComplete) ;
-			alliances.clear();
-			alliances.addAll(new ArrayList<>(Arrays.asList(parser.getData().alliances)));
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			alliances.clear();
+			alliances.addAll(new ArrayList<>(Arrays.asList(parser.getData().alliances)));
 			Constants.checkNoDataScreen(alliances, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;
