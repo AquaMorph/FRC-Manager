@@ -14,13 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.decoration.Animations;
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AwardAdapter;
+import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.Award;
 import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
