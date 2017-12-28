@@ -4,7 +4,7 @@ package com.aquamorph.frcmanager.models;
  * Contains information about awards given at an event
  *
  * @author Christian Colglazier
- * @version 1/26/2016
+ * @version 12/27/2017
  */
 public class Award {
 	public String name;
