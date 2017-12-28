@@ -7,15 +7,14 @@ package com.aquamorph.frcmanager.models;
  * @version 1/26/2016
  */
 public class Award {
-
-	public String event_key;
-	public int award_type;
 	public String name;
+	public int award_type;
+	public String event_key;
 	public RecipientList[] recipient_list;
 	public String year;
 
 	public class RecipientList {
-		public String team_number;
+		public String team_key;
 		public String awardee;
 	}
 }

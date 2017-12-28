@@ -53,6 +53,23 @@ dependencies {
     compile 'com.github.paolorotolo:appintro:3.3.0'
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
     compile 'com.marshalchen.ultimaterecyclerview:library:0.7.0'
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Android runner and rules support
+    androidTestCompile 'com.android.support.test:runner:1.0.1'
+    androidTestCompile 'com.android.support.test:rules:1.0.1'
+
+    // Espresso support
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    // add this for intent mocking support
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.1'
+
+    // add this for webview testing support
+    androidTestCompile 'com.android.support.test.espresso:espresso-web:3.0.1'
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
