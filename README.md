@@ -27,6 +27,7 @@ git clone git@github.com:AquaMorph/FRC-Manager.git
 3. Create a new file in the project directory called `secrets.properties` with the following information. 
 ```
 TBA_KEY="[X-TBA-Auth-Key]"
+```
 
 ## Download
 [Play Store](https://play.google.com/store/apps/details?id=com.aquamorph.frcmanager)
