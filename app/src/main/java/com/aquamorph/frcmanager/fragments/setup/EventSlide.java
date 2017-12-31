@@ -14,10 +14,10 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.models.Event;
 import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventSpinnerAdapter;
-import com.aquamorph.frcmanager.models.Events;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.AppConfig;
 import com.google.gson.reflect.TypeToken;
@@ -37,7 +37,7 @@ public class EventSlide extends Fragment {
 	String TAG = "EventSlide";
 	Spinner eventSpinnder;
 	private EventSpinnerAdapter dataAdapter;
-	ArrayList<Events> eventList = new ArrayList<>();
+	ArrayList<Event> eventList = new ArrayList<>();
 	private String teamNumber, year;
 	private SharedPreferences prefs;
 
@@ -78,9 +78,9 @@ public class EventSlide extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			Parser<ArrayList<Events>> parser = new Parser<>("Events",
+			Parser<ArrayList<Event>> parser = new Parser<>("Event",
 					Constants.getEventURL("frc" + teamNumber, year), new
-					TypeToken<ArrayList<Events>>() {
+					TypeToken<ArrayList<Event>>() {
 					}.getType(), getActivity());
 			parser.fetchJSON(false);
 			while (parser.parsingComplete) ;

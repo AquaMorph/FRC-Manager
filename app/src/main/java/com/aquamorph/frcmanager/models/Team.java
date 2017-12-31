@@ -6,7 +6,7 @@ package com.aquamorph.frcmanager.models;
  * @author Christian Colglazier
  * @version 12/27/2017
  */
-public class EventTeam implements Comparable {
+public class Team implements Comparable {
 
 	public String key;
 	public int team_number;
@@ -25,10 +25,10 @@ public class EventTeam implements Comparable {
 	public String website;
 	public int rookie_year;
 	public String motto;
-	public String[] home_championship;
+//	public String[] home_championship;
 
 	@Override
 	public int compareTo(Object another) {
-		return this.team_number - ((EventTeam) another).team_number;
+		return this.team_number - ((Team) another).team_number;
 	}
 }

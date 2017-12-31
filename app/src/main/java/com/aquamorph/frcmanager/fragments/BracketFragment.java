@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.models.Events;
+import com.aquamorph.frcmanager.models.Event;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.Constants;
@@ -40,10 +40,10 @@ public class BracketFragment extends Fragment implements
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private TextView emptyView;
 	private ArrayList<Match> eventMatches = new ArrayList<>();
-	private ArrayList<Events.Alliances> alliances = new ArrayList<>();
+	private ArrayList<Event.Alliances> alliances = new ArrayList<>();
 	private String teamNumber = "", eventKey = "";
 	private Parser<ArrayList<Match>> parserMatch;
-	private Parser<Events> parserEvents;
+	private Parser<Event> parserEvents;
 	private View qf18;
 	private View qf27;
 	private View qf36;
@@ -111,8 +111,8 @@ public class BracketFragment extends Fragment implements
 		}
 	}
 
-	private void fillBracket(View view, Events.Alliances red, int rRank, Events.Alliances blue,
-	                         int bRank, int winner) {
+	private void fillBracket(View view, Event.Alliances red, int rRank, Event.Alliances blue,
+							 int bRank, int winner) {
 		TextView redRank = (TextView) view.findViewById(R.id.redRank);
 		TextView red1 = (TextView) view.findViewById(R.id.redTeam1);
 		TextView red2 = (TextView) view.findViewById(R.id.redTeam2);
@@ -147,8 +147,8 @@ public class BracketFragment extends Fragment implements
 		setWinner(view, red, rRank, blue, bRank, winner);
 	}
 
-	public void setWinner(View view, Events.Alliances red, int rRank, Events.Alliances blue,
-	                      int bRank, int winner) {
+	public void setWinner(View view, Event.Alliances red, int rRank, Event.Alliances blue,
+						  int bRank, int winner) {
 		TextView redRank = (TextView) view.findViewById(R.id.redRank);
 		TextView red1 = (TextView) view.findViewById(R.id.redTeam1);
 		TextView red2 = (TextView) view.findViewById(R.id.redTeam2);
@@ -211,13 +211,13 @@ public class BracketFragment extends Fragment implements
 
 	private ArrayList<Match> filterMatches(String compLevel, String setNumber) {
 		ArrayList<Match> temp = new ArrayList<>();
-		for (int i = 0; i < eventMatches.size(); i++) {
-			if (eventMatches.get(i).comp_level.equals(compLevel) && eventMatches.get(i)
-					.set_number.equals(setNumber)) {
-				temp.add(eventMatches.get(i));
-			}
-		}
-		sort(temp);
+//		for (int i = 0; i < eventMatches.size(); i++) {
+//			if (eventMatches.get(i).comp_level.equals(compLevel) && eventMatches.get(i)
+//					.set_number.equals(setNumber)) {
+//				temp.add(eventMatches.get(i));
+//			}
+//		}
+//		sort(temp);
 		return temp;
 	}
 
@@ -263,9 +263,9 @@ public class BracketFragment extends Fragment implements
 			parserMatch = new Parser<>("eventMatches", Constants.getEventMatches(eventKey),
 					new TypeToken<ArrayList<Match>>() {
 					}.getType(), getActivity());
-			parserEvents = new Parser<>("Events",
+			parserEvents = new Parser<>("Event",
 					Constants.getEvent(eventKey), new
-					TypeToken<Events>() {
+					TypeToken<Event>() {
 					}.getType(), getActivity());
 		}
 

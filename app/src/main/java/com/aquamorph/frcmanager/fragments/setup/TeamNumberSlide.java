@@ -21,7 +21,7 @@ public class TeamNumberSlide extends Fragment {
 
 	private String TAG = "TeamNumberSlide";
 	private Boolean numberSet = false;
-	private static EditText teamNumber;
+	private EditText teamNumber;
 
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class TeamNumberSlide extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.team_number_slide, container, false);
-		teamNumber = (EditText) view.findViewById(R.id.teamNumberEditText);
+		teamNumber = view.findViewById(R.id.teamNumberEditText);
 		return view;
 	}
 

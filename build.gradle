@@ -20,6 +20,9 @@ allprojects {
         mavenCentral()
         google()
     }
+    def keystorePropertiesFile = rootProject.file("secrets.properties")
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
 task clean(type: Delete) {

@@ -19,14 +19,13 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
-import com.aquamorph.frcmanager.models.EventTeam;
+import com.aquamorph.frcmanager.models.Team;
+import com.aquamorph.frcmanager.models.Rank;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.util.Collections.sort;
 
@@ -42,15 +41,14 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
-	private RecyclerView.Adapter<RankAdapter.MyViewHolder> adapter;
-	private ArrayList<String[]> ranks = new ArrayList<>();
-	private ArrayList<EventTeam> teams = new ArrayList<>();
+	private RecyclerView.Adapter adapter;
+	private ArrayList<Rank> ranks = new ArrayList<>();
+	private ArrayList<Team> teams = new ArrayList<>();
 	private String eventKey = "", teamNumber = "";
-	private Parser<ArrayList<String[]>> parser;
-	private Parser<ArrayList<EventTeam>> teamEventParser;
+	private Parser<Rank> parser;
+	private Parser<ArrayList<Team>> teamEventParser;
 	private SharedPreferences prefs;
 	private Boolean firstLoad = true;
-	private Pattern pattern = Pattern.compile("\\d+\\.\\d{2}");
 
 	/**
 	 * newInstance creates and returns a new RankFragment
@@ -74,7 +72,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+		mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
@@ -83,9 +81,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 			}
 		});
 
-		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		recyclerView = view.findViewById(R.id.rv);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
-		emptyView = (TextView) view.findViewById(R.id.empty_view);
+		emptyView = view.findViewById(R.id.empty_view);
 		adapter = new RankAdapter(getContext(), ranks, teams);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -146,10 +144,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
-					new TypeToken<ArrayList<String[]>>() {
-					}.getType(), getActivity());
+					new TypeToken<Rank>(){}.getType(), getActivity());
 			teamEventParser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
-					new TypeToken<ArrayList<EventTeam>>() {
+					new TypeToken<ArrayList<Team>>() {
 					}.getType(), getActivity());
 		}
 
@@ -170,24 +167,16 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 			if (parser.getData() != null) {
 				ranks.clear();
-				ranks.addAll(parser.getData());
+				ranks.add(parser.getData());
 			}
 
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString("teamRank", "");
-			for (int i = 0; i < ranks.size(); i++) {
-				if (ranks.get(i)[1].equals(teamNumber)) {
-					editor.putString("teamRank", ranks.get(i)[0]);
+			for (int i = 0; i < ranks.get(0).rankings.length; i++) {
+				if (ranks.get(0).rankings[i].team_key.equals("frc"+teamNumber)) {
+					editor.putString("teamRank", Integer.toString(ranks.get(0).rankings[i].rank));
 					editor.apply();
 				}
-				for (int j = 0; j < ranks.get(i).length; j++) {
-					if (ranks.get(i)[j].matches("\\d+\\.+\\d+")) {
-						Matcher matcher = pattern.matcher(ranks.get(i)[j]);
-						if (matcher.find())
-							ranks.get(i)[j] = matcher.group(0);
-					}
-				}
-
 			}
 			Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);

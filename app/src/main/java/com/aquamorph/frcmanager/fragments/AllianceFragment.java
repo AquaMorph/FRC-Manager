@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,7 +19,8 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.AllianceAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
-import com.aquamorph.frcmanager.models.Events;
+import com.aquamorph.frcmanager.models.Alliance;
+import com.aquamorph.frcmanager.models.Event;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
@@ -39,9 +41,9 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Events.Alliances> alliances = new ArrayList<>();
+	private ArrayList<Alliance> alliances = new ArrayList<>();
 	private String eventKey = "";
-	private Parser<Events> parser;
+	private Parser<ArrayList<Alliance>> parser;
 	private Boolean firstLoad = true;
 
 	/**
@@ -60,10 +62,10 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
-		swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+		swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 		swipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
@@ -72,9 +74,9 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 			}
 		});
 
-		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		recyclerView = view.findViewById(R.id.rv);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
-		emptyView = (TextView) view.findViewById(R.id.empty_view);
+		emptyView = view.findViewById(R.id.empty_view);
 		adapter = new AllianceAdapter(getContext(), alliances);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -118,9 +120,9 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 		@Override
 		protected void onPreExecute() {
 			swipeRefreshLayout.setRefreshing(true);
-			parser = new Parser<>("Events",
-					Constants.getEvent(eventKey), new
-					TypeToken<Events>() {
+			parser = new Parser<>("Event",
+					Constants.getAlliancesURL(eventKey), new
+					TypeToken<ArrayList<Alliance>>() {
 					}.getType(), getActivity());
 		}
 
@@ -133,12 +135,14 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 
 		@Override
 		protected void onPostExecute(Void result) {
-			alliances.clear();
-			alliances.addAll(new ArrayList<>(Arrays.asList(parser.getData().alliances)));
-			Constants.checkNoDataScreen(alliances, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
-			if (firstLoad) firstLoad = false;
-			swipeRefreshLayout.setRefreshing(false);
+			if(alliances != null && parser.getData() != null) {
+				alliances.clear();
+				alliances.addAll(parser.getData());
+				Constants.checkNoDataScreen(alliances, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+				if (firstLoad) firstLoad = false;
+				swipeRefreshLayout.setRefreshing(false);
+			}
 		}
 	}
 }

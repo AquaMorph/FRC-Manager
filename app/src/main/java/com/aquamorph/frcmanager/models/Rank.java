@@ -18,7 +18,7 @@ public class Rank {
 		public int rank;
 		public WLTRecord record;
 		public double[] extra_stats;
-		public String[] sort_orders;
+		public double[] sort_orders;
 		public String team_key;
 	}
 

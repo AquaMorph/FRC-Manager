@@ -66,7 +66,6 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 		holder.award.setText(data.get(position).name);
 	}
 
-
 	@Override
 	public void onViewDetachedFromWindow(MyViewHolder holder) {
 		holder.itemView.clearAnimation();
