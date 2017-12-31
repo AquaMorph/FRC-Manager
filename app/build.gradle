@@ -1,6 +1,18 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 
+// Get keys from file not contained in git
+def getProps(String propName) {
+    def propsFile = rootProject.file('secrets.properties')
+    if (propsFile.exists()) {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
+        return props[propName]
+    } else {
+        return ""
+    }
+}
+
 android {
     compileSdkVersion 27
     buildToolsVersion '26.0.2'
@@ -12,7 +24,7 @@ android {
         versionCode 11
         versionName "0.5.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "TBA_KEY", TBA_KEY)
+        buildConfigField("String", "TBA_KEY", getProps("TBA_KEY"))
     }
     testOptions {
         unitTests.all {
@@ -95,3 +107,4 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 repositories {
     mavenCentral()
 }
+
