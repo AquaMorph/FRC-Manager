@@ -14,13 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 /**
  * Default activity of the app.
@@ -34,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private String teamNumber, eventName;
 	private String teamRank;
-	private Boolean paidUser = false;
 	private ViewPager mViewPager;
 
 	@Override
@@ -46,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
 		teamNumber = prefs.getString("teamNumber", "");
 		eventName = prefs.getString("eventShortName", "");
-		String year = prefs.getString("teamNumber", "2015");
 		teamRank = prefs.getString("teamRank", "");
 
 		if (teamNumber.equals("")) openSetup();
@@ -176,37 +171,20 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	 * listener() connects layout to view.
 	 */
 	private void listener() {
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		toolbar.setSubtitle(getSubTitle());
 
 		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.container);
+		mViewPager = findViewById(R.id.container);
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
-		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+		TabLayout tabLayout = findViewById(R.id.tabs);
 		if (tabLayout != null) {
 			tabLayout.setupWithViewPager(mViewPager);
 			tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-		}
-
-		//Load ads
-		AdView mAdView = (AdView) findViewById(R.id.adView);
-		if (paidUser) {
-			if (mAdView != null) {
-				mAdView.setVisibility(View.GONE);
-			}
-		} else {
-			AdRequest adRequest = new AdRequest.Builder()
-					.addTestDevice(getResources().getString(R.string.nexus_5_test_id))
-					.addTestDevice(getResources().getString(R.string.moto_g_test_id))
-					.addTestDevice(getResources().getString(R.string.neux_6p_test_id))
-					.build();
-			if (mAdView != null) {
-				mAdView.loadAd(adRequest);
-			}
 		}
 	}
 }
