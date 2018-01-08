@@ -6,7 +6,8 @@ task pmd(type: Pmd) {
     source = fileTree('src/main/java/')
 
     reports {
-        xml.enabled = false
+        xml.enabled = true
+        xml.destination = "$project.buildDir/outputs/pmd/pmd.html"
         html.enabled = true
         html.destination = "$project.buildDir/outputs/pmd/pmd.html"
     }

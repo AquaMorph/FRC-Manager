@@ -11,6 +11,6 @@ node {
     }
     stage('Analysis') {
         sh './gradlew pmd'
-        pmd canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/rules-pmd.xml', thresholdLimit: 'high', unHealthy: ''
+        pmd canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/pmd.xml', thresholdLimit: 'high', unHealthy: ''
     }
 }
