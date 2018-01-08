@@ -10,7 +10,8 @@ node {
         sh './gradlew clean assemble build'
     }
     stage('Analysis') {
-        sh './gradlew pmd'
+        sh './gradlew pmd findbugs'
         pmd canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/pmd.xml', thresholdLimit: 'high', unHealthy: ''
+        findbugs canComputeNew: false, defaultEncoding: '', excludePattern: '', healthy: '', includePattern: '', pattern: '**/findbugs.xml', thresholdLimit: 'high', unHealthy: ''
     }
 }
