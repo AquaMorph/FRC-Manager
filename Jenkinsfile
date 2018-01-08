@@ -7,8 +7,10 @@ node {
         }
     }
     stage('Build') {
-        sh '''
-            ./gradlew clean assemble build
-        '''
-   }
+        sh './gradlew clean assemble build'
+    }
+    stage('Analysis') {
+        sh './gradlew pmd'
+        pmd canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/rules-pmd.xml', thresholdLimit: 'high', unHealthy: ''
+    }
 }
