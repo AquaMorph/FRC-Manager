@@ -7,7 +7,7 @@ task pmd(type: Pmd) {
 
     reports {
         xml.enabled = true
-        xml.destination = "$project.buildDir/outputs/pmd/pmd.html"
+        xml.destination = "$project.buildDir/outputs/pmd/pmd.xml"
         html.enabled = true
         html.destination = "$project.buildDir/outputs/pmd/pmd.html"
     }
