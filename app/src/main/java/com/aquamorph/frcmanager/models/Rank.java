@@ -1,5 +1,7 @@
 package com.aquamorph.frcmanager.models;
 
+import java.util.Locale;
+
 /**
  * Stores rank information at an event.
  *
@@ -36,5 +38,10 @@ public class Rank {
 	public class SortOrderInfo {
 		public String name;
 		public int precision;
+	}
+
+	public static String recordToString(WLTRecord record) {
+		return String.format(Locale.ENGLISH,"(%d-%d-%d)",
+				record.wins, record.losses, record.ties);
 	}
 }

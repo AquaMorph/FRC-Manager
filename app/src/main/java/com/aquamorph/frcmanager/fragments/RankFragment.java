@@ -26,6 +26,7 @@ import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static java.util.Collections.sort;
 
@@ -174,7 +175,10 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 			editor.putString("teamRank", "");
 			for (int i = 0; i < ranks.get(0).rankings.length; i++) {
 				if (ranks.get(0).rankings[i].team_key.equals("frc"+teamNumber)) {
-					editor.putString("teamRank", Integer.toString(ranks.get(0).rankings[i].rank));
+					editor.putString("teamRank",
+							Integer.toString(ranks.get(0).rankings[i].rank));
+					editor.putString("teamRecord",
+							Rank.recordToString(ranks.get(0).rankings[i].record));
 					editor.apply();
 				}
 			}
