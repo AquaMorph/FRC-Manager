@@ -101,7 +101,7 @@ public class BracketFragment extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(alliances.size() == 0)
+		if (alliances.size() == 0)
 			refresh();
 	}
 
@@ -310,37 +310,37 @@ public class BracketFragment extends Fragment implements
 			fillBracket(qf36, alliances.get(2), 3, alliances.get(5), 6, resultQF36);
 			fillBracket(qf45, alliances.get(3), 4, alliances.get(4), 5, resultQF45);
 
-			if(resultQF18 != 0 && resultQF45 != 0) {
+			if (resultQF18 != 0 && resultQF45 != 0) {
 				int redSF;
-				if(resultQF18 == 1)
+				if (resultQF18 == 1)
 					redSF = 0;
 				else
 					redSF = 7;
 				int blueSF;
-				if(resultQF45 == 1)
+				if (resultQF45 == 1)
 					blueSF = 3;
 				else
 					blueSF = 4;
 				resultSF1 = getWinner(filterMatches("sf", "1"));
-				fillBracket(sf1, alliances.get(redSF), redSF+1, alliances.get(blueSF), blueSF+1,
-						resultSF1);
+				fillBracket(sf1, alliances.get(redSF), redSF + 1, alliances.get(blueSF),
+						blueSF + 1, resultSF1);
 			}
-			if(resultQF27 != 0 && resultQF36 != 0) {
+			if (resultQF27 != 0 && resultQF36 != 0) {
 				int redSF;
-				if(resultQF27 == 1)
+				if (resultQF27 == 1)
 					redSF = 1;
 				else
 					redSF = 6;
 				int blueSF;
-				if(resultQF36 == 1)
+				if (resultQF36 == 1)
 					blueSF = 2;
 				else
 					blueSF = 5;
 				resultSF2 = getWinner(filterMatches("sf", "2"));
-				fillBracket(sf2, alliances.get(redSF), redSF+1, alliances.get(blueSF), blueSF+1,
-						resultSF2);
+				fillBracket(sf2, alliances.get(redSF), redSF + 1, alliances.get(blueSF),
+						blueSF + 1, resultSF2);
 			}
-			if(resultSF1 != 0 && resultSF2 != 0) {
+			if (resultSF1 != 0 && resultSF2 != 0) {
 				setWinner(f, null, -1, null, -1, getWinner(filterMatches("f", "1")));
 			}
 		}

@@ -94,7 +94,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(alliances.size() == 0)
+		if (alliances.size() == 0)
 			refresh();
 	}
 
@@ -135,7 +135,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if(alliances != null && parser.getData() != null) {
+			if (alliances != null && parser.getData() != null) {
 				alliances.clear();
 				alliances.addAll(parser.getData());
 				Constants.checkNoDataScreen(alliances, recyclerView, emptyView);

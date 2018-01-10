@@ -104,7 +104,7 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(teams.size() == 0)
+		if (teams.size() == 0)
 			refresh();
 	}
 

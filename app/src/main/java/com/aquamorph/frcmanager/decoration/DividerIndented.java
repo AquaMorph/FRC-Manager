@@ -30,7 +30,7 @@ public class DividerIndented extends RecyclerView.ItemDecoration {
 			Resources.Theme theme = context.getTheme();
 			theme.resolveAttribute(R.attr.textOnBackground, typedValue, true);
 			int color = typedValue.data;
-			ColorFilter filter = new LightingColorFilter( color, color);
+			ColorFilter filter = new LightingColorFilter(color, color);
 			mDivider.setColorFilter(filter);
 		}
 	}

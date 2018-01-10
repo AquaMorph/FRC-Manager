@@ -92,7 +92,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(eventMatches.size() == 0)
+		if (eventMatches.size() == 0)
 			refresh();
 	}
 

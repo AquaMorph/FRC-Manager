@@ -41,7 +41,7 @@ public class Rank {
 	}
 
 	public static String recordToString(WLTRecord record) {
-		return String.format(Locale.ENGLISH,"(%d-%d-%d)",
+		return String.format(Locale.ENGLISH, "(%d-%d-%d)",
 				record.wins, record.losses, record.ties);
 	}
 }

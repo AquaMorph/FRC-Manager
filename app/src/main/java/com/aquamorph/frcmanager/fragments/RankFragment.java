@@ -107,7 +107,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(ranks.size() == 0)
+		if (ranks.size() == 0)
 			refresh();
 	}
 
@@ -174,7 +174,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 			SharedPreferences.Editor editor = prefs.edit();
 			editor.putString("teamRank", "");
 			for (int i = 0; i < ranks.get(0).rankings.length; i++) {
-				if (ranks.get(0).rankings[i].team_key.equals("frc"+teamNumber)) {
+				if (ranks.get(0).rankings[i].team_key.equals("frc" + teamNumber)) {
 					editor.putString("teamRank",
 							Integer.toString(ranks.get(0).rankings[i].rank));
 					editor.putString("teamRecord",
