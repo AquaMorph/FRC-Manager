@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	 * @return title for the app
 	 */
 	public String getAppTitle() {
-		return String.format("%s (%s)", shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH),
-				teamNumber);
+		return String.format("%s - %s", teamNumber,
+				shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH));
 	}
 
 	/**
