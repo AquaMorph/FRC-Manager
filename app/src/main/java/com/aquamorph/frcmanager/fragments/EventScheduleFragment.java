@@ -67,8 +67,8 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		teamNumber = prefs.getString("teamNumber", "");
 		eventKey = prefs.getString("eventKey", "");
 
-		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
-		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+		View view = inflater.inflate(R.layout.fragment_fastscroll, container, false);
+		mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
@@ -77,8 +77,8 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 			}
 		});
 
-		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-		emptyView = (TextView) view.findViewById(R.id.empty_view);
+		recyclerView = view.findViewById(R.id.rv);
+		emptyView = view.findViewById(R.id.empty_view);
 		adapter = new ScheduleAdapter(getContext(), eventMatches, teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
