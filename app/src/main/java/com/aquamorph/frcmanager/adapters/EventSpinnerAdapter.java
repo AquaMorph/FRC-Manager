@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.models.Events;
+import com.aquamorph.frcmanager.models.Event;
 
 import java.util.ArrayList;
 
@@ -19,10 +19,10 @@ import java.util.ArrayList;
  */
 public class EventSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 
-	private final ArrayList<Events> eventList;
+	private final ArrayList<Event> eventList;
 	private Activity activity;
 
-	public EventSpinnerAdapter(ArrayList<Events> eventList, Activity activity) {
+	public EventSpinnerAdapter(ArrayList<Event> eventList, Activity activity) {
 		this.eventList = eventList;
 		this.activity = activity;
 	}

@@ -7,10 +7,6 @@
     <string name="app_name">FRC Manager</string>
     <string name="action_settings">Settings</string>
     <string name="sample_team">0000</string>
-    <string name="banner_ad_unit_id">ca-app-pub-9342941618723647/7329052431</string>
-    <string name="nexus_5_test_id">467B40B4730D0C3A11B13A410B8E7EFC</string>
-    <string name="moto_g_test_id">DF6094713C3BDC6831BF580ADC637369</string>
-    <string name="neux_6p_test_id">3749D5CDD5A0877C1846927BD4944601</string>
     <string name="event_slide">S</string>
     <string name="welcome_slide_text">Welcome to FRC Manager</string>
     <string name="app_description">An FRC score tracking app based around your team</string>

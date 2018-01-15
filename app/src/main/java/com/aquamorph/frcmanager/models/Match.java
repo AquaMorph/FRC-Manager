@@ -4,33 +4,33 @@ package com.aquamorph.frcmanager.models;
  * Stores match information at an event.
  *
  * @author Christian Colglazier
- * @version 3/31/2016
+ * @version 12/27/2017
  */
 public class Match implements Comparable {
 
 	public String TAG = "Match";
-	public String comp_level;
-	public int match_number;
-	public long time;
-	public String time_string;
-	public String set_number;
 	public String key;
-
+	public String comp_level;
+	public int set_number;
+	public int match_number;
 	public Alliances alliances;
+	public String winning_alliance;
+	public String event_key;
+	public long time;
+	public long actual_time;
+	public long predicted_time;
+	public long post_result_time;
 
 	public class Alliances {
-		public Blue blue;
-		public Red red;
+		public MatchAlliance blue;
+		public MatchAlliance red;
 	}
 
-	public class Blue {
+	public class MatchAlliance {
 		public int score;
-		public String[] teams;
-	}
-
-	public class Red {
-		public int score;
-		public String[] teams;
+		public String[] team_keys;
+		public String[] surrogate_team_keys;
+		public String[] dq_team_keys;
 	}
 
 	@Override

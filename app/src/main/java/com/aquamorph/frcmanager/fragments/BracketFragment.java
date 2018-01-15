@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
-import com.aquamorph.frcmanager.models.Events;
+import com.aquamorph.frcmanager.models.Event;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.Constants;
@@ -40,10 +40,10 @@ public class BracketFragment extends Fragment implements
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private TextView emptyView;
 	private ArrayList<Match> eventMatches = new ArrayList<>();
-	private ArrayList<Events.Alliances> alliances = new ArrayList<>();
+	private ArrayList<Event.Alliances> alliances = new ArrayList<>();
 	private String teamNumber = "", eventKey = "";
 	private Parser<ArrayList<Match>> parserMatch;
-	private Parser<Events> parserEvents;
+	private Parser<Event> parserEvents;
 	private View qf18;
 	private View qf27;
 	private View qf36;
@@ -101,7 +101,7 @@ public class BracketFragment extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(alliances.size() == 0)
+		if (alliances.size() == 0)
 			refresh();
 	}
 
@@ -111,8 +111,8 @@ public class BracketFragment extends Fragment implements
 		}
 	}
 
-	private void fillBracket(View view, Events.Alliances red, int rRank, Events.Alliances blue,
-	                         int bRank, int winner) {
+	private void fillBracket(View view, Event.Alliances red, int rRank, Event.Alliances blue,
+							 int bRank, int winner) {
 		TextView redRank = (TextView) view.findViewById(R.id.redRank);
 		TextView red1 = (TextView) view.findViewById(R.id.redTeam1);
 		TextView red2 = (TextView) view.findViewById(R.id.redTeam2);
@@ -147,8 +147,8 @@ public class BracketFragment extends Fragment implements
 		setWinner(view, red, rRank, blue, bRank, winner);
 	}
 
-	public void setWinner(View view, Events.Alliances red, int rRank, Events.Alliances blue,
-	                      int bRank, int winner) {
+	public void setWinner(View view, Event.Alliances red, int rRank, Event.Alliances blue,
+						  int bRank, int winner) {
 		TextView redRank = (TextView) view.findViewById(R.id.redRank);
 		TextView red1 = (TextView) view.findViewById(R.id.redTeam1);
 		TextView red2 = (TextView) view.findViewById(R.id.redTeam2);
@@ -211,13 +211,13 @@ public class BracketFragment extends Fragment implements
 
 	private ArrayList<Match> filterMatches(String compLevel, String setNumber) {
 		ArrayList<Match> temp = new ArrayList<>();
-		for (int i = 0; i < eventMatches.size(); i++) {
-			if (eventMatches.get(i).comp_level.equals(compLevel) && eventMatches.get(i)
-					.set_number.equals(setNumber)) {
-				temp.add(eventMatches.get(i));
-			}
-		}
-		sort(temp);
+//		for (int i = 0; i < eventMatches.size(); i++) {
+//			if (eventMatches.get(i).comp_level.equals(compLevel) && eventMatches.get(i)
+//					.set_number.equals(setNumber)) {
+//				temp.add(eventMatches.get(i));
+//			}
+//		}
+//		sort(temp);
 		return temp;
 	}
 
@@ -263,9 +263,9 @@ public class BracketFragment extends Fragment implements
 			parserMatch = new Parser<>("eventMatches", Constants.getEventMatches(eventKey),
 					new TypeToken<ArrayList<Match>>() {
 					}.getType(), getActivity());
-			parserEvents = new Parser<>("Events",
+			parserEvents = new Parser<>("Event",
 					Constants.getEvent(eventKey), new
-					TypeToken<Events>() {
+					TypeToken<Event>() {
 					}.getType(), getActivity());
 		}
 
@@ -310,37 +310,37 @@ public class BracketFragment extends Fragment implements
 			fillBracket(qf36, alliances.get(2), 3, alliances.get(5), 6, resultQF36);
 			fillBracket(qf45, alliances.get(3), 4, alliances.get(4), 5, resultQF45);
 
-			if(resultQF18 != 0 && resultQF45 != 0) {
+			if (resultQF18 != 0 && resultQF45 != 0) {
 				int redSF;
-				if(resultQF18 == 1)
+				if (resultQF18 == 1)
 					redSF = 0;
 				else
 					redSF = 7;
 				int blueSF;
-				if(resultQF45 == 1)
+				if (resultQF45 == 1)
 					blueSF = 3;
 				else
 					blueSF = 4;
 				resultSF1 = getWinner(filterMatches("sf", "1"));
-				fillBracket(sf1, alliances.get(redSF), redSF+1, alliances.get(blueSF), blueSF+1,
-						resultSF1);
+				fillBracket(sf1, alliances.get(redSF), redSF + 1, alliances.get(blueSF),
+						blueSF + 1, resultSF1);
 			}
-			if(resultQF27 != 0 && resultQF36 != 0) {
+			if (resultQF27 != 0 && resultQF36 != 0) {
 				int redSF;
-				if(resultQF27 == 1)
+				if (resultQF27 == 1)
 					redSF = 1;
 				else
 					redSF = 6;
 				int blueSF;
-				if(resultQF36 == 1)
+				if (resultQF36 == 1)
 					blueSF = 2;
 				else
 					blueSF = 5;
 				resultSF2 = getWinner(filterMatches("sf", "2"));
-				fillBracket(sf2, alliances.get(redSF), redSF+1, alliances.get(blueSF), blueSF+1,
-						resultSF2);
+				fillBracket(sf2, alliances.get(redSF), redSF + 1, alliances.get(blueSF),
+						blueSF + 1, resultSF2);
 			}
-			if(resultSF1 != 0 && resultSF2 != 0) {
+			if (resultSF1 != 0 && resultSF2 != 0) {
 				setWinner(f, null, -1, null, -1, getWinner(filterMatches("f", "1")));
 			}
 		}

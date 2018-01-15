@@ -1,6 +1,7 @@
 package com.aquamorph.frcmanager.network;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.aquamorph.frcmanager.utils.Constants;
 
@@ -34,6 +35,7 @@ public class BlueAlliance {
 			conn.setRequestProperty("If-Modified-Since", updated);
 			conn.connect();
 			status = conn.getResponseCode();
+			Log.i("BA Status", Integer.toString(status));
 			if (status != 304) lastUpdated = conn.getHeaderField("last-modified");
 			return conn.getInputStream();
 		} catch (IOException e) {

@@ -231,13 +231,6 @@
                     android:id="@+id/qf36"/>
             </LinearLayout>
 
-            <com.google.android.gms.ads.AdView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                ads:adSize="SMART_BANNER"
-                ads:adUnitId="@string/banner_ad_unit_id"/>
-
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>
