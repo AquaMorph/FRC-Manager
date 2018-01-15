@@ -10,7 +10,7 @@ import java.util.Locale;
  * @author Christian Colglazier
  * @version 3/29/2016
  */
-public class Event implements Comparable {
+public class Events implements Comparable {
 
 	public String key;
 	public String website;
@@ -41,7 +41,7 @@ public class Event implements Comparable {
 
 			Date first = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(this.start_date);
 			Date second = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-					.parse(((Event) another).start_date);
+					.parse(((Events) another).start_date);
 			return first.compareTo(second);
 		} catch (Exception e) {
 			e.printStackTrace();

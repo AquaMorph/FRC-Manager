@@ -116,7 +116,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (teamEventMatches.size() == 0)
+		if(teamEventMatches.size() == 0)
 			refresh();
 	}
 

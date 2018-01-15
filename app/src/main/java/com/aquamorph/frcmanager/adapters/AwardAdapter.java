@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.models.Award;
-import com.aquamorph.frcmanager.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -26,6 +25,7 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 	private String TAG = "AwardAdapter";
 	private LayoutInflater inflater;
 	private ArrayList<Award> data;
+	private Context context;
 	private String team = "";
 	private String awardee = "";
 	private View view;
@@ -33,6 +33,7 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 	public AwardAdapter(Context context, ArrayList<Award> data) {
 		inflater = from(context);
 		this.data = data;
+		this.context = context;
 	}
 
 	@Override
@@ -48,16 +49,16 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 		awardee = "";
 
 		for (int i = 0; data.get(position).recipient_list.length > i; i++) {
-			if (data.get(position).recipient_list[i].team_key != null) {
+			if (data.get(position).recipient_list[i].team_number != null) {
 				if (i > 0) team += "\n";
-				team += Constants.formatTeamNumber(data.get(position).recipient_list[i].team_key);
+				team += data.get(position).recipient_list[i].team_number;
 			}
 			if (data.get(position).recipient_list[i].awardee != null) {
 				if (i > 0) awardee += "\n";
 				awardee += data.get(position).recipient_list[i].awardee;
 			}
 		}
-		if (awardee.equals("")) {
+		if(awardee.equals("")) {
 			holder.details.setVisibility(View.GONE);
 		} else {
 			holder.details.setText(awardee);
@@ -65,6 +66,7 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 		holder.teamNumber.setText(team);
 		holder.award.setText(data.get(position).name);
 	}
+
 
 	@Override
 	public void onViewDetachedFromWindow(MyViewHolder holder) {
@@ -84,9 +86,9 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 
 		public MyViewHolder(View itemView) {
 			super(itemView);
-			teamNumber = itemView.findViewById(R.id.team_number);
-			award = itemView.findViewById(R.id.award_name);
-			details = itemView.findViewById(R.id.award_details);
+			teamNumber = (TextView) itemView.findViewById(R.id.team_number);
+			award = (TextView) itemView.findViewById(R.id.award_name);
+			details = (TextView) itemView.findViewById(R.id.award_details);
 		}
 	}
 }

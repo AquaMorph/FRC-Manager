@@ -61,9 +61,9 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
-		swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+		swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 		swipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
@@ -72,8 +72,8 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 			}
 		});
 
-		recyclerView = view.findViewById(R.id.rv);
-		emptyView = view.findViewById(R.id.empty_view);
+		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		emptyView = (TextView) view.findViewById(R.id.empty_view);
 		adapter = new AwardAdapter(getContext(), awards);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -85,7 +85,6 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
-		if (savedInstanceState == null) refresh();
 		Constants.checkNoDataScreen(awards, recyclerView, emptyView);
 		return view;
 	}
@@ -93,7 +92,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (awards.size() == 0)
+		if(awards.size() == 0)
 			refresh();
 	}
 

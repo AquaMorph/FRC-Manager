@@ -15,13 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.adapters.TeamAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
-import com.aquamorph.frcmanager.models.Rank;
 import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.adapters.EventTeamAdapter;
 import com.aquamorph.frcmanager.decoration.Divider;
-import com.aquamorph.frcmanager.models.Team;
+import com.aquamorph.frcmanager.models.EventTeam;
 import com.aquamorph.frcmanager.network.Parser;
 import com.google.gson.reflect.TypeToken;
 
@@ -33,31 +32,31 @@ import static java.util.Collections.sort;
  * Displays a list of teams at an event.
  *
  * @author Christian Colglazier
- * @version 12/30/2017
+ * @version 3/11/2016
  */
-public class TeamFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class TeamEventFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private static String TAG = "TeamFragment";
-	private Parser<ArrayList<Team>> parser;
-	private Parser<Rank> rankParser;
+	private static String TAG = "TeamEventFragment";
+	private Parser<ArrayList<EventTeam>> parser;
+	private Parser<ArrayList<String[]>> rankParser;
 	private SharedPreferences prefs;
 	private SharedPreferences.Editor editor;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Team> teams = new ArrayList<>();
-	private ArrayList<Rank> ranks = new ArrayList<>();
+	private ArrayList<EventTeam> teams = new ArrayList<>();
+	private ArrayList<String[]> ranks = new ArrayList<>();
 	private String eventKey = "", teamNumber = "";
 	private Boolean firstLoad = true;
 
 	/**
-	 * newInstance creates and returns a new TeamFragment
+	 * newInstance creates and returns a new TeamEventFragment
 	 *
-	 * @return TeamFragment
+	 * @return TeamEventFragment
 	 */
-	public static TeamFragment newInstance() {
-		return new TeamFragment();
+	public static TeamEventFragment newInstance() {
+		return new TeamEventFragment();
 	}
 
 	@Override
@@ -70,7 +69,7 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
-		mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
@@ -79,9 +78,9 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 			}
 		});
 
-		recyclerView = view.findViewById(R.id.rv);
-		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new TeamAdapter(getContext(), teams, ranks);
+		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
+		emptyView = (TextView) view.findViewById(R.id.empty_view);
+		adapter = new EventTeamAdapter(getContext(), teams, ranks);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
@@ -92,7 +91,7 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(TeamFragment.this);
+		prefs.registerOnSharedPreferenceChangeListener(TeamEventFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 		teamNumber = prefs.getString("teamNumber", "0000");
 
@@ -104,7 +103,7 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (teams.size() == 0)
+		if(teams.size() == 0)
 			refresh();
 	}
 
@@ -142,9 +141,11 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
-					new TypeToken<ArrayList<Team>>() {}.getType(), getActivity());
+					new TypeToken<ArrayList<EventTeam>>() {
+					}.getType(), getActivity());
 			rankParser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
-					new TypeToken<Rank>() {}.getType(), getActivity());
+					new TypeToken<ArrayList<String[]>>() {
+					}.getType(), getActivity());
 		}
 
 		@Override
@@ -163,7 +164,7 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 			sort(teams);
 			if (rankParser.getData() != null) {
 				ranks.clear();
-				ranks.add(rankParser.getData());
+				ranks.addAll(rankParser.getData());
 			}
 			Constants.checkNoDataScreen(teams, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);

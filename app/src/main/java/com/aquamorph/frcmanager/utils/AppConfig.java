@@ -25,7 +25,7 @@ public class AppConfig {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("year", year);
-		if (Constants.TRACING_LEVEL > 0) {
+		if(Constants.TRACING_LEVEL > 0) {
 			Log.i(TAG, "Year set to: " + year);
 		}
 		editor.apply();
