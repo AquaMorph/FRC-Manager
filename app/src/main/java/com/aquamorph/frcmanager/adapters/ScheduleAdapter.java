@@ -130,39 +130,43 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 	 */
 	private String parseTeamNumber(Boolean red, int robot, int position) {
 		if (red) {
-			return Constants.formatTeamNumber(data.get(position).alliances.red.team_keys[robot]);
+			return Constants.formatTeamNumber(data.get(position).alliances.red.teams[robot]);
 		} else {
-			return Constants.formatTeamNumber(data.get(position).alliances.blue.team_keys[robot]);
+			return Constants.formatTeamNumber(data.get(position).alliances.blue.teams[robot]);
 		}
 	}
 
-	protected class MyViewHolder extends RecyclerView.ViewHolder {
+	public class MyViewHolder extends RecyclerView.ViewHolder {
 
-		private TextView matchNumber;
-		private TextView redTeam1;
-		private TextView redTeam2;
-		private TextView redTeam3;
-		private TextView blueTeam1;
-		private TextView blueTeam2;
-		private TextView blueTeam3;
-		private TextView matchTime;
-		private TextView redScore;
-		private TextView blueScore;
-		private TableLayout scoreTable;
+		protected TextView matchNumber;
+		protected TextView redTeam1;
+		protected TextView redTeam2;
+		protected TextView redTeam3;
+		protected TextView blueTeam1;
+		protected TextView blueTeam2;
+		protected TextView blueTeam3;
+		protected TextView matchTime;
+		protected TextView redScore;
+		protected TextView blueScore;
+		protected TableLayout scoreTable;
+		protected View itemView;
+		protected FrameLayout frameLayout;
 
-		private MyViewHolder(View itemView) {
+		public MyViewHolder(View itemView) {
 			super(itemView);
-			matchNumber = itemView.findViewById(R.id.match_number);
-			redTeam1 = itemView.findViewById(R.id.red_team_1);
-			redTeam2 = itemView.findViewById(R.id.red_team_2);
-			redTeam3 = itemView.findViewById(R.id.red_team_3);
-			blueTeam1 = itemView.findViewById(R.id.blue_team_1);
-			blueTeam2 = itemView.findViewById(R.id.blue_team_2);
-			blueTeam3 = itemView.findViewById(R.id.blue_team_3);
-			redScore = itemView.findViewById(R.id.red_score);
-			blueScore = itemView.findViewById(R.id.blue_score);
-			matchTime = itemView.findViewById(R.id.match_time);
-			scoreTable = itemView.findViewById(R.id.score_table);
+			matchNumber = (TextView) itemView.findViewById(R.id.match_number);
+			redTeam1 = (TextView) itemView.findViewById(R.id.red_team_1);
+			redTeam2 = (TextView) itemView.findViewById(R.id.red_team_2);
+			redTeam3 = (TextView) itemView.findViewById(R.id.red_team_3);
+			blueTeam1 = (TextView) itemView.findViewById(R.id.blue_team_1);
+			blueTeam2 = (TextView) itemView.findViewById(R.id.blue_team_2);
+			blueTeam3 = (TextView) itemView.findViewById(R.id.blue_team_3);
+			redScore = (TextView) itemView.findViewById(R.id.red_score);
+			blueScore = (TextView) itemView.findViewById(R.id.blue_score);
+			matchTime = (TextView) itemView.findViewById(R.id.match_time);
+			scoreTable = (TableLayout) itemView.findViewById(R.id.score_table);
+			this.itemView = itemView;
+			frameLayout = (FrameLayout) itemView.findViewById(R.id.item_layout_container);
 
 			redTeam1.setOnClickListener(new View.OnClickListener() {
 				@Override

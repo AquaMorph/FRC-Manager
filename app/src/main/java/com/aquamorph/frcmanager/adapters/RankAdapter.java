@@ -15,9 +15,7 @@ import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
-import com.aquamorph.frcmanager.models.Team;
-import com.aquamorph.frcmanager.models.Rank;
-import com.aquamorph.frcmanager.utils.Constants;
+import com.aquamorph.frcmanager.models.EventTeam;
 
 import java.util.ArrayList;
 
@@ -27,17 +25,17 @@ import static android.view.LayoutInflater.from;
  * Populates a RecyclerView with the ranks and team names and number for an event.
  *
  * @author Christian Colglazier
- * @version 12/30/2017
+ * @version 3/29/2016
  */
 public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> {
 
 	private String TAG = "RankAdapter";
 	private LayoutInflater inflater;
 	private Context context;
-	private ArrayList<Rank> data;
-	private ArrayList<Team> teams;
+	private ArrayList<String[]> data;
+	private ArrayList<EventTeam> teams;
 
-	public RankAdapter(Context context, ArrayList<Rank> data, ArrayList<Team> teams) {
+	public RankAdapter(Context context, ArrayList<String[]> data, ArrayList<EventTeam> teams) {
 		inflater = from(context);
 		this.data = data;
 		this.context = context;
@@ -47,15 +45,16 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 	@Override
 	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = inflater.inflate(R.layout.rank, parent, false);
-		return new MyViewHolder(view);
+		MyViewHolder holder = new MyViewHolder(view);
+		return holder;
 	}
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
-		holder.teamNumber.setText(String.format("%s. %s", position + 1,
-				getTeamName(data.get(0).rankings[position].team_key)));
+		holder.teamNumber.setText(data.get(position + 1)[0] + ". "
+				+ getTeamName(data.get(position + 1)[1]));
 		holder.teamNumber.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-		holder.rankNumber.setText(Constants.formatTeamNumber(data.get(0).rankings[position].team_key));
+		holder.rankNumber.setText(data.get(position + 1)[1]);
 		holder.details.setVisibility(View.GONE);
 		holder.table.removeAllViews();
 
@@ -63,21 +62,19 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		Resources.Theme theme = context.getTheme();
 		theme.resolveAttribute(R.attr.textOnBackground, typedValue, true);
 
-		for (int i = 0; i < data.get(0).sort_order_info.length; i += 2) {
+		for (int i = 2; i < data.get(position).length; i += 2) {
 			TextView column1 = new TextView(context);
 			TextView column2 = new TextView(context);
 			TextView column3 = new TextView(context);
 			TextView column4 = new TextView(context);
 			TableRow rowHeader = new TableRow(context);
 
-			column1.setText(data.get(0).sort_order_info[i].name + ": ");
-			column2.setText(String.format("%." + data.get(0).sort_order_info[i].precision +
-					"f", data.get(0).rankings[position].sort_orders[i]));
+			column1.setText(data.get(0)[i] + ": ");
+			column2.setText(data.get(position + 1)[i].replaceAll("\\.0*$", ""));
 
-			if (i + 1 < data.get(0).sort_order_info.length) {
-				column3.setText(data.get(0).sort_order_info[i + 1].name + ": ");
-				column4.setText(String.format("%." + data.get(0).sort_order_info[i + 1].precision +
-						"f", data.get(0).rankings[position].sort_orders[i + 1]));
+			if (i + 1 < data.get(position).length) {
+				column3.setText(data.get(0)[i + 1] + ":");
+				column4.setText(data.get(position + 1)[i + 1].replaceAll("\\.0*$", ""));
 			} else {
 				column3.setText("");
 				column4.setText("");
@@ -103,8 +100,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 
 	@Override
 	public int getItemCount() {
-		if(data.size() == 0) return 0;
-		return data.get(0).rankings.length;
+		return data.size() - 1;
 	}
 
 	/**
@@ -115,7 +111,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 	 */
 	public String getTeamName(String number) {
 		for (int i = 0; i < teams.size(); i++) {
-			if (number.equals(teams.get(i).key)) {
+			if (number.equals(Integer.toString(teams.get(i).team_number))) {
 				return teams.get(i).nickname;
 			}
 		}
@@ -132,10 +128,10 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		public MyViewHolder(View itemView) {
 			super(itemView);
 			itemView.setOnClickListener(this);
-			table = itemView.findViewById(R.id.table);
-			teamNumber = itemView.findViewById(R.id.team_number);
-			rankNumber = itemView.findViewById(R.id.rank);
-			details = itemView.findViewById(R.id.details);
+			table = (TableLayout) itemView.findViewById(R.id.table);
+			teamNumber = (TextView) itemView.findViewById(R.id.team_number);
+			rankNumber = (TextView) itemView.findViewById(R.id.rank);
+			details = (TextView) itemView.findViewById(R.id.details);
 		}
 
 		@Override

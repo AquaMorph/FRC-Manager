@@ -8,11 +8,9 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 
-import com.aquamorph.frcmanager.BuildConfig;
 import com.aquamorph.frcmanager.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A collection of constants needed to interact with the Blue Alliance.
@@ -23,8 +21,8 @@ import java.util.Arrays;
 public class Constants {
 
 	public static final String TAG = "FRC Regional";
-	public static final String URL = "https://www.thebluealliance.com/api/v3";
-	public static final String TBA_HEADER = "X-TBA-Auth-Key";
+	public static final String URL = "https://www.thebluealliance.com/api/v2/";
+	public static final String TBA_HEADER = "X-TBA-App-Id";
 	public static final Boolean FORCE_DATA_RELOAD = false;
 	public static int TRACING_LEVEL = 3;
 	public static int MAX_EVENT_TITLE_LENGTH = 20;
@@ -36,7 +34,7 @@ public class Constants {
 	 * @return url to team events
 	 */
 	public static String getEventURL(String team, String year) {
-		return String.format("%s/team/%s/events/%s", URL, team, year);
+		return String.format("%steam/%s/%s/events", URL, team, year);
 	}
 
 	/**
@@ -46,7 +44,7 @@ public class Constants {
 	 * @return url to event
 	 */
 	public static String getEvent(String event) {
-		return String.format("%s/event/%s", URL, event);
+		return String.format("%sevent/%s", URL, event);
 	}
 
 	/**
@@ -56,7 +54,7 @@ public class Constants {
 	 * @return url to list of teams at an event
 	 */
 	public static String getEventTeams(String event) {
-		return String.format("%s/event/%s/teams", URL, event);
+		return String.format("%sevent/%s/teams", URL, event);
 	}
 
 	/**
@@ -67,7 +65,7 @@ public class Constants {
 	 * @return url to team matches for an event
 	 */
 	public static String getEventTeamMatches(String team, String event) {
-		return String.format("%s/team/%s/event/%s/matches", URL, team, event);
+		return String.format("%steam/%s/event/%s/matches", URL, team, event);
 	}
 
 	/**
@@ -77,7 +75,7 @@ public class Constants {
 	 * @return url to matches at en event
 	 */
 	public static String getEventMatches(String event) {
-		return String.format("%s/event/%s/matches", URL, event);
+		return String.format("%sevent/%s/matches", URL, event);
 	}
 
 	/**
@@ -97,7 +95,7 @@ public class Constants {
 	 * @return url to event rankings
 	 */
 	public static String getEventRanks(String event) {
-		return String.format("%s/event/%s/rankings", URL, event);
+		return String.format("%sevent/%s/rankings", URL, event);
 	}
 
 	/**
@@ -107,16 +105,7 @@ public class Constants {
 	 * @return url to event awards
 	 */
 	public static String getEventAwards(String event) {
-		return String.format("%s/event/%s/awards", URL, event);
-	}
-
-	/**
-	 * getAlliancesURL() returns the url for alliances at an event.
-	 * @param event event key
-	 * @return url to alliances at an event
-	 */
-	public static String getAlliancesURL(String event) {
-		return String.format("%s/event/%s/alliances", URL, event);
+		return String.format("%sevent/%s/awards", URL, event);
 	}
 
 	/**
@@ -125,7 +114,7 @@ public class Constants {
 	 * @return url to server status
 	 */
 	public static String getStatusURL() {
-		return URL + "/status";
+		return URL + "status";
 	}
 
 	/**
@@ -134,7 +123,7 @@ public class Constants {
 	 * @return the Blue Alliance header
 	 */
 	public static String getApiHeader(Context context) {
-		return BuildConfig.TBA_KEY;
+		return "christian_colglazier:frc_manager:" + context.getResources().getString(R.string.version);
 	}
 
 	/**

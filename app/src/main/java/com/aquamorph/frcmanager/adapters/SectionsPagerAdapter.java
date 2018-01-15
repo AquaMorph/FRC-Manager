@@ -11,7 +11,7 @@ import com.aquamorph.frcmanager.fragments.AllianceFragment;
 import com.aquamorph.frcmanager.fragments.AwardFragment;
 import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
 import com.aquamorph.frcmanager.fragments.RankFragment;
-import com.aquamorph.frcmanager.fragments.TeamFragment;
+import com.aquamorph.frcmanager.fragments.TeamEventFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 
 
@@ -42,7 +42,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		((TeamScheduleFragment) mFragmentManager.findFragmentByTag("fragment:0")).refresh();
 		((EventScheduleFragment) mFragmentManager.findFragmentByTag("fragment:1")).refresh();
 		((RankFragment) mFragmentManager.findFragmentByTag("fragment:2")).refresh();
-		((TeamFragment) mFragmentManager.findFragmentByTag("fragment:3")).refresh();
+		((TeamEventFragment) mFragmentManager.findFragmentByTag("fragment:3")).refresh();
 		((AllianceFragment) mFragmentManager.findFragmentByTag("fragment:4")).refresh();
 		((AwardFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh();
 	}
@@ -84,13 +84,13 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 			case 2:
 				return RankFragment.newInstance();
 			case 3:
-				return TeamFragment.newInstance();
+				return TeamEventFragment.newInstance();
 			case 4:
 				return AllianceFragment.newInstance();
 			case 5:
 				return AwardFragment.newInstance();
 			default:
-				return TeamFragment.newInstance();
+				return TeamEventFragment.newInstance();
 		}
 	}
 

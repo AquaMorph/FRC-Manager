@@ -15,8 +15,7 @@ import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
-import com.aquamorph.frcmanager.models.Rank;
-import com.aquamorph.frcmanager.models.Team;
+import com.aquamorph.frcmanager.models.EventTeam;
 
 import java.util.ArrayList;
 
@@ -28,25 +27,24 @@ import static android.view.LayoutInflater.from;
  * @author Christian Colglazier
  * @version 3/19/2016
  */
-public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> {
+public class EventTeamAdapter extends RecyclerView.Adapter<EventTeamAdapter.MyViewHolder> {
 
-	private String TAG = "TeamAdapter", info;
+	private String TAG = "EventTeamAdapter", info;
 	private LayoutInflater inflater;
 	private Context context;
-	private ArrayList<Team> data;
-	private ArrayList<Rank> ranks;
+	private ArrayList<EventTeam> data;
+	private ArrayList<String[]> ranks;
 
-	public TeamAdapter(Context context, ArrayList<Team> data, ArrayList<Rank> ranks) {
+	public EventTeamAdapter(Context context, ArrayList<EventTeam> data, ArrayList<String[]> ranks) {
 		inflater = from(context);
 		this.data = data;
 		this.context = context;
 		this.ranks = ranks;
 	}
 
-	private String getTeamRank(String teamNumber, ArrayList<Rank> ranks) {
-		for (int i = 0; i < ranks.get(0).rankings.length; i++) {
-			if (ranks.get(0).rankings[i].team_key.equals(teamNumber)) return " Ranked #" +
-					ranks.get(0).rankings[i].rank;
+	private String getTeamRank(String teamNumber, ArrayList<String[]> ranks) {
+		for (int i = 1; i < ranks.size(); i++) {
+			if (ranks.get(i)[1].equals(teamNumber)) return " Ranked #" + ranks.get(i)[0];
 		}
 		return "";
 	}
@@ -58,21 +56,20 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 	}
 
 	@Override
-	public void onBindViewHolder(TeamAdapter.MyViewHolder holder, int position) {
+	public void onBindViewHolder(EventTeamAdapter.MyViewHolder holder, int position) {
 		SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
 		SpannableString teamName = new SpannableString(data.get(position).nickname);
 		teamName.setSpan(new StyleSpan(Typeface.BOLD), 0, teamName.length(), 0);
 		spannableStringBuilder.append(teamName);
 		SpannableString rank = new SpannableString(getTeamRank(String.valueOf(data.get(position)
-				.key), ranks));
+				.team_number), ranks));
 		rank.setSpan(new RelativeSizeSpan(0.75f), 0, rank.length(), 0);
 		rank.setSpan(new StyleSpan(Typeface.ITALIC), 0, rank.length(), 0);
 		spannableStringBuilder.append(rank);
 
-
 		holder.rankNumber.setText(String.valueOf(data.get(position).team_number));
 		holder.teamNumber.setText(spannableStringBuilder, TextView.BufferType.SPANNABLE);
-		holder.details.setText(data.get(position).city + ", " + data.get(position).state_prov);
+		holder.details.setText(data.get(position).location.replaceAll(" \\d{5}", ""));
 	}
 
 	@Override
@@ -89,9 +86,9 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 		public MyViewHolder(View itemView) {
 			super(itemView);
 			itemView.setOnClickListener(this);
-			teamNumber = itemView.findViewById(R.id.team_number);
-			rankNumber = itemView.findViewById(R.id.rank);
-			details = itemView.findViewById(R.id.details);
+			teamNumber = (TextView) itemView.findViewById(R.id.team_number);
+			rankNumber = (TextView) itemView.findViewById(R.id.rank);
+			details = (TextView) itemView.findViewById(R.id.details);
 		}
 
 		@Override
