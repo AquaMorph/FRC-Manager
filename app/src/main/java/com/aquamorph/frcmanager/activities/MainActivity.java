@@ -28,7 +28,7 @@ import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener {
 
 	private String TAG = "MainActivity";
-	private SectionsPagerAdapter mSectionsPagerAdapter;
+	private static SectionsPagerAdapter mSectionsPagerAdapter;
 	private String teamNumber, eventName, teamRank, teamRecord;
 	private ViewPager mViewPager;
 
@@ -196,5 +196,9 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 			tabLayout.setupWithViewPager(mViewPager);
 			tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 		}
+	}
+
+	public static void refresh() {
+		mSectionsPagerAdapter.refreshAll();
 	}
 }
