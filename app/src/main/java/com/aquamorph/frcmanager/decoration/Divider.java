@@ -22,13 +22,11 @@ public class Divider extends RecyclerView.ItemDecoration {
 	private final Paint mPaint;
 	private final int mAlpha;
 	private int indent;
-	private Context context;
 
 	public Divider(Context context, float width, int indent) {
-		this.context = context;
 		TypedValue typedValue = new TypedValue();
 		Resources.Theme theme = context.getTheme();
-		theme.resolveAttribute(R.attr.textOnBackground, typedValue, true);
+		theme.resolveAttribute(R.attr.dividerColor, typedValue, true);
 		int color = typedValue.data;
 		mPaint = new Paint();
 		mPaint.setColor(color);

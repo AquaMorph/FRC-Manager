@@ -17,4 +17,6 @@
     <color name="black">#000000</color>
     <color name="background_light">#FAFAFA</color>
     <color name="background_dark">#424242</color>
+    <color name="divider_light">#E0E0E0</color>
+    <color name="divider_dark">#1F1F1F</color>
 </resources>

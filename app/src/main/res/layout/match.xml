@@ -33,8 +33,9 @@
                 android:layout_weight="1.7"
                 android:gravity="center"
                 android:text="QF-123"
+                android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="?textOnBackground"/>
+                android:textColor="?textOnBackground" />
 
             <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
                          android:layout_width="0dp"
