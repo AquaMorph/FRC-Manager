@@ -16,9 +16,9 @@
             android:id="@+id/rv"
             app:fastScrollEnabled="true"
             app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollHorizontalTrackDrawable="@drawable/line_drawable"
+            app:fastScrollHorizontalTrackDrawable="?attr/scroll_line"
             app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollVerticalTrackDrawable="@drawable/line_drawable"
+            app:fastScrollVerticalTrackDrawable="?attr/scroll_line"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

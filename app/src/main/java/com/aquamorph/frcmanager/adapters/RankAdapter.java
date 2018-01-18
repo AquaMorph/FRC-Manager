@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -83,14 +85,19 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 				column4.setText("");
 			}
 
-			column1.setTextSize(context.getResources().getDimension(R.dimen.text_size));
+			TextViewCompat.setAutoSizeTextTypeWithDefaults(column1,
+					TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+			TextViewCompat.setAutoSizeTextTypeWithDefaults(column2,
+					TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+			TextViewCompat.setAutoSizeTextTypeWithDefaults(column3,
+					TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+			TextViewCompat.setAutoSizeTextTypeWithDefaults(column4,
+					TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+
 			column1.setTextColor(typedValue.data);
-			column2.setTextSize(context.getResources().getDimension(R.dimen.text_size));
 			column2.setTypeface(null, Typeface.ITALIC);
 			column2.setTextColor(typedValue.data);
-			column3.setTextSize(context.getResources().getDimension(R.dimen.text_size));
 			column3.setTextColor(typedValue.data);
-			column4.setTextSize(context.getResources().getDimension(R.dimen.text_size));
 			column4.setTypeface(null, Typeface.ITALIC);
 			column4.setTextColor(typedValue.data);
 			rowHeader.addView(column1);
