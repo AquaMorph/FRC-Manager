@@ -29,8 +29,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 	private String TAG = "MainActivity";
 	private SectionsPagerAdapter mSectionsPagerAdapter;
-	private String teamNumber, eventName;
-	private String teamRank;
+	private String teamNumber, eventName, teamRank, teamRecord;
 	private ViewPager mViewPager;
 
 	@Override
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		teamNumber = prefs.getString("teamNumber", "");
 		eventName = prefs.getString("eventShortName", "");
 		teamRank = prefs.getString("teamRank", "");
+		teamRecord = prefs.getString("teamRecord", "");
 
 		if (teamNumber.equals("")) openSetup();
 
@@ -124,18 +124,25 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	}
 
 	/**
-	 * getSubTitle() returns the subtitle string for the toolbar with the event name,
+	 * getAppTitle() returns the text for the app.
+	 * @return title for the app
+	 */
+	public String getAppTitle() {
+		return String.format("%s - %s", teamNumber,
+				shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH));
+	}
+
+	/**
+	 * getAppSubTitle() returns the subtitle string for the toolbar with the event name,
 	 * team number and current rank if available.
 	 *
 	 * @return subtitle string
 	 */
-	public String getSubTitle() {
+	public String getAppSubTitle() {
 		if (teamRank.equals("")) {
-			return String.format("%s (%s)", shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH),
-					teamNumber);
+			return "";
 		} else {
-			return String.format("%s (%s) Rank #%s",
-					shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH), teamNumber, teamRank);
+			return String.format("Rank #%s %s", teamRank, teamRecord);
 		}
 	}
 
@@ -159,8 +166,10 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		teamNumber = sharedPreferences.getString("teamNumber", "0000");
 		eventName = sharedPreferences.getString("eventShortName", "North Carolina");
 		teamRank = sharedPreferences.getString("teamRank", "");
+		teamRecord = sharedPreferences.getString("teamRecord", "");
 		if (getSupportActionBar() != null) {
-			getSupportActionBar().setSubtitle(getSubTitle());
+			getSupportActionBar().setTitle(getAppTitle());
+			getSupportActionBar().setSubtitle(getAppSubTitle());
 		}
 		if (key.equals("theme")) {
 			this.recreate();
@@ -173,7 +182,8 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	private void listener() {
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		toolbar.setSubtitle(getSubTitle());
+		getSupportActionBar().setTitle(getAppTitle());
+		getSupportActionBar().setSubtitle(getAppSubTitle());
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = findViewById(R.id.container);

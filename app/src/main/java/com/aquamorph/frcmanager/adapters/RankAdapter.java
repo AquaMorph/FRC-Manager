@@ -52,7 +52,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
-		holder.teamNumber.setText(String.format("%s. %s",position + 1,
+		holder.teamNumber.setText(String.format("%s. %s", position + 1,
 				getTeamName(data.get(0).rankings[position].team_key)));
 		holder.teamNumber.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 		holder.rankNumber.setText(Constants.formatTeamNumber(data.get(0).rankings[position].team_key));
@@ -75,9 +75,9 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 					"f", data.get(0).rankings[position].sort_orders[i]));
 
 			if (i + 1 < data.get(0).sort_order_info.length) {
-				column3.setText(data.get(0).sort_order_info[i+1].name + ": ");
-				column4.setText(String.format("%." + data.get(0).sort_order_info[i+1].precision +
-						"f", data.get(0).rankings[position].sort_orders[i+1]));
+				column3.setText(data.get(0).sort_order_info[i + 1].name + ": ");
+				column4.setText(String.format("%." + data.get(0).sort_order_info[i + 1].precision +
+						"f", data.get(0).rankings[position].sort_orders[i + 1]));
 			} else {
 				column3.setText("");
 				column4.setText("");

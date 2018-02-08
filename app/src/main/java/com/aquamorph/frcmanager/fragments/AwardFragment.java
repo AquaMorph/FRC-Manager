@@ -61,7 +61,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
 		swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 		swipeRefreshLayout.setColorSchemeResources(R.color.accent);
@@ -93,7 +93,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(awards.size() == 0)
+		if (awards.size() == 0)
 			refresh();
 	}
 

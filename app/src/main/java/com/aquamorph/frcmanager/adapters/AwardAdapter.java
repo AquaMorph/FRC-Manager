@@ -57,7 +57,7 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 				awardee += data.get(position).recipient_list[i].awardee;
 			}
 		}
-		if(awardee.equals("")) {
+		if (awardee.equals("")) {
 			holder.details.setVisibility(View.GONE);
 		} else {
 			holder.details.setText(awardee);

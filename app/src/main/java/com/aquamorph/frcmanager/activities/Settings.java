@@ -26,14 +26,14 @@ public class Settings extends AppCompatActivity implements
 		MainActivity.theme(this);
 		setContentView(R.layout.settings);
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		if (toolbar != null) {
 			toolbar.setTitle("Settings");
 		}
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsFragment())
-				.commit();
+		getFragmentManager().beginTransaction().replace(R.id.content_frame,
+				new SettingsFragment()).commit();
 		MainActivity.theme(this);
 	}
 

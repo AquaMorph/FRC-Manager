@@ -1,6 +1,8 @@
 package com.aquamorph.frcmanager.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -38,8 +40,8 @@ public class Setup extends AppIntro {
 		addSlide(teamNumberSlide);
 		addSlide(eventSlide);
 
-		setBarColor(ContextCompat.getColor(this ,R.color.blue_primary));
-		setSeparatorColor(ContextCompat.getColor(this ,R.color.blue_primary));
+		setBarColor(ContextCompat.getColor(this, R.color.blue_primary));
+		setSeparatorColor(ContextCompat.getColor(this, R.color.blue_primary));
 		setOffScreenPageLimit(4);
 
 		// Hide Skip/Done button.
@@ -59,6 +61,11 @@ public class Setup extends AppIntro {
 		if(Constants.TRACING_LEVEL > 0) {
 			Log.i(TAG, "Team Number: " + teamNumberSlide.getTeamNumber());
 		}
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString("teamRank", "");
+		editor.putString("teamRecord", "");
+		editor.apply();
 		this.finish();
 	}
 

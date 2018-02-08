@@ -48,7 +48,7 @@ public class AllianceAdapter extends RecyclerView.Adapter<AllianceAdapter.MyView
 		holder.team1.setText(Constants.formatTeamNumber(data.get(position).picks[0]));
 		holder.team2.setText(Constants.formatTeamNumber(data.get(position).picks[1]));
 		holder.team3.setText(Constants.formatTeamNumber(data.get(position).picks[2]));
-		if(data.get(position).picks.length > 3) {
+		if (data.get(position).picks.length > 3) {
 			holder.team4.setText(Constants.formatTeamNumber(data.get(position).picks[3]));
 		} else {
 			holder.team4.setVisibility(View.GONE);

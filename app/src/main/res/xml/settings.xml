@@ -7,7 +7,7 @@
         android:title="@string/general_title">
         <PreferenceScreen
             android:summary="Relaunches the setup screen"
-            android:title="Reset team and event">
+            android:title="Reset Team and Event">
             <intent android:action="com.aquamorph.frcmanager.activities.Setup"/>
         </PreferenceScreen>
         <ListPreference
@@ -27,11 +27,18 @@
             android:summary="Created by Christian Colglazier"
             android:title="@string/version_text"/>
         <Preference
+            android:summary="Feel free to create new GitHub issues to request features or improvements."
+            android:title="Request New Features">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/AquaMorph/FRC-Manager/issues/"/>
+        </Preference>
+        <Preference
             android:summary="www.thebluealliance.com"
             android:title="Data from the Blue Alliance">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="http://www.thebluealliance.com"/>
+                android:data="https://www.thebluealliance.com"/>
         </Preference>
     </PreferenceCategory>
 
