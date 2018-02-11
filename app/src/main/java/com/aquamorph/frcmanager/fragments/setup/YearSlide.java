@@ -34,7 +34,7 @@ public class YearSlide extends Fragment implements AdapterView.OnItemSelectedLis
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.year_slide, container, false);
-		yearSpinnder = (Spinner) view.findViewById(R.id.year_spinner);
+		yearSpinnder = view.findViewById(R.id.year_spinner);
 		yearSpinnder.setOnItemSelectedListener(this);
 		return view;
 	}

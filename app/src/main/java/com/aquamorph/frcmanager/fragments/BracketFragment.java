@@ -77,7 +77,7 @@ public class BracketFragment extends Fragment implements
 		eventKey = prefs.getString("eventKey", "");
 
 		View view = inflater.inflate(R.layout.bracket, container, false);
-		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+		mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
@@ -114,16 +114,16 @@ public class BracketFragment extends Fragment implements
 
 	private void fillBracket(View view, Event.Alliances red, int rRank, Event.Alliances blue,
 							 int bRank, int winner) {
-		TextView redRank = (TextView) view.findViewById(R.id.redRank);
-		TextView red1 = (TextView) view.findViewById(R.id.redTeam1);
-		TextView red2 = (TextView) view.findViewById(R.id.redTeam2);
-		TextView red3 = (TextView) view.findViewById(R.id.redTeam3);
-		TextView red4 = (TextView) view.findViewById(R.id.redTeam4);
-		TextView blueRank = (TextView) view.findViewById(R.id.blueRank);
-		TextView blue1 = (TextView) view.findViewById(R.id.blueTeam1);
-		TextView blue2 = (TextView) view.findViewById(R.id.blueTeam2);
-		TextView blue3 = (TextView) view.findViewById(R.id.blueTeam3);
-		TextView blue4 = (TextView) view.findViewById(R.id.blueTeam4);
+		TextView redRank =  view.findViewById(R.id.redRank);
+		TextView red1 = view.findViewById(R.id.redTeam1);
+		TextView red2 = view.findViewById(R.id.redTeam2);
+		TextView red3 = view.findViewById(R.id.redTeam3);
+		TextView red4 =  view.findViewById(R.id.redTeam4);
+		TextView blueRank = view.findViewById(R.id.blueRank);
+		TextView blue1 = view.findViewById(R.id.blueTeam1);
+		TextView blue2 = view.findViewById(R.id.blueTeam2);
+		TextView blue3 = view.findViewById(R.id.blueTeam3);
+		TextView blue4 = view.findViewById(R.id.blueTeam4);
 
 		if (red != null) {
 			redRank.setText(String.valueOf(rRank));
@@ -150,16 +150,16 @@ public class BracketFragment extends Fragment implements
 
 	public void setWinner(View view, Event.Alliances red, int rRank, Event.Alliances blue,
 						  int bRank, int winner) {
-		TextView redRank = (TextView) view.findViewById(R.id.redRank);
-		TextView red1 = (TextView) view.findViewById(R.id.redTeam1);
-		TextView red2 = (TextView) view.findViewById(R.id.redTeam2);
-		TextView red3 = (TextView) view.findViewById(R.id.redTeam3);
-		TextView red4 = (TextView) view.findViewById(R.id.redTeam4);
-		TextView blueRank = (TextView) view.findViewById(R.id.blueRank);
-		TextView blue1 = (TextView) view.findViewById(R.id.blueTeam1);
-		TextView blue2 = (TextView) view.findViewById(R.id.blueTeam2);
-		TextView blue3 = (TextView) view.findViewById(R.id.blueTeam3);
-		TextView blue4 = (TextView) view.findViewById(R.id.blueTeam4);
+		TextView redRank = view.findViewById(R.id.redRank);
+		TextView red1 = view.findViewById(R.id.redTeam1);
+		TextView red2 = view.findViewById(R.id.redTeam2);
+		TextView red3 = view.findViewById(R.id.redTeam3);
+		TextView red4 = view.findViewById(R.id.redTeam4);
+		TextView blueRank = view.findViewById(R.id.blueRank);
+		TextView blue1 = view.findViewById(R.id.blueTeam1);
+		TextView blue2 = view.findViewById(R.id.blueTeam2);
+		TextView blue3 = view.findViewById(R.id.blueTeam3);
+		TextView blue4 = view.findViewById(R.id.blueTeam4);
 
 		if (winner == 1) {
 			redRank.setTypeface(null, Typeface.BOLD);

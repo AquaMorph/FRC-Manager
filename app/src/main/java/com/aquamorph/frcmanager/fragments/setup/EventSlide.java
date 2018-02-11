@@ -52,7 +52,7 @@ public class EventSlide extends Fragment {
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.event_slide, container, false);
 
-		eventSpinnder = (Spinner) view.findViewById(R.id.event_spinner);
+		eventSpinnder = view.findViewById(R.id.event_spinner);
 		dataAdapter = new EventSpinnerAdapter(eventList, getActivity());
 		eventSpinnder.setAdapter(dataAdapter);
 		eventSpinnder.setOnItemSelectedListener(new EventSpinnerListener());
