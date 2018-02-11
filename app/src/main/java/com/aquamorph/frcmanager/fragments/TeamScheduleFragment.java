@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.models.Match;
@@ -162,17 +163,21 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		}
 		eventKey = prefs.getString("eventKey", "");
 
-		mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+		mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				refresh();
+				if(getTeamFromSettings) {
+					MainActivity.refresh();
+				} else {
+					refresh();
+				}
 			}
 		});
 
-		recyclerView = (RecyclerView) view.findViewById(R.id.rv);
-		emptyView = (TextView) view.findViewById(R.id.empty_view);
+		recyclerView = view.findViewById(R.id.rv);
+		emptyView = view.findViewById(R.id.empty_view);
 		adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);

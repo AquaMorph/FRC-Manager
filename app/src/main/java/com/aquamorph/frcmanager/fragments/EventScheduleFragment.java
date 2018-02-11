@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.models.Match;
@@ -73,7 +74,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				refresh();
+				MainActivity.refresh();
 			}
 		});
 
