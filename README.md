@@ -1,7 +1,7 @@
 ﻿# FRC Manager
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
 [![API](https://img.shields.io/badge/API-15%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=15)
-[![Build Status](https://ci.cacolglazier.com/job/FRC%20Manager/badge/icon)](https://ci.cacolglazier.com/job/FRC%20Manager/)
+[![Build Status](https://ci.cacolglazier.com/job/FRC-Manager/badge/icon)](https://ci.cacolglazier.com/job/FRC-Manager/)
 [![GitHub issues](https://img.shields.io/github/issues/AquaMorph/FRC-Manager.svg)](https://github.com/AquaMorph/FRC-Manager/issues)
 [![ZenHub](https://raw.githubusercontent.com/ZenHubIO/support/master/zenhub-badge.png)](https://zenhub.com)
 
