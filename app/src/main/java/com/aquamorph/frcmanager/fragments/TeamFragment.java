@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.TeamAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.models.Rank;
@@ -75,7 +76,7 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				refresh();
+				MainActivity.refresh();
 			}
 		});
 

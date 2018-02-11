@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
+import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.models.Event;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.Parser;
@@ -81,7 +82,7 @@ public class BracketFragment extends Fragment implements
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				refresh();
+				MainActivity.refresh();
 			}
 		});
 
