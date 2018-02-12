@@ -43,6 +43,7 @@ public class TeamSummary extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
+			default:
 				this.finish();
 				break;
 		}

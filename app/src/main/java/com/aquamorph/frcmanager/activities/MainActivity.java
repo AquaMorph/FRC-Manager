@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 				openSettings();
 				break;
 			case R.id.refresh_all:
+			default:
 				mSectionsPagerAdapter.refreshAll();
 				break;
 		}

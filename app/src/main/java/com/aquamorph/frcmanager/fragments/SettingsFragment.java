@@ -23,7 +23,7 @@ public class SettingsFragment extends PreferenceFragment
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (key.equals("theme")) {
+		if ("theme".equals(key)) {
 			getActivity().recreate();
 		}
 	}
