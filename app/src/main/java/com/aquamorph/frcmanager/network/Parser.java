@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
@@ -63,7 +64,7 @@ public class Parser<T> {
 	 * @param storeData Determines if data should be stored in memory
 	 */
 	public void fetchJSON(final Boolean storeData) {
-		try {
+
 			if (Constants.TRACING_LEVEL > 0) {
 				Log.d(TAG, "Loading " + name);
 			}
@@ -80,7 +81,12 @@ public class Parser<T> {
 			InputStream statusStream = statusBlueAlliance.connect(Constants.getStatusURL(), "",
 					context);
 			if (statusBlueAlliance.getStatus() == 200) {
-				BufferedReader reader = new BufferedReader(new InputStreamReader(statusStream));
+				BufferedReader reader = null;
+				try {
+					reader = new BufferedReader(new InputStreamReader(statusStream, "UTF-8"));
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 				Status status = gson.fromJson(reader, Status.class);
 				// Displays error message when the FIRST server is down
 				if (status.is_datafeed_down) {
@@ -133,10 +139,7 @@ public class Parser<T> {
 				data = getStoredData();
 			}
 			parsingComplete = false;
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-	}
 
 	/**
 	 * Returns a list of parsed data.

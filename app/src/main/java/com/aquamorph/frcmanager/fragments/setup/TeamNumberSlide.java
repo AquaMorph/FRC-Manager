@@ -19,7 +19,6 @@ import com.aquamorph.frcmanager.utils.AppConfig;
  */
 public class TeamNumberSlide extends Fragment {
 
-	private String TAG = "TeamNumberSlide";
 	private Boolean numberSet = false;
 	private EditText teamNumber;
 

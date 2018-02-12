@@ -22,7 +22,6 @@ import com.aquamorph.frcmanager.utils.AppConfig;
 
 public class YearSlide extends Fragment implements AdapterView.OnItemSelectedListener {
 
-	String TAG = "YearSlide";
 	Spinner yearSpinnder;
 
 	@Override

@@ -40,8 +40,9 @@ public class Settings extends AppCompatActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-			default:
 				this.finish();
+				break;
+			default:
 				break;
 		}
 		return super.onOptionsItemSelected(item);

@@ -26,8 +26,8 @@ public class Constants {
 	public static final String URL = "https://www.thebluealliance.com/api/v3";
 	public static final String TBA_HEADER = "X-TBA-Auth-Key";
 	public static final Boolean FORCE_DATA_RELOAD = false;
-	public static int TRACING_LEVEL = 3;
-	public static int MAX_EVENT_TITLE_LENGTH = 20;
+	public static final int TRACING_LEVEL = 3;
+	public static final int MAX_EVENT_TITLE_LENGTH = 20;
 
 	/**
 	 * getEventURL() returns the url for a list of events a team is registered.
@@ -170,11 +170,11 @@ public class Constants {
 	public static String underlineText(String text) {
 		text = text.replace(" ", "");
 		int spaces = 4 - text.length();
-		String spacesText = "";
+		StringBuilder spacesText = new StringBuilder();
 		for (int i = 0; i < spaces; i++) {
-			spacesText += "&nbsp;";
+			spacesText.append("&nbsp;");
 		}
-		return String.format("<pre>%s<u>%s</u></pre>", spacesText, text);
+		return String.format("<pre>%s<u>%s</u></pre>", spacesText.toString(), text);
 	}
 
 	/**
