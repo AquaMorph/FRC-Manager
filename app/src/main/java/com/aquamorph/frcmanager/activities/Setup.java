@@ -40,8 +40,8 @@ public class Setup extends AppIntro {
 		addSlide(teamNumberSlide);
 		addSlide(eventSlide);
 
-		setBarColor(ContextCompat.getColor(this, R.color.blue_primary));
-		setSeparatorColor(ContextCompat.getColor(this, R.color.blue_primary));
+		setBarColor(ContextCompat.getColor(this, R.color.primary));
+		setSeparatorColor(ContextCompat.getColor(this, R.color.primary_dark));
 		setOffScreenPageLimit(4);
 
 		// Hide Skip/Done button.
