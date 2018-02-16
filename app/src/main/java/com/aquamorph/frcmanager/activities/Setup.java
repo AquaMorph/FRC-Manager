@@ -11,7 +11,7 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.fragments.setup.EventSlide;
 import com.aquamorph.frcmanager.fragments.setup.Slide;
 import com.aquamorph.frcmanager.fragments.setup.TeamNumberSlide;
-import com.aquamorph.frcmanager.fragments.setup.YearSlide;
+import com.aquamorph.frcmanager.utils.Logging;
 import com.github.paolorotolo.appintro.AppIntro;
 
 /**
@@ -23,7 +23,6 @@ import com.github.paolorotolo.appintro.AppIntro;
 public class Setup extends AppIntro {
 
 	private String TAG = "Setup";
-	private YearSlide yearSlide;
 	private TeamNumberSlide teamNumberSlide;
 	private EventSlide eventSlide;
 	private int counter = 0;
@@ -31,12 +30,10 @@ public class Setup extends AppIntro {
 	// Please DO NOT override onCreate. Use init.
 	@Override
 	public void init(Bundle savedInstanceState) {
-		yearSlide = new YearSlide();
 		teamNumberSlide = new TeamNumberSlide();
 		eventSlide = new EventSlide();
 
 		addSlide(Slide.newInstance(R.layout.first_slide));
-		addSlide(yearSlide);
 		addSlide(teamNumberSlide);
 		addSlide(eventSlide);
 
@@ -63,8 +60,8 @@ public class Setup extends AppIntro {
 		}
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		SharedPreferences.Editor editor = prefs.edit();
-		editor.putString("teamRank", "");
-		editor.putString("teamRecord", "");
+//		editor.putString("teamRank", "");
+//		editor.putString("teamRecord", "");
 		editor.apply();
 		this.finish();
 	}
@@ -73,10 +70,14 @@ public class Setup extends AppIntro {
 	public void onSlideChanged() {
 		counter++;
 		// Do something when the slide changes.
-		if(teamNumberSlide != null && counter > 2 && teamNumberSlide.getTeamNumber() != null) {
-			teamNumberSlide.setTeamNumber(teamNumberSlide.getTeamNumber());
-			eventSlide.load();
+		if(teamNumberSlide!= null && teamNumberSlide.getTeamNumber().matches("[0-9]+")) {
+			try {
+				Logging.debug(this, "Gettings events for Setup", 0);
+				teamNumberSlide.setTeamNumber(teamNumberSlide.getTeamNumber());
+				eventSlide.load();
+			} catch (Exception e) {}
 		}
+
 	}
 
 	@Override

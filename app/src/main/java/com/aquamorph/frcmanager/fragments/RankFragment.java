@@ -164,28 +164,30 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		@Override
 		protected void onPostExecute(Void result) {
 			teams.clear();
-			teams.addAll(teamEventParser.getData());
-			sort(teams);
+			if (teamEventParser.getData() != null) {
+				teams.addAll(teamEventParser.getData());
+				sort(teams);
 
-			if (parser.getData() != null) {
-				ranks.clear();
-				ranks.add(parser.getData());
-			}
-
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putString("teamRank", "");
-			for (int i = 0; i < ranks.get(0).rankings.length; i++) {
-				if (ranks.get(0).rankings[i].team_key.equals("frc" + teamNumber)) {
-					editor.putString("teamRank",
-							Integer.toString(ranks.get(0).rankings[i].rank));
-					editor.putString("teamRecord",
-							Rank.recordToString(ranks.get(0).rankings[i].record));
-					editor.apply();
+				if (parser.getData() != null) {
+					ranks.clear();
+					ranks.add(parser.getData());
 				}
+
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putString("teamRank", "");
+				for (int i = 0; i < ranks.get(0).rankings.length; i++) {
+					if (ranks.get(0).rankings[i].team_key.equals("frc" + teamNumber)) {
+						editor.putString("teamRank",
+								Integer.toString(ranks.get(0).rankings[i].rank));
+						editor.putString("teamRecord",
+								Rank.recordToString(ranks.get(0).rankings[i].record));
+						editor.apply();
+					}
+				}
+				Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+				if (firstLoad) firstLoad = false;
 			}
-			Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
-			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

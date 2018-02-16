@@ -10,6 +10,7 @@ import android.util.Log;
 import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.models.Status;
+import com.aquamorph.frcmanager.utils.Logging;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -65,9 +66,7 @@ public class Parser<T> {
 	 */
 	public void fetchJSON(final Boolean storeData) {
 
-			if (Constants.TRACING_LEVEL > 0) {
-				Log.d(TAG, "Loading " + name);
-			}
+		Logging.debug(this, "Loading " + name, 0);
 			online = Constants.isNetworkAvailable(context);
 
 			// Displays message saying there is no connection
@@ -104,9 +103,7 @@ public class Parser<T> {
 
 			// Checks for internet connection
 			if (online) {
-				if (Constants.TRACING_LEVEL > 0) {
-					Log.d(TAG, "Online");
-				}
+				Logging.debug(this, "Online", 0);
 				BlueAlliance blueAlliance = new BlueAlliance();
 				InputStream stream;
 				if (storeData) {
@@ -118,9 +115,7 @@ public class Parser<T> {
 				// Checks for change in data
 				if (blueAlliance.getStatus() == 200 || getStoredData() == null
 						|| Constants.FORCE_DATA_RELOAD || !storeData) {
-					if (Constants.TRACING_LEVEL > 0) {
-						Log.d(TAG, "Loading new data for " + name);
-					}
+					Logging.debug(this, "Loading new data for " + name, 0);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					data = gson.fromJson(reader, type);
 					if (storeData) {
@@ -176,9 +171,7 @@ public class Parser<T> {
 	 * @param data parsed values
 	 */
 	public void storeData(String data) {
-		if (Constants.TRACING_LEVEL > 0) {
-			Log.d(TAG, "Storing Data");
-		}
+		Logging.debug(this, "Storing Data", 0);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(name, data);
 		editor.apply();
@@ -190,9 +183,7 @@ public class Parser<T> {
 	 * @return data
 	 */
 	private T getStoredData() {
-		if (Constants.TRACING_LEVEL > 0) {
-			Log.d(TAG, "Loading Data from a save");
-		}
+		Logging.debug(this, "Loading data from a save", 0);
 		String json = prefs.getString(name, "");
 		return gson.fromJson(json, type);
 	}

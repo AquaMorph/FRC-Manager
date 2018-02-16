@@ -38,6 +38,14 @@
         android:layout_height="0dp"
         android:layout_weight="4"/>
 
+    <Spinner
+        android:id="@+id/year_spinner"
+        android:paddingTop="@dimen/expand_size"
+        android:paddingBottom="@dimen/expand_size"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/year_array"/>
+
     <Space
         android:id="@+id/blank2"
         android:layout_width="fill_parent"

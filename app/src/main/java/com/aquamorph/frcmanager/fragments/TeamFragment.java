@@ -160,15 +160,17 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 		@Override
 		protected void onPostExecute(Void result) {
 			teams.clear();
-			teams.addAll(parser.getData());
-			sort(teams);
-			if (rankParser.getData() != null) {
-				ranks.clear();
-				ranks.add(rankParser.getData());
+			if(parser.getData() != null) {
+				teams.addAll(parser.getData());
+				sort(teams);
+				if (rankParser.getData() != null) {
+					ranks.clear();
+					ranks.add(rankParser.getData());
+				}
+				Constants.checkNoDataScreen(teams, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+				if (firstLoad) firstLoad = false;
 			}
-			Constants.checkNoDataScreen(teams, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
-			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

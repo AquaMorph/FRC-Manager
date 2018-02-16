@@ -6,7 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.utils.AppConfig;
@@ -17,8 +20,9 @@ import com.aquamorph.frcmanager.utils.AppConfig;
  * @author Christian Colglazier
  * @version 3/29/2016
  */
-public class TeamNumberSlide extends Fragment {
+public class TeamNumberSlide extends Fragment  implements AdapterView.OnItemSelectedListener {
 
+	Spinner yearSpinnder;
 	private Boolean numberSet = false;
 	private EditText teamNumber;
 
@@ -32,8 +36,19 @@ public class TeamNumberSlide extends Fragment {
 	                         Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.team_number_slide, container, false);
 		teamNumber = view.findViewById(R.id.teamNumberEditText);
+		yearSpinnder = view.findViewById(R.id.year_spinner);
+		yearSpinnder.setOnItemSelectedListener(this);
 		return view;
 	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+		((TextView) yearSpinnder.getSelectedView()).setTextColor(getResources().getColor(R.color.icons));
+		AppConfig.setYear(parent.getItemAtPosition(position).toString(), getContext());
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {}
 
 	/**
 	 * getTeamNumber() gets the team number entered by the user.
