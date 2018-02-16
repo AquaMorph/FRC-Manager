@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.BuildConfig;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.utils.AppConfig;
 
@@ -38,6 +39,7 @@ public class TeamNumberSlide extends Fragment  implements AdapterView.OnItemSele
 		teamNumber = view.findViewById(R.id.teamNumberEditText);
 		yearSpinnder = view.findViewById(R.id.year_spinner);
 		yearSpinnder.setOnItemSelectedListener(this);
+		if(BuildConfig.APP_DEBUG) yearSpinnder.setVisibility(View.VISIBLE);
 		return view;
 	}
 

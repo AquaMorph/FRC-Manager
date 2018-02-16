@@ -40,6 +40,7 @@
 
     <Spinner
         android:id="@+id/year_spinner"
+        android:visibility="gone"
         android:paddingTop="@dimen/expand_size"
         android:paddingBottom="@dimen/expand_size"
         android:layout_width="match_parent"
