@@ -42,6 +42,8 @@ public class Settings extends AppCompatActivity implements
 			case android.R.id.home:
 				this.finish();
 				break;
+			default:
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

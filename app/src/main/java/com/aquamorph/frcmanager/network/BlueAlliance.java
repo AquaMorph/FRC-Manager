@@ -19,8 +19,8 @@ import java.net.URL;
 public class BlueAlliance {
 
 	HttpURLConnection conn;
-	public String lastUpdated = "";
-	public int status;
+	private String lastUpdated = "";
+	private int status;
 
 	public InputStream connect(String address, String updated, Context context) {
 
@@ -46,7 +46,9 @@ public class BlueAlliance {
 
 	public void close() {
 		try {
-			conn.getInputStream().close();
+			if (conn != null) {
+				conn.getInputStream().close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -73,12 +73,9 @@ public class Setup extends AppIntro {
 	public void onSlideChanged() {
 		counter++;
 		// Do something when the slide changes.
-		if(teamNumberSlide != null && counter > 2) {
-			if (teamNumberSlide.getTeamNumber() != null
-					&& !teamNumberSlide.getTeamNumber().equals(null)) {
-				teamNumberSlide.setTeamNumber(teamNumberSlide.getTeamNumber());
-				eventSlide.load();
-			}
+		if(teamNumberSlide != null && counter > 2 && teamNumberSlide.getTeamNumber() != null) {
+			teamNumberSlide.setTeamNumber(teamNumberSlide.getTeamNumber());
+			eventSlide.load();
 		}
 	}
 

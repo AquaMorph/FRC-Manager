@@ -45,6 +45,8 @@ public class TeamSummary extends AppCompatActivity {
 			case android.R.id.home:
 				this.finish();
 				break;
+			default:
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

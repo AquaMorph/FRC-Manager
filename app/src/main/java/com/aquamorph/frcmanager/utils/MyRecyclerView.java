@@ -46,7 +46,7 @@ public class MyRecyclerView extends RecyclerView {
 					public void run() {
 						mScrollable = true;
 					}
-				}, i * 100);
+				}, i * 100L);
 			}
 		}
 	}
