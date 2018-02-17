@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 				break;
 			case R.id.refresh_all:
 			default:
-				mSectionsPagerAdapter.refreshAll();
+				mSectionsPagerAdapter.refreshAll(false);
 				break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -200,6 +200,10 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	}
 
 	public static void refresh() {
-		mSectionsPagerAdapter.refreshAll();
+		mSectionsPagerAdapter.refreshAll(false);
+	}
+
+	public static void refresh(Boolean force) {
+		mSectionsPagerAdapter.refreshAll(force);
 	}
 }

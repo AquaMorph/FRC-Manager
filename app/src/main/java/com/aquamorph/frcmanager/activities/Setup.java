@@ -63,6 +63,7 @@ public class Setup extends AppIntro {
 //		editor.putString("teamRank", "");
 //		editor.putString("teamRecord", "");
 		editor.apply();
+		MainActivity.refresh(true);
 		this.finish();
 	}
 
@@ -74,7 +75,7 @@ public class Setup extends AppIntro {
 			try {
 				Logging.debug(this, "Gettings events for Setup", 0);
 				teamNumberSlide.setTeamNumber(teamNumberSlide.getTeamNumber());
-				eventSlide.load();
+				eventSlide.load(true);
 			} catch (Exception e) {}
 		}
 

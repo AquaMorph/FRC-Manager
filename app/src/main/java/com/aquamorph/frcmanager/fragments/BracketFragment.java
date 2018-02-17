@@ -103,12 +103,12 @@ public class BracketFragment extends Fragment implements
 	public void onResume() {
 		super.onResume();
 		if (alliances.size() == 0)
-			refresh();
+			refresh(false);
 	}
 
-	public void refresh() {
+	public void refresh(Boolean force) {
 		if (!eventKey.equals("")) {
-			new BracketFragment.LoadBracket().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new BracketFragment.LoadBracket(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
@@ -191,7 +191,7 @@ public class BracketFragment extends Fragment implements
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
 			teamNumber = sharedPreferences.getString("teamNumber", "");
 			eventKey = sharedPreferences.getString("eventKey", "");
-			refresh();
+			refresh(true);
 		}
 	}
 
@@ -258,16 +258,22 @@ public class BracketFragment extends Fragment implements
 
 	class LoadBracket extends AsyncTask<Void, Void, Void> {
 
+		boolean force;
+
+		public LoadBracket(boolean force) {
+			this.force = force;
+		}
+
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
 			parserMatch = new Parser<>("eventMatches", Constants.getEventMatches(eventKey),
 					new TypeToken<ArrayList<Match>>() {
-					}.getType(), getActivity());
+					}.getType(), getActivity(), force);
 			parserEvents = new Parser<>("Event",
 					Constants.getEvent(eventKey), new
 					TypeToken<Event>() {
-					}.getType(), getActivity());
+					}.getType(), getActivity(), force);
 		}
 
 		@Override

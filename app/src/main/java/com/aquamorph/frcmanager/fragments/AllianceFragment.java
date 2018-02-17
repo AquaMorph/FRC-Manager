@@ -96,15 +96,15 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	public void onResume() {
 		super.onResume();
 		if (alliances.size() == 0)
-			refresh();
+			refresh(false);
 	}
 
 	/**
 	 * refrest() loads data needed for this fragment.
 	 */
-	public void refresh() {
+	public void refresh(boolean force) {
 		if (!eventKey.equals("")) {
-			new LoadAlliances().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
@@ -112,11 +112,17 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("eventKey")) {
 			eventKey = sharedPreferences.getString("eventKey", "");
-			refresh();
+			refresh(true);
 		}
 	}
 
 	class LoadAlliances extends AsyncTask<Void, Void, Void> {
+
+		boolean force;
+
+		public LoadAlliances(boolean force) {
+			this.force = force;
+		}
 
 		@Override
 		protected void onPreExecute() {
@@ -124,7 +130,7 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 			parser = new Parser<>("Event",
 					Constants.getAlliancesURL(eventKey), new
 					TypeToken<ArrayList<Alliance>>() {
-					}.getType(), getActivity());
+					}.getType(), getActivity(), force);
 		}
 
 		@Override

@@ -47,8 +47,9 @@ public class Parser<T> {
 	 * @param url      The url where the date will be parsed
 	 * @param type     The data type of the data to be collected
 	 * @param activity The current state of the application
+	 * @param force	   Force reload of data
 	 */
-	public Parser(String name, String url, Type type, Activity activity) {
+	public Parser(String name, String url, Type type, Activity activity, Boolean force) {
 		this.name = name;
 		this.url = url;
 		this.type = type;
@@ -56,6 +57,11 @@ public class Parser<T> {
 		this.activity = activity;
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		TAG = name + "." + TAG;
+		if (force) {
+			Logging.debug(this, name + " force reloading", 1);
+			storeData("");
+			storeLastModified("");
+		}
 	}
 
 	/**
