@@ -123,7 +123,11 @@ public class Parser<T> {
 						|| Constants.FORCE_DATA_RELOAD || !storeData) {
 					Logging.debug(this, "Loading new data for " + name, 0);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-					data = gson.fromJson(reader, type);
+					try {
+						data = gson.fromJson(reader, type);
+					} catch (Exception e) {
+						Logging.debug(this, e.getMessage(), 0);
+					}
 					if (storeData) {
 						storeLastModified(blueAlliance.getLastUpdated());
 						storeData(gson.toJson(data));

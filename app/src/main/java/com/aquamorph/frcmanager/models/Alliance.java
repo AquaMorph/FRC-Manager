@@ -12,7 +12,7 @@ public class Alliance {
     public Backup backup;
     public String[] declines;
     public String[] picks;
-    public Status status;
+//    public Status status;
 
     public class Backup {
         public String out;
