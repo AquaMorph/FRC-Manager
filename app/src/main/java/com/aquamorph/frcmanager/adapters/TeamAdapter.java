@@ -44,9 +44,11 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 	}
 
 	private String getTeamRank(String teamNumber, ArrayList<Rank> ranks) {
-		for (int i = 0; i < ranks.get(0).rankings.length; i++) {
-			if (ranks.get(0).rankings[i].team_key.equals(teamNumber)) return " Ranked #" +
-					ranks.get(0).rankings[i].rank;
+		if(ranks != null && ranks.size() > 0) {
+			for (int i = 0; i < ranks.get(0).rankings.length; i++) {
+				if (ranks.get(0).rankings[i].team_key.equals(teamNumber)) return " Ranked #" +
+						ranks.get(0).rankings[i].rank;
+			}
 		}
 		return "";
 	}

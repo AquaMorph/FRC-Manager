@@ -145,11 +145,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 				teamNumber = sharedPreferences.getString("teamNumber", "");
 			}
 			eventKey = sharedPreferences.getString("eventKey", "");
-			if (parser != null) {
-				parser.storeData("");
-			}
 			listener();
-			refresh(false);
 		}
 	}
 

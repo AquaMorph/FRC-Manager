@@ -37,7 +37,6 @@ import java.util.Arrays;
  */
 public class AllianceFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private String TAG = "AllianceFragment";
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
@@ -95,8 +94,9 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (alliances.size() == 0)
+		if (alliances.size() == 0) {
 			refresh(false);
+		}
 	}
 
 	/**
@@ -112,7 +112,6 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("eventKey")) {
 			eventKey = sharedPreferences.getString("eventKey", "");
-			refresh(true);
 		}
 	}
 
@@ -148,8 +147,8 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 				Constants.checkNoDataScreen(alliances, recyclerView, emptyView);
 				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 				if (firstLoad) firstLoad = false;
-				swipeRefreshLayout.setRefreshing(false);
 			}
+			swipeRefreshLayout.setRefreshing(false);
 		}
 	}
 }

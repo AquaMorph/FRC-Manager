@@ -41,8 +41,8 @@
     <Spinner
         android:id="@+id/year_spinner"
         android:visibility="gone"
-        android:paddingTop="@dimen/expand_size"
-        android:paddingBottom="@dimen/expand_size"
+        android:paddingTop="@dimen/divider_padding"
+        android:paddingBottom="@dimen/divider_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/year_array"/>

@@ -125,18 +125,9 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("eventKey")) {
 			eventKey = sharedPreferences.getString("eventKey", "");
-			if (parser != null) {
-				parser.storeData("");
-			}
-			if (!eventKey.equals("")) {
-				refresh(true);
-			}
 		}
 		if (key.equals("teamNumber")) {
 			teamNumber = sharedPreferences.getString("teamNumber", "");
-			if (!teamNumber.equals("")) {
-				refresh(true);
-			}
 		}
 	}
 
@@ -176,22 +167,23 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 				if (parser.getData() != null) {
 					ranks.clear();
 					ranks.add(parser.getData());
-				}
 
-				SharedPreferences.Editor editor = prefs.edit();
-				editor.putString("teamRank", "");
-				for (int i = 0; i < ranks.get(0).rankings.length; i++) {
-					if (ranks.get(0).rankings[i].team_key.equals("frc" + teamNumber)) {
-						editor.putString("teamRank",
-								Integer.toString(ranks.get(0).rankings[i].rank));
-						editor.putString("teamRecord",
-								Rank.recordToString(ranks.get(0).rankings[i].record));
-						editor.apply();
+
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putString("teamRank", "");
+					for (int i = 0; i < ranks.get(0).rankings.length; i++) {
+						if (ranks.get(0).rankings[i].team_key.equals("frc" + teamNumber)) {
+							editor.putString("teamRank",
+									Integer.toString(ranks.get(0).rankings[i].rank));
+							editor.putString("teamRecord",
+									Rank.recordToString(ranks.get(0).rankings[i].record));
+							editor.apply();
+						}
 					}
+					Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
+					Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+					if (firstLoad) firstLoad = false;
 				}
-				Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
-				if (firstLoad) firstLoad = false;
 			}
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
