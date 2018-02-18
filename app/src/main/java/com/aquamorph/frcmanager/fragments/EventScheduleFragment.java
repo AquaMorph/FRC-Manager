@@ -94,15 +94,15 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	public void onResume() {
 		super.onResume();
 		if (eventMatches.size() == 0)
-			refresh();
+			refresh(false);
 	}
 
 	/**
 	 * refresh reloads the event schedule and repopulates the listview
 	 */
-	public void refresh() {
+	public void refresh(Boolean force) {
 		if (!eventKey.equals("")) {
-			new LoadEventSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new LoadEventSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
@@ -116,17 +116,23 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
 			recyclerView.setAdapter(adapter);
 			recyclerView.setLayoutManager(llm);
-			refresh();
+			refresh(true);
 		}
 	}
 
 	class LoadEventSchedule extends AsyncTask<Void, Void, Void> {
 
+		boolean force;
+
+		public LoadEventSchedule(boolean force) {
+			this.force = force;
+		}
+
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("eventMatches", Constants.getEventMatches(eventKey), new TypeToken<ArrayList<Match>>() {
-			}.getType(), getActivity());
+			}.getType(), getActivity(), force);
 		}
 
 		@Override

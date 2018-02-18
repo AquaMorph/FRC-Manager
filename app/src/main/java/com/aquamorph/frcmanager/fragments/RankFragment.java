@@ -100,7 +100,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		eventKey = prefs.getString("eventKey", "");
 		teamNumber = prefs.getString("teamNumber", "0000");
 
-		if (savedInstanceState == null) refresh();
+		if (savedInstanceState == null) refresh(false);
 		Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
 		return view;
 	}
@@ -109,15 +109,15 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	public void onResume() {
 		super.onResume();
 		if (ranks.size() == 0)
-			refresh();
+			refresh(false);
 	}
 
 	/**
 	 * refrest() loads data needed for this fragment.
 	 */
-	public void refresh() {
+	public void refresh(Boolean force) {
 		if (!eventKey.equals("") && !teamNumber.equals("")) {
-			new LoadRanks().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new LoadRanks(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
@@ -129,27 +129,32 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 				parser.storeData("");
 			}
 			if (!eventKey.equals("")) {
-				refresh();
+				refresh(true);
 			}
 		}
 		if (key.equals("teamNumber")) {
 			teamNumber = sharedPreferences.getString("teamNumber", "");
 			if (!teamNumber.equals("")) {
-				refresh();
+				refresh(true);
 			}
 		}
 	}
 
 	private class LoadRanks extends AsyncTask<Void, Void, Void> {
 
+		boolean force;
+
+		public LoadRanks(boolean force) {
+			this.force = force;
+		}
+
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
-					new TypeToken<Rank>(){}.getType(), getActivity());
+					new TypeToken<Rank>(){}.getType(), getActivity(), force);
 			teamEventParser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
-					new TypeToken<ArrayList<Team>>() {
-					}.getType(), getActivity());
+					new TypeToken<ArrayList<Team>>() {}.getType(), getActivity(),force);
 		}
 
 		@Override
@@ -164,28 +169,30 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		@Override
 		protected void onPostExecute(Void result) {
 			teams.clear();
-			teams.addAll(teamEventParser.getData());
-			sort(teams);
+			if (teamEventParser.getData() != null) {
+				teams.addAll(teamEventParser.getData());
+				sort(teams);
 
-			if (parser.getData() != null) {
-				ranks.clear();
-				ranks.add(parser.getData());
-			}
-
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putString("teamRank", "");
-			for (int i = 0; i < ranks.get(0).rankings.length; i++) {
-				if (ranks.get(0).rankings[i].team_key.equals("frc" + teamNumber)) {
-					editor.putString("teamRank",
-							Integer.toString(ranks.get(0).rankings[i].rank));
-					editor.putString("teamRecord",
-							Rank.recordToString(ranks.get(0).rankings[i].record));
-					editor.apply();
+				if (parser.getData() != null) {
+					ranks.clear();
+					ranks.add(parser.getData());
 				}
+
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putString("teamRank", "");
+				for (int i = 0; i < ranks.get(0).rankings.length; i++) {
+					if (ranks.get(0).rankings[i].team_key.equals("frc" + teamNumber)) {
+						editor.putString("teamRank",
+								Integer.toString(ranks.get(0).rankings[i].rank));
+						editor.putString("teamRecord",
+								Rank.recordToString(ranks.get(0).rankings[i].record));
+						editor.apply();
+					}
+				}
+				Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+				if (firstLoad) firstLoad = false;
 			}
-			Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
-			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

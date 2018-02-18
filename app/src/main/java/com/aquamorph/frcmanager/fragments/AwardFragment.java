@@ -35,7 +35,6 @@ import java.util.ArrayList;
 public class AwardFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	SharedPreferences prefs;
-	private String TAG = "AwardFragment";
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
@@ -86,7 +85,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 		eventKey = prefs.getString("eventKey", "");
 
-		if (savedInstanceState == null) refresh();
+		if (savedInstanceState == null) refresh(false);
 		Constants.checkNoDataScreen(awards, recyclerView, emptyView);
 		return view;
 	}
@@ -95,15 +94,16 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	public void onResume() {
 		super.onResume();
 		if (awards.size() == 0)
-			refresh();
+			refresh(false);
 	}
 
 	/**
 	 * refrest() loads data needed for this fragment.
+	 * @param force
 	 */
-	public void refresh() {
+	public void refresh(boolean force) {
 		if (!eventKey.equals("")) {
-			new LoadAwards().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new LoadAwards(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
@@ -111,18 +111,24 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("eventKey")) {
 			eventKey = sharedPreferences.getString("eventKey", "");
-			refresh();
+			refresh(false);
 		}
 	}
 
 	class LoadAwards extends AsyncTask<Void, Void, Void> {
+
+		boolean force;
+
+		public LoadAwards(boolean force) {
+			this.force = force;
+		}
 
 		@Override
 		protected void onPreExecute() {
 			swipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("eventAwards", Constants.getEventAwards(eventKey),
 					new TypeToken<ArrayList<Award>>() {
-					}.getType(), getActivity());
+					}.getType(), getActivity(), force);
 		}
 
 		@Override
