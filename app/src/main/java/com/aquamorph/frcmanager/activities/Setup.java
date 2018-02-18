@@ -3,6 +3,8 @@ package com.aquamorph.frcmanager.activities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -18,18 +20,17 @@ import com.github.paolorotolo.appintro.AppIntro;
  * App set up activity gets the desired year, team, and event.
  *
  * @author Christian Colglazier
- * @version 3/29/2016
+ * @version 2/17/2018
  */
 public class Setup extends AppIntro {
 
 	private String TAG = "Setup";
 	private TeamNumberSlide teamNumberSlide;
 	private EventSlide eventSlide;
-	private int counter = 0;
 
-	// Please DO NOT override onCreate. Use init.
 	@Override
-	public void init(Bundle savedInstanceState) {
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		teamNumberSlide = new TeamNumberSlide();
 		eventSlide = new EventSlide();
 
@@ -51,10 +52,8 @@ public class Setup extends AppIntro {
 	}
 
 	@Override
-	public void onSkipPressed() {}
-
-	@Override
-	public void onDonePressed() {
+	public void onDonePressed(Fragment currentFragment) {
+		super.onDonePressed(currentFragment);
 		if(Constants.TRACING_LEVEL > 0) {
 			Log.i(TAG, "Team Number: " + teamNumberSlide.getTeamNumber());
 		}
@@ -68,9 +67,8 @@ public class Setup extends AppIntro {
 	}
 
 	@Override
-	public void onSlideChanged() {
-		counter++;
-		// Do something when the slide changes.
+	public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
+		super.onSlideChanged(oldFragment, newFragment);
 		if(teamNumberSlide!= null && teamNumberSlide.getTeamNumber().matches("[0-9]+")) {
 			try {
 				Logging.debug(this, "Gettings events for Setup", 0);
@@ -78,9 +76,5 @@ public class Setup extends AppIntro {
 				eventSlide.load(true);
 			} catch (Exception e) {}
 		}
-
 	}
-
-	@Override
-	public void onNextPressed() {}
 }
