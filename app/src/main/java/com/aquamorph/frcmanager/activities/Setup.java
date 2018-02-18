@@ -60,8 +60,8 @@ public class Setup extends AppIntro {
 		}
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		SharedPreferences.Editor editor = prefs.edit();
-//		editor.putString("teamRank", "");
-//		editor.putString("teamRecord", "");
+		editor.putString("teamRank", "");
+		editor.putString("teamRecord", "");
 		editor.apply();
 		MainActivity.refresh(true);
 		this.finish();
