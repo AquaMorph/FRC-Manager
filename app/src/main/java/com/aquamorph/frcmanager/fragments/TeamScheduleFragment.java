@@ -118,19 +118,20 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	public void onResume() {
 		super.onResume();
 		if (teamEventMatches.size() == 0)
-			refresh();
+			refresh(false);
 	}
 
 	/**
 	 * refrest() loads data needed for this fragment.
+	 * @param force
 	 */
-	public void refresh() {
+	public void refresh(boolean force) {
 		if (Constants.TRACING_LEVEL >= 2) {
 			Log.i(TAG, "teamNumber: " + teamNumber);
 		}
 		Log.i(TAG, "Data is being refreshed");
 		if (!teamNumber.equals("") && !eventKey.equals("")) {
-			new LoadTeamSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new LoadTeamSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		} else {
 			Log.i(TAG, "Not set");
 		}
@@ -148,7 +149,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 				parser.storeData("");
 			}
 			listener();
-			refresh();
+			refresh(false);
 		}
 	}
 
@@ -171,7 +172,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 				if(getTeamFromSettings) {
 					MainActivity.refresh();
 				} else {
-					refresh();
+					refresh(false);
 				}
 			}
 		});
@@ -187,13 +188,18 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
 
+		boolean force;
+
+		public LoadTeamSchedule(boolean force) {
+			this.force = force;
+		}
+
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
 					("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>() {
-			}.getType(),
-					getActivity());
+			}.getType(),getActivity(), force);
 		}
 
 		@Override

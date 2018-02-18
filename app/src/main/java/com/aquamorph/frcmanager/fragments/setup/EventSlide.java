@@ -62,12 +62,18 @@ public class EventSlide extends Fragment {
 	/**
 	 * load() loads the team events
 	 */
-	public void load() {
-		final LoadTeamEvents loadTeamEvents = new LoadTeamEvents();
+	public void load(Boolean force) {
+		final LoadTeamEvents loadTeamEvents = new LoadTeamEvents(force);
 		loadTeamEvents.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	class LoadTeamEvents extends AsyncTask<Void, Void, Void> {
+
+		boolean force;
+
+		public LoadTeamEvents(boolean force) {
+			this.force = force;
+		}
 
 		@Override
 		protected void onPreExecute() {
@@ -80,8 +86,7 @@ public class EventSlide extends Fragment {
 		protected Void doInBackground(Void... params) {
 			Parser<ArrayList<Event>> parser = new Parser<>("Event",
 					Constants.getEventURL("frc" + teamNumber, year), new
-					TypeToken<ArrayList<Event>>() {
-					}.getType(), getActivity());
+					TypeToken<ArrayList<Event>>() {}.getType(), getActivity(), force);
 			parser.fetchJSON(false);
 			while (parser.parsingComplete) ;
 			if (parser.getData() != null) {

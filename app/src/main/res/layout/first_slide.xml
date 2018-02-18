@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_weight="10"
-              android:background="@color/blue_primary"
+              android:background="@color/primary"
               android:orientation="vertical"
               android:paddingLeft="16dp"
               android:paddingRight="16dp">
@@ -13,27 +13,28 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="3"
+        android:layout_weight="2"
         android:fontFamily="sans-serif-thin"
-        android:gravity="center"
+        android:gravity="center|bottom"
         android:text="@string/welcome_slide_text"
         android:textColor="@color/icons"
         android:textSize="28sp"/>
 
     <ImageView
         android:id="@+id/imageView"
+        android:scaleType="fitCenter"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="7"
         android:contentDescription="@string/icon_description"
-        android:src="@drawable/app_icon"/>
+        android:src="@drawable/ic_launcher_foreground"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="3"
-        android:gravity="center"
+        android:layout_weight="1"
+        android:gravity="center|top"
         android:text="@string/app_description"
         android:textColor="@color/icons"
         android:textSize="16sp"/>

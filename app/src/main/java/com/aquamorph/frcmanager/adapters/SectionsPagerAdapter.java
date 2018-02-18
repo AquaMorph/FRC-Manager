@@ -38,13 +38,13 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	/**
 	 * refreshAll() reloads all data in the fragments.
 	 */
-	public void refreshAll() {
-		((TeamScheduleFragment) mFragmentManager.findFragmentByTag("fragment:0")).refresh();
-		((EventScheduleFragment) mFragmentManager.findFragmentByTag("fragment:1")).refresh();
-		((RankFragment) mFragmentManager.findFragmentByTag("fragment:2")).refresh();
-		((TeamFragment) mFragmentManager.findFragmentByTag("fragment:3")).refresh();
-		((AllianceFragment) mFragmentManager.findFragmentByTag("fragment:4")).refresh();
-		((AwardFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh();
+	public void refreshAll(boolean force) {
+		((TeamScheduleFragment) mFragmentManager.findFragmentByTag("fragment:0")).refresh(force);
+		((EventScheduleFragment) mFragmentManager.findFragmentByTag("fragment:1")).refresh(force);
+		((RankFragment) mFragmentManager.findFragmentByTag("fragment:2")).refresh(force);
+		((TeamFragment) mFragmentManager.findFragmentByTag("fragment:3")).refresh(force);
+		((AllianceFragment) mFragmentManager.findFragmentByTag("fragment:4")).refresh(force);
+		((AwardFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh(force);
 	}
 
 	@Override
