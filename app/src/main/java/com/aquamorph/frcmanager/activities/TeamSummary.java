@@ -33,7 +33,9 @@ public class TeamSummary extends AppCompatActivity {
 			toolbar.setTitle(teamNumber);
 		}
 		setSupportActionBar(toolbar);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 		TeamScheduleFragment teamScheduleFragment = TeamScheduleFragment.newInstance();
 		teamScheduleFragment.setTeamNumber(teamNumber);
 		getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, teamScheduleFragment).commit();

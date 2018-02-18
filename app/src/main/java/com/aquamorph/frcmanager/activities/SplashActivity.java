@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 /**
- * <p></p>
+ * Splashscreen for app startup
  *
  * @author Christian Colglazier
  * @version 7/27/2016
@@ -15,7 +15,6 @@ public class SplashActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 		finish();

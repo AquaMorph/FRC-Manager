@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.adapters;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -47,6 +48,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		((AwardFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh(force);
 	}
 
+	@NonNull
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 

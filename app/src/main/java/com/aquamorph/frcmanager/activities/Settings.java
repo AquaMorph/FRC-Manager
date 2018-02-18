@@ -4,11 +4,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.fragments.SettingsFragment;
+import com.aquamorph.frcmanager.utils.Logging;
 
 /**
  * Settings activity to take users input about how the app should be set up as well as
@@ -51,9 +51,9 @@ public class Settings extends AppCompatActivity implements
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		Log.i("Settings", "Settings Changed");
+		Logging.info(this, "Settings Changed", 0);
 		if (key.equals("theme")) {
-			Log.i("Settings", "Theme Changed");
+			Logging.info(this, "Theme Changed",0);
 			this.recreate();
 		}
 	}

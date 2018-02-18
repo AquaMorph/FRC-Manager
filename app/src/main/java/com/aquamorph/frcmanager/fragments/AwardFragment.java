@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -60,7 +61,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
 		swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
@@ -98,8 +99,8 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	}
 
 	/**
-	 * refrest() loads data needed for this fragment.
-	 * @param force
+	 * refrest() loads data needed for this fragment
+	 * @param force force reload data
 	 */
 	public void refresh(boolean force) {
 		if (!eventKey.equals("")) {
@@ -119,7 +120,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 		boolean force;
 
-		public LoadAwards(boolean force) {
+		LoadAwards(boolean force) {
 			this.force = force;
 		}
 
@@ -127,8 +128,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 		protected void onPreExecute() {
 			swipeRefreshLayout.setRefreshing(true);
 			parser = new Parser<>("eventAwards", Constants.getEventAwards(eventKey),
-					new TypeToken<ArrayList<Award>>() {
-					}.getType(), getActivity(), force);
+					new TypeToken<ArrayList<Award>>() {}.getType(), getActivity(), force);
 		}
 
 		@Override

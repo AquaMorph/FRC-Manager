@@ -25,7 +25,6 @@ import static android.view.LayoutInflater.from;
  */
 public class AllianceAdapter extends RecyclerView.Adapter<AllianceAdapter.MyViewHolder> {
 
-	private String TAG = "AllianceAdapter";
 	private LayoutInflater inflater;
 	private ArrayList<Alliance> data;
 	private Context context;

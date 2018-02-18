@@ -3,31 +3,27 @@ package com.aquamorph.frcmanager.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 /**
- * <p></p>
+ * Handles storing and receiving keys.
  *
  * @author Christian Colglazier
  * @version 2/24/2017
  */
 
 public class AppConfig {
-	private static String TAG = "AppConfig";
 
 	/**
 	 * Stores the year so SharedPreferences
 	 *
-	 * @param year
-	 * @param context
+	 * @param year year of event being tracked
+	 * @param context app context
 	 */
 	public static void setYear(String year, Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("year", year);
-		if (Constants.TRACING_LEVEL > 0) {
-			Log.i(TAG, "Year set to: " + year);
-		}
+		Logging.info(context, "Year set to: " + year, 0);
 		editor.apply();
 	}
 
@@ -35,7 +31,7 @@ public class AppConfig {
 	 * setTeamNumber() saves the team number to shared preferences.
 	 *
 	 * @param team number
-	 * @param context
+	 * @param context app context
 	 */
 	public static void setTeamNumber(String team, Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -48,7 +44,7 @@ public class AppConfig {
 	 * setEventKey set the shared variable of the event key.
 	 *
 	 * @param key identification key of an event
-	 * @param context
+	 * @param context app context
 	 */
 	public static void setEventKey(String key, Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -61,7 +57,7 @@ public class AppConfig {
 	 * setEventShortName() set the shared variable of the events name.
 	 *
 	 * @param name event name
-	 * @param context
+	 * @param context app context
 	 */
 	public static void setEventShortName(String name, Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);

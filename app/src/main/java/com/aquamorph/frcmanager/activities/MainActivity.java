@@ -11,13 +11,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
+import com.aquamorph.frcmanager.utils.Logging;
 
 /**
  * Default activity of the app.
@@ -27,10 +27,8 @@ import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
  */
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener {
 
-	private String TAG = "MainActivity";
 	private static SectionsPagerAdapter mSectionsPagerAdapter;
 	private String teamNumber, eventName, teamRank, teamRecord;
-	private ViewPager mViewPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		setContentView(R.layout.activity_main);
-		Log.i(TAG, "onConfigurationChanged");
+		Logging.info(this, "onConfigurationChanged", 0);
 		listener();
 	}
 
@@ -187,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		getSupportActionBar().setSubtitle(getAppSubTitle());
 
 		// Set up the ViewPager with the sections adapter.
-		mViewPager = findViewById(R.id.container);
+		ViewPager mViewPager = findViewById(R.id.container);
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
 		mViewPager.setAdapter(mSectionsPagerAdapter);

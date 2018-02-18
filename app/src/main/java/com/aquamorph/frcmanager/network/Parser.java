@@ -5,11 +5,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.models.Status;
+import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.utils.Logging;
 import com.google.gson.Gson;
 
@@ -30,8 +29,6 @@ import java.util.Arrays;
 public class Parser<T> {
 
 	public volatile boolean parsingComplete = true;
-	public Boolean online;
-	private String TAG = "Parser";
 	private T data;
 	private Gson gson = new Gson();
 	private Type type;
@@ -56,7 +53,6 @@ public class Parser<T> {
 		this.context = activity.getApplicationContext();
 		this.activity = activity;
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		TAG = name + "." + TAG;
 		if (force) {
 			Logging.debug(this, name + " force reloading", 1);
 			storeData("");
@@ -73,7 +69,7 @@ public class Parser<T> {
 	public void fetchJSON(final Boolean storeData) {
 
 		Logging.debug(this, "Loading " + name, 0);
-			online = Constants.isNetworkAvailable(context);
+		Boolean online = Constants.isNetworkAvailable(context);
 
 			// Displays message saying there is no connection
 			if (!online) {

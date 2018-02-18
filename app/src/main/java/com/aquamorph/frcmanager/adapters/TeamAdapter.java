@@ -30,7 +30,6 @@ import static android.view.LayoutInflater.from;
  */
 public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> {
 
-	private String TAG = "TeamAdapter", info;
 	private LayoutInflater inflater;
 	private Context context;
 	private ArrayList<Team> data;

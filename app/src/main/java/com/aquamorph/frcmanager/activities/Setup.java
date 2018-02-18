@@ -6,9 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.fragments.setup.EventSlide;
 import com.aquamorph.frcmanager.fragments.setup.Slide;
@@ -24,7 +22,6 @@ import com.github.paolorotolo.appintro.AppIntro;
  */
 public class Setup extends AppIntro {
 
-	private String TAG = "Setup";
 	private TeamNumberSlide teamNumberSlide;
 	private EventSlide eventSlide;
 
@@ -54,9 +51,7 @@ public class Setup extends AppIntro {
 	@Override
 	public void onDonePressed(Fragment currentFragment) {
 		super.onDonePressed(currentFragment);
-		if(Constants.TRACING_LEVEL > 0) {
-			Log.i(TAG, "Team Number: " + teamNumberSlide.getTeamNumber());
-		}
+		Logging.info(this, "Team Number: " + teamNumberSlide.getTeamNumber(), 0);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("teamRank", "");
@@ -71,7 +66,7 @@ public class Setup extends AppIntro {
 		super.onSlideChanged(oldFragment, newFragment);
 		if(teamNumberSlide!= null && teamNumberSlide.getTeamNumber().matches("[0-9]+")) {
 			try {
-				Logging.debug(this, "Gettings events for Setup", 0);
+				Logging.info(this, "Gettings events for Setup", 0);
 				teamNumberSlide.setTeamNumber(teamNumberSlide.getTeamNumber());
 				eventSlide.load(true);
 			} catch (Exception e) {}

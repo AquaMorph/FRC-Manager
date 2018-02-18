@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
-import com.aquamorph.frcmanager.models.Team;
 import com.aquamorph.frcmanager.models.Rank;
+import com.aquamorph.frcmanager.models.Team;
 import com.aquamorph.frcmanager.utils.Constants;
 
 import java.util.ArrayList;
@@ -33,7 +33,6 @@ import static android.view.LayoutInflater.from;
  */
 public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> {
 
-	private String TAG = "RankAdapter";
 	private LayoutInflater inflater;
 	private Context context;
 	private ArrayList<Rank> data;
@@ -85,14 +84,16 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 				column4.setText("");
 			}
 
-			TextViewCompat.setAutoSizeTextTypeWithDefaults(column1,
-					TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-			TextViewCompat.setAutoSizeTextTypeWithDefaults(column2,
-					TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-			TextViewCompat.setAutoSizeTextTypeWithDefaults(column3,
-					TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-			TextViewCompat.setAutoSizeTextTypeWithDefaults(column4,
-					TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+			if(Build.VERSION.SDK_INT >= 26) {
+				TextViewCompat.setAutoSizeTextTypeWithDefaults(column1,
+						TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+				TextViewCompat.setAutoSizeTextTypeWithDefaults(column2,
+						TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+				TextViewCompat.setAutoSizeTextTypeWithDefaults(column3,
+						TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+				TextViewCompat.setAutoSizeTextTypeWithDefaults(column4,
+						TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+			}
 
 			column1.setTextColor(typedValue.data);
 			column2.setTypeface(null, Typeface.ITALIC);
@@ -120,7 +121,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 	 * @param number of the team
 	 * @return name of the team
 	 */
-	public String getTeamName(String number) {
+	private String getTeamName(String number) {
 		for (int i = 0; i < teams.size(); i++) {
 			if (number.equals(teams.get(i).key)) {
 				return teams.get(i).nickname;
@@ -136,7 +137,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		TextView details;
 		TableLayout table;
 
-		public MyViewHolder(View itemView) {
+		MyViewHolder(View itemView) {
 			super(itemView);
 			itemView.setOnClickListener(this);
 			table = itemView.findViewById(R.id.table);

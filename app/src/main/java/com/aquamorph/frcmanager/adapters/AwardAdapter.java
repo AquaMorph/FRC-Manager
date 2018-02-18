@@ -23,12 +23,8 @@ import static android.view.LayoutInflater.from;
  */
 public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder> {
 
-	private String TAG = "AwardAdapter";
 	private LayoutInflater inflater;
 	private ArrayList<Award> data;
-	private String team = "";
-	private String awardee = "";
-	private View view;
 
 	public AwardAdapter(Context context, ArrayList<Award> data) {
 		inflater = from(context);
@@ -37,15 +33,15 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 
 	@Override
 	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		view = inflater.inflate(R.layout.award, parent, false);
+		View view = inflater.inflate(R.layout.award, parent, false);
 		return new MyViewHolder(view);
 	}
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
 		holder.setIsRecyclable(false);
-		team = "";
-		awardee = "";
+		String team = "";
+		String awardee = "";
 
 		for (int i = 0; data.get(position).recipient_list.length > i; i++) {
 			if (data.get(position).recipient_list[i].team_key != null) {

@@ -24,6 +24,18 @@ public class Logging {
     }
 
     /**
+     * info() prints to info at a tracing level
+     * @param object
+     * @param message
+     * @param level
+     */
+    public static void info(Object object, String message, int level) {
+        if (Constants.TRACING_LEVEL >= level ) {
+            Log.i(object.getClass().getSimpleName(), message);
+        }
+    }
+
+    /**
      * error() prints to error at a tracing level
      * @param object
      * @param message

@@ -9,10 +9,8 @@ import android.view.Display;
 import android.view.View;
 
 import com.aquamorph.frcmanager.BuildConfig;
-import com.aquamorph.frcmanager.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A collection of constants needed to interact with the Blue Alliance.
@@ -22,11 +20,10 @@ import java.util.Arrays;
  */
 public class Constants {
 
-	public static final String TAG = "FRC Regional";
-	public static final String URL = "https://www.thebluealliance.com/api/v3";
+	private static final String URL = "https://www.thebluealliance.com/api/v3";
 	public static final String TBA_HEADER = "X-TBA-Auth-Key";
 	public static final Boolean FORCE_DATA_RELOAD = false;
-	public static final int TRACING_LEVEL = 3;
+	static final int TRACING_LEVEL = 3;
 	public static final int MAX_EVENT_TITLE_LENGTH = 20;
 
 	/**
@@ -194,7 +191,7 @@ public class Constants {
 	/**
 	 * isLargeScreen returns if the screen is large or not
 	 *
-	 * @param context
+	 * @param context app context
 	 * @return screen size
 	 */
 	public static boolean isLargeScreen(Context context) {

@@ -9,14 +9,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
 import com.aquamorph.frcmanager.models.Match;
+import com.aquamorph.frcmanager.utils.Constants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -33,13 +32,10 @@ import static android.view.LayoutInflater.from;
  */
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyViewHolder> {
 
-	private String TAG = "ScheduleAdapter";
 	private LayoutInflater inflater;
 	private Context context;
 	private ArrayList<Match> data;
 	private String team;
-	private Boolean isAttached = true;
-	private int lastPosition = -1;
 
 	public ScheduleAdapter(Context context, ArrayList<Match> data, String team) {
 		inflater = from(context);
@@ -136,7 +132,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 		}
 	}
 
-	protected class MyViewHolder extends RecyclerView.ViewHolder {
+	class MyViewHolder extends RecyclerView.ViewHolder {
 
 		private TextView matchNumber;
 		private TextView redTeam1;

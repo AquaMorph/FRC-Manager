@@ -4,9 +4,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +14,13 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.models.Event;
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.EventSpinnerAdapter;
+import com.aquamorph.frcmanager.models.Event;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.AppConfig;
+import com.aquamorph.frcmanager.utils.Constants;
+import com.aquamorph.frcmanager.utils.Logging;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -34,7 +35,6 @@ import static java.util.Collections.sort;
  */
 public class EventSlide extends Fragment {
 
-	String TAG = "EventSlide";
 	Spinner eventSpinnder;
 	private EventSpinnerAdapter dataAdapter;
 	ArrayList<Event> eventList = new ArrayList<>();
@@ -48,8 +48,8 @@ public class EventSlide extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.event_slide, container, false);
 
 		eventSpinnder = view.findViewById(R.id.event_spinner);
@@ -79,7 +79,7 @@ public class EventSlide extends Fragment {
 		protected void onPreExecute() {
 			teamNumber = prefs.getString("teamNumber", "");
 			year = prefs.getString("year", "");
-			Log.i(TAG, "Team Number: " + teamNumber);
+			Logging.info(this, "Team Number: " + teamNumber,0);
 		}
 
 		@Override
@@ -93,9 +93,8 @@ public class EventSlide extends Fragment {
 				eventList.clear();
 				eventList.addAll(parser.getData());
 				sort(eventList);
-				Log.i(TAG, "Event size: " + eventList.size() + parser.getData().toString());
 			}
-			Log.i(TAG, "Event size: " + eventList.size());
+			Logging.info(this, "Event size: " + eventList.size(), 0);
 			return null;
 		}
 
@@ -110,10 +109,8 @@ public class EventSlide extends Fragment {
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 			AppConfig.setEventKey(eventList.get(position).key, getContext());
-			if (Constants.TRACING_LEVEL > 0) {
-				Log.i(TAG, "Key:" + eventList.get(position).key);
-				Log.i(TAG, "Short Name:" + eventList.get(position).short_name);
-			}
+			Logging.info(this, "Key:" + eventList.get(position).key, 0);
+			Logging.info(this, "Short Name:" + eventList.get(position).short_name,0);
 			AppConfig.setEventShortName(eventList.get(position).short_name, getContext());
 			((TextView) eventSpinnder.getSelectedView()).setTextColor(getResources()
 					.getColor(R.color.icons));

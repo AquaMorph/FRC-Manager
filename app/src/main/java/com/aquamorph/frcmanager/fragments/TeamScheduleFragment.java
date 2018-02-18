@@ -12,7 +12,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.Constants;
+import com.aquamorph.frcmanager.utils.Logging;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -40,7 +40,6 @@ import static java.util.Collections.sort;
 public class TeamScheduleFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
 	SharedPreferences prefs;
-	private String TAG = "TeamScheduleFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
@@ -70,9 +69,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		if (Constants.TRACING_LEVEL >= 3) {
-			Log.i(TAG, "TeamScheduleFragment created");
-		}
+		Logging.info(this, "TeamScheduleFragment created", 3);
 	}
 
 	@Override
@@ -84,9 +81,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 				teamNumber = savedInstanceState.getString("teamNumber");
 			}
 			eventKey = savedInstanceState.getString("eventKey");
-			if (Constants.TRACING_LEVEL >= 2) {
-				Log.i(TAG, "savedInstanceState teamNumber: " + teamNumber);
-			}
+			Logging.info(this, "savedInstanceState teamNumber: " + teamNumber, 2);
 		}
 		listener();
 		Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
@@ -98,9 +93,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		super.onSaveInstanceState(outState);
 		outState.putString("teamNumber", teamNumber);
 		outState.putString("eventKey", eventKey);
-		if (Constants.TRACING_LEVEL >= 3) {
-			Log.i(TAG, "onSaveInstanceState");
-		}
+		Logging.info(this, "onSaveInstanceState", 3);
 	}
 
 	@Override
@@ -109,9 +102,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 		view = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
 				.inflate(R.layout.fragment_team_schedule, null);
 		listener();
-		if (Constants.TRACING_LEVEL >= 3) {
-			Log.i(TAG, "Configuration Changed");
-		}
+		Logging.info(this, "Configuration Changed", 3);
 	}
 
 	@Override
@@ -126,14 +117,12 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	 * @param force
 	 */
 	public void refresh(boolean force) {
-		if (Constants.TRACING_LEVEL >= 2) {
-			Log.i(TAG, "teamNumber: " + teamNumber);
-		}
-		Log.i(TAG, "Data is being refreshed");
+		Logging.info(this, "teamNumber: " + teamNumber, 2);
+		Logging.info(this, "Data is being refreshed", 0);
 		if (!teamNumber.equals("") && !eventKey.equals("")) {
 			new LoadTeamSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		} else {
-			Log.i(TAG, "Not set");
+			Logging.error(this, "Team or event key not set", 0);
 		}
 	}
 
@@ -186,7 +175,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		boolean force;
 
-		public LoadTeamSchedule(boolean force) {
+		LoadTeamSchedule(boolean force) {
 			this.force = force;
 		}
 

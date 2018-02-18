@@ -16,13 +16,13 @@ import java.net.URL;
  * @author Christian Colglazier
  * @version 3/29/2016
  */
-public class BlueAlliance {
+class BlueAlliance {
 
 	HttpURLConnection conn;
 	private String lastUpdated = "";
 	private int status;
 
-	public InputStream connect(String address, String updated, Context context) {
+	InputStream connect(String address, String updated, Context context) {
 
 		try {
 			URL url = new URL(address);
@@ -44,7 +44,7 @@ public class BlueAlliance {
 		return null;
 	}
 
-	public void close() {
+	void close() {
 		try {
 			if (conn != null) {
 				conn.getInputStream().close();
@@ -59,7 +59,7 @@ public class BlueAlliance {
 	 *
 	 * @return last updated
 	 */
-	public String getLastUpdated() {
+	String getLastUpdated() {
 		return lastUpdated;
 	}
 
@@ -68,7 +68,7 @@ public class BlueAlliance {
 	 *
 	 * @return connection status
 	 */
-	public int getStatus() {
+	int getStatus() {
 		return status;
 	}
 }

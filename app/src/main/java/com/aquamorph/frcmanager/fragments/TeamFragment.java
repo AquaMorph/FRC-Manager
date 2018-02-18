@@ -38,11 +38,9 @@ import static java.util.Collections.sort;
  */
 public class TeamFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private static String TAG = "TeamFragment";
 	private Parser<ArrayList<Team>> parser;
 	private Parser<Rank> rankParser;
 	private SharedPreferences prefs;
-	private SharedPreferences.Editor editor;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;

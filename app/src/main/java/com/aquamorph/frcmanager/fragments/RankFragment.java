@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,14 +21,13 @@ import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.RankAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
-import com.aquamorph.frcmanager.models.Team;
 import com.aquamorph.frcmanager.models.Rank;
+import com.aquamorph.frcmanager.models.Team;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import static java.util.Collections.sort;
 
@@ -39,7 +39,6 @@ import static java.util.Collections.sort;
  */
 public class RankFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private static String TAG = "RankFragment";
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
@@ -68,8 +67,8 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -135,7 +134,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		boolean force;
 
-		public LoadRanks(boolean force) {
+		LoadRanks(boolean force) {
 			this.force = force;
 		}
 
