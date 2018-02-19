@@ -41,12 +41,9 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	 * refreshAll() reloads all data in the fragments.
 	 */
 	public void refreshAll(boolean force) {
-		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:0")).refresh(force);
-		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:1")).refresh(force);
-		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:2")).refresh(force);
-		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:3")).refresh(force);
-		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:4")).refresh(force);
-		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh(force);
+		for (int i = 0; i < tabNames.length; i++ ) {
+			((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:" + i)).refresh(force);
+		}
 	}
 
 	@NonNull

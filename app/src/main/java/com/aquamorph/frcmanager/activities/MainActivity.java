@@ -14,9 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
+import com.aquamorph.frcmanager.utils.Constants;
+import com.aquamorph.frcmanager.utils.Data;
 import com.aquamorph.frcmanager.utils.Logging;
 
 /**
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 	private static SectionsPagerAdapter mSectionsPagerAdapter;
 	private String teamNumber, eventName, teamRank, teamRecord;
+	public Data data;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		eventName = prefs.getString("eventShortName", "");
 		teamRank = prefs.getString("teamRank", "");
 		teamRecord = prefs.getString("teamRecord", "");
+
+		data = new Data(this);
 
 		if (teamNumber.equals("")) openSetup();
 
