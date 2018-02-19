@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,7 +38,8 @@ import static java.util.Collections.sort;
  * @author Christian Colglazier
  * @version 10/19/2016
  */
-public class TeamScheduleFragment extends Fragment implements OnSharedPreferenceChangeListener {
+public class TeamScheduleFragment extends Fragment
+		implements OnSharedPreferenceChangeListener, RefreshFragment {
 
 	SharedPreferences prefs;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -73,8 +75,8 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
 		if (savedInstanceState != null) {
 			if (getTeamFromSettings) {

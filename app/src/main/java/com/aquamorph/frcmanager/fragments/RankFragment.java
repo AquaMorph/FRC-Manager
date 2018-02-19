@@ -37,7 +37,8 @@ import static java.util.Collections.sort;
  * @author Christian Colglazier
  * @version 10/20/2016
  */
-public class RankFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class RankFragment extends Fragment
+		implements SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
@@ -114,7 +115,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 	/**
 	 * refrest() loads data needed for this fragment.
 	 */
-	public void refresh(Boolean force) {
+	public void refresh(boolean force) {
 		if (!eventKey.equals("") && !teamNumber.equals("")) {
 			new LoadRanks(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}

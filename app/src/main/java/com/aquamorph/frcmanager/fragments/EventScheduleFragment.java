@@ -33,7 +33,8 @@ import java.util.Collections;
  * @author Christian Colglazier
  * @version 3/29/2016
  */
-public class EventScheduleFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class EventScheduleFragment extends Fragment
+		implements SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
 	SharedPreferences prefs;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -100,7 +101,7 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	/**
 	 * refresh reloads the event schedule and repopulates the listview
 	 */
-	public void refresh(Boolean force) {
+	public void refresh(boolean force) {
 		if (!eventKey.equals("")) {
 			new LoadEventSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}

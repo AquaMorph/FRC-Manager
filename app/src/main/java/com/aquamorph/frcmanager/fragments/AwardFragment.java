@@ -33,7 +33,8 @@ import java.util.ArrayList;
  * @author Christian Colglazier
  * @version 2/13/2016
  */
-public class AwardFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AwardFragment extends Fragment
+		implements SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
 	SharedPreferences prefs;
 	private SwipeRefreshLayout swipeRefreshLayout;

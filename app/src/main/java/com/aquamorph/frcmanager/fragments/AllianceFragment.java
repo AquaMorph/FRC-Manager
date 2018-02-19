@@ -21,13 +21,11 @@ import com.aquamorph.frcmanager.adapters.AllianceAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.Alliance;
-import com.aquamorph.frcmanager.models.Event;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Displays a list of alliance for eliminations.
@@ -35,7 +33,8 @@ import java.util.Arrays;
  * @author Christian Colglazier
  * @version 10/20/2016
  */
-public class AllianceFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AllianceFragment extends Fragment
+		implements SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;

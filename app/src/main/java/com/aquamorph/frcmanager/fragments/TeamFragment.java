@@ -36,7 +36,8 @@ import static java.util.Collections.sort;
  * @author Christian Colglazier
  * @version 12/30/2017
  */
-public class TeamFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class TeamFragment extends Fragment
+		implements SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
 	private Parser<ArrayList<Team>> parser;
 	private Parser<Rank> rankParser;
@@ -110,7 +111,7 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 	/**
 	 * refrest() loads data needed for this fragment.
 	 */
-	public void refresh(Boolean force) {
+	public void refresh(boolean force) {
 		if (!eventKey.equals("") && !teamNumber.equals("")) {
 			new LoadEventTeams(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}

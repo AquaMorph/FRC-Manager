@@ -12,6 +12,7 @@ import com.aquamorph.frcmanager.fragments.AllianceFragment;
 import com.aquamorph.frcmanager.fragments.AwardFragment;
 import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
 import com.aquamorph.frcmanager.fragments.RankFragment;
+import com.aquamorph.frcmanager.fragments.RefreshFragment;
 import com.aquamorph.frcmanager.fragments.TeamFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 
@@ -40,12 +41,12 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	 * refreshAll() reloads all data in the fragments.
 	 */
 	public void refreshAll(boolean force) {
-		((TeamScheduleFragment) mFragmentManager.findFragmentByTag("fragment:0")).refresh(force);
-		((EventScheduleFragment) mFragmentManager.findFragmentByTag("fragment:1")).refresh(force);
-		((RankFragment) mFragmentManager.findFragmentByTag("fragment:2")).refresh(force);
-		((TeamFragment) mFragmentManager.findFragmentByTag("fragment:3")).refresh(force);
-		((AllianceFragment) mFragmentManager.findFragmentByTag("fragment:4")).refresh(force);
-		((AwardFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh(force);
+		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:0")).refresh(force);
+		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:1")).refresh(force);
+		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:2")).refresh(force);
+		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:3")).refresh(force);
+		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:4")).refresh(force);
+		((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh(force);
 	}
 
 	@NonNull
