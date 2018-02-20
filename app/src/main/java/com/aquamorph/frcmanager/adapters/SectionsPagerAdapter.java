@@ -38,17 +38,25 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		mFragments = new SparseArray<>();
 	}
 
+	public boolean isDataLoading() {
+		return !Data.allianceParsingComplete || !Data.awardParsingComplete
+				|| !Data.eventMatchesParsingComplete;
+	}
+
 	/**
 	 * refreshAll() reloads all data in the fragments.
 	 */
 	public void refreshAll(boolean force) {
-		refrestData(force);
-		for (int i = 0; i < tabNames.length; i++ ) {
-			((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:" + i)).refresh(force);
+		if(force || !isDataLoading()) {
+			refrestData(force);
+			for (int i = 0; i < tabNames.length; i++) {
+				((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:" + i)).refresh(force);
+			}
 		}
 	}
 
 	public void refrestData(boolean force) {
+		Data.awardParsingComplete = false;
 		Data.allianceParsingComplete = false;
 		Data.eventMatchesParsingComplete= false;
 		Data.refresh(force);

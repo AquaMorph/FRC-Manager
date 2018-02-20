@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.models.Alliance;
+import com.aquamorph.frcmanager.models.Award;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.Parser;
 import com.google.gson.reflect.TypeToken;
@@ -22,10 +23,14 @@ public class Data {
 	public static String teamNumber = "";
 	public static ArrayList<Alliance> alliances = new ArrayList<>();
 	public static ArrayList<Match> eventMatches = new ArrayList<>();
+	public static ArrayList<Award> awards = new ArrayList<>();
+	public static boolean awardParsingComplete = false;
 	public static boolean eventMatchesParsingComplete = false;
 	public static boolean allianceParsingComplete = false;
+	private static Parser<ArrayList<Award>> parser;
 	private static Parser<ArrayList<Alliance>> allianceParser;
-	private static Parser<ArrayList<Match>> parser;
+	private static Parser<ArrayList<Match>> eventMatchParser;
+
 
 	public Data(Activity activity) {
 		this.activity = activity;
@@ -33,8 +38,39 @@ public class Data {
 
 	public static void refresh(boolean force) {
 		if (!eventKey.equals("")) {
+			new LoadAwards(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new LoadEventSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		}
+	}
+
+	static class LoadAwards extends AsyncTask<Void, Void, Void> {
+
+		boolean force;
+
+		LoadAwards(boolean force) {
+			this.force = force;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			awardParsingComplete = false;
+			parser = new Parser<>("eventAwards", Constants.getEventAwards(Data.eventKey),
+					new TypeToken<ArrayList<Award>>() {}.getType(), activity, force);
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			parser.fetchJSON(true);
+			while (parser.parsingComplete) ;
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			awards.clear();
+			awards.addAll(parser.getData());
+			awardParsingComplete = true;
 		}
 	}
 
@@ -48,22 +84,22 @@ public class Data {
 
 		@Override
 		protected void onPreExecute() {
-			parser = new Parser<>("eventMatches", Constants.getEventMatches(eventKey),
-					new TypeToken<ArrayList<Match>>() {}.getType(), activity, force);
 			eventMatchesParsingComplete = false;
+			eventMatchParser = new Parser<>("eventMatches", Constants.getEventMatches(eventKey),
+					new TypeToken<ArrayList<Match>>() {}.getType(), activity, force);
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parser.fetchJSON(true);
-			while (parser.parsingComplete) ;
+			eventMatchParser.fetchJSON(true);
+			while (eventMatchParser.parsingComplete) ;
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			eventMatches.clear();
-			eventMatches.addAll(parser.getData());
+			eventMatches.addAll(eventMatchParser.getData());
 			Collections.sort(eventMatches);
 			eventMatchesParsingComplete = true;
 		}

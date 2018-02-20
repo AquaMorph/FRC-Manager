@@ -23,6 +23,7 @@ import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.Award;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.Constants;
+import com.aquamorph.frcmanager.utils.Data;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -41,9 +42,6 @@ public class AwardFragment extends Fragment
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Award> awards = new ArrayList<>();
-	private String eventKey = "";
-	private Parser<ArrayList<Award>> parser;
 	private Boolean firstLoad = true;
 
 	/**
@@ -76,7 +74,7 @@ public class AwardFragment extends Fragment
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new AwardAdapter(getContext(), awards);
+		adapter = new AwardAdapter(getContext(), Data.awards);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -85,17 +83,16 @@ public class AwardFragment extends Fragment
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
-		eventKey = prefs.getString("eventKey", "");
 
 		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(awards, recyclerView, emptyView);
+		Constants.checkNoDataScreen(Data.awards, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (awards.size() == 0)
+		if (Data.awards.size() == 0)
 			refresh(false);
 	}
 
@@ -104,7 +101,7 @@ public class AwardFragment extends Fragment
 	 * @param force force reload data
 	 */
 	public void refresh(boolean force) {
-		if (!eventKey.equals("")) {
+		if (!Data.eventKey.equals("")) {
 			new LoadAwards(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
@@ -112,8 +109,7 @@ public class AwardFragment extends Fragment
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("eventKey")) {
-			eventKey = sharedPreferences.getString("eventKey", "");
-			refresh(false);
+			refresh(true);
 		}
 	}
 
@@ -128,22 +124,17 @@ public class AwardFragment extends Fragment
 		@Override
 		protected void onPreExecute() {
 			swipeRefreshLayout.setRefreshing(true);
-			parser = new Parser<>("eventAwards", Constants.getEventAwards(eventKey),
-					new TypeToken<ArrayList<Award>>() {}.getType(), getActivity(), force);
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parser.fetchJSON(true);
-			while (parser.parsingComplete) ;
+			while (!Data.allianceParsingComplete) ;
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			awards.clear();
-			awards.addAll(parser.getData());
-			Constants.checkNoDataScreen(awards, recyclerView, emptyView);
+			Constants.checkNoDataScreen(Data.awards, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;
 			swipeRefreshLayout.setRefreshing(false);

@@ -166,13 +166,15 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		Data.teamNumber = sharedPreferences.getString("teamNumber", "0000");
 		eventName = sharedPreferences.getString("eventShortName", "North Carolina");
 		teamRank = sharedPreferences.getString("teamRank", "");
 		teamRecord = sharedPreferences.getString("teamRecord", "");
 		switch (key) {
 			case "eventKey":
 				Data.eventKey = sharedPreferences.getString("eventKey", "");
+				break;
+			case "teamNumber":
+				Data.teamNumber = sharedPreferences.getString("teamNumber", "0000");
 				break;
 			default:
 				break;

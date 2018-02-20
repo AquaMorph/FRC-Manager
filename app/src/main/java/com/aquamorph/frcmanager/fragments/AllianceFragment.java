@@ -88,17 +88,11 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 	 */
 	public void refresh(boolean force) {
 		if (!Data.eventKey.equals("")) {
-			new LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new LoadAlliances().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
 	class LoadAlliances extends AsyncTask<Void, Void, Void> {
-
-		boolean force;
-
-		public LoadAlliances(boolean force) {
-			this.force = force;
-		}
 
 		@Override
 		protected void onPreExecute() {
