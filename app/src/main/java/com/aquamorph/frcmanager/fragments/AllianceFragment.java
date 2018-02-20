@@ -25,7 +25,7 @@ import com.aquamorph.frcmanager.utils.Data;
  * Displays a list of alliance for eliminations.
  *
  * @author Christian Colglazier
- * @version 10/20/2016
+ * @version 2/20/2018
  */
 public class AllianceFragment extends Fragment implements RefreshFragment {
 

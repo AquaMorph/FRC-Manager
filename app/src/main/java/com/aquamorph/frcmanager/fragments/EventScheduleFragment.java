@@ -22,6 +22,7 @@ import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.Constants;
+import com.aquamorph.frcmanager.utils.Data;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import java.util.Collections;
  * Displays a list of matches at an event.
  *
  * @author Christian Colglazier
- * @version 3/29/2016
+ * @version 2/20/2018
  */
 public class EventScheduleFragment extends Fragment
 		implements SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
@@ -41,9 +42,6 @@ public class EventScheduleFragment extends Fragment
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Match> eventMatches = new ArrayList<>();
-	private String teamNumber = "", eventKey = "";
-	private Parser<ArrayList<Match>> parser;
 	private Boolean firstLoad = true;
 
 	/**
@@ -66,8 +64,6 @@ public class EventScheduleFragment extends Fragment
 							 Bundle savedInstanceState) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(EventScheduleFragment.this);
-		teamNumber = prefs.getString("teamNumber", "");
-		eventKey = prefs.getString("eventKey", "");
 
 		View view = inflater.inflate(R.layout.fragment_fastscroll, container, false);
 		mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
@@ -81,20 +77,20 @@ public class EventScheduleFragment extends Fragment
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new ScheduleAdapter(getContext(), eventMatches, teamNumber);
+		adapter = new ScheduleAdapter(getContext(), Data.eventMatches, Data.teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
-		Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
+		Constants.checkNoDataScreen(Data.eventMatches, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (eventMatches.size() == 0)
+		if (Data.eventMatches.size() == 0)
 			refresh(false);
 	}
 
@@ -102,7 +98,7 @@ public class EventScheduleFragment extends Fragment
 	 * refresh reloads the event schedule and repopulates the listview
 	 */
 	public void refresh(boolean force) {
-		if (!eventKey.equals("")) {
+		if (!Data.eventKey.equals("")) {
 			new LoadEventSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
@@ -110,9 +106,7 @@ public class EventScheduleFragment extends Fragment
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
-			teamNumber = sharedPreferences.getString("teamNumber", "");
-			eventKey = sharedPreferences.getString("eventKey", "");
-			adapter = new ScheduleAdapter(getContext(), eventMatches, teamNumber);
+			adapter = new ScheduleAdapter(getContext(), Data.eventMatches, Data.teamNumber);
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
 			recyclerView.setAdapter(adapter);
@@ -132,23 +126,17 @@ public class EventScheduleFragment extends Fragment
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
-			parser = new Parser<>("eventMatches", Constants.getEventMatches(eventKey), new TypeToken<ArrayList<Match>>() {
-			}.getType(), getActivity(), force);
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parser.fetchJSON(true);
-			while (parser.parsingComplete) ;
+			while (!Data.eventMatchesParsingComplete) ;
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			eventMatches.clear();
-			eventMatches.addAll(parser.getData());
-			Collections.sort(eventMatches);
-			Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
+			Constants.checkNoDataScreen(Data.eventMatches, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);

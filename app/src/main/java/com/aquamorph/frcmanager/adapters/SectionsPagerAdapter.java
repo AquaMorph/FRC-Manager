@@ -50,6 +50,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 	public void refrestData(boolean force) {
 		Data.allianceParsingComplete = false;
+		Data.eventMatchesParsingComplete= false;
 		Data.refresh(force);
 	}
 

@@ -29,7 +29,7 @@ import com.aquamorph.frcmanager.utils.Logging;
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener {
 
 	private static SectionsPagerAdapter mSectionsPagerAdapter;
-	private String teamNumber, eventName, teamRank, teamRecord;
+	private String eventName, teamRank, teamRecord;
 	public Data data;
 
 	@Override
@@ -39,14 +39,14 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
-		teamNumber = prefs.getString("teamNumber", "");
+		Data.teamNumber = prefs.getString("teamNumber", "");
 		eventName = prefs.getString("eventShortName", "");
 		teamRank = prefs.getString("teamRank", "");
 		teamRecord = prefs.getString("teamRecord", "");
 		Data.eventKey = prefs.getString("eventKey", "");
 		data = new Data(this);
 
-		if (teamNumber.equals("")) openSetup();
+		if (Data.teamNumber.equals("")) openSetup();
 
 		listener();
 		theme(this);
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	 * @return team number string
 	 */
 	public String getTeamNumber() {
-		return "frc" + teamNumber;
+		return "frc" + Data.teamNumber;
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	 * @return title for the app
 	 */
 	public String getAppTitle() {
-		return String.format("%s - %s", teamNumber,
+		return String.format("%s - %s", Data.teamNumber,
 				shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH));
 	}
 
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		teamNumber = sharedPreferences.getString("teamNumber", "0000");
+		Data.teamNumber = sharedPreferences.getString("teamNumber", "0000");
 		eventName = sharedPreferences.getString("eventShortName", "North Carolina");
 		teamRank = sharedPreferences.getString("teamRank", "");
 		teamRecord = sharedPreferences.getString("teamRecord", "");
