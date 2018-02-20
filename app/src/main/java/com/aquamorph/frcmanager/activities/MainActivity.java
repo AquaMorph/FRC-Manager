@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		eventName = prefs.getString("eventShortName", "");
 		teamRank = prefs.getString("teamRank", "");
 		teamRecord = prefs.getString("teamRecord", "");
-
+		Data.eventKey = prefs.getString("eventKey", "");
 		data = new Data(this);
 
 		if (teamNumber.equals("")) openSetup();
@@ -170,6 +170,13 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		eventName = sharedPreferences.getString("eventShortName", "North Carolina");
 		teamRank = sharedPreferences.getString("teamRank", "");
 		teamRecord = sharedPreferences.getString("teamRecord", "");
+		switch (key) {
+			case "eventKey":
+				Data.eventKey = sharedPreferences.getString("eventKey", "");
+				break;
+			default:
+				break;
+		}
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setTitle(getAppTitle());
 			getSupportActionBar().setSubtitle(getAppSubTitle());
@@ -199,6 +206,11 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 			tabLayout.setupWithViewPager(mViewPager);
 			tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 		}
+		refrestData(false);
+	}
+
+	public static void refrestData(boolean force) {
+		mSectionsPagerAdapter.refrestData(force);
 	}
 
 	public static void refresh() {

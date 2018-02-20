@@ -14,23 +14,23 @@ import java.util.ArrayList;
  */
 
 public class Data {
-	private Activity activity;
+	private static Activity activity;
 	public static String eventKey = "";
 	public static ArrayList<Alliance> alliances = new ArrayList<>();
 	public static boolean allianceParsingComplete = false;
-	private Parser<ArrayList<Alliance>> parser;
+	private static Parser<ArrayList<Alliance>> parser;
 
 	public Data(Activity activity) {
 		this.activity = activity;
 	}
 
-	public void refresh(boolean force) {
+	public static void refresh(boolean force) {
 		if (!eventKey.equals("")) {
 			new LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
-	class LoadAlliances extends AsyncTask<Void, Void, Void> {
+	static class LoadAlliances extends AsyncTask<Void, Void, Void> {
 
 		boolean force;
 

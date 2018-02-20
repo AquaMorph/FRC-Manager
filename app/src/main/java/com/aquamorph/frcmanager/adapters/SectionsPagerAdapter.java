@@ -15,6 +15,7 @@ import com.aquamorph.frcmanager.fragments.RankFragment;
 import com.aquamorph.frcmanager.fragments.RefreshFragment;
 import com.aquamorph.frcmanager.fragments.TeamFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
+import com.aquamorph.frcmanager.utils.Data;
 
 
 /**
@@ -41,9 +42,15 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	 * refreshAll() reloads all data in the fragments.
 	 */
 	public void refreshAll(boolean force) {
+		refrestData(force);
 		for (int i = 0; i < tabNames.length; i++ ) {
 			((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:" + i)).refresh(force);
 		}
+	}
+
+	public void refrestData(boolean force) {
+		Data.allianceParsingComplete = false;
+		Data.refresh(force);
 	}
 
 	@NonNull
