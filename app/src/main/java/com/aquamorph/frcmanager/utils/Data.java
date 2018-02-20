@@ -24,6 +24,7 @@ public class Data {
 	private static Activity activity;
 	public static String eventKey = "";
 	public static String teamNumber = "";
+	public static ArrayList<Match> teamEventMatches = new ArrayList<>();
 	public static ArrayList<Team> teams = new ArrayList<>();
 	public static ArrayList<Rank> ranks = new ArrayList<>();
 	public static ArrayList<Alliance> alliances = new ArrayList<>();

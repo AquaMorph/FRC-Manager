@@ -25,10 +25,11 @@ import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.network.Parser;
 import com.aquamorph.frcmanager.utils.Constants;
+import com.aquamorph.frcmanager.utils.Data;
 import com.aquamorph.frcmanager.utils.Logging;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static java.util.Collections.sort;
 
@@ -173,6 +174,12 @@ public class TeamScheduleFragment extends Fragment
 		recyclerView.setAdapter(adapter);
 	}
 
+	private boolean isTeamInMatch(Match match, String team) {
+		if (Arrays.asList(match.alliances.red.team_keys).contains(team)) return true;
+		else if (Arrays.asList(match.alliances.blue.team_keys).contains(team)) return true;
+		else return false;
+	}
+
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
 
 		boolean force;
@@ -184,25 +191,23 @@ public class TeamScheduleFragment extends Fragment
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
-			parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
-					("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>() {
-			}.getType(),getActivity(), force);
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parser.fetchJSON(getTeamFromSettings);
-			while (parser.parsingComplete) ;
+			while (!Data.eventMatchesParsingComplete) ;
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (parser.getData() != null) {
-				teamEventMatches.clear();
-				teamEventMatches.addAll(parser.getData());
-				sort(teamEventMatches);
+			teamEventMatches.clear();
+			for (Match match : Data.eventMatches) {
+				if (isTeamInMatch(match, "frc" + teamNumber)) teamEventMatches.add(match);
 			}
+
+			sort(teamEventMatches);
+
 			Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;
