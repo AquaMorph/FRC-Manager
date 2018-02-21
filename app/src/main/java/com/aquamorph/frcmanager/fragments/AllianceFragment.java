@@ -2,6 +2,7 @@ package com.aquamorph.frcmanager.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -101,7 +102,7 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.allianceParsingComplete) ;
+			while (!Data.allianceParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 

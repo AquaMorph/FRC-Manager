@@ -2,6 +2,7 @@ package com.aquamorph.frcmanager.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -113,8 +114,8 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.teamParsingComplete) ;
-			while (!Data.rankParsingComplete) ;
+			while (!Data.teamParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!Data.rankParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 

@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.fragments;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -120,8 +121,8 @@ public class RankFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.teamParsingComplete) ;
-			while (!Data.rankParsingComplete) ;
+			while (!Data.teamParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!Data.rankParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 

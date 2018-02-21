@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.fragments;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -128,7 +129,7 @@ public class AwardFragment extends Fragment
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.allianceParsingComplete) ;
+			while (!Data.allianceParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 

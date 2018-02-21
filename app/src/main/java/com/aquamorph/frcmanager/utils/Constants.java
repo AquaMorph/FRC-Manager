@@ -25,6 +25,7 @@ public class Constants {
 	public static final Boolean FORCE_DATA_RELOAD = false;
 	static final int TRACING_LEVEL = 3;
 	public static final int MAX_EVENT_TITLE_LENGTH = 20;
+	public static final int THREAD_WAIT_TIME = 10;
 
 	/**
 	 * getEventURL() returns the url for a list of events a team is registered.

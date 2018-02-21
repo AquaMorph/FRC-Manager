@@ -6,6 +6,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -195,7 +196,7 @@ public class TeamScheduleFragment extends Fragment
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.eventMatchesParsingComplete) ;
+			while (!Data.eventMatchesParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 

@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.fragments;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -130,7 +131,7 @@ public class EventScheduleFragment extends Fragment
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.eventMatchesParsingComplete) ;
+			while (!Data.eventMatchesParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
