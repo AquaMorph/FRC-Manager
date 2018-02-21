@@ -1,15 +1,15 @@
-package com.aquamorph.frcmanager.utils;
+package com.aquamorph.frcmanager.network;
 
 import android.app.Activity;
-
-import com.aquamorph.frcmanager.network.Parser;
-
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * Created by ccolglazier on 2/21/2018.
+ * DataLoader structure for parser and parsed dataLoader.
+ *
+ * @author Christian Colglazier
+ * @version 2/21/2018
  */
 
 public class DataContainer<T> {

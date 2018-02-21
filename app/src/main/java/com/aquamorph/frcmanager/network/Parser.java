@@ -36,15 +36,16 @@ public class Parser<T> {
 	private Context context;
 	private SharedPreferences prefs;
 	private Activity activity;
+	private boolean isNewData = false;
 
 	/**
 	 * Initializes Parser.
 	 *
 	 * @param name     The name of date being collected
 	 * @param url      The url where the date will be parsed
-	 * @param type     The data type of the data to be collected
+	 * @param type     The dataLoader type of the dataLoader to be collected
 	 * @param activity The current state of the application
-	 * @param force	   Force reload of data
+	 * @param force	   Force reload of dataLoader
 	 */
 	public Parser(String name, String url, Type type, Activity activity, Boolean force) {
 		this.name = name;
@@ -61,10 +62,10 @@ public class Parser<T> {
 	}
 
 	/**
-	 * Updates data. Checks if data has already been collected and if it
-	 * had loads from saved data.
+	 * Updates dataLoader. Checks if dataLoader has already been collected and if it
+	 * had loads from saved dataLoader.
 	 *
-	 * @param storeData Determines if data should be stored in memory
+	 * @param storeData Determines if dataLoader should be stored in memory
 	 */
 	public void fetchJSON(final Boolean storeData) {
 
@@ -114,10 +115,10 @@ public class Parser<T> {
 					stream = blueAlliance.connect(url, "", context);
 				}
 
-				// Checks for change in data
+				// Checks for change in dataLoader
 				if (blueAlliance.getStatus() == 200 || getStoredData() == null
 						|| Constants.FORCE_DATA_RELOAD || !storeData) {
-					Logging.debug(this, "Loading new data for " + name, 0);
+					Logging.debug(this, "Loading new dataLoader for " + name, 0);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					try {
 						data = gson.fromJson(reader, type);
@@ -143,9 +144,9 @@ public class Parser<T> {
 		}
 
 	/**
-	 * Returns a list of parsed data.
+	 * Returns a list of parsed dataLoader.
 	 *
-	 * @return data
+	 * @return dataLoader
 	 */
 	public T getData() {
 		return data;
@@ -177,20 +178,30 @@ public class Parser<T> {
 	 * @param data parsed values
 	 */
 	public void storeData(String data) {
-		Logging.debug(this, "Storing Data", 0);
+		isNewData = true;
+		Logging.debug(this, "Storing DataLoader", 0);
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(name, data);
 		editor.apply();
 	}
 
 	/**
-	 * getData() returns data from a stored json string.
+	 * getData() returns dataLoader from a stored json string.
 	 *
-	 * @return data
+	 * @return dataLoader
 	 */
 	private T getStoredData() {
-		Logging.debug(this, "Loading data from a save", 0);
+		Logging.debug(this, "Loading dataLoader from a save", 0);
 		String json = prefs.getString(name, "");
 		return gson.fromJson(json, type);
+	}
+
+	/**
+	 * isNewData() returns if there has been new dataLoader loaded.
+	 *
+	 * @return did the parser return new dataLoader
+	 */
+	public boolean isNewData() {
+		return isNewData;
 	}
 }

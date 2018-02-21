@@ -16,8 +16,8 @@ import android.view.MenuItem;
 
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
+import com.aquamorph.frcmanager.network.DataLoader;
 import com.aquamorph.frcmanager.utils.Constants;
-import com.aquamorph.frcmanager.utils.Data;
 import com.aquamorph.frcmanager.utils.Logging;
 
 /**
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 	private static SectionsPagerAdapter mSectionsPagerAdapter;
 	private String eventName, teamRank, teamRecord;
-	public Data data;
+	public DataLoader dataLoader;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +39,14 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
-		Data.teamNumber = prefs.getString("teamNumber", "");
+		DataLoader.teamNumber = prefs.getString("teamNumber", "");
 		eventName = prefs.getString("eventShortName", "");
 		teamRank = prefs.getString("teamRank", "");
 		teamRecord = prefs.getString("teamRecord", "");
-		Data.eventKey = prefs.getString("eventKey", "");
-		data = new Data(this);
+		DataLoader.eventKey = prefs.getString("eventKey", "");
+		dataLoader = new DataLoader(this);
 
-		if (Data.teamNumber.equals("")) openSetup();
+		if (DataLoader.teamNumber.equals("")) openSetup();
 
 		listener();
 		theme(this);
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	 * @return team number string
 	 */
 	public String getTeamNumber() {
-		return "frc" + Data.teamNumber;
+		return "frc" + DataLoader.teamNumber;
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	 * @return title for the app
 	 */
 	public String getAppTitle() {
-		return String.format("%s - %s", Data.teamNumber,
+		return String.format("%s - %s", DataLoader.teamNumber,
 				shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH));
 	}
 
@@ -171,10 +171,10 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		teamRecord = sharedPreferences.getString("teamRecord", "");
 		switch (key) {
 			case "eventKey":
-				Data.eventKey = sharedPreferences.getString("eventKey", "");
+				DataLoader.eventKey = sharedPreferences.getString("eventKey", "");
 				break;
 			case "teamNumber":
-				Data.teamNumber = sharedPreferences.getString("teamNumber", "0000");
+				DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000");
 				break;
 			default:
 				break;

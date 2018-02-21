@@ -23,8 +23,8 @@ import com.aquamorph.frcmanager.adapters.RankAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.Rank;
+import com.aquamorph.frcmanager.network.DataLoader;
 import com.aquamorph.frcmanager.utils.Constants;
-import com.aquamorph.frcmanager.utils.Data;
 
 /**
  * Displays the ranks of all the teams at an event.
@@ -75,7 +75,7 @@ public class RankFragment extends Fragment implements RefreshFragment {
 		recyclerView = view.findViewById(R.id.rv);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new RankAdapter(getContext(), Data.rankDC.data, Data.teamDC.data);
+		adapter = new RankAdapter(getContext(), DataLoader.rankDC.data, DataLoader.teamDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -86,22 +86,22 @@ public class RankFragment extends Fragment implements RefreshFragment {
 		}
 
 		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(Data.rankDC.data, recyclerView, emptyView);
+		Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Data.rankDC.data.size() == 0)
+		if (DataLoader.rankDC.data.size() == 0)
 			refresh(false);
 	}
 
 	/**
-	 * refrest() loads data needed for this fragment.
+	 * refrest() loads dataLoader needed for this fragment.
 	 */
 	public void refresh(boolean force) {
-		if (!Data.eventKey.equals("") && !Data.teamNumber.equals("")) {
+		if (!DataLoader.eventKey.equals("") && !DataLoader.teamNumber.equals("")) {
 			new LoadRanks(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
@@ -121,8 +121,8 @@ public class RankFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
-			while (!Data.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!DataLoader.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!DataLoader.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
@@ -130,17 +130,18 @@ public class RankFragment extends Fragment implements RefreshFragment {
 		protected void onPostExecute(Void result) {
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString("teamRank", "");
-				for (int i = 0; i < Data.rankDC.data.get(0).rankings.length; i++) {
-					if (Data.rankDC.data.get(0).rankings[i].team_key.equals("frc" + Data.teamNumber)) {
+				for (int i = 0; i < DataLoader.rankDC.data.get(0).rankings.length; i++) {
+					if (DataLoader.rankDC.data.get(0).rankings[i].team_key.equals("frc" + DataLoader.teamNumber)) {
 						editor.putString("teamRank",
-								Integer.toString(Data.rankDC.data.get(0).rankings[i].rank));
+								Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].rank));
 						editor.putString("teamRecord",
-								Rank.recordToString(Data.rankDC.data.get(0).rankings[i].record));
+								Rank.recordToString(DataLoader.rankDC.data.get(0).rankings[i].record));
 						editor.apply();
 					}
 				}
-				Constants.checkNoDataScreen(Data.rankDC.data, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+				Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+						DataLoader.rankDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;
 				mSwipeRefreshLayout.setRefreshing(false);
 			}

@@ -176,8 +176,8 @@ public class Constants {
 	}
 
 	/**
-	 * checkNoDataScreen() displays a no data screen if there is not any data to display. Else
-	 * displays data.
+	 * checkNoDataScreen() displays a no dataLoader screen if there is not any dataLoader to display. Else
+	 * displays dataLoader.
 	 */
 	public static void checkNoDataScreen(ArrayList data, View recyclerView, View emptyView) {
 		if (data.isEmpty()) {

@@ -19,8 +19,8 @@ import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.TeamAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
+import com.aquamorph.frcmanager.network.DataLoader;
 import com.aquamorph.frcmanager.utils.Constants;
-import com.aquamorph.frcmanager.utils.Data;
 
 /**
  * Displays a list of teams at an event.
@@ -66,7 +66,7 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new TeamAdapter(getContext(), Data.teamDC.data, Data.rankDC.data);
+		adapter = new TeamAdapter(getContext(), DataLoader.teamDC.data, DataLoader.rankDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
@@ -78,22 +78,22 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 		}
 
 		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(Data.teamDC.data, recyclerView, emptyView);
+		Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Data.teamDC.data.size() == 0)
+		if (DataLoader.teamDC.data.size() == 0)
 			refresh(false);
 	}
 
 	/**
-	 * refrest() loads data needed for this fragment.
+	 * refrest() loads dataLoader needed for this fragment.
 	 */
 	public void refresh(boolean force) {
-		if (!Data.eventKey.equals("") && !Data.teamNumber.equals("")) {
+		if (!DataLoader.eventKey.equals("") && !DataLoader.teamNumber.equals("")) {
 			new LoadEventTeams(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
@@ -114,15 +114,16 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
-			while (!Data.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!DataLoader.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!DataLoader.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Constants.checkNoDataScreen(Data.teamDC.data, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+			Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
+			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+					DataLoader.teamDC.parser.isNewData());
 			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);
 		}

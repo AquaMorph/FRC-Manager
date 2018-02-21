@@ -20,14 +20,8 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
-import com.aquamorph.frcmanager.models.Match;
-import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.network.DataLoader;
 import com.aquamorph.frcmanager.utils.Constants;
-import com.aquamorph.frcmanager.utils.Data;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Displays a list of matches at an event.
@@ -78,20 +72,20 @@ public class EventScheduleFragment extends Fragment
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new ScheduleAdapter(getContext(), Data.matchDC.data, Data.teamNumber);
+		adapter = new ScheduleAdapter(getContext(), DataLoader.matchDC.data, DataLoader.teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
-		Constants.checkNoDataScreen(Data.matchDC.data, recyclerView, emptyView);
+		Constants.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Data.matchDC.data.size() == 0)
+		if (DataLoader.matchDC.data.size() == 0)
 			refresh(false);
 	}
 
@@ -99,7 +93,7 @@ public class EventScheduleFragment extends Fragment
 	 * refresh reloads the event schedule and repopulates the listview
 	 */
 	public void refresh(boolean force) {
-		if (!Data.eventKey.equals("")) {
+		if (!DataLoader.eventKey.equals("")) {
 			new LoadEventSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
@@ -107,7 +101,7 @@ public class EventScheduleFragment extends Fragment
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
-			adapter = new ScheduleAdapter(getContext(), Data.matchDC.data, Data.teamNumber);
+			adapter = new ScheduleAdapter(getContext(), DataLoader.matchDC.data, DataLoader.teamNumber);
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
 			recyclerView.setAdapter(adapter);
@@ -131,14 +125,15 @@ public class EventScheduleFragment extends Fragment
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.matchDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!DataLoader.matchDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Constants.checkNoDataScreen(Data.matchDC.data, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+			Constants.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
+			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+					DataLoader.matchDC.parser.isNewData());
 			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);
 		}

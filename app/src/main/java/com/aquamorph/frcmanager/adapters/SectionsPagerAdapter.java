@@ -15,8 +15,7 @@ import com.aquamorph.frcmanager.fragments.RankFragment;
 import com.aquamorph.frcmanager.fragments.RefreshFragment;
 import com.aquamorph.frcmanager.fragments.TeamFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
-import com.aquamorph.frcmanager.utils.Data;
-import com.aquamorph.frcmanager.utils.DataContainer;
+import com.aquamorph.frcmanager.network.DataLoader;
 
 
 /**
@@ -40,12 +39,12 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	}
 
 	public boolean isDataLoading() {
-		return !Data.awardDC.complete || !Data.teamDC.complete || !Data.rankDC.complete
-				|| !Data.matchDC.complete || !Data.allianceDC.complete;
+		return !DataLoader.awardDC.complete || !DataLoader.teamDC.complete || !DataLoader.rankDC.complete
+				|| !DataLoader.matchDC.complete || !DataLoader.allianceDC.complete;
 	}
 
 	/**
-	 * refreshAll() reloads all data in the fragments.
+	 * refreshAll() reloads all dataLoader in the fragments.
 	 */
 	public void refreshAll(boolean force) {
 		if(force || !isDataLoading()) {
@@ -57,12 +56,12 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	}
 
 	public void refrestData(boolean force) {
-		Data.teamDC.complete = false;
-		Data.rankDC.complete = false;
-		Data.awardDC.complete = false;
-		Data.allianceDC.complete = false;
-		Data.matchDC.complete= false;
-		Data.refresh(force);
+		DataLoader.teamDC.complete = false;
+		DataLoader.rankDC.complete = false;
+		DataLoader.awardDC.complete = false;
+		DataLoader.allianceDC.complete = false;
+		DataLoader.matchDC.complete= false;
+		DataLoader.refresh(force);
 	}
 
 	@NonNull
