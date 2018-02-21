@@ -55,7 +55,7 @@ public class DataLoader {
 		teamDC = new DataContainer(force, activity,
 				new TypeToken<ArrayList<Team>>(){}.getType(), Constants.getEventTeams(eventKey),
 				"eventTeams");
-		rankDC = new DataContainer(false, activity,
+		rankDC = new DataContainer(force, activity,
 				new TypeToken<Rank>(){}.getType(),Constants.getEventRanks(eventKey),
 				"eventRank");
 		awardDC = new DataContainer(force, activity,
@@ -70,4 +70,50 @@ public class DataLoader {
 	}
 
 
+	static class Load extends AsyncTask<Void, Void, Void> {
+
+		private DataContainer dataContainer;
+		private boolean isRank = false;
+		private boolean isSortable = false;
+
+		Load(DataContainer dataContainer) {
+			this.dataContainer = dataContainer;
+		}
+
+		Load(DataContainer dataContainer, boolean isRank, boolean isSortable) {
+			this.dataContainer = dataContainer;
+			this.isRank = isRank;
+			this.isSortable = isSortable;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			dataContainer.complete = false;
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			dataContainer.parser.fetchJSON(true);
+			while (dataContainer.parser.parsingComplete) {
+				SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			dataContainer.data.clear();
+			if (dataContainer.parser.getData() != null) {
+				if(isRank) {
+					dataContainer.data.add(dataContainer.parser.getData());
+				} else {
+					dataContainer.data.addAll((Collection) dataContainer.parser.getData());
+					if (isSortable) {
+						sort(dataContainer.data);
+					}
+				}
+			}
+			dataContainer.complete = true;
+		}
+	}
 }

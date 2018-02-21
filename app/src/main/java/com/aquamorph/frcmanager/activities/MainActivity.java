@@ -179,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 			default:
 				break;
 		}
+
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setTitle(getAppTitle());
 			getSupportActionBar().setSubtitle(getAppSubTitle());
@@ -208,10 +209,10 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 			tabLayout.setupWithViewPager(mViewPager);
 			tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 		}
-		refrestData(false);
+		refreshData(false);
 	}
 
-	public static void refrestData(boolean force) {
+	public static void refreshData(boolean force) {
 		mSectionsPagerAdapter.refrestData(force);
 	}
 

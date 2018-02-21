@@ -47,11 +47,9 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	 * refreshAll() reloads all dataLoader in the fragments.
 	 */
 	public void refreshAll(boolean force) {
-		if(force || !isDataLoading()) {
-			refrestData(force);
-			for (int i = 0; i < tabNames.length; i++) {
-				((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:" + i)).refresh(force);
-			}
+		refrestData(force);
+		for (int i = 0; i < tabNames.length; i++) {
+			((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:" + i)).refresh(force);
 		}
 	}
 
