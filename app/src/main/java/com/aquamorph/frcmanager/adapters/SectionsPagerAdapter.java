@@ -16,6 +16,7 @@ import com.aquamorph.frcmanager.fragments.RefreshFragment;
 import com.aquamorph.frcmanager.fragments.TeamFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 import com.aquamorph.frcmanager.utils.Data;
+import com.aquamorph.frcmanager.utils.DataContainer;
 
 
 /**
@@ -39,8 +40,8 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	}
 
 	public boolean isDataLoading() {
-		return !Data.allianceParsingComplete || !Data.awardParsingComplete
-				|| !Data.eventMatchesParsingComplete;
+		return !Data.awardDC.complete || !Data.teamDC.complete || !Data.rankDC.complete
+				|| !Data.matchDC.complete || !Data.allianceDC.complete;
 	}
 
 	/**
@@ -58,9 +59,9 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	public void refrestData(boolean force) {
 		Data.teamDC.complete = false;
 		Data.rankDC.complete = false;
-		Data.awardParsingComplete = false;
-		Data.allianceParsingComplete = false;
-		Data.eventMatchesParsingComplete= false;
+		Data.awardDC.complete = false;
+		Data.allianceDC.complete = false;
+		Data.matchDC.complete= false;
 		Data.refresh(force);
 	}
 

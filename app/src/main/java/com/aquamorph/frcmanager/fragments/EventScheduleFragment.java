@@ -78,20 +78,20 @@ public class EventScheduleFragment extends Fragment
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new ScheduleAdapter(getContext(), Data.eventMatches, Data.teamNumber);
+		adapter = new ScheduleAdapter(getContext(), Data.matchDC.data, Data.teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
-		Constants.checkNoDataScreen(Data.eventMatches, recyclerView, emptyView);
+		Constants.checkNoDataScreen(Data.matchDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Data.eventMatches.size() == 0)
+		if (Data.matchDC.data.size() == 0)
 			refresh(false);
 	}
 
@@ -107,7 +107,7 @@ public class EventScheduleFragment extends Fragment
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
-			adapter = new ScheduleAdapter(getContext(), Data.eventMatches, Data.teamNumber);
+			adapter = new ScheduleAdapter(getContext(), Data.matchDC.data, Data.teamNumber);
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
 			recyclerView.setAdapter(adapter);
@@ -131,13 +131,13 @@ public class EventScheduleFragment extends Fragment
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.eventMatchesParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!Data.matchDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Constants.checkNoDataScreen(Data.eventMatches, recyclerView, emptyView);
+			Constants.checkNoDataScreen(Data.matchDC.data, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);

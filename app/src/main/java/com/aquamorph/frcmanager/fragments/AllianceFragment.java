@@ -67,19 +67,19 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 		recyclerView = view.findViewById(R.id.rv);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new AllianceAdapter(getContext(), Data.alliances);
+		adapter = new AllianceAdapter(getContext(), Data.allianceDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
-		Constants.checkNoDataScreen(Data.alliances, recyclerView, emptyView);
+		Constants.checkNoDataScreen(Data.allianceDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Data.alliances.size() == 0) {
+		if (Data.allianceDC.data.size() == 0) {
 			refresh(false);
 		}
 	}
@@ -102,14 +102,14 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.allianceParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!Data.allianceDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (Data.alliances != null) {
-				Constants.checkNoDataScreen(Data.alliances, recyclerView, emptyView);
+			if (Data.allianceDC.data != null) {
+				Constants.checkNoDataScreen(Data.allianceDC.data, recyclerView, emptyView);
 				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 				if (firstLoad) firstLoad = false;
 			}

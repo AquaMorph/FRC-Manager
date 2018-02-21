@@ -196,14 +196,14 @@ public class TeamScheduleFragment extends Fragment
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.eventMatchesParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!Data.matchDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			teamEventMatches.clear();
-			for (Match match : Data.eventMatches) {
+			for (Match match : Data.matchDC.data) {
 				if (isTeamInMatch(match, "frc" + teamNumber)) teamEventMatches.add(match);
 			}
 

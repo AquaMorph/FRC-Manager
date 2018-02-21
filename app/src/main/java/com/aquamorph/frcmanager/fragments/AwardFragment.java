@@ -75,7 +75,7 @@ public class AwardFragment extends Fragment
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new AwardAdapter(getContext(), Data.awards);
+		adapter = new AwardAdapter(getContext(), Data.awardDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -86,14 +86,14 @@ public class AwardFragment extends Fragment
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 
 		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(Data.awards, recyclerView, emptyView);
+		Constants.checkNoDataScreen(Data.awardDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Data.awards.size() == 0)
+		if (Data.awardDC.data.size() == 0)
 			refresh(false);
 	}
 
@@ -129,13 +129,13 @@ public class AwardFragment extends Fragment
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.allianceParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!Data.awardDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Constants.checkNoDataScreen(Data.awards, recyclerView, emptyView);
+			Constants.checkNoDataScreen(Data.awardDC.data, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;
 			swipeRefreshLayout.setRefreshing(false);
