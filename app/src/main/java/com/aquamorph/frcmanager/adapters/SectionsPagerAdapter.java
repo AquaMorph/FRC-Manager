@@ -56,7 +56,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	}
 
 	public void refrestData(boolean force) {
-		Data.teamParsingComplete = false;
+		Data.teamDC.complete = false;
 		Data.rankParsingComplete = false;
 		Data.awardParsingComplete = false;
 		Data.allianceParsingComplete = false;

@@ -66,7 +66,7 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new TeamAdapter(getContext(), Data.teams, Data.ranks);
+		adapter = new TeamAdapter(getContext(), Data.teamDC.data, Data.ranks);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
@@ -78,14 +78,14 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 		}
 
 		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(Data.teams, recyclerView, emptyView);
+		Constants.checkNoDataScreen(Data.teamDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Data.teams.size() == 0)
+		if (Data.teamDC.data.size() == 0)
 			refresh(false);
 	}
 
@@ -114,14 +114,14 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.teamParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!Data.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			while (!Data.rankParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Constants.checkNoDataScreen(Data.teams, recyclerView, emptyView);
+			Constants.checkNoDataScreen(Data.teamDC.data, recyclerView, emptyView);
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 			if (firstLoad) firstLoad = false;
 			mSwipeRefreshLayout.setRefreshing(false);

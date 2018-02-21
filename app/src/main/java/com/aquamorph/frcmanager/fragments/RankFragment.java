@@ -75,7 +75,7 @@ public class RankFragment extends Fragment implements RefreshFragment {
 		recyclerView = view.findViewById(R.id.rv);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new RankAdapter(getContext(), Data.ranks, Data.teams);
+		adapter = new RankAdapter(getContext(), Data.ranks, Data.teamDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -121,7 +121,7 @@ public class RankFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			while (!Data.teamParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!Data.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			while (!Data.rankParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}

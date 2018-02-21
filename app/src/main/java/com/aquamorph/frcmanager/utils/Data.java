@@ -12,6 +12,7 @@ import com.aquamorph.frcmanager.network.Parser;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 import static java.util.Collections.sort;
@@ -24,31 +25,32 @@ public class Data {
 	private static Activity activity;
 	public static String eventKey = "";
 	public static String teamNumber = "";
-	public static ArrayList<Match> teamEventMatches = new ArrayList<>();
-	public static ArrayList<Team> teams = new ArrayList<>();
 	public static ArrayList<Rank> ranks = new ArrayList<>();
 	public static ArrayList<Alliance> alliances = new ArrayList<>();
 	public static ArrayList<Match> eventMatches = new ArrayList<>();
 	public static ArrayList<Award> awards = new ArrayList<>();
-	public static boolean teamParsingComplete = false;
 	public static boolean rankParsingComplete = false;
 	public static boolean awardParsingComplete = false;
 	public static boolean eventMatchesParsingComplete = false;
 	public static boolean allianceParsingComplete = false;
-	private static Parser<ArrayList<Team>> teamEventParser;
 	private static Parser<Rank> rankParser;
 	private static Parser<ArrayList<Award>> awardParser;
 	private static Parser<ArrayList<Alliance>> allianceParser;
 	private static Parser<ArrayList<Match>> eventMatchParser;
+	public static DataContainer<Team> teamDC;
 
 
 	public Data(Activity activity) {
 		this.activity = activity;
+		teamDC = new DataContainer(false, activity,
+				new TypeToken<ArrayList<Team>>(){}.getType(),Constants.getEventTeams(eventKey));
 	}
 
 	public static void refresh(boolean force) {
 		if (!eventKey.equals("")) {
-			new LoadTeams(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			teamDC = new DataContainer(force, activity,
+					new TypeToken<ArrayList<Team>>(){}.getType(),Constants.getEventTeams(eventKey));
+			new Load(teamDC).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new LoadRanks(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new LoadAwards(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -56,38 +58,37 @@ public class Data {
 		}
 	}
 
-	static class LoadTeams extends AsyncTask<Void, Void, Void> {
+	static class Load extends AsyncTask<Void, Void, Void> {
 
-		boolean force;
+		DataContainer dataContainer;
 
-		LoadTeams(boolean force) {
-			this.force = force;
+		Load(DataContainer dataContainer) {
+			this.dataContainer = dataContainer;
 		}
 
 		@Override
 		protected void onPreExecute() {
-			teamParsingComplete = false;
-			teamEventParser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
-					new TypeToken<ArrayList<Team>>() {}.getType(), activity,force);
+			dataContainer.complete = false;
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			teamEventParser.fetchJSON(true);
-			while (teamEventParser.parsingComplete) ;
+			dataContainer.parser.fetchJSON(true);
+			while (dataContainer.parser.parsingComplete) ;
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			teams.clear();
-			if (teamEventParser.getData() != null) {
-				teams.addAll(teamEventParser.getData());
-				sort(teams);
+			dataContainer.data.clear();
+			if (dataContainer.parser.getData() != null) {
+				dataContainer.data.addAll((Collection) dataContainer.parser.getData());
+				sort(dataContainer.data);
 			}
-			teamParsingComplete = true;
+			dataContainer.complete = true;
 		}
 	}
+
 
 	static class LoadRanks extends AsyncTask<Void, Void, Void> {
 
