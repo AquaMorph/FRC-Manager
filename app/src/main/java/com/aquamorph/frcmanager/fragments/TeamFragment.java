@@ -66,7 +66,7 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new TeamAdapter(getContext(), Data.teamDC.data, Data.ranks);
+		adapter = new TeamAdapter(getContext(), Data.teamDC.data, Data.rankDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
@@ -115,7 +115,7 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 		@Override
 		protected Void doInBackground(Void... params) {
 			while (!Data.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
-			while (!Data.rankParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!Data.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 

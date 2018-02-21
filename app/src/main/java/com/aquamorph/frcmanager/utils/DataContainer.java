@@ -18,9 +18,9 @@ public class DataContainer<T> {
 	public ArrayList<T> data = new ArrayList<>();
 	public boolean complete;
 
-	DataContainer(boolean force, Activity activity, Type type, String url) {
+	DataContainer(boolean force, Activity activity, Type type, String url, String name) {
 		this.force = force;
-		this.parser = new Parser<>("eventTeams", url, type, activity, force);
+		this.parser = new Parser<>(name, url, type, activity, force);
 		complete = false;
 	}
 

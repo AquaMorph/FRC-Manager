@@ -75,7 +75,7 @@ public class RankFragment extends Fragment implements RefreshFragment {
 		recyclerView = view.findViewById(R.id.rv);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new RankAdapter(getContext(), Data.ranks, Data.teamDC.data);
+		adapter = new RankAdapter(getContext(), Data.rankDC.data, Data.teamDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -86,14 +86,14 @@ public class RankFragment extends Fragment implements RefreshFragment {
 		}
 
 		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(Data.ranks, recyclerView, emptyView);
+		Constants.checkNoDataScreen(Data.rankDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (Data.ranks.size() == 0)
+		if (Data.rankDC.data.size() == 0)
 			refresh(false);
 	}
 
@@ -122,7 +122,7 @@ public class RankFragment extends Fragment implements RefreshFragment {
 		@Override
 		protected Void doInBackground(Void... params) {
 			while (!Data.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
-			while (!Data.rankParsingComplete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!Data.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
@@ -130,16 +130,16 @@ public class RankFragment extends Fragment implements RefreshFragment {
 		protected void onPostExecute(Void result) {
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString("teamRank", "");
-				for (int i = 0; i < Data.ranks.get(0).rankings.length; i++) {
-					if (Data.ranks.get(0).rankings[i].team_key.equals("frc" + Data.teamNumber)) {
+				for (int i = 0; i < Data.rankDC.data.get(0).rankings.length; i++) {
+					if (Data.rankDC.data.get(0).rankings[i].team_key.equals("frc" + Data.teamNumber)) {
 						editor.putString("teamRank",
-								Integer.toString(Data.ranks.get(0).rankings[i].rank));
+								Integer.toString(Data.rankDC.data.get(0).rankings[i].rank));
 						editor.putString("teamRecord",
-								Rank.recordToString(Data.ranks.get(0).rankings[i].record));
+								Rank.recordToString(Data.rankDC.data.get(0).rankings[i].record));
 						editor.apply();
 					}
 				}
-				Constants.checkNoDataScreen(Data.ranks, recyclerView, emptyView);
+				Constants.checkNoDataScreen(Data.rankDC.data, recyclerView, emptyView);
 				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
 				if (firstLoad) firstLoad = false;
 				mSwipeRefreshLayout.setRefreshing(false);

@@ -25,33 +25,35 @@ public class Data {
 	private static Activity activity;
 	public static String eventKey = "";
 	public static String teamNumber = "";
-	public static ArrayList<Rank> ranks = new ArrayList<>();
 	public static ArrayList<Alliance> alliances = new ArrayList<>();
 	public static ArrayList<Match> eventMatches = new ArrayList<>();
 	public static ArrayList<Award> awards = new ArrayList<>();
-	public static boolean rankParsingComplete = false;
 	public static boolean awardParsingComplete = false;
 	public static boolean eventMatchesParsingComplete = false;
 	public static boolean allianceParsingComplete = false;
-	private static Parser<Rank> rankParser;
 	private static Parser<ArrayList<Award>> awardParser;
 	private static Parser<ArrayList<Alliance>> allianceParser;
 	private static Parser<ArrayList<Match>> eventMatchParser;
 	public static DataContainer<Team> teamDC;
+	public static DataContainer<Rank> rankDC;
 
 
 	public Data(Activity activity) {
 		this.activity = activity;
 		teamDC = new DataContainer(false, activity,
-				new TypeToken<ArrayList<Team>>(){}.getType(),Constants.getEventTeams(eventKey));
+				new TypeToken<ArrayList<Team>>(){}.getType(),Constants.getEventTeams(eventKey), "eventTeams");
+		rankDC = new DataContainer(false, activity,
+				new TypeToken<ArrayList<Rank>>(){}.getType(),Constants.getEventRanks(eventKey),"eventRank");
 	}
 
 	public static void refresh(boolean force) {
 		if (!eventKey.equals("")) {
 			teamDC = new DataContainer(force, activity,
-					new TypeToken<ArrayList<Team>>(){}.getType(),Constants.getEventTeams(eventKey));
+					new TypeToken<ArrayList<Team>>(){}.getType(),Constants.getEventTeams(eventKey), "eventTeams");
+			rankDC = new DataContainer(false, activity,
+					new TypeToken<Rank>(){}.getType(),Constants.getEventRanks(eventKey),"eventRank");
 			new Load(teamDC).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			new LoadRanks(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new Load(rankDC, true).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new LoadAwards(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 			new LoadEventSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -61,9 +63,15 @@ public class Data {
 	static class Load extends AsyncTask<Void, Void, Void> {
 
 		DataContainer dataContainer;
+		boolean isRank = false;
 
 		Load(DataContainer dataContainer) {
 			this.dataContainer = dataContainer;
+		}
+
+		Load(DataContainer dataContainer, boolean isRank) {
+			this.dataContainer = dataContainer;
+			this.isRank = isRank;
 		}
 
 		@Override
@@ -82,43 +90,15 @@ public class Data {
 		protected void onPostExecute(Void result) {
 			dataContainer.data.clear();
 			if (dataContainer.parser.getData() != null) {
-				dataContainer.data.addAll((Collection) dataContainer.parser.getData());
-				sort(dataContainer.data);
+				if(isRank) {
+					dataContainer.data.clear();
+					dataContainer.data.add(dataContainer.parser.getData());
+				} else {
+					dataContainer.data.addAll((Collection) dataContainer.parser.getData());
+					sort(dataContainer.data);
+				}
 			}
 			dataContainer.complete = true;
-		}
-	}
-
-
-	static class LoadRanks extends AsyncTask<Void, Void, Void> {
-
-		boolean force;
-
-		LoadRanks(boolean force) {
-			this.force = force;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			rankParsingComplete = false;
-			rankParser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
-					new TypeToken<Rank>(){}.getType(), activity, force);
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			rankParser.fetchJSON(true);
-			while (rankParser.parsingComplete) ;
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			if (rankParser.getData() != null) {
-				ranks.clear();
-				ranks.add(rankParser.getData());
-			}
-			rankParsingComplete = true;
 		}
 	}
 
