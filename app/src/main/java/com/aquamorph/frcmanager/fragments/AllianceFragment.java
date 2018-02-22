@@ -85,15 +85,19 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 	}
 
 	/**
-	 * refrest() loads dataLoader needed for this fragment.
+	 * refresh() loads dataLoader needed for this fragment.
 	 */
 	public void refresh(boolean force) {
-		if (!DataLoader.eventKey.equals("")) {
-			new LoadAlliances().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		}
+		new LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	class LoadAlliances extends AsyncTask<Void, Void, Void> {
+
+		boolean force;
+
+		public LoadAlliances(boolean force) {
+			this.force = force;
+		}
 
 		@Override
 		protected void onPreExecute() {
@@ -108,12 +112,12 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (DataLoader.allianceDC.data != null) {
-				Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
-						DataLoader.allianceDC.parser.isNewData());
-				if (firstLoad) firstLoad = false;
-			}
+			Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
+			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+					DataLoader.allianceDC.parser.isNewData());
+			if (firstLoad) firstLoad = false;
+			adapter = new AllianceAdapter(getContext(), DataLoader.allianceDC.data);
+			recyclerView.setAdapter(adapter);
 			swipeRefreshLayout.setRefreshing(false);
 		}
 	}

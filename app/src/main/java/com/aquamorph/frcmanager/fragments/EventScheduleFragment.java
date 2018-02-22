@@ -135,6 +135,8 @@ public class EventScheduleFragment extends Fragment
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 					DataLoader.matchDC.parser.isNewData());
 			if (firstLoad) firstLoad = false;
+			adapter = new ScheduleAdapter(getContext(), DataLoader.matchDC.data, DataLoader.teamNumber);
+			recyclerView.setAdapter(adapter);
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

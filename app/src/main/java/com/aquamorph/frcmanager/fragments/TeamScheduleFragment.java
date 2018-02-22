@@ -48,7 +48,7 @@ public class TeamScheduleFragment extends Fragment
 	private TextView emptyView;
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
-	private String teamNumber = "", eventKey = "";
+	private String teamNumber = "";
 	private View view;
 	private Boolean getTeamFromSettings = true;
 	private Boolean firstLoad = true;
@@ -82,7 +82,6 @@ public class TeamScheduleFragment extends Fragment
 			if (getTeamFromSettings) {
 				teamNumber = savedInstanceState.getString("teamNumber");
 			}
-			eventKey = savedInstanceState.getString("eventKey");
 			Logging.info(this, "savedInstanceState teamNumber: " + teamNumber, 2);
 		}
 		listener();
@@ -94,7 +93,6 @@ public class TeamScheduleFragment extends Fragment
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putString("teamNumber", teamNumber);
-		outState.putString("eventKey", eventKey);
 		Logging.info(this, "onSaveInstanceState", 3);
 	}
 
@@ -121,7 +119,7 @@ public class TeamScheduleFragment extends Fragment
 	public void refresh(boolean force) {
 		Logging.info(this, "teamNumber: " + teamNumber, 2);
 		Logging.info(this, "DataLoader is being refreshed", 0);
-		if (!teamNumber.equals("") && !eventKey.equals("")) {
+		if (!teamNumber.equals("") && !DataLoader.eventKey.equals("")) {
 			new LoadTeamSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		} else {
 			Logging.error(this, "Team or event key not set", 0);
@@ -135,7 +133,6 @@ public class TeamScheduleFragment extends Fragment
 			if (getTeamFromSettings) {
 				teamNumber = sharedPreferences.getString("teamNumber", "");
 			}
-			eventKey = sharedPreferences.getString("eventKey", "");
 			listener();
 		}
 	}
@@ -149,8 +146,6 @@ public class TeamScheduleFragment extends Fragment
 		if (getTeamFromSettings) {
 			teamNumber = prefs.getString("teamNumber", "");
 		}
-		eventKey = prefs.getString("eventKey", "");
-
 		mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

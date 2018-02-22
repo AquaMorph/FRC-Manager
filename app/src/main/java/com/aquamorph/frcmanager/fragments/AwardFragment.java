@@ -134,6 +134,8 @@ public class AwardFragment extends Fragment
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 					DataLoader.awardDC.parser.isNewData());
 			if (firstLoad) firstLoad = false;
+			adapter = new AwardAdapter(getContext(), DataLoader.awardDC.data);
+			recyclerView.setAdapter(adapter);
 			swipeRefreshLayout.setRefreshing(false);
 		}
 	}

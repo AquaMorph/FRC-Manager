@@ -128,23 +128,26 @@ public class RankFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected void onPostExecute(Void result) {
-				SharedPreferences.Editor editor = prefs.edit();
-				editor.putString("teamRank", "");
-				for (int i = 0; i < DataLoader.rankDC.data.get(0).rankings.length; i++) {
-					if (DataLoader.rankDC.data.get(0).rankings[i].team_key.equals("frc" + DataLoader.teamNumber)) {
-						editor.putString("teamRank",
-								Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].rank));
-						editor.putString("teamRecord",
-								Rank.recordToString(DataLoader.rankDC.data.get(0).rankings[i].record));
-						editor.apply();
-					}
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putString("teamRank", "");
+			for (int i = 0; i < DataLoader.rankDC.data.get(0).rankings.length; i++) {
+				if (DataLoader.rankDC.data.get(0).rankings[i].team_key.equals("frc" + DataLoader.teamNumber)) {
+					editor.putString("teamRank",
+							Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].rank));
+					editor.putString("teamRecord",
+							Rank.recordToString(DataLoader.rankDC.data.get(0).rankings[i].record));
+					editor.apply();
 				}
-				Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
-						DataLoader.rankDC.parser.isNewData());
-				if (firstLoad) firstLoad = false;
-				mSwipeRefreshLayout.setRefreshing(false);
 			}
-
+			Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
+			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+					DataLoader.rankDC.parser.isNewData());
+			if (firstLoad) firstLoad = false;
+			adapter = new RankAdapter(getContext(), DataLoader.rankDC.data, DataLoader.teamDC.data);
+			LinearLayoutManager llm = new LinearLayoutManager(getContext());
+			llm.setOrientation(LinearLayoutManager.VERTICAL);
+			recyclerView.setAdapter(adapter);
+			mSwipeRefreshLayout.setRefreshing(false);
+		}
 	}
 }

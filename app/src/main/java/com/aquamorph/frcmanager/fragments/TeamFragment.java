@@ -77,7 +77,7 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
 
-		if (savedInstanceState == null) refresh(false);
+//		if (savedInstanceState == null) refresh(false);
 		Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
 		return view;
 	}
@@ -90,14 +90,13 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 	}
 
 	/**
-	 * refrest() loads dataLoader needed for this fragment.
+	 * refresh() loads dataLoader needed for this fragment.
 	 */
 	public void refresh(boolean force) {
 		if (!DataLoader.eventKey.equals("") && !DataLoader.teamNumber.equals("")) {
 			new LoadEventTeams(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
-
 
 	class LoadEventTeams extends AsyncTask<Void, Void, Void> {
 
@@ -125,6 +124,8 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 					DataLoader.teamDC.parser.isNewData());
 			if (firstLoad) firstLoad = false;
+			adapter = new TeamAdapter(getContext(), DataLoader.teamDC.data, DataLoader.rankDC.data);
+			recyclerView.setAdapter(adapter);
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 
