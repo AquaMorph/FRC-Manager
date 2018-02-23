@@ -128,15 +128,17 @@ public class RankFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putString("teamRank", "");
-			for (int i = 0; i < DataLoader.rankDC.data.get(0).rankings.length; i++) {
-				if (DataLoader.rankDC.data.get(0).rankings[i].team_key.equals("frc" + DataLoader.teamNumber)) {
-					editor.putString("teamRank",
-							Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].rank));
-					editor.putString("teamRecord",
-							Rank.recordToString(DataLoader.rankDC.data.get(0).rankings[i].record));
-					editor.apply();
+			if(!DataLoader.rankDC.data.isEmpty()) {
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putString("teamRank", "");
+				for (int i = 0; i < DataLoader.rankDC.data.get(0).rankings.length; i++) {
+					if (DataLoader.rankDC.data.get(0).rankings[i].team_key.equals("frc" + DataLoader.teamNumber)) {
+						editor.putString("teamRank",
+								Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].rank));
+						editor.putString("teamRecord",
+								Rank.recordToString(DataLoader.rankDC.data.get(0).rankings[i].record));
+						editor.apply();
+					}
 				}
 			}
 			Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
