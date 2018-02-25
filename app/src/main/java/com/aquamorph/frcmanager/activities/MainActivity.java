@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	private static SectionsPagerAdapter mSectionsPagerAdapter;
 	private String eventName, teamRank, teamRecord;
 	public DataLoader dataLoader;
+	ViewPager mViewPager;
+	private TabLayout tabLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,9 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 				break;
 			case R.id.refresh_all:
 			default:
+				mSectionsPagerAdapter.removeFrag(0);
+				mSectionsPagerAdapter.notifyDataSetChanged();
+//				mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount() - 1);
 				mSectionsPagerAdapter.refreshAll(false);
 				break;
 		}
@@ -199,16 +204,16 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		getSupportActionBar().setSubtitle(getAppSubTitle());
 
 		// Set up the ViewPager with the sections adapter.
-		ViewPager mViewPager = findViewById(R.id.container);
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
-		mViewPager.setAdapter(mSectionsPagerAdapter);
-
-		TabLayout tabLayout = findViewById(R.id.tabs);
+		mViewPager = findViewById(R.id.container);
+		tabLayout = findViewById(R.id.tabs);
 		if (tabLayout != null) {
 			tabLayout.setupWithViewPager(mViewPager);
 			tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 		}
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+				mViewPager, tabLayout);
+		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
+		mViewPager.setAdapter(mSectionsPagerAdapter);
 		refreshData(false);
 	}
 

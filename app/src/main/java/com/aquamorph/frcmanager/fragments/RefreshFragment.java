@@ -5,5 +5,5 @@ package com.aquamorph.frcmanager.fragments;
  */
 
 public interface RefreshFragment {
-	public void refresh(boolean force);
+	void refresh(boolean force);
 }

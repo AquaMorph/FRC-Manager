@@ -1,11 +1,11 @@
 package com.aquamorph.frcmanager.adapters;
 
-import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.util.SparseArray;
+import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
 import com.aquamorph.frcmanager.fragments.AllianceFragment;
@@ -15,27 +15,34 @@ import com.aquamorph.frcmanager.fragments.RankFragment;
 import com.aquamorph.frcmanager.fragments.RefreshFragment;
 import com.aquamorph.frcmanager.fragments.TeamFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
+import com.aquamorph.frcmanager.models.Tab;
 import com.aquamorph.frcmanager.network.DataLoader;
 
+import java.util.ArrayList;
 
 /**
  * Populates a tab layout with fragments.
  *
  * @author Christian Colglazier
- * @version 3/29/2016
+ * @version 2/25/2018
  */
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-	private final FragmentManager mFragmentManager;
-	private SparseArray<Fragment> mFragments;
-	private FragmentTransaction mCurTransaction;
-	private String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams",
-			"Alliances", "Awards"};
+	private TabLayout tabLayout;
+	private ViewPager viewPager;
+	public ArrayList<Tab> tabs = new ArrayList<>();
 
-	public SectionsPagerAdapter(FragmentManager fragmentManager) {
+	public SectionsPagerAdapter(FragmentManager fragmentManager, ViewPager viewPager,
+								TabLayout tabLayout) {
 		super(fragmentManager);
-		mFragmentManager = fragmentManager;
-		mFragments = new SparseArray<>();
+		this.tabLayout = tabLayout;
+		this.viewPager = viewPager;
+		addFrag("Team Schedule", TeamScheduleFragment.newInstance());
+		addFrag("Event Schedule", EventScheduleFragment.newInstance());
+		addFrag("Rankings", RankFragment.newInstance());
+		addFrag("Teams", TeamFragment.newInstance());
+		addFrag("Alliances", AllianceFragment.newInstance());
+		addFrag("Awards", AwardFragment.newInstance());
 	}
 
 	public boolean isDataLoading() {
@@ -48,8 +55,8 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	 */
 	public void refreshAll(boolean force) {
 		refrestData(force);
-		for (int i = 0; i < tabNames.length; i++) {
-			((RefreshFragment) mFragmentManager.findFragmentByTag("fragment:" + i)).refresh(force);
+		for (int i = 0; i < tabs.size(); i++) {
+			((RefreshFragment) tabs.get(i).fragment).refresh(force);
 		}
 	}
 
@@ -62,61 +69,14 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		DataLoader.refresh(force);
 	}
 
-	@NonNull
-	@Override
-	public Object instantiateItem(ViewGroup container, int position) {
-
-		Fragment fragment = mFragmentManager.findFragmentByTag("fragment:" + position);
-		if (fragment == null) {
-			fragment = getItem(position);
-			if (mCurTransaction == null) {
-				mCurTransaction = mFragmentManager.beginTransaction();
-			}
-			mCurTransaction.add(container.getId(), fragment, "fragment:" + position);
-		}
-		return fragment;
-	}
-
-	@Override
-	public void destroyItem(ViewGroup container, int position, Object object) {
-		if (mCurTransaction == null) {
-			mCurTransaction = mFragmentManager.beginTransaction();
-		}
-		mCurTransaction.detach(mFragments.get(position));
-		mFragments.remove(position);
-	}
-
 	@Override
 	public CharSequence getPageTitle(int position) {
-		return tabNames[position];
-	}
-
-	public Fragment getItem(int position) {
-		switch (position) {
-			case 0:
-				return TeamScheduleFragment.newInstance();
-			case 1:
-				return EventScheduleFragment.newInstance();
-			case 2:
-				return RankFragment.newInstance();
-			case 3:
-				return TeamFragment.newInstance();
-			case 4:
-				return AllianceFragment.newInstance();
-			case 5:
-				return AwardFragment.newInstance();
-			default:
-				return TeamFragment.newInstance();
-		}
+		return tabs.get(position).name;
 	}
 
 	@Override
-	public void finishUpdate(ViewGroup container) {
-		if (mCurTransaction != null) {
-			mCurTransaction.commitAllowingStateLoss();
-			mCurTransaction = null;
-			mFragmentManager.executePendingTransactions();
-		}
+	public Fragment getItem(int position) {
+		return tabs.get(position).fragment;
 	}
 
 	@Override
@@ -126,7 +86,36 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public int getCount() {
-		return tabNames.length;
+		return tabs.size();
 	}
 
+	public void addFrag(String title, Fragment fragment) {
+		tabs.add(new Tab(title, fragment));
+	}
+
+	public void removeFrag(int position) {
+		removeTab(position);
+		Fragment fragment = tabs.get(position).fragment;
+		tabs.remove(position);
+		destroyFragmentView(viewPager, position, fragment);
+		notifyDataSetChanged();
+	}
+
+	public void destroyFragmentView(ViewGroup container, int position, Object object) {
+		FragmentManager manager = ((Fragment) object).getFragmentManager();
+		FragmentTransaction trans = manager.beginTransaction();
+		trans.remove((Fragment) object);
+		trans.commit();
+	}
+
+	public void removeTab(int position) {
+		if (tabLayout.getChildCount() > 0) {
+			tabLayout.removeTabAt(position);
+		}
+	}
+
+	@Override
+	public int getItemPosition(Object object) {
+		return POSITION_NONE;
+	}
 }
