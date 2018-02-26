@@ -111,7 +111,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 
 	@Override
 	public int getItemCount() {
-		if(data.size() == 0) return 0;
+		if(data.size() == 0 || data.get(0).rankings == null) return 0;
 		return data.get(0).rankings.length;
 	}
 

@@ -90,10 +90,10 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	}
 
 	public void removeFrag(int position) {
-		removeTab(position);
 		Fragment fragment = tabs.get(position).fragment;
-		tabs.remove(position);
 		destroyFragmentView(viewPager, position, fragment);
+		removeTab(position);
+		tabs.remove(position);
 		notifyDataSetChanged();
 	}
 
