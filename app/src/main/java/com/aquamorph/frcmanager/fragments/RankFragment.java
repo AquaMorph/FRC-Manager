@@ -101,7 +101,8 @@ public class RankFragment extends Fragment implements RefreshFragment {
 	 * refrest() loads dataLoader needed for this fragment.
 	 */
 	public void refresh(boolean force) {
-		if (!DataLoader.eventKey.equals("") && !DataLoader.teamNumber.equals("")) {
+		if (!DataLoader.eventKey.equals("") && !DataLoader.teamNumber.equals("")
+				&& getContext() != null) {
 			new LoadRanks(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
@@ -145,11 +146,13 @@ public class RankFragment extends Fragment implements RefreshFragment {
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 					DataLoader.rankDC.parser.isNewData());
 			if (firstLoad) firstLoad = false;
-			adapter = new RankAdapter(getContext(), DataLoader.rankDC.data, DataLoader.teamDC.data);
-			LinearLayoutManager llm = new LinearLayoutManager(getContext());
-			llm.setOrientation(LinearLayoutManager.VERTICAL);
-			recyclerView.setAdapter(adapter);
-			mSwipeRefreshLayout.setRefreshing(false);
+			if (getContext() != null) {
+				adapter = new RankAdapter(getContext(), DataLoader.rankDC.data, DataLoader.teamDC.data);
+				LinearLayoutManager llm = new LinearLayoutManager(getContext());
+				llm.setOrientation(LinearLayoutManager.VERTICAL);
+				recyclerView.setAdapter(adapter);
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
 		}
 	}
 }

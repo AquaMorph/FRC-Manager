@@ -116,9 +116,11 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 					DataLoader.allianceDC.parser.isNewData());
 			if (firstLoad) firstLoad = false;
-			adapter = new AllianceAdapter(getContext(), DataLoader.allianceDC.data);
-			recyclerView.setAdapter(adapter);
-			swipeRefreshLayout.setRefreshing(false);
+			if (getContext() != null) {
+				adapter = new AllianceAdapter(getContext(), DataLoader.allianceDC.data);
+				recyclerView.setAdapter(adapter);
+				swipeRefreshLayout.setRefreshing(false);
+			}
 		}
 	}
 }

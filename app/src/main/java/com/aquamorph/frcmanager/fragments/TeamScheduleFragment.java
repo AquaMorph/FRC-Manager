@@ -141,31 +141,33 @@ public class TeamScheduleFragment extends Fragment
 	 * listener() initializes all needed types on creation
 	 */
 	public void listener() {
-		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
-		if (getTeamFromSettings) {
-			teamNumber = prefs.getString("teamNumber", "");
-		}
-		mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
-		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				if(getTeamFromSettings) {
-					MainActivity.refresh();
-				} else {
-					refresh(false);
-				}
+		if (getContext() != null) {
+			prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+			prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
+			if (getTeamFromSettings) {
+				teamNumber = prefs.getString("teamNumber", "");
 			}
-		});
+			mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+			mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
+			mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+				@Override
+				public void onRefresh() {
+					if (getTeamFromSettings) {
+						MainActivity.refresh();
+					} else {
+						refresh(false);
+					}
+				}
+			});
 
-		recyclerView = view.findViewById(R.id.rv);
-		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
-		LinearLayoutManager llm = new LinearLayoutManager(getContext());
-		llm.setOrientation(LinearLayoutManager.VERTICAL);
-		recyclerView.setLayoutManager(llm);
-		recyclerView.setAdapter(adapter);
+			recyclerView = view.findViewById(R.id.rv);
+			emptyView = view.findViewById(R.id.empty_view);
+			adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
+			LinearLayoutManager llm = new LinearLayoutManager(getContext());
+			llm.setOrientation(LinearLayoutManager.VERTICAL);
+			recyclerView.setLayoutManager(llm);
+			recyclerView.setAdapter(adapter);
+		}
 	}
 
 	private boolean isTeamInMatch(Match match, String team) {
@@ -201,10 +203,12 @@ public class TeamScheduleFragment extends Fragment
 			}
 			sort(teamEventMatches);
 			Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
-					DataLoader.matchDC.parser.isNewData());
-			if (firstLoad) firstLoad = false;
-			mSwipeRefreshLayout.setRefreshing(false);
+			{
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+						DataLoader.matchDC.parser.isNewData());
+				if (firstLoad) firstLoad = false;
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
 		}
 	}
 }

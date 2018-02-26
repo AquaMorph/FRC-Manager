@@ -124,9 +124,11 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 					DataLoader.teamDC.parser.isNewData());
 			if (firstLoad) firstLoad = false;
-			adapter = new TeamAdapter(getContext(), DataLoader.teamDC.data, DataLoader.rankDC.data);
-			recyclerView.setAdapter(adapter);
-			mSwipeRefreshLayout.setRefreshing(false);
+			if (getContext() != null) {
+				adapter = new TeamAdapter(getContext(), DataLoader.teamDC.data, DataLoader.rankDC.data);
+				recyclerView.setAdapter(adapter);
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
 		}
 
 	}

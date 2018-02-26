@@ -4,10 +4,18 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
+import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
+import com.aquamorph.frcmanager.fragments.AllianceFragment;
+import com.aquamorph.frcmanager.fragments.AwardFragment;
+import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
+import com.aquamorph.frcmanager.fragments.RankFragment;
+import com.aquamorph.frcmanager.fragments.TeamFragment;
+import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 import com.aquamorph.frcmanager.models.Alliance;
 import com.aquamorph.frcmanager.models.Award;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.models.Rank;
+import com.aquamorph.frcmanager.models.Tab;
 import com.aquamorph.frcmanager.models.Team;
 import com.aquamorph.frcmanager.utils.Constants;
 import com.google.gson.reflect.TypeToken;
@@ -26,6 +34,7 @@ import static java.util.Collections.sort;
 
 public class DataLoader {
 	private static Activity activity;
+	private static SectionsPagerAdapter adapter;
 	public static String eventKey = "";
 	public static String teamNumber = "";
 	public static DataContainer<Team> teamDC;
@@ -33,21 +42,33 @@ public class DataLoader {
 	public static DataContainer<Award> awardDC;
 	public static DataContainer<Match> matchDC;
 	public static DataContainer<Alliance> allianceDC;
+	private static ArrayList<Tab> teamTabs = new ArrayList<>();
+	private static ArrayList<Tab> rankTabs = new ArrayList<>();
+	private static ArrayList<Tab> awardTabs = new ArrayList<>();
+	private static ArrayList<Tab> matchTabs = new ArrayList<>();
+	private static ArrayList<Tab> allianceTabs = new ArrayList<>();
 
 
-	public DataLoader(Activity activity) {
+	public DataLoader(Activity activity, SectionsPagerAdapter adapter) {
 		this.activity = activity;
+		this.adapter = adapter;
+		matchTabs.add(new Tab("Team Schedule", TeamScheduleFragment.newInstance()));
+		matchTabs.add(new Tab("Event Schedule", EventScheduleFragment.newInstance()));
+		rankTabs.add(new Tab("Rankings", RankFragment.newInstance()));
+		teamTabs.add(new Tab("Teams", TeamFragment.newInstance()));
+		allianceTabs.add(new Tab("Alliances", AllianceFragment.newInstance()));
+		awardTabs.add(new Tab("Awards", AwardFragment.newInstance()));
 		setDataContainers(false);
 	}
 
 	public static void refresh(boolean force) {
 		if (!eventKey.equals("")) {
 			setDataContainers(force);
-			new Load(matchDC, false, true).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			new Load(teamDC, false, true).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			new Load(rankDC, true, false).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			new Load(awardDC).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			new Load(allianceDC).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new Load(matchDC, false, true, matchTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new Load(teamDC, false, true, teamTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new Load(rankDC, true, false, rankTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new Load(awardDC, awardTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			new Load(allianceDC, allianceTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
 
@@ -73,17 +94,24 @@ public class DataLoader {
 	static class Load extends AsyncTask<Void, Void, Void> {
 
 		private DataContainer dataContainer;
+		private ArrayList<Tab> tabs;
+		private SectionsPagerAdapter adapter;
 		private boolean isRank = false;
 		private boolean isSortable = false;
 
-		Load(DataContainer dataContainer) {
+		Load(DataContainer dataContainer, ArrayList<Tab> tabs, SectionsPagerAdapter adapter) {
 			this.dataContainer = dataContainer;
+			this.tabs = tabs;
+			this.adapter = adapter;
 		}
 
-		Load(DataContainer dataContainer, boolean isRank, boolean isSortable) {
+		Load(DataContainer dataContainer, boolean isRank, boolean isSortable, ArrayList<Tab> tabs,
+			 SectionsPagerAdapter adapter) {
 			this.dataContainer = dataContainer;
 			this.isRank = isRank;
 			this.isSortable = isSortable;
+			this.tabs = tabs;
+			this.adapter = adapter;
 		}
 
 		@Override
@@ -110,6 +138,19 @@ public class DataLoader {
 					dataContainer.data.addAll((Collection) dataContainer.parser.getData());
 					if (isSortable) {
 						sort(dataContainer.data);
+					}
+				}
+			}
+			if (dataContainer.data.isEmpty()) {
+				for (Tab tab: tabs) {
+					if (adapter.isTab(tab.name)) {
+						adapter.removeFrag(adapter.tabPosition(tab.name));
+					}
+				}
+			} else {
+				for (Tab tab: tabs) {
+					if (!adapter.isTab(tab.name)) {
+						adapter.addFrag(tab);
 					}
 				}
 			}

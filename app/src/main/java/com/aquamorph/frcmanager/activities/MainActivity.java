@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		teamRank = prefs.getString("teamRank", "");
 		teamRecord = prefs.getString("teamRecord", "");
 		DataLoader.eventKey = prefs.getString("eventKey", "");
-		dataLoader = new DataLoader(this);
+
 
 		if (DataLoader.teamNumber.equals("")) openSetup();
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		setContentView(R.layout.activity_main);
-		Logging.info(this, "onConfigurationChanged", 0);
+		Logging.info(this, "onConfigurationChanged", 2);
 		listener();
 	}
 
@@ -96,9 +96,6 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 				break;
 			case R.id.refresh_all:
 			default:
-				mSectionsPagerAdapter.removeFrag(0);
-				mSectionsPagerAdapter.notifyDataSetChanged();
-//				mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount() - 1);
 				mSectionsPagerAdapter.refreshAll(false);
 				break;
 		}
@@ -212,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		}
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
 				mViewPager, tabLayout);
+		dataLoader = new DataLoader(this, mSectionsPagerAdapter);
 		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		refreshData(false);

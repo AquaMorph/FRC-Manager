@@ -101,7 +101,10 @@ public class EventScheduleFragment extends Fragment
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
-			adapter = new ScheduleAdapter(getContext(), DataLoader.matchDC.data, DataLoader.teamNumber);
+			if (getContext() != null) {
+				adapter = new ScheduleAdapter(getContext(), DataLoader.matchDC.data,
+						DataLoader.teamNumber);
+			}
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
 			recyclerView.setAdapter(adapter);

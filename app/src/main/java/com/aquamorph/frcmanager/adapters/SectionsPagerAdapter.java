@@ -8,17 +8,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
-import com.aquamorph.frcmanager.fragments.AllianceFragment;
-import com.aquamorph.frcmanager.fragments.AwardFragment;
-import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
-import com.aquamorph.frcmanager.fragments.RankFragment;
 import com.aquamorph.frcmanager.fragments.RefreshFragment;
-import com.aquamorph.frcmanager.fragments.TeamFragment;
-import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
 import com.aquamorph.frcmanager.models.Tab;
 import com.aquamorph.frcmanager.network.DataLoader;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Populates a tab layout with fragments.
@@ -37,12 +32,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		super(fragmentManager);
 		this.tabLayout = tabLayout;
 		this.viewPager = viewPager;
-		addFrag("Team Schedule", TeamScheduleFragment.newInstance());
-		addFrag("Event Schedule", EventScheduleFragment.newInstance());
-		addFrag("Rankings", RankFragment.newInstance());
-		addFrag("Teams", TeamFragment.newInstance());
-		addFrag("Alliances", AllianceFragment.newInstance());
-		addFrag("Awards", AwardFragment.newInstance());
 	}
 
 	public boolean isDataLoading() {
@@ -91,6 +80,13 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 	public void addFrag(String title, Fragment fragment) {
 		tabs.add(new Tab(title, fragment));
+		Collections.sort(tabs);
+	}
+
+	public void addFrag(Tab tab) {
+		tabs.add(tab);
+		Collections.sort(tabs);
+		notifyDataSetChanged();
 	}
 
 	public void removeFrag(int position) {
@@ -105,7 +101,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 		FragmentManager manager = ((Fragment) object).getFragmentManager();
 		FragmentTransaction trans = manager.beginTransaction();
 		trans.remove((Fragment) object);
-		trans.commit();
+		trans.commitAllowingStateLoss();
 	}
 
 	public void removeTab(int position) {
@@ -117,5 +113,23 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	@Override
 	public int getItemPosition(Object object) {
 		return POSITION_NONE;
+	}
+
+	public Boolean isTab(String name) {
+		for (Tab tab: tabs) {
+			if (name.equals(tab.name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public int tabPosition(String name) {
+		for (int i = 0; i < tabs.size(); i++) {
+			if (name.equals(tabs.get(i).name)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }
