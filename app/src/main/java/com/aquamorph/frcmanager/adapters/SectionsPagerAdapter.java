@@ -99,9 +99,11 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 	public void destroyFragmentView(ViewGroup container, int position, Object object) {
 		FragmentManager manager = ((Fragment) object).getFragmentManager();
-		FragmentTransaction trans = manager.beginTransaction();
-		trans.remove((Fragment) object);
-		trans.commitAllowingStateLoss();
+		if (manager != null) {
+			FragmentTransaction trans = manager.beginTransaction();
+			trans.remove((Fragment) object);
+			trans.commitAllowingStateLoss();
+		}
 	}
 
 	public void removeTab(int position) {
