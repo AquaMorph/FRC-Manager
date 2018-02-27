@@ -123,7 +123,9 @@ public class EventScheduleFragment extends Fragment
 
 		@Override
 		protected void onPreExecute() {
-			mSwipeRefreshLayout.setRefreshing(true);
+			if (mSwipeRefreshLayout != null) {
+				mSwipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
@@ -134,11 +136,11 @@ public class EventScheduleFragment extends Fragment
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Constants.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
-					DataLoader.matchDC.parser.isNewData());
-			if (firstLoad) firstLoad = false;
 			if(getContext() != null) {
+				Constants.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+					DataLoader.matchDC.parser.isNewData());
+				if (firstLoad) firstLoad = false;
 				adapter = new ScheduleAdapter(getContext(), DataLoader.matchDC.data, DataLoader.teamNumber);
 				recyclerView.setAdapter(adapter);
 				mSwipeRefreshLayout.setRefreshing(false);

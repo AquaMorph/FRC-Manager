@@ -41,12 +41,14 @@ android {
         debug {
             testCoverageEnabled true
             minifyEnabled false
+            zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "boolean", "APP_DEBUG", "true"
         }
         release {
             testCoverageEnabled false
-            minifyEnabled false
+            minifyEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "boolean", "APP_DEBUG", "false"
         }

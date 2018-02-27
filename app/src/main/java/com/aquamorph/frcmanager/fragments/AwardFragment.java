@@ -94,6 +94,7 @@ public class AwardFragment extends Fragment
 
 	/**
 	 * refrest() loads dataLoader needed for this fragment
+	 *
 	 * @param force force reload dataLoader
 	 */
 	public void refresh(boolean force) {
@@ -119,7 +120,9 @@ public class AwardFragment extends Fragment
 
 		@Override
 		protected void onPreExecute() {
-			swipeRefreshLayout.setRefreshing(true);
+			if (swipeRefreshLayout != null) {
+				swipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
@@ -130,11 +133,11 @@ public class AwardFragment extends Fragment
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
-					DataLoader.awardDC.parser.isNewData());
-			if (firstLoad) firstLoad = false;
 			if (getContext() != null) {
+				Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+						DataLoader.awardDC.parser.isNewData());
+				if (firstLoad) firstLoad = false;
 				adapter = new AwardAdapter(getContext(), DataLoader.awardDC.data);
 				recyclerView.setAdapter(adapter);
 				swipeRefreshLayout.setRefreshing(false);

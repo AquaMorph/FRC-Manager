@@ -186,7 +186,9 @@ public class TeamScheduleFragment extends Fragment
 
 		@Override
 		protected void onPreExecute() {
-			mSwipeRefreshLayout.setRefreshing(true);
+			if (mSwipeRefreshLayout != null) {
+				mSwipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
@@ -197,13 +199,13 @@ public class TeamScheduleFragment extends Fragment
 
 		@Override
 		protected void onPostExecute(Void result) {
-			teamEventMatches.clear();
-			for (Match match : DataLoader.matchDC.data) {
-				if (isTeamInMatch(match, "frc" + teamNumber)) teamEventMatches.add(match);
-			}
-			sort(teamEventMatches);
-			Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
-			{
+			if (getContext() != null) {
+				teamEventMatches.clear();
+				for (Match match : DataLoader.matchDC.data) {
+					if (isTeamInMatch(match, "frc" + teamNumber)) teamEventMatches.add(match);
+				}
+				sort(teamEventMatches);
+				Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
 				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 						DataLoader.matchDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;

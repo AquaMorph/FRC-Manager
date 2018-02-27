@@ -101,7 +101,9 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected void onPreExecute() {
-			swipeRefreshLayout.setRefreshing(true);
+			if (swipeRefreshLayout != null) {
+				swipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
@@ -112,11 +114,11 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
-					DataLoader.allianceDC.parser.isNewData());
-			if (firstLoad) firstLoad = false;
 			if (getContext() != null) {
+				Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+						DataLoader.allianceDC.parser.isNewData());
+				if (firstLoad) firstLoad = false;
 				adapter = new AllianceAdapter(getContext(), DataLoader.allianceDC.data);
 				recyclerView.setAdapter(adapter);
 				swipeRefreshLayout.setRefreshing(false);

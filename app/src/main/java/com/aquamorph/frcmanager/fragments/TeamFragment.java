@@ -108,7 +108,9 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected void onPreExecute() {
-			mSwipeRefreshLayout.setRefreshing(true);
+			if (mSwipeRefreshLayout != null) {
+				mSwipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
@@ -120,11 +122,11 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
-					DataLoader.teamDC.parser.isNewData());
-			if (firstLoad) firstLoad = false;
 			if (getContext() != null) {
+				Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+						DataLoader.teamDC.parser.isNewData());
+				if (firstLoad) firstLoad = false;
 				adapter = new TeamAdapter(getContext(), DataLoader.teamDC.data, DataLoader.rankDC.data);
 				recyclerView.setAdapter(adapter);
 				mSwipeRefreshLayout.setRefreshing(false);

@@ -117,7 +117,9 @@ public class RankFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected void onPreExecute() {
-			mSwipeRefreshLayout.setRefreshing(true);
+			if (mSwipeRefreshLayout != null) {
+				mSwipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
@@ -144,11 +146,11 @@ public class RankFragment extends Fragment implements RefreshFragment {
 					}
 				}
 			}
-			Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
-					DataLoader.rankDC.parser.isNewData());
-			if (firstLoad) firstLoad = false;
 			if (getContext() != null) {
+				Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+					DataLoader.rankDC.parser.isNewData());
+				if (firstLoad) firstLoad = false;
 				adapter = new RankAdapter(getContext(), DataLoader.rankDC.data, DataLoader.teamDC.data);
 				LinearLayoutManager llm = new LinearLayoutManager(getContext());
 				llm.setOrientation(LinearLayoutManager.VERTICAL);
