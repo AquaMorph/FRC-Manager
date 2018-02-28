@@ -136,8 +136,10 @@ public class RankFragment extends Fragment implements RefreshFragment {
 				editor.putString("teamRank", "");
 				for (int i = 0; i < DataLoader.rankDC.data.get(0).rankings.length; i++) {
 					if (DataLoader.rankDC.data.get(0).rankings[i].team_key.equals("frc" + DataLoader.teamNumber)) {
-						editor.putString("teamRank",
-								Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].rank));
+						if (Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].rank) != null) {
+							editor.putString("teamRank",
+									Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].rank));
+						}
 						if (DataLoader.rankDC.data.get(0).rankings[i].record != null) {
 							editor.putString("teamRecord", Rank.recordToString(
 									DataLoader.rankDC.data.get(0).rankings[i].record));
