@@ -11,7 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Established a connection to the Blue Alliance and fetches JSON data.
+ * Established a connection to the Blue Alliance and fetches JSON dataLoader.
  *
  * @author Christian Colglazier
  * @version 3/29/2016

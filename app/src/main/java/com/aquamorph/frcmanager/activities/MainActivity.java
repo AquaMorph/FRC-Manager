@@ -14,9 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter;
+import com.aquamorph.frcmanager.network.DataLoader;
+import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.utils.Logging;
 
 /**
@@ -28,7 +29,10 @@ import com.aquamorph.frcmanager.utils.Logging;
 public class MainActivity extends AppCompatActivity implements OnSharedPreferenceChangeListener {
 
 	private static SectionsPagerAdapter mSectionsPagerAdapter;
-	private String teamNumber, eventName, teamRank, teamRecord;
+	private String eventName, teamRank, teamRecord;
+	public DataLoader dataLoader;
+	ViewPager mViewPager;
+	private TabLayout tabLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +41,14 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(MainActivity.this);
-		teamNumber = prefs.getString("teamNumber", "");
+		DataLoader.teamNumber = prefs.getString("teamNumber", "");
 		eventName = prefs.getString("eventShortName", "");
 		teamRank = prefs.getString("teamRank", "");
 		teamRecord = prefs.getString("teamRecord", "");
+		DataLoader.eventKey = prefs.getString("eventKey", "");
 
-		if (teamNumber.equals("")) openSetup();
+
+		if (DataLoader.teamNumber.equals("")) openSetup();
 
 		listener();
 		theme(this);
@@ -72,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		setContentView(R.layout.activity_main);
-		Logging.info(this, "onConfigurationChanged", 0);
+		Logging.info(this, "onConfigurationChanged", 2);
 		listener();
 	}
 
@@ -119,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	 * @return team number string
 	 */
 	public String getTeamNumber() {
-		return "frc" + teamNumber;
+		return "frc" + DataLoader.teamNumber;
 	}
 
 	/**
@@ -127,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	 * @return title for the app
 	 */
 	public String getAppTitle() {
-		return String.format("%s - %s", teamNumber,
+		return String.format("%s - %s", DataLoader.teamNumber,
 				shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH));
 	}
 
@@ -162,10 +168,20 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		teamNumber = sharedPreferences.getString("teamNumber", "0000");
 		eventName = sharedPreferences.getString("eventShortName", "North Carolina");
 		teamRank = sharedPreferences.getString("teamRank", "");
 		teamRecord = sharedPreferences.getString("teamRecord", "");
+		switch (key) {
+			case "eventKey":
+				DataLoader.eventKey = sharedPreferences.getString("eventKey", "");
+				break;
+			case "teamNumber":
+				DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000");
+				break;
+			default:
+				break;
+		}
+
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setTitle(getAppTitle());
 			getSupportActionBar().setSubtitle(getAppSubTitle());
@@ -185,16 +201,22 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 		getSupportActionBar().setSubtitle(getAppSubTitle());
 
 		// Set up the ViewPager with the sections adapter.
-		ViewPager mViewPager = findViewById(R.id.container);
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
-		mViewPager.setAdapter(mSectionsPagerAdapter);
-
-		TabLayout tabLayout = findViewById(R.id.tabs);
+		mViewPager = findViewById(R.id.container);
+		tabLayout = findViewById(R.id.tabs);
 		if (tabLayout != null) {
 			tabLayout.setupWithViewPager(mViewPager);
 			tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 		}
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+				mViewPager, tabLayout);
+		dataLoader = new DataLoader(this, mSectionsPagerAdapter);
+		mViewPager.setOffscreenPageLimit(mSectionsPagerAdapter.getCount());
+		mViewPager.setAdapter(mSectionsPagerAdapter);
+		refreshData(false);
+	}
+
+	public static void refreshData(boolean force) {
+		mSectionsPagerAdapter.refrestData(force);
 	}
 
 	public static void refresh() {

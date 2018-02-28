@@ -121,7 +121,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 	 *
 	 * @param red      is the robot red or blue
 	 * @param robot    position of the team
-	 * @param position data position
+	 * @param position dataLoader position
 	 * @return team number
 	 */
 	private String parseTeamNumber(Boolean red, int robot, int position) {

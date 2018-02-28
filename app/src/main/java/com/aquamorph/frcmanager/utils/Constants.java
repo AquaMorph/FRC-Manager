@@ -25,6 +25,7 @@ public class Constants {
 	public static final Boolean FORCE_DATA_RELOAD = false;
 	static final int TRACING_LEVEL = 3;
 	public static final int MAX_EVENT_TITLE_LENGTH = 20;
+	public static final int THREAD_WAIT_TIME = 10;
 
 	/**
 	 * getEventURL() returns the url for a list of events a team is registered.
@@ -175,8 +176,8 @@ public class Constants {
 	}
 
 	/**
-	 * checkNoDataScreen() displays a no data screen if there is not any data to display. Else
-	 * displays data.
+	 * checkNoDataScreen() displays a no dataLoader screen if there is not any dataLoader to display. Else
+	 * displays dataLoader.
 	 */
 	public static void checkNoDataScreen(ArrayList data, View recyclerView, View emptyView) {
 		if (data.isEmpty()) {

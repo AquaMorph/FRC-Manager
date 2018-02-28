@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.fragments;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,12 +21,8 @@ import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.AwardAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
-import com.aquamorph.frcmanager.models.Award;
-import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.network.DataLoader;
 import com.aquamorph.frcmanager.utils.Constants;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
 
 /**
  * Displays a list of awards at a event
@@ -33,16 +30,14 @@ import java.util.ArrayList;
  * @author Christian Colglazier
  * @version 2/13/2016
  */
-public class AwardFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AwardFragment extends Fragment
+		implements SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
 	SharedPreferences prefs;
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Award> awards = new ArrayList<>();
-	private String eventKey = "";
-	private Parser<ArrayList<Award>> parser;
 	private Boolean firstLoad = true;
 
 	/**
@@ -75,7 +70,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new AwardAdapter(getContext(), awards);
+		adapter = new AwardAdapter(getContext(), DataLoader.awardDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -84,26 +79,26 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
-		eventKey = prefs.getString("eventKey", "");
 
 		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(awards, recyclerView, emptyView);
+		Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (awards.size() == 0)
+		if (DataLoader.awardDC.data.size() == 0)
 			refresh(false);
 	}
 
 	/**
-	 * refrest() loads data needed for this fragment
-	 * @param force force reload data
+	 * refrest() loads dataLoader needed for this fragment
+	 *
+	 * @param force force reload dataLoader
 	 */
 	public void refresh(boolean force) {
-		if (!eventKey.equals("")) {
+		if (!DataLoader.eventKey.equals("")) {
 			new LoadAwards(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
@@ -111,8 +106,7 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("eventKey")) {
-			eventKey = sharedPreferences.getString("eventKey", "");
-			refresh(false);
+			refresh(true);
 		}
 	}
 
@@ -126,26 +120,28 @@ public class AwardFragment extends Fragment implements SharedPreferences.OnShare
 
 		@Override
 		protected void onPreExecute() {
-			swipeRefreshLayout.setRefreshing(true);
-			parser = new Parser<>("eventAwards", Constants.getEventAwards(eventKey),
-					new TypeToken<ArrayList<Award>>() {}.getType(), getActivity(), force);
+			if (swipeRefreshLayout != null) {
+				swipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parser.fetchJSON(true);
-			while (parser.parsingComplete) ;
+			while (!DataLoader.awardDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			awards.clear();
-			awards.addAll(parser.getData());
-			Constants.checkNoDataScreen(awards, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
-			if (firstLoad) firstLoad = false;
-			swipeRefreshLayout.setRefreshing(false);
+			if (getContext() != null) {
+				Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+						DataLoader.awardDC.parser.isNewData());
+				if (firstLoad) firstLoad = false;
+				adapter = new AwardAdapter(getContext(), DataLoader.awardDC.data);
+				recyclerView.setAdapter(adapter);
+				swipeRefreshLayout.setRefreshing(false);
+			}
 		}
 	}
 }

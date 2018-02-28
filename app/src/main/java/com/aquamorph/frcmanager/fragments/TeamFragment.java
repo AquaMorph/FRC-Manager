@@ -1,9 +1,8 @@
 package com.aquamorph.frcmanager.fragments;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,39 +14,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.TeamAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
-import com.aquamorph.frcmanager.models.Rank;
-import com.aquamorph.frcmanager.utils.Constants;
-import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.decoration.Divider;
-import com.aquamorph.frcmanager.models.Team;
-import com.aquamorph.frcmanager.network.Parser;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-
-import static java.util.Collections.sort;
+import com.aquamorph.frcmanager.network.DataLoader;
+import com.aquamorph.frcmanager.utils.Constants;
 
 /**
  * Displays a list of teams at an event.
  *
  * @author Christian Colglazier
- * @version 12/30/2017
+ * @version 2/20/2018
  */
-public class TeamFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class TeamFragment extends Fragment implements RefreshFragment {
 
-	private Parser<ArrayList<Team>> parser;
-	private Parser<Rank> rankParser;
-	private SharedPreferences prefs;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Team> teams = new ArrayList<>();
-	private ArrayList<Rank> ranks = new ArrayList<>();
-	private String eventKey = "", teamNumber = "";
 	private Boolean firstLoad = true;
 
 	/**
@@ -80,7 +66,7 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new TeamAdapter(getContext(), teams, ranks);
+		adapter = new TeamAdapter(getContext(), DataLoader.teamDC.data, DataLoader.rankDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
@@ -90,48 +76,25 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 		} else {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
-		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(TeamFragment.this);
-		eventKey = prefs.getString("eventKey", "");
-		teamNumber = prefs.getString("teamNumber", "0000");
 
-		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(teams, recyclerView, emptyView);
+//		if (savedInstanceState == null) refresh(false);
+		Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (teams.size() == 0)
+		if (DataLoader.teamDC.data.size() == 0)
 			refresh(false);
 	}
 
 	/**
-	 * refrest() loads data needed for this fragment.
+	 * refresh() loads dataLoader needed for this fragment.
 	 */
-	public void refresh(Boolean force) {
-		if (!eventKey.equals("") && !teamNumber.equals("")) {
+	public void refresh(boolean force) {
+		if (!DataLoader.eventKey.equals("") && !DataLoader.teamNumber.equals("")) {
 			new LoadEventTeams(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		}
-	}
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (key.equals("eventKey")) {
-			eventKey = sharedPreferences.getString("eventKey", "");
-			if (parser != null) {
-				parser.storeData("");
-			}
-			if (!eventKey.equals("")) {
-				refresh(true);
-			}
-		}
-		if (key.equals("teamNumber")) {
-			teamNumber = sharedPreferences.getString("teamNumber", "");
-			if (!teamNumber.equals("")) {
-				refresh(true);
-			}
 		}
 	}
 
@@ -145,37 +108,30 @@ public class TeamFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected void onPreExecute() {
-			mSwipeRefreshLayout.setRefreshing(true);
-			parser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
-					new TypeToken<ArrayList<Team>>() {}.getType(), getActivity(), force);
-			rankParser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
-					new TypeToken<Rank>() {}.getType(), getActivity(), force);
+			if (mSwipeRefreshLayout != null) {
+				mSwipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parser.fetchJSON(true);
-			while (parser.parsingComplete) ;
-			rankParser.fetchJSON(true);
-			while (rankParser.parsingComplete) ;
+			while (!DataLoader.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!DataLoader.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			teams.clear();
-			if(parser.getData() != null) {
-				teams.addAll(parser.getData());
-				sort(teams);
-				if (rankParser.getData() != null) {
-					ranks.clear();
-					ranks.add(rankParser.getData());
-				}
-				Constants.checkNoDataScreen(teams, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+			if (getContext() != null) {
+				Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+						DataLoader.teamDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;
+				adapter = new TeamAdapter(getContext(), DataLoader.teamDC.data, DataLoader.rankDC.data);
+				recyclerView.setAdapter(adapter);
+				mSwipeRefreshLayout.setRefreshing(false);
 			}
-			mSwipeRefreshLayout.setRefreshing(false);
 		}
+
 	}
 }

@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.fragments;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,14 +23,8 @@ import com.aquamorph.frcmanager.adapters.RankAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
 import com.aquamorph.frcmanager.models.Rank;
-import com.aquamorph.frcmanager.models.Team;
-import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.network.DataLoader;
 import com.aquamorph.frcmanager.utils.Constants;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-
-import static java.util.Collections.sort;
 
 /**
  * Displays the ranks of all the teams at an event.
@@ -37,17 +32,12 @@ import static java.util.Collections.sort;
  * @author Christian Colglazier
  * @version 10/20/2016
  */
-public class RankFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class RankFragment extends Fragment implements RefreshFragment {
 
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Rank> ranks = new ArrayList<>();
-	private ArrayList<Team> teams = new ArrayList<>();
-	private String eventKey = "", teamNumber = "";
-	private Parser<Rank> parser;
-	private Parser<ArrayList<Team>> teamEventParser;
 	private SharedPreferences prefs;
 	private Boolean firstLoad = true;
 
@@ -85,7 +75,7 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 		recyclerView = view.findViewById(R.id.rv);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new RankAdapter(getContext(), ranks, teams);
+		adapter = new RankAdapter(getContext(), DataLoader.rankDC.data, DataLoader.teamDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
@@ -95,38 +85,25 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
 
-		prefs.registerOnSharedPreferenceChangeListener(RankFragment.this);
-		eventKey = prefs.getString("eventKey", "");
-		teamNumber = prefs.getString("teamNumber", "0000");
-
 		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
+		Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (ranks.size() == 0)
+		if (DataLoader.rankDC.data.size() == 0)
 			refresh(false);
 	}
 
 	/**
-	 * refrest() loads data needed for this fragment.
+	 * refrest() loads dataLoader needed for this fragment.
 	 */
-	public void refresh(Boolean force) {
-		if (!eventKey.equals("") && !teamNumber.equals("")) {
+	public void refresh(boolean force) {
+		if (!DataLoader.eventKey.equals("") && !DataLoader.teamNumber.equals("")
+				&& getContext() != null) {
 			new LoadRanks(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		}
-	}
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (key.equals("eventKey")) {
-			eventKey = sharedPreferences.getString("eventKey", "");
-		}
-		if (key.equals("teamNumber")) {
-			teamNumber = sharedPreferences.getString("teamNumber", "");
 		}
 	}
 
@@ -140,51 +117,48 @@ public class RankFragment extends Fragment implements SharedPreferences.OnShared
 
 		@Override
 		protected void onPreExecute() {
-			mSwipeRefreshLayout.setRefreshing(true);
-			parser = new Parser<>("eventRank", Constants.getEventRanks(eventKey),
-					new TypeToken<Rank>(){}.getType(), getActivity(), force);
-			teamEventParser = new Parser<>("eventTeams", Constants.getEventTeams(eventKey),
-					new TypeToken<ArrayList<Team>>() {}.getType(), getActivity(),force);
+			if (mSwipeRefreshLayout != null) {
+				mSwipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			teamEventParser.fetchJSON(true);
-			while (teamEventParser.parsingComplete) ;
-			parser.fetchJSON(true);
-			while (parser.parsingComplete) ;
+			while (!DataLoader.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+			while (!DataLoader.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			teams.clear();
-			if (teamEventParser.getData() != null) {
-				teams.addAll(teamEventParser.getData());
-				sort(teams);
-
-				if (parser.getData() != null) {
-					ranks.clear();
-					ranks.add(parser.getData());
-
-
-					SharedPreferences.Editor editor = prefs.edit();
-					editor.putString("teamRank", "");
-					for (int i = 0; i < ranks.get(0).rankings.length; i++) {
-						if (ranks.get(0).rankings[i].team_key.equals("frc" + teamNumber)) {
+			if(!DataLoader.rankDC.data.isEmpty() && DataLoader.rankDC.data.get(0).rankings != null) {
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putString("teamRank", "");
+				for (int i = 0; i < DataLoader.rankDC.data.get(0).rankings.length; i++) {
+					if (DataLoader.rankDC.data.get(0).rankings[i].team_key.equals("frc" + DataLoader.teamNumber)) {
+						if (Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].rank) != null) {
 							editor.putString("teamRank",
-									Integer.toString(ranks.get(0).rankings[i].rank));
-							editor.putString("teamRecord",
-									Rank.recordToString(ranks.get(0).rankings[i].record));
-							editor.apply();
+									Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].rank));
 						}
+						if (DataLoader.rankDC.data.get(0).rankings[i].record != null) {
+							editor.putString("teamRecord", Rank.recordToString(
+									DataLoader.rankDC.data.get(0).rankings[i].record));
+						}
+						editor.apply();
 					}
-					Constants.checkNoDataScreen(ranks, recyclerView, emptyView);
-					Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
-					if (firstLoad) firstLoad = false;
 				}
 			}
-			mSwipeRefreshLayout.setRefreshing(false);
+			if (getContext() != null) {
+				Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+					DataLoader.rankDC.parser.isNewData());
+				if (firstLoad) firstLoad = false;
+				adapter = new RankAdapter(getContext(), DataLoader.rankDC.data, DataLoader.teamDC.data);
+				LinearLayoutManager llm = new LinearLayoutManager(getContext());
+				llm.setOrientation(LinearLayoutManager.VERTICAL);
+				recyclerView.setAdapter(adapter);
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
 		}
 	}
 }

@@ -46,8 +46,10 @@ public class TeamNumberSlide extends Fragment  implements AdapterView.OnItemSele
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		((TextView) yearSpinnder.getSelectedView()).setTextColor(getResources().getColor(R.color.icons));
-		AppConfig.setYear(parent.getItemAtPosition(position).toString(), getContext());
+		if (yearSpinnder != null) {
+			((TextView) yearSpinnder.getSelectedView()).setTextColor(getResources().getColor(R.color.icons));
+			AppConfig.setYear(parent.getItemAtPosition(position).toString(), getContext());
+		}
 	}
 
 	@Override

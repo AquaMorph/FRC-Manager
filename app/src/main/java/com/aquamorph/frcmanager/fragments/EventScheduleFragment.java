@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.fragments;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,30 +20,23 @@ import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
-import com.aquamorph.frcmanager.models.Match;
-import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.network.DataLoader;
 import com.aquamorph.frcmanager.utils.Constants;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Displays a list of matches at an event.
  *
  * @author Christian Colglazier
- * @version 3/29/2016
+ * @version 2/20/2018
  */
-public class EventScheduleFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class EventScheduleFragment extends Fragment
+		implements SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
 	SharedPreferences prefs;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Match> eventMatches = new ArrayList<>();
-	private String teamNumber = "", eventKey = "";
-	private Parser<ArrayList<Match>> parser;
 	private Boolean firstLoad = true;
 
 	/**
@@ -65,8 +59,6 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 							 Bundle savedInstanceState) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		prefs.registerOnSharedPreferenceChangeListener(EventScheduleFragment.this);
-		teamNumber = prefs.getString("teamNumber", "");
-		eventKey = prefs.getString("eventKey", "");
 
 		View view = inflater.inflate(R.layout.fragment_fastscroll, container, false);
 		mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
@@ -80,28 +72,28 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 		recyclerView = view.findViewById(R.id.rv);
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new ScheduleAdapter(getContext(), eventMatches, teamNumber);
+		adapter = new ScheduleAdapter(getContext(), DataLoader.matchDC.data, DataLoader.teamNumber);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
-		Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
+		Constants.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (eventMatches.size() == 0)
+		if (DataLoader.matchDC.data.size() == 0)
 			refresh(false);
 	}
 
 	/**
 	 * refresh reloads the event schedule and repopulates the listview
 	 */
-	public void refresh(Boolean force) {
-		if (!eventKey.equals("")) {
+	public void refresh(boolean force) {
+		if (!DataLoader.eventKey.equals("")) {
 			new LoadEventSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		}
 	}
@@ -109,9 +101,10 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		if (key.equals("teamNumber") || key.equals("eventKey")) {
-			teamNumber = sharedPreferences.getString("teamNumber", "");
-			eventKey = sharedPreferences.getString("eventKey", "");
-			adapter = new ScheduleAdapter(getContext(), eventMatches, teamNumber);
+			if (getContext() != null) {
+				adapter = new ScheduleAdapter(getContext(), DataLoader.matchDC.data,
+						DataLoader.teamNumber);
+			}
 			LinearLayoutManager llm = new LinearLayoutManager(getContext());
 			llm.setOrientation(LinearLayoutManager.VERTICAL);
 			recyclerView.setAdapter(adapter);
@@ -130,27 +123,28 @@ public class EventScheduleFragment extends Fragment implements SharedPreferences
 
 		@Override
 		protected void onPreExecute() {
-			mSwipeRefreshLayout.setRefreshing(true);
-			parser = new Parser<>("eventMatches", Constants.getEventMatches(eventKey), new TypeToken<ArrayList<Match>>() {
-			}.getType(), getActivity(), force);
+			if (mSwipeRefreshLayout != null) {
+				mSwipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parser.fetchJSON(true);
-			while (parser.parsingComplete) ;
+			while (!DataLoader.matchDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			eventMatches.clear();
-			eventMatches.addAll(parser.getData());
-			Collections.sort(eventMatches);
-			Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
-			if (firstLoad) firstLoad = false;
-			mSwipeRefreshLayout.setRefreshing(false);
+			if(getContext() != null) {
+				Constants.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+					DataLoader.matchDC.parser.isNewData());
+				if (firstLoad) firstLoad = false;
+				adapter = new ScheduleAdapter(getContext(), DataLoader.matchDC.data, DataLoader.teamNumber);
+				recyclerView.setAdapter(adapter);
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
 		}
 	}
 }

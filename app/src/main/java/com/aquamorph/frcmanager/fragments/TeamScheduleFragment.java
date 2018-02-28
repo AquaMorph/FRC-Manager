@@ -6,7 +6,9 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,12 +24,12 @@ import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.models.Match;
-import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.network.DataLoader;
 import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.utils.Logging;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static java.util.Collections.sort;
 
@@ -37,7 +39,8 @@ import static java.util.Collections.sort;
  * @author Christian Colglazier
  * @version 10/19/2016
  */
-public class TeamScheduleFragment extends Fragment implements OnSharedPreferenceChangeListener {
+public class TeamScheduleFragment extends Fragment
+		implements OnSharedPreferenceChangeListener, RefreshFragment {
 
 	SharedPreferences prefs;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -45,8 +48,7 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	private TextView emptyView;
 	private Adapter adapter;
 	private ArrayList<Match> teamEventMatches = new ArrayList<>();
-	private String teamNumber = "", eventKey = "";
-	private Parser<ArrayList<Match>> parser;
+	private String teamNumber = "";
 	private View view;
 	private Boolean getTeamFromSettings = true;
 	private Boolean firstLoad = true;
@@ -73,14 +75,13 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_team_schedule, container, false);
 		if (savedInstanceState != null) {
 			if (getTeamFromSettings) {
 				teamNumber = savedInstanceState.getString("teamNumber");
 			}
-			eventKey = savedInstanceState.getString("eventKey");
 			Logging.info(this, "savedInstanceState teamNumber: " + teamNumber, 2);
 		}
 		listener();
@@ -92,7 +93,6 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putString("teamNumber", teamNumber);
-		outState.putString("eventKey", eventKey);
 		Logging.info(this, "onSaveInstanceState", 3);
 	}
 
@@ -113,13 +113,13 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	}
 
 	/**
-	 * refrest() loads data needed for this fragment.
+	 * refrest() loads dataLoader needed for this fragment.
 	 * @param force
 	 */
 	public void refresh(boolean force) {
 		Logging.info(this, "teamNumber: " + teamNumber, 2);
-		Logging.info(this, "Data is being refreshed", 0);
-		if (!teamNumber.equals("") && !eventKey.equals("")) {
+		Logging.info(this, "DataLoader is being refreshed", 0);
+		if (!teamNumber.equals("") && !DataLoader.eventKey.equals("")) {
 			new LoadTeamSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		} else {
 			Logging.error(this, "Team or event key not set", 0);
@@ -133,7 +133,6 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 			if (getTeamFromSettings) {
 				teamNumber = sharedPreferences.getString("teamNumber", "");
 			}
-			eventKey = sharedPreferences.getString("eventKey", "");
 			listener();
 		}
 	}
@@ -142,33 +141,39 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 	 * listener() initializes all needed types on creation
 	 */
 	public void listener() {
-		prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
-		if (getTeamFromSettings) {
-			teamNumber = prefs.getString("teamNumber", "");
-		}
-		eventKey = prefs.getString("eventKey", "");
-
-		mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-		mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
-		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				if(getTeamFromSettings) {
-					MainActivity.refresh();
-				} else {
-					refresh(false);
-				}
+		if (getContext() != null) {
+			prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+			prefs.registerOnSharedPreferenceChangeListener(TeamScheduleFragment.this);
+			if (getTeamFromSettings) {
+				teamNumber = prefs.getString("teamNumber", "");
 			}
-		});
+			mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+			mSwipeRefreshLayout.setColorSchemeResources(R.color.accent);
+			mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+				@Override
+				public void onRefresh() {
+					if (getTeamFromSettings) {
+						MainActivity.refresh();
+					} else {
+						refresh(false);
+					}
+				}
+			});
 
-		recyclerView = view.findViewById(R.id.rv);
-		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
-		LinearLayoutManager llm = new LinearLayoutManager(getContext());
-		llm.setOrientation(LinearLayoutManager.VERTICAL);
-		recyclerView.setLayoutManager(llm);
-		recyclerView.setAdapter(adapter);
+			recyclerView = view.findViewById(R.id.rv);
+			emptyView = view.findViewById(R.id.empty_view);
+			adapter = new ScheduleAdapter(getContext(), teamEventMatches, teamNumber);
+			LinearLayoutManager llm = new LinearLayoutManager(getContext());
+			llm.setOrientation(LinearLayoutManager.VERTICAL);
+			recyclerView.setLayoutManager(llm);
+			recyclerView.setAdapter(adapter);
+		}
+	}
+
+	private boolean isTeamInMatch(Match match, String team) {
+		if (Arrays.asList(match.alliances.red.team_keys).contains(team)) return true;
+		else if (Arrays.asList(match.alliances.blue.team_keys).contains(team)) return true;
+		else return false;
 	}
 
 	class LoadTeamSchedule extends AsyncTask<Void, Void, Void> {
@@ -181,32 +186,31 @@ public class TeamScheduleFragment extends Fragment implements OnSharedPreference
 
 		@Override
 		protected void onPreExecute() {
-			mSwipeRefreshLayout.setRefreshing(true);
-			parser = new Parser<>("teamEventMatches", Constants.getEventTeamMatches
-					("frc" + teamNumber, eventKey), new TypeToken<ArrayList<Match>>() {
-			}.getType(),getActivity(), force);
+			if (mSwipeRefreshLayout != null) {
+				mSwipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parser.fetchJSON(getTeamFromSettings);
-			while (parser.parsingComplete) ;
+			while (!DataLoader.matchDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (parser.getData() != null) {
+			if (getContext() != null) {
 				teamEventMatches.clear();
-				teamEventMatches.addAll(parser.getData());
+				for (Match match : DataLoader.matchDC.data) {
+					if (isTeamInMatch(match, "frc" + teamNumber)) teamEventMatches.add(match);
+				}
 				sort(teamEventMatches);
+				Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+						DataLoader.matchDC.parser.isNewData());
+				if (firstLoad) firstLoad = false;
+				mSwipeRefreshLayout.setRefreshing(false);
 			}
-			Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
-			Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
-			if (firstLoad) firstLoad = false;
-			mSwipeRefreshLayout.setRefreshing(false);
-			mSwipeRefreshLayout.destroyDrawingCache();
-			mSwipeRefreshLayout.clearAnimation();
 		}
 	}
 }

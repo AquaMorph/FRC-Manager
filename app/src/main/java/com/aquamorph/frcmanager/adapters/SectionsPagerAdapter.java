@@ -1,108 +1,71 @@
 package com.aquamorph.frcmanager.adapters;
 
-import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.util.SparseArray;
+import android.support.v4.view.ViewPager;
 import android.view.ViewGroup;
 
-import com.aquamorph.frcmanager.fragments.AllianceFragment;
-import com.aquamorph.frcmanager.fragments.AwardFragment;
-import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
-import com.aquamorph.frcmanager.fragments.RankFragment;
-import com.aquamorph.frcmanager.fragments.TeamFragment;
-import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
+import com.aquamorph.frcmanager.fragments.RefreshFragment;
+import com.aquamorph.frcmanager.models.Tab;
+import com.aquamorph.frcmanager.network.DataLoader;
 
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Populates a tab layout with fragments.
  *
  * @author Christian Colglazier
- * @version 3/29/2016
+ * @version 2/25/2018
  */
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-	private final FragmentManager mFragmentManager;
-	private SparseArray<Fragment> mFragments;
-	private FragmentTransaction mCurTransaction;
-	private String[] tabNames = {"Team Schedule", "Event Schedule", "Rankings", "Teams",
-			"Alliances", "Awards"};
+	private TabLayout tabLayout;
+	private ViewPager viewPager;
+	public ArrayList<Tab> tabs = new ArrayList<>();
 
-	public SectionsPagerAdapter(FragmentManager fragmentManager) {
+	public SectionsPagerAdapter(FragmentManager fragmentManager, ViewPager viewPager,
+								TabLayout tabLayout) {
 		super(fragmentManager);
-		mFragmentManager = fragmentManager;
-		mFragments = new SparseArray<>();
+		this.tabLayout = tabLayout;
+		this.viewPager = viewPager;
+	}
+
+	public boolean isDataLoading() {
+		return !DataLoader.awardDC.complete || !DataLoader.teamDC.complete || !DataLoader.rankDC.complete
+				|| !DataLoader.matchDC.complete || !DataLoader.allianceDC.complete;
 	}
 
 	/**
-	 * refreshAll() reloads all data in the fragments.
+	 * refreshAll() reloads all dataLoader in the fragments.
 	 */
 	public void refreshAll(boolean force) {
-		((TeamScheduleFragment) mFragmentManager.findFragmentByTag("fragment:0")).refresh(force);
-		((EventScheduleFragment) mFragmentManager.findFragmentByTag("fragment:1")).refresh(force);
-		((RankFragment) mFragmentManager.findFragmentByTag("fragment:2")).refresh(force);
-		((TeamFragment) mFragmentManager.findFragmentByTag("fragment:3")).refresh(force);
-		((AllianceFragment) mFragmentManager.findFragmentByTag("fragment:4")).refresh(force);
-		((AwardFragment) mFragmentManager.findFragmentByTag("fragment:5")).refresh(force);
+		refrestData(force);
+		for (int i = 0; i < tabs.size(); i++) {
+			((RefreshFragment) tabs.get(i).fragment).refresh(force);
+		}
 	}
 
-	@NonNull
-	@Override
-	public Object instantiateItem(ViewGroup container, int position) {
-
-		Fragment fragment = mFragmentManager.findFragmentByTag("fragment:" + position);
-		if (fragment == null) {
-			fragment = getItem(position);
-			if (mCurTransaction == null) {
-				mCurTransaction = mFragmentManager.beginTransaction();
-			}
-			mCurTransaction.add(container.getId(), fragment, "fragment:" + position);
-		}
-		return fragment;
-	}
-
-	@Override
-	public void destroyItem(ViewGroup container, int position, Object object) {
-		if (mCurTransaction == null) {
-			mCurTransaction = mFragmentManager.beginTransaction();
-		}
-		mCurTransaction.detach(mFragments.get(position));
-		mFragments.remove(position);
+	public void refrestData(boolean force) {
+		DataLoader.teamDC.complete = false;
+		DataLoader.rankDC.complete = false;
+		DataLoader.awardDC.complete = false;
+		DataLoader.allianceDC.complete = false;
+		DataLoader.matchDC.complete= false;
+		DataLoader.refresh(force);
 	}
 
 	@Override
 	public CharSequence getPageTitle(int position) {
-		return tabNames[position];
-	}
-
-	public Fragment getItem(int position) {
-		switch (position) {
-			case 0:
-				return TeamScheduleFragment.newInstance();
-			case 1:
-				return EventScheduleFragment.newInstance();
-			case 2:
-				return RankFragment.newInstance();
-			case 3:
-				return TeamFragment.newInstance();
-			case 4:
-				return AllianceFragment.newInstance();
-			case 5:
-				return AwardFragment.newInstance();
-			default:
-				return TeamFragment.newInstance();
-		}
+		return tabs.get(position).name;
 	}
 
 	@Override
-	public void finishUpdate(ViewGroup container) {
-		if (mCurTransaction != null) {
-			mCurTransaction.commitAllowingStateLoss();
-			mCurTransaction = null;
-			mFragmentManager.executePendingTransactions();
-		}
+	public Fragment getItem(int position) {
+		return tabs.get(position).fragment;
 	}
 
 	@Override
@@ -112,7 +75,63 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public int getCount() {
-		return tabNames.length;
+		return tabs.size();
 	}
 
+	public void addFrag(String title, Fragment fragment) {
+		tabs.add(new Tab(title, fragment));
+		Collections.sort(tabs);
+	}
+
+	public void addFrag(Tab tab) {
+		tabs.add(tab);
+		Collections.sort(tabs);
+		notifyDataSetChanged();
+	}
+
+	public void removeFrag(int position) {
+		Fragment fragment = tabs.get(position).fragment;
+		destroyFragmentView(viewPager, position, fragment);
+		removeTab(position);
+		tabs.remove(position);
+		notifyDataSetChanged();
+	}
+
+	public void destroyFragmentView(ViewGroup container, int position, Object object) {
+		FragmentManager manager = ((Fragment) object).getFragmentManager();
+		if (manager != null) {
+			FragmentTransaction trans = manager.beginTransaction();
+			trans.remove((Fragment) object);
+			trans.commitAllowingStateLoss();
+		}
+	}
+
+	public void removeTab(int position) {
+		if (tabLayout.getChildCount() > 0) {
+			tabLayout.removeTabAt(position);
+		}
+	}
+
+	@Override
+	public int getItemPosition(Object object) {
+		return POSITION_NONE;
+	}
+
+	public Boolean isTab(String name) {
+		for (Tab tab: tabs) {
+			if (name.equals(tab.name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public int tabPosition(String name) {
+		for (int i = 0; i < tabs.size(); i++) {
+			if (name.equals(tabs.get(i).name)) {
+				return i;
+			}
+		}
+		return -1;
+	}
 }

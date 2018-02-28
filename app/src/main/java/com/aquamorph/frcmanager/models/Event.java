@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Store information about an event.
+ * Stores information about an event.
  *
  * @author Christian Colglazier
  * @version 3/29/2016
@@ -13,27 +13,34 @@ import java.util.Locale;
 public class Event implements Comparable {
 
 	public String key;
-	public String website;
-	public Boolean official;
-	public String end_date;
 	public String name;
-	public String short_name;
-	public String facebook_eid;
-	public String event_district_string;
-	public String venue_address;
-	public String event_district;
-	public String location;
 	public String event_code;
-	public String year;
-	public Alliances[] alliances;
-	public String event_type_string;
+	public int event_type;
+	public DistrictList district;
+	public String city;
+	public String state_prov;
+	public String country;
 	public String start_date;
-	public String event_type;
-
-	public class Alliances {
-		public String[] declines;
-		public String[] picks;
-	}
+	public String end_date;
+	public int year;
+	public String short_name;
+	public String event_type_string;
+	public int week;
+	public String address;
+	public String postal_code;
+	public String gmaps_place_id;
+	public String gmaps_url;
+	public double lat;
+	public double lng;
+	public String location_name;
+	public String timezone;
+	public String website;
+	public String first_event_id;
+	public String first_event_code;
+	public Webcast[] webcasts;
+	public String[] division_keys;
+	public int playoff_type;
+	public String playoff_type_string;
 
 	@Override
 	public int compareTo(Object another) {

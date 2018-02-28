@@ -1,9 +1,8 @@
 package com.aquamorph.frcmanager.fragments;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,30 +19,21 @@ import com.aquamorph.frcmanager.activities.MainActivity;
 import com.aquamorph.frcmanager.adapters.AllianceAdapter;
 import com.aquamorph.frcmanager.decoration.Animations;
 import com.aquamorph.frcmanager.decoration.Divider;
-import com.aquamorph.frcmanager.models.Alliance;
-import com.aquamorph.frcmanager.models.Event;
-import com.aquamorph.frcmanager.network.Parser;
+import com.aquamorph.frcmanager.network.DataLoader;
 import com.aquamorph.frcmanager.utils.Constants;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Displays a list of alliance for eliminations.
  *
  * @author Christian Colglazier
- * @version 10/20/2016
+ * @version 2/20/2018
  */
-public class AllianceFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class AllianceFragment extends Fragment implements RefreshFragment {
 
 	private SwipeRefreshLayout swipeRefreshLayout;
 	private RecyclerView recyclerView;
 	private TextView emptyView;
 	private RecyclerView.Adapter adapter;
-	private ArrayList<Alliance> alliances = new ArrayList<>();
-	private String eventKey = "";
-	private Parser<ArrayList<Alliance>> parser;
 	private Boolean firstLoad = true;
 
 	/**
@@ -77,42 +67,28 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 		recyclerView = view.findViewById(R.id.rv);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
 		emptyView = view.findViewById(R.id.empty_view);
-		adapter = new AllianceAdapter(getContext(), alliances);
+		adapter = new AllianceAdapter(getContext(), DataLoader.allianceDC.data);
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
-
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-		prefs.registerOnSharedPreferenceChangeListener(AllianceFragment.this);
-		eventKey = prefs.getString("eventKey", "");
-
-		Constants.checkNoDataScreen(alliances, recyclerView, emptyView);
+		Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (alliances.size() == 0) {
+		if (DataLoader.allianceDC.data.size() == 0) {
 			refresh(false);
 		}
 	}
 
 	/**
-	 * refrest() loads data needed for this fragment.
+	 * refresh() loads dataLoader needed for this fragment.
 	 */
 	public void refresh(boolean force) {
-		if (!eventKey.equals("")) {
-			new LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		}
-	}
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		if (key.equals("eventKey")) {
-			eventKey = sharedPreferences.getString("eventKey", "");
-		}
+		new LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 	}
 
 	class LoadAlliances extends AsyncTask<Void, Void, Void> {
@@ -125,30 +101,28 @@ public class AllianceFragment extends Fragment implements SharedPreferences.OnSh
 
 		@Override
 		protected void onPreExecute() {
-			swipeRefreshLayout.setRefreshing(true);
-			parser = new Parser<>("Event",
-					Constants.getAlliancesURL(eventKey), new
-					TypeToken<ArrayList<Alliance>>() {
-					}.getType(), getActivity(), force);
+			if (swipeRefreshLayout != null) {
+				swipeRefreshLayout.setRefreshing(true);
+			}
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			parser.fetchJSON(true);
-			while (parser.parsingComplete) ;
+			while (!DataLoader.allianceDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (alliances != null && parser.getData() != null) {
-				alliances.clear();
-				alliances.addAll(parser.getData());
-				Constants.checkNoDataScreen(alliances, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad, true);
+			if (getContext() != null) {
+				Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
+				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+						DataLoader.allianceDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;
+				adapter = new AllianceAdapter(getContext(), DataLoader.allianceDC.data);
+				recyclerView.setAdapter(adapter);
+				swipeRefreshLayout.setRefreshing(false);
 			}
-			swipeRefreshLayout.setRefreshing(false);
 		}
 	}
 }

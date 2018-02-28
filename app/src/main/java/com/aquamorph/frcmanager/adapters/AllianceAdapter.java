@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import static android.view.LayoutInflater.from;
 
 /**
- * Populated a view with alliance data.
+ * Populated a view with alliance dataLoader.
  *
  * @author Christian Colglazier
  * @version 3/31/2016
