@@ -87,7 +87,12 @@ public class EventSlide extends Fragment {
 			Parser<ArrayList<Event>> parser = new Parser<>("Event",
 					Constants.getEventURL("frc" + teamNumber, year), new
 					TypeToken<ArrayList<Event>>() {}.getType(), getActivity(), force);
-			parser.fetchJSON(false);
+			try {
+				parser.fetchJSON(false);
+			} catch (Exception e) {
+				Logging.error(this, e.getMessage(), 0);
+			}
+
 			while (parser.parsingComplete) ;
 			if (parser.getData() != null) {
 				eventList.clear();

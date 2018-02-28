@@ -118,9 +118,9 @@ public class Parser<T> {
 				// Checks for change in dataLoader
 				if (blueAlliance.getStatus() == 200 || getStoredData() == null
 						|| Constants.FORCE_DATA_RELOAD || !storeData) {
-					Logging.debug(this, "Loading new dataLoader for " + name, 0);
-					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 					try {
+						Logging.debug(this, "Loading new dataLoader for " + name, 0);
+						BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 						data = gson.fromJson(reader, type);
 					} catch (Exception e) {
 						Logging.debug(this, e.getMessage(), 0);
