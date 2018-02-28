@@ -25,7 +25,7 @@ android {
         applicationId "com.aquamorph.frcmanager"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 12
+        versionCode 13
         versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "TBA_KEY", getProps("TBA_KEY"))
@@ -39,14 +39,11 @@ android {
     }
     buildTypes {
         debug {
-            //testCoverageEnabled true
-            //minifyEnabled false
-            //zipAlignEnabled false
-            testCoverageEnabled false
-            minifyEnabled true
-            zipAlignEnabled true
+            testCoverageEnabled true
+            minifyEnabled false
+            zipAlignEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "boolean", "APP_DEBUG", "false"
+            buildConfigField "boolean", "APP_DEBUG", "true"
         }
         release {
             testCoverageEnabled false
