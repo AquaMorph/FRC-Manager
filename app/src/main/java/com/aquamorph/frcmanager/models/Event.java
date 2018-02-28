@@ -47,8 +47,7 @@ public class Event implements Comparable {
 		try {
 
 			Date first = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(this.start_date);
-			Date second = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-					.parse(((Event) another).start_date);
+			Date second = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(((Event) another).start_date);
 			return first.compareTo(second);
 		} catch (Exception e) {
 			e.printStackTrace();

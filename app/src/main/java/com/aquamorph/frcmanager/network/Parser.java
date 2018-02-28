@@ -61,13 +61,17 @@ public class Parser<T> {
 		}
 	}
 
+	public void fetchJSON(final Boolean storeData) {
+		fetchJSON(storeData, true);
+	}
+
 	/**
 	 * Updates dataLoader. Checks if dataLoader has already been collected and if it
 	 * had loads from saved dataLoader.
 	 *
 	 * @param storeData Determines if dataLoader should be stored in memory
 	 */
-	public void fetchJSON(final Boolean storeData) {
+	public void fetchJSON(final Boolean storeData, Boolean checkAPI) {
 
 		Logging.debug(this, "Loading " + name, 0);
 		Boolean online = Constants.isNetworkAvailable(context);
@@ -78,31 +82,34 @@ public class Parser<T> {
 						R.string.no_connection_message, Snackbar.LENGTH_LONG).show();
 			}
 
-			// Checks FIRST sever status
-			BlueAlliance statusBlueAlliance = new BlueAlliance();
-			InputStream statusStream = statusBlueAlliance.connect(Constants.getStatusURL(), "",
-					context);
-			if (statusBlueAlliance.getStatus() == 200) {
-				BufferedReader reader = null;
-				try {
-					reader = new BufferedReader(new InputStreamReader(statusStream, "UTF-8"));
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+			if (checkAPI) {
+				// Checks FIRST sever status
+				BlueAlliance statusBlueAlliance = new BlueAlliance();
+				InputStream statusStream = statusBlueAlliance.connect(Constants.getStatusURL(), "",
+						context);
+
+				if (statusBlueAlliance.getStatus() == 200) {
+					BufferedReader reader = null;
+					try {
+						reader = new BufferedReader(new InputStreamReader(statusStream, "UTF-8"));
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					Status status = gson.fromJson(reader, Status.class);
+					// Displays error message when the FIRST server is down
+					if (status.is_datafeed_down) {
+						Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
+								R.string.first_server_down, Snackbar.LENGTH_LONG).show();
+					}
+					String eventKey = prefs.getString("eventKey", "");
+					// Displays error message when the event server is down
+					if (Arrays.asList(status.down_events).contains(eventKey)) {
+						Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
+								R.string.event_server_down, Snackbar.LENGTH_LONG).show();
+					}
 				}
-				Status status = gson.fromJson(reader, Status.class);
-				// Displays error message when the FIRST server is down
-				if (status.is_datafeed_down) {
-					Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
-							R.string.first_server_down, Snackbar.LENGTH_LONG).show();
-				}
-				String eventKey = prefs.getString("eventKey", "");
-				// Displays error message when the event server is down
-				if (Arrays.asList(status.down_events).contains(eventKey)) {
-					Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
-							R.string.event_server_down, Snackbar.LENGTH_LONG).show();
-				}
+				statusBlueAlliance.close();
 			}
-			statusBlueAlliance.close();
 
 			// Checks for internet connection
 			if (online) {

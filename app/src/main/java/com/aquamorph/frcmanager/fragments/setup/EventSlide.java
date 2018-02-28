@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.fragments.setup;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -84,22 +85,24 @@ public class EventSlide extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			Parser<ArrayList<Event>> parser = new Parser<>("Event",
-					Constants.getEventURL("frc" + teamNumber, year), new
-					TypeToken<ArrayList<Event>>() {}.getType(), getActivity(), force);
+			String url = Constants.getEventURL("frc" + teamNumber, year);
+			Logging.info(this, "Loading: " + url, 0);
+			Parser<ArrayList<Event>> parser = new Parser<>("Event", url, new
+					TypeToken<ArrayList<Event>>(){}.getType(), getActivity(), force);
 			try {
-				parser.fetchJSON(false);
+				parser.fetchJSON(false, false);
+				while (parser.parsingComplete) {
+					SystemClock.sleep(Constants.THREAD_WAIT_TIME);
+				}
+				if (parser.getData() != null) {
+					eventList.clear();
+					eventList.addAll(parser.getData());
+					sort(eventList);
+				}
+				Logging.info(this, "Event size: " + eventList.size(), 0);
 			} catch (Exception e) {
 				Logging.error(this, e.getMessage(), 0);
 			}
-
-			while (parser.parsingComplete) ;
-			if (parser.getData() != null) {
-				eventList.clear();
-				eventList.addAll(parser.getData());
-				sort(eventList);
-			}
-			Logging.info(this, "Event size: " + eventList.size(), 0);
 			return null;
 		}
 
