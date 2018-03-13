@@ -10,16 +10,16 @@ import java.util.Locale;
  */
 public class Rank {
 	public Rankings[] rankings = new Rankings[0];
-	public ExtraStatsInfo[] extra_stats_info = new ExtraStatsInfo[0];
+//	public ExtraStatsInfo[] extra_stats_info = new ExtraStatsInfo[0];
 	public SortOrderInfo[] sort_order_info = new SortOrderInfo[0];
 
 	public class Rankings {
-		public int dq;
-		public int matches_played;
-		public double qual_average;
+//		public int dq;
+//		public int matches_played;
+//		public double qual_average;
 		public int rank;
 		public WLTRecord record;
-		public double[] extra_stats;
+//		public double[] extra_stats;
 		public double[] sort_orders;
 		public String team_key;
 	}
@@ -30,10 +30,10 @@ public class Rank {
 		public int ties;
 	}
 
-	public class ExtraStatsInfo {
-		public String name;
-		public int precision;
-	}
+//	public class ExtraStatsInfo {
+//		public String name;
+//		public int precision;
+//	}
 
 	public class SortOrderInfo {
 		public String name;

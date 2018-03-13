@@ -14,17 +14,17 @@ public class Team implements Comparable {
 	public String name;
 	public String city;
 	public String state_prov;
-	public String country;
-	public String address;
-	public String postal_code;
-	public String gmaps_place_id;
-	public String gmaps_url;
-	public String lat;
-	public String lng;
-	public String location_name;
-	public String website;
-	public int rookie_year;
-	public String motto;
+//	public String country;
+//	public String address;
+//	public String postal_code;
+//	public String gmaps_place_id;
+//	public String gmaps_url;
+//	public String lat;
+//	public String lng;
+//	public String location_name;
+//	public String website;
+//	public int rookie_year;
+//	public String motto;
 //	public String[] home_championship;
 
 	@Override

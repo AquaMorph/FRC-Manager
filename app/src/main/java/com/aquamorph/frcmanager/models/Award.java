@@ -8,10 +8,10 @@ package com.aquamorph.frcmanager.models;
  */
 public class Award {
 	public String name;
-	public int award_type;
-	public String event_key;
+//	public int award_type;
+//	public String event_key;
 	public RecipientList[] recipient_list;
-	public String year;
+//	public String year;
 
 	public class RecipientList {
 		public String team_key;

@@ -8,8 +8,8 @@ package com.aquamorph.frcmanager.models;
  */
 
 public class Status {
-	public int current_season;
+//	public int current_season;
 	public String[] down_events;
 	public Boolean is_datafeed_down;
-	public int max_season;
+//	public int max_season;
 }

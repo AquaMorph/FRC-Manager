@@ -8,18 +8,17 @@ package com.aquamorph.frcmanager.models;
  */
 public class Match implements Comparable {
 
-	public String TAG = "Match";
 	public String key;
 	public String comp_level;
-	public int set_number;
+//	public int set_number;
 	public int match_number;
 	public Alliances alliances;
-	public String winning_alliance;
-	public String event_key;
+//	public String winning_alliance;
+//	public String event_key;
 	public long time;
-	public long actual_time;
-	public long predicted_time;
-	public long post_result_time;
+//	public long actual_time;
+//	public long predicted_time;
+//	public long post_result_time;
 
 	public class Alliances {
 		public MatchAlliance blue;
@@ -29,8 +28,8 @@ public class Match implements Comparable {
 	public class MatchAlliance {
 		public int score;
 		public String[] team_keys;
-		public String[] surrogate_team_keys;
-		public String[] dq_team_keys;
+//		public String[] surrogate_team_keys;
+//		public String[] dq_team_keys;
 	}
 
 	@Override

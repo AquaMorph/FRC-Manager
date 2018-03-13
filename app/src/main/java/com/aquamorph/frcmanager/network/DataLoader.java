@@ -18,6 +18,8 @@ import com.aquamorph.frcmanager.models.Rank;
 import com.aquamorph.frcmanager.models.Tab;
 import com.aquamorph.frcmanager.models.Team;
 import com.aquamorph.frcmanager.utils.Constants;
+import com.aquamorph.frcmanager.utils.Logging;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -121,7 +123,12 @@ public class DataLoader {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			dataContainer.parser.fetchJSON(true);
+			try {
+				dataContainer.parser.fetchJSON(true);
+			} catch (JsonSyntaxException exception) {
+				Logging.error(this, "JSON Parsing Error", 0);
+				Logging.error(this, exception.getMessage(), 0);
+			}
 			while (dataContainer.parser.parsingComplete) {
 				SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			}

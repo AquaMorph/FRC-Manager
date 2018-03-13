@@ -130,7 +130,7 @@ public class Parser<T> {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 						data = gson.fromJson(reader, type);
 					} catch (Exception e) {
-						Logging.debug(this, e.getMessage(), 0);
+						Logging.debug(this, "Trace: " + e.getMessage(), 0);
 					}
 					if (storeData) {
 						storeLastModified(blueAlliance.getLastUpdated());
