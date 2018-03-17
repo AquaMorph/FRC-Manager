@@ -15,7 +15,7 @@ public class Rank {
 
 	public class Rankings {
 //		public int dq;
-//		public int matches_played;
+		public int matches_played;
 //		public double qual_average;
 		public int rank;
 		public WLTRecord record;

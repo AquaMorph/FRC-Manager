@@ -24,6 +24,7 @@ import com.aquamorph.frcmanager.utils.Constants;
 import java.util.ArrayList;
 
 import static android.view.LayoutInflater.from;
+import static com.aquamorph.frcmanager.models.Rank.recordToString;
 
 /**
  * Populates a RecyclerView with the ranks and team names and number for an event.
@@ -64,21 +65,30 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		Resources.Theme theme = context.getTheme();
 		theme.resolveAttribute(R.attr.textOnBackground, typedValue, true);
 
-		for (int i = 0; i < data.get(0).sort_order_info.length; i += 2) {
+		ArrayList<RankInfo> ranks = new ArrayList<>();
+		for (int i = 0; i < data.get(0).sort_order_info.length; i++) {
+			ranks.add(new RankInfo(String.format("%s: ", data.get(0).sort_order_info[i].name),
+					String.format("%." + data.get(0).sort_order_info[i].precision +
+							"f", data.get(0).rankings[position].sort_orders[i])));
+		}
+//		ranks.add(new RankInfo("Played: ",
+//				Integer.toString(data.get(0).rankings[position].matches_played)));
+		ranks.add(new RankInfo("Record: ",
+				recordToString(data.get(0).rankings[position].record)));
+
+		for (int i = 0; i < ranks.size(); i += 2) {
 			TextView column1 = new TextView(context);
 			TextView column2 = new TextView(context);
 			TextView column3 = new TextView(context);
 			TextView column4 = new TextView(context);
 			TableRow rowHeader = new TableRow(context);
 
-			column1.setText(data.get(0).sort_order_info[i].name + ": ");
-			column2.setText(String.format("%." + data.get(0).sort_order_info[i].precision +
-					"f", data.get(0).rankings[position].sort_orders[i]));
+			column1.setText(ranks.get(i).name);
+			column2.setText(ranks.get(i).value);
 
-			if (i + 1 < data.get(0).sort_order_info.length) {
-				column3.setText(data.get(0).sort_order_info[i + 1].name + ": ");
-				column4.setText(String.format("%." + data.get(0).sort_order_info[i + 1].precision +
-						"f", data.get(0).rankings[position].sort_orders[i + 1]));
+			if (i + 1 < ranks.size()) {
+				column3.setText(ranks.get(i + 1).name);
+				column4.setText(ranks.get(i + 1).value);
 			} else {
 				column3.setText("");
 				column4.setText("");
@@ -151,6 +161,15 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 			Intent intent = new Intent(context, TeamSummary.class);
 			intent.putExtra("teamNumber", rankNumber.getText().toString());
 			context.startActivity(intent);
+		}
+	}
+	public class RankInfo {
+		String name;
+		String value;
+
+		public RankInfo(String name, String value) {
+			this.name = name;
+			this.value = value;
 		}
 	}
 }
