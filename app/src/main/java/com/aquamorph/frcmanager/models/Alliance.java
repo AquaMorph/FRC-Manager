@@ -12,21 +12,21 @@ public class Alliance {
 //    public Backup backup;
 //    public String[] declines;
     public String[] picks;
-//    public Status status;
+    public Status status;
 
 //    public class Backup {
 //        public String out;
 //        public String in;
 //    }
-//
-//    public class Status {
+
+    public class Status {
 //        public WLTRecord current_level_record;
-//        public String level;
+        public String level;
 //        public double playoff_average;
 //        public WLTRecord record;
 //        public String status;
-//    }
-//
+    }
+
 //    public class WLTRecord {
 //        public int losses;
 //        public int wins;
