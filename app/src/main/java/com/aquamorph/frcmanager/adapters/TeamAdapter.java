@@ -61,19 +61,18 @@ public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.MyViewHolder> 
 	@Override
 	public void onBindViewHolder(TeamAdapter.MyViewHolder holder, int position) {
 		SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
-		SpannableString teamName = new SpannableString(data.get(position).nickname);
+		SpannableString teamName = new SpannableString(data.get(position).getNickname());
 		teamName.setSpan(new StyleSpan(Typeface.BOLD), 0, teamName.length(), 0);
 		spannableStringBuilder.append(teamName);
-		SpannableString rank = new SpannableString(getTeamRank(String.valueOf(data.get(position)
-				.key), ranks));
+		SpannableString rank = new SpannableString(getTeamRank(String.valueOf(data.get(position).getKey()), ranks));
 		rank.setSpan(new RelativeSizeSpan(0.75f), 0, rank.length(), 0);
 		rank.setSpan(new StyleSpan(Typeface.ITALIC), 0, rank.length(), 0);
 		spannableStringBuilder.append(rank);
 
 
-		holder.rankNumber.setText(String.valueOf(data.get(position).team_number));
+		holder.rankNumber.setText(String.valueOf(data.get(position).getTeam_number()));
 		holder.teamNumber.setText(spannableStringBuilder, TextView.BufferType.SPANNABLE);
-		holder.details.setText(data.get(position).city + ", " + data.get(position).state_prov);
+		holder.details.setText(data.get(position).getCity() + ", " + data.get(position).getState_prov());
 	}
 
 	@Override

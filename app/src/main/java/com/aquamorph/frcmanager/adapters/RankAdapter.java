@@ -123,8 +123,8 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 	 */
 	private String getTeamName(String number) {
 		for (int i = 0; i < teams.size(); i++) {
-			if (number.equals(teams.get(i).key)) {
-				return teams.get(i).nickname;
+			if (number.equals(teams.get(i).getKey())) {
+				return teams.get(i).getNickname();
 			}
 		}
 		return "";

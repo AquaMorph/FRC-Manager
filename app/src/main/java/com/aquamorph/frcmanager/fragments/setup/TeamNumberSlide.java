@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.aquamorph.frcmanager.BuildConfig;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.utils.AppConfig;
+import com.aquamorph.frcmanager.utils.Logging;
 
 /**
  * Fragment slide that asks the user their team number.
@@ -47,8 +48,12 @@ public class TeamNumberSlide extends Fragment  implements AdapterView.OnItemSele
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		if (yearSpinnder != null) {
-			((TextView) yearSpinnder.getSelectedView()).setTextColor(getResources().getColor(R.color.icons));
-			AppConfig.setYear(parent.getItemAtPosition(position).toString(), getContext());
+			try {
+				((TextView) yearSpinnder.getSelectedView()).setTextColor(getResources().getColor(R.color.icons));
+				AppConfig.setYear(parent.getItemAtPosition(position).toString(), getContext());
+			} catch (Exception e) {
+				Logging.error(this, e.getMessage(), 0);
+			}
 		}
 	}
 
