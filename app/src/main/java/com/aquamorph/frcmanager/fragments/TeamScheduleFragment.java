@@ -171,8 +171,8 @@ public class TeamScheduleFragment extends Fragment
 	}
 
 	private boolean isTeamInMatch(Match match, String team) {
-		if (Arrays.asList(match.alliances.red.team_keys).contains(team)) return true;
-		else if (Arrays.asList(match.alliances.blue.team_keys).contains(team)) return true;
+		if (Arrays.asList(match.getAlliances().getRed().getTeam_keys()).contains(team)) return true;
+		else if (Arrays.asList(match.getAlliances().getBlue().getTeam_keys()).contains(team)) return true;
 		else return false;
 	}
 

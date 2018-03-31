@@ -8,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
+import com.aquamorph.frcmanager.models.Alliance;
+import com.aquamorph.frcmanager.utils.Constants;
 
 import java.util.ArrayList;
 

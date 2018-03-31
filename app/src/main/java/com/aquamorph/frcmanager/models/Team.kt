@@ -6,25 +6,25 @@ package com.aquamorph.frcmanager.models
  * @author Christian Colglazier
  * @version 3/30/2018
  */
-abstract class Team : Comparable<Team> {
-    abstract var key: String
-    abstract var team_number: Int
-    abstract var nickname: String
-    abstract var name: String
-    abstract var city: String
-    abstract var state_prov: String
-    abstract var country: String
-    abstract var address: String
-    abstract var postal_code: String
-    abstract var gmaps_place_id: String
-    abstract var gmaps_url: String
-    abstract var lat: String
-    abstract var lng: String
-    abstract var location_name: String
-    abstract var website: String
-    abstract var rookie_year: Int
-    abstract var motto: String
-    abstract var home_championship: Array<String>
+class Team : Comparable<Team> {
+    var key: String = ""
+    var team_number: Int = 0
+    var nickname: String = ""
+    var name: String = ""
+    var city: String = ""
+    var state_prov: String = ""
+    var country: String = ""
+    var address: String = ""
+    var postal_code: String = ""
+    var gmaps_place_id: String = ""
+    var gmaps_url: String = ""
+    var lat: String = ""
+    var lng: String = ""
+    var location_name: String = ""
+    var website: String = ""
+    var rookie_year: Int = 0
+    var motto: String = ""
+    var home_championship: Array<String> = emptyArray()
 
     override operator fun compareTo(other: Team): Int {
         return this.team_number - other.team_number

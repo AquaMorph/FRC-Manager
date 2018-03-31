@@ -9,36 +9,36 @@ import java.util.*
  * @author Christian Colglazier
  * @version 3/30/2018
  */
-abstract class Event : Comparable<Event> {
-    abstract var key: String?
-    abstract var name: String?
-    abstract var event_code: String?
-    abstract var event_type: Int?
-    abstract var district: DistrictList?
-    abstract var city: String?
-    abstract var state_prov: String?
-    abstract var country: String?
-    abstract var start_date: String?
-    abstract var end_date: String?
-    abstract var year: Int?
-    abstract var short_name: String?
-    abstract var event_type_string: String?
-    abstract var week: Int?
-    abstract var address: String?
-    abstract var postal_code: String?
-    abstract var gmaps_place_id: String?
-    abstract var gmaps_url: String?
-    abstract var lat: Double
-    abstract var lng: Double
-    abstract var location_name: String?
-    abstract var timezone: String?
-    abstract var website: String?
-    abstract var first_event_id: String?
-    abstract var first_event_code: String?
-//    abstract var webcasts: Array<WebCast>?
-    abstract var division_keys: Array<String>?
-    abstract var playoff_type: Int?
-    abstract var playoff_type_string: String?
+class Event : Comparable<Event> {
+    var key: String = ""
+    var name: String = ""
+    var event_code: String = ""
+    var event_type: Int = 0
+    var district: DistrictList = DistrictList()
+    var city: String = ""
+    var state_prov: String = ""
+    var country: String = ""
+    var start_date: String = ""
+    var end_date: String = ""
+    var year: Int = 0
+    var short_name: String  = ""
+    var event_type_string: String = ""
+    var week: Int = 0
+    var address: String = ""
+    var postal_code: String = ""
+    var gmaps_place_id: String = ""
+    var gmaps_url: String = ""
+    var lat: Double = 0.0
+    var lng: Double =0.0
+    var location_name: String = ""
+    var timezone: String = ""
+    var website: String = ""
+    var first_event_id: String = ""
+    var first_event_code: String = ""
+//    var webcasts: Array<WebCast>?
+    var division_keys: Array<String> = emptyArray()
+    var playoff_type: Int = 0
+    var playoff_type_string: String = ""
 
     override operator fun compareTo(other: Event): Int {
         try {

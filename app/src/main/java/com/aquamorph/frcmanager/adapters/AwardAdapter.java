@@ -43,14 +43,14 @@ public class AwardAdapter extends RecyclerView.Adapter<AwardAdapter.MyViewHolder
 		String team = "";
 		String awardee = "";
 
-		for (int i = 0; data.get(position).recipient_list.length > i; i++) {
-			if (data.get(position).recipient_list[i].getTeam_key() != null) {
+		for (int i = 0; data.get(position).getRecipient_list().length > i; i++) {
+			if (data.get(position).getRecipient_list()[i].getTeam_key() != null) {
 				if (i > 0) team += "\n";
-				team += Constants.formatTeamNumber(data.get(position).recipient_list[i].getTeam_key());
+				team += Constants.formatTeamNumber(data.get(position).getRecipient_list()[i].getTeam_key());
 			}
-			if (data.get(position).recipient_list[i].getAwardee() != null) {
+			if (data.get(position).getRecipient_list()[i].getAwardee() != null) {
 				if (i > 0) awardee += "\n";
-				awardee += data.get(position).recipient_list[i].getAwardee();
+				awardee += data.get(position).getRecipient_list()[i].getAwardee();
 			}
 		}
 		if (awardee.equals("")) {

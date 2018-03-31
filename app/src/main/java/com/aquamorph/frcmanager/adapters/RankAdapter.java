@@ -24,7 +24,6 @@ import com.aquamorph.frcmanager.utils.Constants;
 import java.util.ArrayList;
 
 import static android.view.LayoutInflater.from;
-import static com.aquamorph.frcmanager.models.Rank.recordToString;
 
 /**
  * Populates a RecyclerView with the ranks and team names and number for an event.
@@ -55,9 +54,9 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
 		holder.teamNumber.setText(String.format("%s. %s", position + 1,
-				getTeamName(data.get(0).rankings[position].team_key)));
+				getTeamName(data.get(0).getRankings()[position].getTeam_key())));
 		holder.teamNumber.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-		holder.rankNumber.setText(Constants.formatTeamNumber(data.get(0).rankings[position].team_key));
+		holder.rankNumber.setText(Constants.formatTeamNumber(data.get(0).getRankings()[position].getTeam_key()));
 		holder.details.setVisibility(View.GONE);
 		holder.table.removeAllViews();
 
@@ -66,15 +65,15 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		theme.resolveAttribute(R.attr.textOnBackground, typedValue, true);
 
 		ArrayList<RankInfo> ranks = new ArrayList<>();
-		for (int i = 0; i < data.get(0).sort_order_info.length; i++) {
-			ranks.add(new RankInfo(String.format("%s: ", data.get(0).sort_order_info[i].name),
-					String.format("%." + data.get(0).sort_order_info[i].precision +
-							"f", data.get(0).rankings[position].sort_orders[i])));
+		for (int i = 0; i < data.get(0).getSort_order_info().length; i++) {
+			ranks.add(new RankInfo(String.format("%s: ", data.get(0).getSort_order_info()[i].getName()),
+					String.format("%." + data.get(0).getSort_order_info()[i].getPrecision() +
+							"f", data.get(0).getRankings()[position].getSort_orders()[i])));
 		}
 //		ranks.add(new RankInfo("Played: ",
 //				Integer.toString(data.get(0).rankings[position].matches_played)));
 		ranks.add(new RankInfo("Record: ",
-				recordToString(data.get(0).rankings[position].record)));
+				Rank.Companion.recordToString(data.get(0).getRankings()[position].getRecord())));
 
 		for (int i = 0; i < ranks.size(); i += 2) {
 			TextView column1 = new TextView(context);
@@ -121,8 +120,8 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 
 	@Override
 	public int getItemCount() {
-		if(data.size() == 0 || data.get(0).rankings == null) return 0;
-		return data.get(0).rankings.length;
+		if(data.size() == 0) return 0;
+		return data.get(0).getRankings().length;
 	}
 
 	/**
@@ -167,7 +166,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		String name;
 		String value;
 
-		public RankInfo(String name, String value) {
+		RankInfo(String name, String value) {
 			this.name = name;
 			this.value = value;
 		}

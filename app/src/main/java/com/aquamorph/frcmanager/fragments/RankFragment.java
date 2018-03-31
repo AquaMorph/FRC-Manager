@@ -131,18 +131,18 @@ public class RankFragment extends Fragment implements RefreshFragment {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if(!DataLoader.rankDC.data.isEmpty() && DataLoader.rankDC.data.get(0).rankings != null) {
+			if(!DataLoader.rankDC.data.isEmpty() && DataLoader.rankDC.data.get(0).getRankings() != null) {
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putString("teamRank", "");
-				for (int i = 0; i < DataLoader.rankDC.data.get(0).rankings.length; i++) {
-					if (DataLoader.rankDC.data.get(0).rankings[i].getTeam_key().equals("frc" + DataLoader.teamNumber)) {
-						if (Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].getRank()) != null) {
+				for (int i = 0; i < DataLoader.rankDC.data.get(0).getRankings().length; i++) {
+					if (DataLoader.rankDC.data.get(0).getRankings()[i].getTeam_key().equals("frc" + DataLoader.teamNumber)) {
+						if (Integer.toString(DataLoader.rankDC.data.get(0).getRankings()[i].getRank()) != null) {
 							editor.putString("teamRank",
-									Integer.toString(DataLoader.rankDC.data.get(0).rankings[i].getRank()));
+									Integer.toString(DataLoader.rankDC.data.get(0).getRankings()[i].getRank()));
 						}
-						if (DataLoader.rankDC.data.get(0).rankings[i].getRecord() != null) {
-							editor.putString("teamRecord", Rank.recordToString(
-									DataLoader.rankDC.data.get(0).rankings[i].getRecord()));
+						if (DataLoader.rankDC.data.get(0).getRankings()[i].getRecord() != null) {
+							editor.putString("teamRecord", Rank.Companion.recordToString(
+									DataLoader.rankDC.data.get(0).getRankings()[i].getRecord()));
 						}
 						editor.apply();
 					}

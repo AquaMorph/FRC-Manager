@@ -6,15 +6,15 @@ package com.aquamorph.frcmanager.models
  * @author Christian Colglazier
  * @version 3/30/2018
  */
-abstract class Award {
-    abstract var name: String?
-    abstract var award_type: Int
-    abstract var event_key: String?
-    abstract var recipient_list: Array<RecipientList>?
-    abstract var year: String?
+class Award {
+    var name: String = ""
+    var award_type: Int = 0
+    var event_key: String = ""
+    var recipient_list: Array<RecipientList> = emptyArray()
+    var year: String = ""
 
-    abstract inner class RecipientList {
-        abstract var team_key: String?
-        abstract var awardee: String?
+    inner class RecipientList {
+        var team_key: String = ""
+        var awardee: String = ""
     }
 }

@@ -11,6 +11,7 @@ import com.aquamorph.frcmanager.fragments.EventScheduleFragment;
 import com.aquamorph.frcmanager.fragments.RankFragment;
 import com.aquamorph.frcmanager.fragments.TeamFragment;
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment;
+import com.aquamorph.frcmanager.models.Alliance;
 import com.aquamorph.frcmanager.models.Award;
 import com.aquamorph.frcmanager.models.Match;
 import com.aquamorph.frcmanager.models.Rank;

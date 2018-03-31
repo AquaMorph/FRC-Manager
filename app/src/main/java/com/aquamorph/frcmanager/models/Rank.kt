@@ -8,36 +8,36 @@ import java.util.*
  * @author Christian Colglazier
  * @version 3/30/2017
  */
-abstract class Rank {
+class Rank {
     var rankings = arrayOfNulls<Rankings>(0)
     var extra_stats_info = arrayOfNulls<ExtraStatsInfo>(0)
     var sort_order_info = arrayOfNulls<SortOrderInfo>(0)
 
-    abstract inner class Rankings {
-        abstract var dq: Int?
-        abstract var matches_played: Int?
-        abstract var qual_average: Double?
-        abstract var rank: Int?
-        abstract var record: WLTRecord?
-        abstract var extra_stats: DoubleArray?
-        abstract var sort_orders: DoubleArray?
-        abstract var team_key: String?
+    inner class Rankings {
+        var dq: Int = 0
+        var matches_played: Int = 0
+        var qual_average: Double = 0.0
+        var rank: Int = 0
+        var record: WLTRecord = WLTRecord()
+        var extra_stats: DoubleArray? = null
+        var sort_orders: DoubleArray? = null
+        var team_key: String = ""
     }
 
-    abstract inner class WLTRecord {
-        abstract var losses: Int?
-        abstract var wins: Int?
-        abstract var ties: Int?
+    inner class WLTRecord {
+        var losses: Int = 0
+        var wins: Int = 0
+        var ties: Int = 0
     }
 
-    abstract inner class ExtraStatsInfo {
-        abstract var name: String?
-        abstract var precision: Int?
+    inner class ExtraStatsInfo {
+        var name: String  = ""
+        var precision: Int = 0
     }
 
-    abstract inner class SortOrderInfo {
-        abstract var name: String?
-        abstract var precision: Int?
+    inner class SortOrderInfo {
+        var name: String = ""
+        var precision: Int = 0
     }
 
     companion object {

@@ -97,7 +97,7 @@ public class Parser<T> {
 					}
 					Status status = gson.fromJson(reader, Status.class);
 					// Displays error message when the FIRST server is down
-					if (status.getIs_datafeed_down()) {
+					if (status.is_datafeed_down()) {
 						Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
 								R.string.first_server_down, Snackbar.LENGTH_LONG).show();
 					}

@@ -7,29 +7,29 @@ package com.aquamorph.frcmanager.models
  * @version 3/30/2018
  */
 
-abstract class Alliance {
-    abstract var name: String?
-    abstract var backup: Backup?
-    abstract var declines: Array<String>?
-    abstract var picks: Array<String>?
-    abstract var status: Status?
+class Alliance {
+    var name: String = ""
+    var backup: Backup? = null
+    var declines: Array<String> = emptyArray()
+    var picks: Array<String> = emptyArray()
+    var status: Status? = null
 
-    abstract inner class Backup {
-        abstract var out: String?
-        abstract var `in`: String?
+    inner class Backup {
+        var out: String = ""
+        var `in`: String = ""
     }
 
-    abstract inner class Status {
-        abstract var current_level_record: WLTRecord?
-        abstract var level: String?
-        abstract var playoff_average: Double
-        abstract var record: WLTRecord?
-        abstract var status: String?
+    inner class Status {
+        var current_level_record: WLTRecord = WLTRecord()
+        var level: String = ""
+        var playoff_average: Double = 0.0
+        var record: WLTRecord = WLTRecord()
+        var status: String = ""
     }
 
-    abstract inner class WLTRecord {
-        abstract var losses: Int?
-        abstract var wins: Int?
-        abstract var ties: Int?
+    inner class WLTRecord {
+        var losses: Int = 0
+        var wins: Int = 0
+        var ties: Int = 0
     }
 }

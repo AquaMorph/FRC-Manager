@@ -52,8 +52,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
-		holder.matchNumber.setText(String.format("%S-%s", data.get(position).comp_level, data
-				.get(position).match_number));
+		holder.matchNumber.setText(String.format("%S-%s", data.get(position).getComp_level(), data
+				.get(position).getMatch_number()));
 		holder.redTeam1.setText(parseTeamNumber(true, 0, position));
 		holder.redTeam2.setText(parseTeamNumber(true, 1, position));
 		holder.redTeam3.setText(parseTeamNumber(true, 2, position));
@@ -78,10 +78,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 		}
 
 		//Bolds winning score
-		if (data.get(position).alliances.getRed().getScore() == data.get(position).alliances.getBlue().getScore()) {
+		if (data.get(position).getAlliances().getRed().getScore() == data.get(position).getAlliances().getBlue().getScore()) {
 			holder.redScore.setTypeface(null, Typeface.BOLD);
 			holder.blueScore.setTypeface(null, Typeface.BOLD);
-		} else if (data.get(position).alliances.getRed().getScore() > data.get(position).alliances.getBlue().getScore()) {
+		} else if (data.get(position).getAlliances().getRed().getScore() > data.get(position).getAlliances().getBlue().getScore()) {
 			holder.redScore.setTypeface(null, Typeface.BOLD);
 			holder.blueScore.setTypeface(null, Typeface.NORMAL);
 		} else {
@@ -89,17 +89,17 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 			holder.blueScore.setTypeface(null, Typeface.BOLD);
 		}
 
-		if (data.get(position).alliances.getRed().getScore() != -1) {
+		if (data.get(position).getAlliances().getRed().getScore() != -1) {
 			holder.matchTime.setVisibility(View.GONE);
 			holder.scoreTable.setVisibility(View.VISIBLE);
-			holder.redScore.setText(String.valueOf(data.get(position).alliances.getRed().getScore()));
-			holder.blueScore.setText(String.valueOf(data.get(position).alliances.getBlue().getScore()));
+			holder.redScore.setText(String.valueOf(data.get(position).getAlliances().getRed().getScore()));
+			holder.blueScore.setText(String.valueOf(data.get(position).getAlliances().getBlue().getScore()));
 		} else {
 			holder.matchTime.setVisibility(View.VISIBLE);
 			holder.scoreTable.setVisibility(View.GONE);
 			Date time = new Date();
 			DateFormat df = new SimpleDateFormat("hh:mm aa");
-			time.setTime(data.get(position).time * 1000);
+			time.setTime(data.get(position).getTime() * 1000);
 			holder.matchTime.setText(df.format(time));
 		}
 
@@ -126,9 +126,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 	 */
 	private String parseTeamNumber(Boolean red, int robot, int position) {
 		if (red) {
-			return Constants.formatTeamNumber(data.get(position).alliances.getRed().getTeam_keys()[robot]);
+			return Constants.formatTeamNumber(data.get(position).getAlliances().getRed().getTeam_keys()[robot]);
 		} else {
-			return Constants.formatTeamNumber(data.get(position).alliances.getBlue().getTeam_keys()[robot]);
+			return Constants.formatTeamNumber(data.get(position).getAlliances().getBlue().getTeam_keys()[robot]);
 		}
 	}
 

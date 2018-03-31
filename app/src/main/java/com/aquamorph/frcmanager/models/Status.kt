@@ -7,9 +7,9 @@ package com.aquamorph.frcmanager.models
  * @version 3/30/2018
  */
 
-abstract class Status {
-    abstract var current_season: Int?
-    abstract var down_events: Array<String>?
-    abstract var is_datafeed_down: Boolean?
-    abstract var max_season: Int?
+class Status {
+    var current_season: Int? = null
+    var down_events: Array<String>? = emptyArray()
+    var is_datafeed_down: Boolean = false
+    var max_season: Int? = 0
 }

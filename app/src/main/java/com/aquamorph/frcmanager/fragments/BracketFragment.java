@@ -199,7 +199,7 @@ public class BracketFragment extends Fragment implements
 	private void filterMatches() {
 		ArrayList<Match> temp = new ArrayList<>();
 		for (int i = 0; i < eventMatches.size(); i++) {
-			String compLevel = eventMatches.get(i).comp_level;
+			String compLevel = eventMatches.get(i).getComp_level();
 			if (compLevel.equals("qf") || compLevel.equals("sf") || compLevel.equals("f")) {
 				temp.add(eventMatches.get(i));
 			}
@@ -225,16 +225,21 @@ public class BracketFragment extends Fragment implements
 		if (matches.size() < 2)
 			return 0;
 		else if (matches.size() == 3) {
-			if (matches.get(2).alliances.red.score > matches.get(2).alliances.blue.score)
+			if (matches.get(2).getAlliances().getRed().getScore() >
+					matches.get(2).getAlliances().getBlue().getScore())
 				return 1;
 			else
 				return 2;
 		} else {
-			if (matches.get(0).alliances.red.score > matches.get(0).alliances.blue.score &&
-					matches.get(1).alliances.red.score > matches.get(1).alliances.blue.score)
+			if (matches.get(0).getAlliances().getRed().getScore() >
+					matches.get(0).getAlliances().getBlue().getScore() &&
+					matches.get(1).getAlliances().getRed().getScore() >
+							matches.get(1).getAlliances().getBlue().getScore())
 				return 1;
-			else if (matches.get(0).alliances.red.score < matches.get(0).alliances.blue.score &&
-					matches.get(1).alliances.red.score < matches.get(1).alliances.blue.score)
+			else if (matches.get(0).getAlliances().getRed().getScore() <
+					matches.get(0).getAlliances().getBlue().getScore() &&
+					matches.get(1).getAlliances().getRed().getScore() <
+							matches.get(1).getAlliances().getBlue().getScore())
 				return 2;
 			else
 				return 0;

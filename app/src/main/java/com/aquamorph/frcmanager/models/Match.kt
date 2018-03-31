@@ -6,29 +6,29 @@ package com.aquamorph.frcmanager.models
  * @author Christian Colglazier
  * @version 3/30/2018
  */
-abstract class Match : Comparable<Match> {
-    abstract var key: String?
-    abstract var comp_level: String?
-    abstract var set_number: Int?
-    abstract var match_number: Int?
-    abstract var alliances: Alliances?
-    abstract var winning_alliance: String?
-    abstract var event_key: String?
-    abstract var time: Long?
-    abstract var actual_time: Long?
-    abstract var predicted_time: Long?
-    abstract var post_result_time: Long?
+class Match : Comparable<Match> {
+    var key: String = ""
+    var comp_level: String = ""
+    var set_number: Int = 0
+    var match_number: Int =0
+    var alliances: Alliances = Alliances()
+    var winning_alliance: String = ""
+    var event_key: String = ""
+    var time: Long = 0L
+    var actual_time: Long = 0L
+    var predicted_time: Long = 0L
+    var post_result_time: Long = 0L
 
-    abstract inner class Alliances {
-        abstract var blue: MatchAlliance?
-        abstract var red: MatchAlliance?
+    inner class Alliances {
+        var blue: MatchAlliance = MatchAlliance()
+        var red: MatchAlliance = MatchAlliance()
     }
 
-    abstract inner class MatchAlliance {
-        abstract var score: Int?
-        abstract var team_keys: Array<String>?
-        abstract var surrogate_team_keys: Array<String>?
-        abstract var dq_team_keys: Array<String>?
+    inner class MatchAlliance {
+        var score: Int = 0
+        var team_keys: Array<String> = emptyArray()
+        var surrogate_team_keys: Array<String> = emptyArray()
+        var dq_team_keys: Array<String> = emptyArray()
     }
 
     override operator fun compareTo(other: Match): Int {

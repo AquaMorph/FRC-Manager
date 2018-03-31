@@ -7,9 +7,9 @@ package com.aquamorph.frcmanager.models
  * @version 3/30/2018
  */
 
-abstract class DistrictList {
-    abstract var abbreviation: String?
-    abstract var display_name: String?
-    abstract var key: String?
-    abstract var year: Int?
+class DistrictList {
+    var abbreviation: String = ""
+    var display_name: String = ""
+    var key: String = ""
+    var year: Int = 0
 }
