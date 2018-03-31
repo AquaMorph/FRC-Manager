@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aquamorph.frcmanager.models.Alliance;
 import com.aquamorph.frcmanager.utils.Constants;
 import com.aquamorph.frcmanager.R;
 import com.aquamorph.frcmanager.activities.TeamSummary;
@@ -44,11 +43,11 @@ public class AllianceAdapter extends RecyclerView.Adapter<AllianceAdapter.MyView
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
 		holder.allianceNumber.setText(Integer.toString(position + 1));
-		holder.team1.setText(Constants.formatTeamNumber(data.get(position).picks[0]));
-		holder.team2.setText(Constants.formatTeamNumber(data.get(position).picks[1]));
-		holder.team3.setText(Constants.formatTeamNumber(data.get(position).picks[2]));
-		if (data.get(position).picks.length > 3) {
-			holder.team4.setText(Constants.formatTeamNumber(data.get(position).picks[3]));
+		holder.team1.setText(Constants.formatTeamNumber(data.get(position).getPicks()[0]));
+		holder.team2.setText(Constants.formatTeamNumber(data.get(position).getPicks()[1]));
+		holder.team3.setText(Constants.formatTeamNumber(data.get(position).getPicks()[2]));
+		if (data.get(position).getPicks().length > 3) {
+			holder.team4.setText(Constants.formatTeamNumber(data.get(position).getPicks()[3]));
 		} else {
 			holder.team4.setVisibility(View.GONE);
 		}

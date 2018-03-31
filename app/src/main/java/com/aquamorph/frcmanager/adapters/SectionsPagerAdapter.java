@@ -45,7 +45,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	public void refreshAll(boolean force) {
 		refrestData(force);
 		for (int i = 0; i < tabs.size(); i++) {
-			((RefreshFragment) tabs.get(i).fragment).refresh(force);
+			((RefreshFragment) tabs.get(i).getFragment()).refresh(force);
 		}
 	}
 
@@ -60,12 +60,12 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public CharSequence getPageTitle(int position) {
-		return tabs.get(position).name;
+		return tabs.get(position).getName();
 	}
 
 	@Override
 	public Fragment getItem(int position) {
-		return tabs.get(position).fragment;
+		return tabs.get(position).getFragment();
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 	}
 
 	public void removeFrag(int position) {
-		Fragment fragment = tabs.get(position).fragment;
+		Fragment fragment = tabs.get(position).getFragment();
 		destroyFragmentView(viewPager, position, fragment);
 		removeTab(position);
 		tabs.remove(position);
@@ -119,7 +119,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 	public Boolean isTab(String name) {
 		for (Tab tab: tabs) {
-			if (name.equals(tab.name)) {
+			if (name.equals(tab.getName())) {
 				return true;
 			}
 		}
@@ -128,7 +128,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
 	public int tabPosition(String name) {
 		for (int i = 0; i < tabs.size(); i++) {
-			if (name.equals(tabs.get(i).name)) {
+			if (name.equals(tabs.get(i).getName())) {
 				return i;
 			}
 		}

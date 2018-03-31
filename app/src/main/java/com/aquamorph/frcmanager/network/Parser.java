@@ -97,13 +97,13 @@ public class Parser<T> {
 					}
 					Status status = gson.fromJson(reader, Status.class);
 					// Displays error message when the FIRST server is down
-					if (status.is_datafeed_down) {
+					if (status.getIs_datafeed_down()) {
 						Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
 								R.string.first_server_down, Snackbar.LENGTH_LONG).show();
 					}
 					String eventKey = prefs.getString("eventKey", "");
 					// Displays error message when the event server is down
-					if (Arrays.asList(status.down_events).contains(eventKey)) {
+					if (Arrays.asList(status.getDown_events()).contains(eventKey)) {
 						Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
 								R.string.event_server_down, Snackbar.LENGTH_LONG).show();
 					}

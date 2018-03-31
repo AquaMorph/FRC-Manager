@@ -78,10 +78,10 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 		}
 
 		//Bolds winning score
-		if (data.get(position).alliances.red.score == data.get(position).alliances.blue.score) {
+		if (data.get(position).alliances.getRed().getScore() == data.get(position).alliances.getBlue().getScore()) {
 			holder.redScore.setTypeface(null, Typeface.BOLD);
 			holder.blueScore.setTypeface(null, Typeface.BOLD);
-		} else if (data.get(position).alliances.red.score > data.get(position).alliances.blue.score) {
+		} else if (data.get(position).alliances.getRed().getScore() > data.get(position).alliances.getBlue().getScore()) {
 			holder.redScore.setTypeface(null, Typeface.BOLD);
 			holder.blueScore.setTypeface(null, Typeface.NORMAL);
 		} else {
@@ -89,11 +89,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 			holder.blueScore.setTypeface(null, Typeface.BOLD);
 		}
 
-		if (data.get(position).alliances.red.score != -1) {
+		if (data.get(position).alliances.getRed().getScore() != -1) {
 			holder.matchTime.setVisibility(View.GONE);
 			holder.scoreTable.setVisibility(View.VISIBLE);
-			holder.redScore.setText(String.valueOf(data.get(position).alliances.red.score));
-			holder.blueScore.setText(String.valueOf(data.get(position).alliances.blue.score));
+			holder.redScore.setText(String.valueOf(data.get(position).alliances.getRed().getScore()));
+			holder.blueScore.setText(String.valueOf(data.get(position).alliances.getBlue().getScore()));
 		} else {
 			holder.matchTime.setVisibility(View.VISIBLE);
 			holder.scoreTable.setVisibility(View.GONE);
@@ -126,9 +126,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 	 */
 	private String parseTeamNumber(Boolean red, int robot, int position) {
 		if (red) {
-			return Constants.formatTeamNumber(data.get(position).alliances.red.team_keys[robot]);
+			return Constants.formatTeamNumber(data.get(position).alliances.getRed().getTeam_keys()[robot]);
 		} else {
-			return Constants.formatTeamNumber(data.get(position).alliances.blue.team_keys[robot]);
+			return Constants.formatTeamNumber(data.get(position).alliances.getBlue().getTeam_keys()[robot]);
 		}
 	}
 

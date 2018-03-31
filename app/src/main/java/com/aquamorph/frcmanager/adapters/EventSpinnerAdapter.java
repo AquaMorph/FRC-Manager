@@ -34,7 +34,7 @@ public class EventSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		return eventList.get(position).short_name;
+		return eventList.get(position).getShort_name();
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class EventSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 					android.R.layout.simple_dropdown_item_1line, parent, false
 			);
 		}
-		text.setText(eventList.get(position).name);
+		text.setText(eventList.get(position).getName());
 		return text;
 	}
 

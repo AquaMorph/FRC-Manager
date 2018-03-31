@@ -116,10 +116,10 @@ public class EventSlide extends Fragment {
 
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-			AppConfig.setEventKey(eventList.get(position).key, getContext());
-			Logging.info(this, "Key:" + eventList.get(position).key, 0);
-			Logging.info(this, "Short Name:" + eventList.get(position).short_name,0);
-			AppConfig.setEventShortName(eventList.get(position).short_name, getContext());
+			AppConfig.setEventKey(eventList.get(position).getKey(), getContext());
+			Logging.info(this, "Key:" + eventList.get(position).getKey(), 0);
+			Logging.info(this, "Short Name:" + eventList.get(position).getShort_name(),0);
+			AppConfig.setEventShortName(eventList.get(position).getShort_name(), getContext());
 			((TextView) eventSpinnder.getSelectedView()).setTextColor(getResources()
 					.getColor(R.color.icons));
 		}
