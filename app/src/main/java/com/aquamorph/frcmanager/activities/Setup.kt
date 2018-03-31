@@ -58,14 +58,13 @@ class Setup : AppIntro() {
 
     override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
         super.onSlideChanged(oldFragment, newFragment)
-        if (teamNumberSlide != null && teamNumberSlide!!.teamNumber.matches("[0-9]+".toRegex())) {
+        if (teamNumberSlide != null &&
+                teamNumberSlide!!.getTeamNumber().matches("[0-9]+".toRegex())) {
             try {
                 Logging.info(this, "Gettings events for Setup", 0)
-                teamNumberSlide!!.teamNumber = teamNumberSlide!!.teamNumber
+                teamNumberSlide!!.setTeamNumber()
                 eventSlide!!.load(true)
-            } catch (e: Exception) {
-            }
-
+            } catch (e: Exception) {}
         }
     }
 }
