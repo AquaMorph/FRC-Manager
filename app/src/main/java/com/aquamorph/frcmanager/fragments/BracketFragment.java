@@ -80,7 +80,7 @@ public class BracketFragment extends Fragment implements
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				MainActivity.refresh();
+				MainActivity.Companion.refresh();
 			}
 		});
 

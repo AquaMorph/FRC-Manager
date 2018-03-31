@@ -153,7 +153,7 @@ public class TeamScheduleFragment extends Fragment
 				@Override
 				public void onRefresh() {
 					if (getTeamFromSettings) {
-						MainActivity.refresh();
+						MainActivity.Companion.refresh();
 					} else {
 						refresh(false);
 					}

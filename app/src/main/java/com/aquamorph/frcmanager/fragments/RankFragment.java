@@ -68,7 +68,7 @@ public class RankFragment extends Fragment implements RefreshFragment {
 		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				MainActivity.refresh();
+				MainActivity.Companion.refresh();
 			}
 		});
 

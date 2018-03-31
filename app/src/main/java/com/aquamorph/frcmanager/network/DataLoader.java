@@ -57,9 +57,9 @@ public class DataLoader {
 		matchTabs.add(new Tab("Team Schedule", TeamScheduleFragment.newInstance()));
 		matchTabs.add(new Tab("Event Schedule", EventScheduleFragment.newInstance()));
 		rankTabs.add(new Tab("Rankings", RankFragment.newInstance()));
-		teamTabs.add(new Tab("Teams", TeamFragment.newInstance()));
-		allianceTabs.add(new Tab("Alliances", AllianceFragment.newInstance()));
-		awardTabs.add(new Tab("Awards", AwardFragment.newInstance()));
+		teamTabs.add(new Tab("Teams", TeamFragment.Companion.newInstance()));
+		allianceTabs.add(new Tab("Alliances", AllianceFragment.Companion.newInstance()));
+		awardTabs.add(new Tab("Awards", AwardFragment.Companion.newInstance()));
 		setDataContainers(false);
 	}
 

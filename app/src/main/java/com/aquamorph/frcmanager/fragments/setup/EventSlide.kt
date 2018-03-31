@@ -94,7 +94,7 @@ class EventSlide : Fragment() {
         }
 
         override fun onPostExecute(result: Void?) {
-            dataAdapter!!.notifyDataSetChanged()
+            dataAdapter.notifyDataSetChanged()
         }
     }
 
