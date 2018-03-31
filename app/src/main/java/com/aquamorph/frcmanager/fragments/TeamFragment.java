@@ -124,7 +124,7 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 		protected void onPostExecute(Void result) {
 			if (getContext() != null) {
 				Constants.INSTANCE.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+				Animations.INSTANCE.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 						DataLoader.teamDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;
 				adapter = new TeamAdapter(getContext(), DataLoader.teamDC.data, DataLoader.rankDC.data);

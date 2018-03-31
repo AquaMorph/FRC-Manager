@@ -150,7 +150,7 @@ public class RankFragment extends Fragment implements RefreshFragment {
 			}
 			if (getContext() != null) {
 				Constants.INSTANCE.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+				Animations.INSTANCE.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 					DataLoader.rankDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;
 				adapter = new RankAdapter(getContext(), DataLoader.rankDC.data, DataLoader.teamDC.data);

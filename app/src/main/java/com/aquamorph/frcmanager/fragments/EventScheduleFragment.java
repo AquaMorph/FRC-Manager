@@ -138,7 +138,7 @@ public class EventScheduleFragment extends Fragment
 		protected void onPostExecute(Void result) {
 			if(getContext() != null) {
 				Constants.INSTANCE.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+				Animations.INSTANCE.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 					DataLoader.matchDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;
 				adapter = new ScheduleAdapter(getContext(), DataLoader.matchDC.data, DataLoader.teamNumber);

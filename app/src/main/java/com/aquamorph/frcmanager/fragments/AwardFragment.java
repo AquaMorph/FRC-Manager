@@ -135,7 +135,7 @@ public class AwardFragment extends Fragment
 		protected void onPostExecute(Void result) {
 			if (getContext() != null) {
 				Constants.INSTANCE.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+				Animations.INSTANCE.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 						DataLoader.awardDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;
 				adapter = new AwardAdapter(getContext(), DataLoader.awardDC.data);

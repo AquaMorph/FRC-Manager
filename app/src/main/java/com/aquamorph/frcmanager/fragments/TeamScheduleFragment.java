@@ -206,7 +206,7 @@ public class TeamScheduleFragment extends Fragment
 				}
 				sort(teamEventMatches);
 				Constants.INSTANCE.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+				Animations.INSTANCE.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 						DataLoader.matchDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;
 				mSwipeRefreshLayout.setRefreshing(false);

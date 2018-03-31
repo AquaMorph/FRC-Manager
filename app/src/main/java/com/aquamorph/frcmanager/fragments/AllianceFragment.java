@@ -116,7 +116,7 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 		protected void onPostExecute(Void result) {
 			if (getContext() != null) {
 				Constants.INSTANCE.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
-				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
+				Animations.INSTANCE.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 						DataLoader.allianceDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;
 				adapter = new AllianceAdapter(getContext(), DataLoader.allianceDC.data);
