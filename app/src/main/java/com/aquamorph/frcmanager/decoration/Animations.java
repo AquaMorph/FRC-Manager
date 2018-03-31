@@ -32,7 +32,7 @@ public class Animations {
 
 				@Override
 				public void onAnimationEnd(Animation animation) {
-					Logging.info(this, "Animation Ended", 1);
+					Logging.INSTANCE.info(this, "Animation Ended", 1);
 					(adapter).notifyDataSetChanged();
 					view.startAnimation(slideIn);
 				}

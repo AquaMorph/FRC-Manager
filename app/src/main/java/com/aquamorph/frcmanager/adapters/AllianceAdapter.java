@@ -44,11 +44,11 @@ public class AllianceAdapter extends RecyclerView.Adapter<AllianceAdapter.MyView
 	@Override
 	public void onBindViewHolder(MyViewHolder holder, int position) {
 		holder.allianceNumber.setText(Integer.toString(position + 1));
-		holder.team1.setText(Constants.formatTeamNumber(data.get(position).getPicks()[0]));
-		holder.team2.setText(Constants.formatTeamNumber(data.get(position).getPicks()[1]));
-		holder.team3.setText(Constants.formatTeamNumber(data.get(position).getPicks()[2]));
+		holder.team1.setText(Constants.INSTANCE.formatTeamNumber(data.get(position).getPicks()[0]));
+		holder.team2.setText(Constants.INSTANCE.formatTeamNumber(data.get(position).getPicks()[1]));
+		holder.team3.setText(Constants.INSTANCE.formatTeamNumber(data.get(position).getPicks()[2]));
 		if (data.get(position).getPicks().length > 3) {
-			holder.team4.setText(Constants.formatTeamNumber(data.get(position).getPicks()[3]));
+			holder.team4.setText(Constants.INSTANCE.formatTeamNumber(data.get(position).getPicks()[3]));
 		} else {
 			holder.team4.setVisibility(View.GONE);
 		}

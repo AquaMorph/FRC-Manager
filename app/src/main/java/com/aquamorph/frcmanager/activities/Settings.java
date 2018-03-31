@@ -51,9 +51,9 @@ public class Settings extends AppCompatActivity implements
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		Logging.info(this, "Settings Changed", 0);
+		Logging.INSTANCE.info(this, "Settings Changed", 0);
 		if (key.equals("theme")) {
-			Logging.info(this, "Theme Changed",0);
+			Logging.INSTANCE.info(this, "Theme Changed",0);
 			this.recreate();
 		}
 	}

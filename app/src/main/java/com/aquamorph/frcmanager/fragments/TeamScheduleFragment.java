@@ -71,7 +71,7 @@ public class TeamScheduleFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		Logging.info(this, "TeamScheduleFragment created", 3);
+		Logging.INSTANCE.info(this, "TeamScheduleFragment created", 3);
 	}
 
 	@Override
@@ -82,10 +82,10 @@ public class TeamScheduleFragment extends Fragment
 			if (getTeamFromSettings) {
 				teamNumber = savedInstanceState.getString("teamNumber");
 			}
-			Logging.info(this, "savedInstanceState teamNumber: " + teamNumber, 2);
+			Logging.INSTANCE.info(this, "savedInstanceState teamNumber: " + teamNumber, 2);
 		}
 		listener();
-		Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
+		Constants.INSTANCE.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
 		return view;
 	}
 
@@ -93,7 +93,7 @@ public class TeamScheduleFragment extends Fragment
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putString("teamNumber", teamNumber);
-		Logging.info(this, "onSaveInstanceState", 3);
+		Logging.INSTANCE.info(this, "onSaveInstanceState", 3);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class TeamScheduleFragment extends Fragment
 		view = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
 				.inflate(R.layout.fragment_team_schedule, null);
 		listener();
-		Logging.info(this, "Configuration Changed", 3);
+		Logging.INSTANCE.info(this, "Configuration Changed", 3);
 	}
 
 	@Override
@@ -117,12 +117,12 @@ public class TeamScheduleFragment extends Fragment
 	 * @param force
 	 */
 	public void refresh(boolean force) {
-		Logging.info(this, "teamNumber: " + teamNumber, 2);
-		Logging.info(this, "DataLoader is being refreshed", 0);
+		Logging.INSTANCE.info(this, "teamNumber: " + teamNumber, 2);
+		Logging.INSTANCE.info(this, "DataLoader is being refreshed", 0);
 		if (!teamNumber.equals("") && !DataLoader.eventKey.equals("")) {
 			new LoadTeamSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		} else {
-			Logging.error(this, "Team or event key not set", 0);
+			Logging.INSTANCE.error(this, "Team or event key not set", 0);
 		}
 	}
 
@@ -205,7 +205,7 @@ public class TeamScheduleFragment extends Fragment
 					if (isTeamInMatch(match, "frc" + teamNumber)) teamEventMatches.add(match);
 				}
 				sort(teamEventMatches);
-				Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
+				Constants.INSTANCE.checkNoDataScreen(teamEventMatches, recyclerView, emptyView);
 				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 						DataLoader.matchDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;

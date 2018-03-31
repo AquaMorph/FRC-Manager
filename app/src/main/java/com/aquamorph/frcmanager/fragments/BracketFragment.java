@@ -270,11 +270,11 @@ public class BracketFragment extends Fragment implements
 		@Override
 		protected void onPreExecute() {
 			mSwipeRefreshLayout.setRefreshing(true);
-			parserMatch = new Parser<>("eventMatches", Constants.getEventMatches(eventKey),
+			parserMatch = new Parser<>("eventMatches", Constants.INSTANCE.getEventMatches(eventKey),
 					new TypeToken<ArrayList<Match>>() {
 					}.getType(), getActivity(), force);
 			parserEvents = new Parser<>("Event",
-					Constants.getEvent(eventKey), new
+					Constants.INSTANCE.getEvent(eventKey), new
 					TypeToken<Event>() {
 					}.getType(), getActivity(), force);
 		}
@@ -282,9 +282,9 @@ public class BracketFragment extends Fragment implements
 		@Override
 		protected Void doInBackground(Void... params) {
 			parserMatch.fetchJSON(true);
-			while (parserMatch.parsingComplete) ;
+			while (parserMatch.getParsingComplete()) ;
 			parserEvents.fetchJSON(true);
-			while (parserEvents.parsingComplete) ;
+			while (parserEvents.getParsingComplete()) ;
 			return null;
 		}
 

@@ -72,7 +72,7 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
-		Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
+		Constants.INSTANCE.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
 		return view;
 	}
 
@@ -115,7 +115,7 @@ public class AllianceFragment extends Fragment implements RefreshFragment {
 		@Override
 		protected void onPostExecute(Void result) {
 			if (getContext() != null) {
-				Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
+				Constants.INSTANCE.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView);
 				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 						DataLoader.allianceDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;

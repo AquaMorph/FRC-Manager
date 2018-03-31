@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnSharedPreferenc
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		setContentView(R.layout.activity_main);
-		Logging.info(this, "onConfigurationChanged", 2);
+		Logging.INSTANCE.info(this, "onConfigurationChanged", 2);
 		listener();
 	}
 

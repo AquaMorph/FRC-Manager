@@ -81,7 +81,7 @@ public class AwardFragment extends Fragment
 		prefs.registerOnSharedPreferenceChangeListener(AwardFragment.this);
 
 		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView);
+		Constants.INSTANCE.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView);
 		return view;
 	}
 
@@ -134,7 +134,7 @@ public class AwardFragment extends Fragment
 		@Override
 		protected void onPostExecute(Void result) {
 			if (getContext() != null) {
-				Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView);
+				Constants.INSTANCE.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView);
 				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 						DataLoader.awardDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;

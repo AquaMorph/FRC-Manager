@@ -64,17 +64,17 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 		// Underlines team number
 		team = String.format("%4s", team);
 		if (parseTeamNumber(true, 0, position).equals(team)) {
-			holder.redTeam1.setText(Html.fromHtml(Constants.underlineText(team)));
+			holder.redTeam1.setText(Html.fromHtml(Constants.INSTANCE.underlineText(team)));
 		} else if (parseTeamNumber(true, 1, position).equals(team)) {
-			holder.redTeam2.setText(Html.fromHtml(Constants.underlineText(team)));
+			holder.redTeam2.setText(Html.fromHtml(Constants.INSTANCE.underlineText(team)));
 		} else if (parseTeamNumber(true, 2, position).equals(team)) {
-			holder.redTeam3.setText(Html.fromHtml(Constants.underlineText(team)));
+			holder.redTeam3.setText(Html.fromHtml(Constants.INSTANCE.underlineText(team)));
 		} else if (parseTeamNumber(false, 0, position).equals(team)) {
-			holder.blueTeam1.setText(Html.fromHtml(Constants.underlineText(team)));
+			holder.blueTeam1.setText(Html.fromHtml(Constants.INSTANCE.underlineText(team)));
 		} else if (parseTeamNumber(false, 1, position).equals(team)) {
-			holder.blueTeam2.setText(Html.fromHtml(Constants.underlineText(team)));
+			holder.blueTeam2.setText(Html.fromHtml(Constants.INSTANCE.underlineText(team)));
 		} else if (parseTeamNumber(false, 2, position).equals(team)) {
-			holder.blueTeam3.setText(Html.fromHtml(Constants.underlineText(team)));
+			holder.blueTeam3.setText(Html.fromHtml(Constants.INSTANCE.underlineText(team)));
 		}
 
 		//Bolds winning score
@@ -126,9 +126,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.MyView
 	 */
 	private String parseTeamNumber(Boolean red, int robot, int position) {
 		if (red) {
-			return Constants.formatTeamNumber(data.get(position).getAlliances().getRed().getTeam_keys()[robot]);
+			return Constants.INSTANCE.formatTeamNumber(data.get(position).getAlliances().getRed().getTeam_keys()[robot]);
 		} else {
-			return Constants.formatTeamNumber(data.get(position).getAlliances().getBlue().getTeam_keys()[robot]);
+			return Constants.INSTANCE.formatTeamNumber(data.get(position).getAlliances().getBlue().getTeam_keys()[robot]);
 		}
 	}
 

@@ -80,18 +80,18 @@ public class EventSlide extends Fragment {
 		protected void onPreExecute() {
 			teamNumber = prefs.getString("teamNumber", "");
 			year = prefs.getString("year", "");
-			Logging.info(this, "Team Number: " + teamNumber,0);
+			Logging.INSTANCE.info(this, "Team Number: " + teamNumber,0);
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			String url = Constants.getEventURL("frc" + teamNumber, year);
-			Logging.info(this, "Loading: " + url, 0);
+			String url = Constants.INSTANCE.getEventURL("frc" + teamNumber, year);
+			Logging.INSTANCE.info(this, "Loading: " + url, 0);
 			Parser<ArrayList<Event>> parser = new Parser<>("Event", url, new
 					TypeToken<ArrayList<Event>>(){}.getType(), getActivity(), force);
 			try {
 				parser.fetchJSON(false, false);
-				while (parser.parsingComplete) {
+				while (parser.getParsingComplete()) {
 					SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 				}
 				if (parser.getData() != null) {
@@ -99,9 +99,9 @@ public class EventSlide extends Fragment {
 					eventList.addAll(parser.getData());
 					sort(eventList);
 				}
-				Logging.info(this, "Event size: " + eventList.size(), 0);
+				Logging.INSTANCE.info(this, "Event size: " + eventList.size(), 0);
 			} catch (Exception e) {
-				Logging.error(this, e.getMessage(), 0);
+				Logging.INSTANCE.error(this, e.getMessage(), 0);
 			}
 			return null;
 		}
@@ -116,10 +116,10 @@ public class EventSlide extends Fragment {
 
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-			AppConfig.setEventKey(eventList.get(position).getKey(), getContext());
-			Logging.info(this, "Key:" + eventList.get(position).getKey(), 0);
-			Logging.info(this, "Short Name:" + eventList.get(position).getShort_name(),0);
-			AppConfig.setEventShortName(eventList.get(position).getShort_name(), getContext());
+			AppConfig.INSTANCE.setEventKey(eventList.get(position).getKey(), getContext());
+			Logging.INSTANCE.info(this, "Key:" + eventList.get(position).getKey(), 0);
+			Logging.INSTANCE.info(this, "Short Name:" + eventList.get(position).getShort_name(),0);
+			AppConfig.INSTANCE.setEventShortName(eventList.get(position).getShort_name(), getContext());
 			((TextView) eventSpinnder.getSelectedView()).setTextColor(getResources()
 					.getColor(R.color.icons));
 		}

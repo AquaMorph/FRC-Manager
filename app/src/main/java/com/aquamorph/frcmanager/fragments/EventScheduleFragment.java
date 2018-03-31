@@ -78,7 +78,7 @@ public class EventScheduleFragment extends Fragment
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(llm);
 
-		Constants.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
+		Constants.INSTANCE.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
 		return view;
 	}
 
@@ -137,7 +137,7 @@ public class EventScheduleFragment extends Fragment
 		@Override
 		protected void onPostExecute(Void result) {
 			if(getContext() != null) {
-				Constants.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
+				Constants.INSTANCE.checkNoDataScreen(DataLoader.matchDC.data, recyclerView, emptyView);
 				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 					DataLoader.matchDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;

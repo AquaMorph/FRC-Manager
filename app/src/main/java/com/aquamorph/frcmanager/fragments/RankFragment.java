@@ -79,14 +79,14 @@ public class RankFragment extends Fragment implements RefreshFragment {
 		LinearLayoutManager llm = new LinearLayoutManager(getContext());
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setAdapter(adapter);
-		if (Constants.isLargeScreen(getContext())) {
+		if (Constants.INSTANCE.isLargeScreen(getContext())) {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 		} else {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
 
 		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
+		Constants.INSTANCE.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
 		return view;
 	}
 
@@ -149,7 +149,7 @@ public class RankFragment extends Fragment implements RefreshFragment {
 				}
 			}
 			if (getContext() != null) {
-				Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
+				Constants.INSTANCE.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView);
 				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 					DataLoader.rankDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;

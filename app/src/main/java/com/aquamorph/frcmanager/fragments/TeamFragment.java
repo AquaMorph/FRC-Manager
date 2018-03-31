@@ -71,14 +71,14 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 		llm.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.addItemDecoration(new Divider(getContext(), 2, 72));
 		recyclerView.setAdapter(adapter);
-		if (Constants.isLargeScreen(getContext())) {
+		if (Constants.INSTANCE.isLargeScreen(getContext())) {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 		} else {
 			recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 		}
 
 //		if (savedInstanceState == null) refresh(false);
-		Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
+		Constants.INSTANCE.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
 		return view;
 	}
 
@@ -123,7 +123,7 @@ public class TeamFragment extends Fragment implements RefreshFragment {
 		@Override
 		protected void onPostExecute(Void result) {
 			if (getContext() != null) {
-				Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
+				Constants.INSTANCE.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView);
 				Animations.loadAnimation(getContext(), recyclerView, adapter, firstLoad,
 						DataLoader.teamDC.parser.isNewData());
 				if (firstLoad) firstLoad = false;

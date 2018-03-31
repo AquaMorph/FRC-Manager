@@ -76,19 +76,19 @@ public class DataLoader {
 
 	private static void setDataContainers(boolean force) {
 		teamDC = new DataContainer(force, activity,
-				new TypeToken<ArrayList<Team>>(){}.getType(), Constants.getEventTeams(eventKey),
+				new TypeToken<ArrayList<Team>>(){}.getType(), Constants.INSTANCE.getEventTeams(eventKey),
 				"eventTeams");
 		rankDC = new DataContainer(force, activity,
-				new TypeToken<Rank>(){}.getType(),Constants.getEventRanks(eventKey),
+				new TypeToken<Rank>(){}.getType(), Constants.INSTANCE.getEventRanks(eventKey),
 				"eventRank");
 		awardDC = new DataContainer(force, activity,
-				new TypeToken<ArrayList<Award>>(){}.getType(),Constants.getEventAwards(eventKey),
+				new TypeToken<ArrayList<Award>>(){}.getType(), Constants.INSTANCE.getEventAwards(eventKey),
 				"eventAwards");
 		matchDC = new DataContainer(force, activity,
-				new TypeToken<ArrayList<Match>>(){}.getType(),Constants.getEventMatches(eventKey),
+				new TypeToken<ArrayList<Match>>(){}.getType(), Constants.INSTANCE.getEventMatches(eventKey),
 				"eventMatches");
 		allianceDC = new DataContainer(force, activity,
-				new TypeToken<ArrayList<Alliance>>(){}.getType(),Constants.getAlliancesURL(eventKey),
+				new TypeToken<ArrayList<Alliance>>(){}.getType(), Constants.INSTANCE.getAlliancesURL(eventKey),
 				"Alliance");
 	}
 
@@ -126,10 +126,10 @@ public class DataLoader {
 			try {
 				dataContainer.parser.fetchJSON(true);
 			} catch (JsonSyntaxException exception) {
-				Logging.error(this, "JSON Parsing Error", 0);
-				Logging.error(this, exception.getMessage(), 0);
+				Logging.INSTANCE.error(this, "JSON Parsing Error", 0);
+				Logging.INSTANCE.error(this, exception.getMessage(), 0);
 			}
-			while (dataContainer.parser.parsingComplete) {
+			while (dataContainer.parser.getParsingComplete()) {
 				SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			}
 			return null;

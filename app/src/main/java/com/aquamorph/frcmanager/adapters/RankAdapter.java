@@ -56,7 +56,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.MyViewHolder> 
 		holder.teamNumber.setText(String.format("%s. %s", position + 1,
 				getTeamName(data.get(0).getRankings()[position].getTeam_key())));
 		holder.teamNumber.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-		holder.rankNumber.setText(Constants.formatTeamNumber(data.get(0).getRankings()[position].getTeam_key()));
+		holder.rankNumber.setText(Constants.INSTANCE.formatTeamNumber(data.get(0).getRankings()[position].getTeam_key()));
 		holder.details.setVisibility(View.GONE);
 		holder.table.removeAllViews();
 

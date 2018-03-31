@@ -50,9 +50,9 @@ public class TeamNumberSlide extends Fragment  implements AdapterView.OnItemSele
 		if (yearSpinnder != null) {
 			try {
 				((TextView) yearSpinnder.getSelectedView()).setTextColor(getResources().getColor(R.color.icons));
-				AppConfig.setYear(parent.getItemAtPosition(position).toString(), getContext());
+				AppConfig.INSTANCE.setYear(parent.getItemAtPosition(position).toString(), getContext());
 			} catch (Exception e) {
-				Logging.error(this, e.getMessage(), 0);
+				Logging.INSTANCE.error(this, e.getMessage(), 0);
 			}
 		}
 	}
@@ -75,7 +75,7 @@ public class TeamNumberSlide extends Fragment  implements AdapterView.OnItemSele
 	 * @param team number
 	 */
 	public void setTeamNumber(String team) {
-		AppConfig.setTeamNumber(team, getContext());
+		AppConfig.INSTANCE.setTeamNumber(team, getContext());
 		numberSet = false;
 	}
 

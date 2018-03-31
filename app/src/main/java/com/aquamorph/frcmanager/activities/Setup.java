@@ -51,7 +51,7 @@ public class Setup extends AppIntro {
 	@Override
 	public void onDonePressed(Fragment currentFragment) {
 		super.onDonePressed(currentFragment);
-		Logging.info(this, "Team Number: " + teamNumberSlide.getTeamNumber(), 0);
+		Logging.INSTANCE.info(this, "Team Number: " + teamNumberSlide.getTeamNumber(), 0);
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString("teamRank", "");
@@ -66,7 +66,7 @@ public class Setup extends AppIntro {
 		super.onSlideChanged(oldFragment, newFragment);
 		if(teamNumberSlide!= null && teamNumberSlide.getTeamNumber().matches("[0-9]+")) {
 			try {
-				Logging.info(this, "Gettings events for Setup", 0);
+				Logging.INSTANCE.info(this, "Gettings events for Setup", 0);
 				teamNumberSlide.setTeamNumber(teamNumberSlide.getTeamNumber());
 				eventSlide.load(true);
 			} catch (Exception e) {}
