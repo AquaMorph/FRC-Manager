@@ -54,9 +54,9 @@ public class DataLoader {
 	public DataLoader(Activity activity, SectionsPagerAdapter adapter) {
 		this.activity = activity;
 		this.adapter = adapter;
-		matchTabs.add(new Tab("Team Schedule", TeamScheduleFragment.newInstance()));
-		matchTabs.add(new Tab("Event Schedule", EventScheduleFragment.newInstance()));
-		rankTabs.add(new Tab("Rankings", RankFragment.newInstance()));
+		matchTabs.add(new Tab("Team Schedule", TeamScheduleFragment.Companion.newInstance()));
+		matchTabs.add(new Tab("Event Schedule", EventScheduleFragment.Companion.newInstance()));
+		rankTabs.add(new Tab("Rankings", RankFragment.Companion.newInstance()));
 		teamTabs.add(new Tab("Teams", TeamFragment.Companion.newInstance()));
 		allianceTabs.add(new Tab("Alliances", AllianceFragment.Companion.newInstance()));
 		awardTabs.add(new Tab("Awards", AwardFragment.Companion.newInstance()));
