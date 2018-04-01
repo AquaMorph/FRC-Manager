@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.adapters
 
+import android.app.Activity
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -19,7 +20,10 @@ import java.util.*
  * @version 2/25/2018
  */
 class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPager: ViewPager,
-                           private val tabLayout: TabLayout) : FragmentStatePagerAdapter(fragmentManager) {
+                           private val tabLayout: TabLayout, activity: Activity) :
+        FragmentStatePagerAdapter(fragmentManager) {
+    var act = activity
+
     var tabs = ArrayList<Tab>()
 
     val isDataLoading: Boolean
@@ -42,7 +46,7 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPag
         DataLoader.awardDC.complete = false
         DataLoader.allianceDC.complete = false
         DataLoader.matchDC.complete = false
-        DataLoader.refresh(force)
+        DataLoader.refresh(force, this, act)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
