@@ -118,18 +118,18 @@ public class DataLoader {
 
 		@Override
 		protected void onPreExecute() {
-			dataContainer.complete = false;
+			dataContainer.setComplete(false);
 		}
 
 		@Override
 		protected Void doInBackground(Void... params) {
 			try {
-				dataContainer.parser.fetchJSON(true);
+				dataContainer.getParser().fetchJSON(true);
 			} catch (JsonSyntaxException exception) {
 				Logging.INSTANCE.error(this, "JSON Parsing Error", 0);
 				Logging.INSTANCE.error(this, exception.getMessage(), 0);
 			}
-			while (dataContainer.parser.getParsingComplete()) {
+			while (dataContainer.getParser().getParsingComplete()) {
 				SystemClock.sleep(Constants.THREAD_WAIT_TIME);
 			}
 			return null;
@@ -137,18 +137,18 @@ public class DataLoader {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			dataContainer.data.clear();
-			if (dataContainer.parser.getData() != null) {
+			dataContainer.getData().clear();
+			if (dataContainer.getParser().getData() != null) {
 				if(isRank) {
-					dataContainer.data.add(dataContainer.parser.getData());
+					dataContainer.getData().add(dataContainer.getParser().getData());
 				} else {
-					dataContainer.data.addAll((Collection) dataContainer.parser.getData());
+					dataContainer.getData().addAll((Collection) dataContainer.getParser().getData());
 					if (isSortable) {
-						sort(dataContainer.data);
+						sort(dataContainer.getData());
 					}
 				}
 			}
-			if (dataContainer.data.isEmpty()) {
+			if (dataContainer.getData().isEmpty()) {
 				for (Tab tab: tabs) {
 					if (adapter.isTab(tab.getName())) {
 						adapter.removeFrag(adapter.tabPosition(tab.getName()));
@@ -161,7 +161,7 @@ public class DataLoader {
 					}
 				}
 			}
-			dataContainer.complete = true;
+			dataContainer.setComplete(true);
 		}
 	}
 }
