@@ -80,7 +80,7 @@ class TeamFragment : Fragment(), RefreshFragment {
         }
     }
 
-    internal inner class LoadEventTeams(var force: Boolean) : AsyncTask<Void, Void, Void>() {
+    internal inner class LoadEventTeams(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             if (mSwipeRefreshLayout != null) {
@@ -88,13 +88,13 @@ class TeamFragment : Fragment(), RefreshFragment {
             }
         }
 
-        override fun doInBackground(vararg params: Void): Void? {
+        override fun doInBackground(vararg params: Void?): Void? {
             while (!DataLoader.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
             while (!DataLoader.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
             return null
         }
 
-        override fun onPostExecute(result: Void) {
+        override fun onPostExecute(result: Void?) {
             if (context != null) {
                 Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView!!, emptyView!!)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
