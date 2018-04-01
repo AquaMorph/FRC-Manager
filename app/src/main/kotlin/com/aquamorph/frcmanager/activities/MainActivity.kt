@@ -27,12 +27,12 @@ import com.aquamorph.frcmanager.utils.Logging
  * @version 3/29/2016
  */
 class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
-    private var eventName: String? = null
-    private var teamRank: String? = null
+    private lateinit var eventName: String
+    private lateinit var teamRank: String
     private var teamRecord: String? = null
     lateinit var dataLoader: DataLoader
     private lateinit var mViewPager: ViewPager
-    private var tabLayout: TabLayout? = null
+    private lateinit var tabLayout: TabLayout
 
     /**
      * getTeamNumber() returns the string tag for Blue Alliance requests of the current
