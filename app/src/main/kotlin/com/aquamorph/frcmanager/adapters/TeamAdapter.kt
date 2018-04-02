@@ -32,7 +32,7 @@ class TeamAdapter(private val context: Context, private val data: ArrayList<Team
     private val inflater: LayoutInflater = from(context)
 
     private fun getTeamRank(teamNumber: String, ranks: ArrayList<Rank>?): String {
-        if (ranks != null && ranks.size > 0 && ranks[0].rankings != null) {
+        if (ranks != null && ranks.size > 0) {
             for (i in 0 until ranks[0].rankings.size) {
                 if (ranks[0].rankings[i]!!.team_key == teamNumber)
                     return " Ranked #" + ranks[0].rankings[i]!!.rank
@@ -62,7 +62,7 @@ class TeamAdapter(private val context: Context, private val data: ArrayList<Team
     }
 
     override fun getItemCount(): Int {
-        return data.size - 1
+        return data.size
     }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {

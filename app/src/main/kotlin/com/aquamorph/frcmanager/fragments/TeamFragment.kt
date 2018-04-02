@@ -25,15 +25,15 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of teams at an event.
  *
  * @author Christian Colglazier
- * @version 3/31/2018
+ * @version 4/2/2018
  */
 class TeamFragment : Fragment(), RefreshFragment {
 
-    private var mSwipeRefreshLayout: SwipeRefreshLayout? = null
-    private var recyclerView: RecyclerView? = null
-    private var emptyView: TextView? = null
-    private var adapter: RecyclerView.Adapter<*>? = null
-    private var firstLoad: Boolean? = true
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyView: TextView
+    private lateinit var adapter: RecyclerView.Adapter<*>
+    private var firstLoad: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,24 +44,24 @@ class TeamFragment : Fragment(), RefreshFragment {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        mSwipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
-        mSwipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.accent)
+        mSwipeRefreshLayout.setOnRefreshListener { MainActivity.refresh() }
 
         recyclerView = view.findViewById(R.id.rv)
         emptyView = view.findViewById(R.id.empty_view)
         adapter = TeamAdapter(context!!, DataLoader.teamDC.data, DataLoader.rankDC.data)
         val llm = LinearLayoutManager(context)
         llm.orientation = LinearLayoutManager.VERTICAL
-        recyclerView!!.addItemDecoration(Divider(context!!, 2f, 72))
-        recyclerView!!.adapter = adapter
+        recyclerView.addItemDecoration(Divider(context!!, 2f, 72))
+        recyclerView.adapter = adapter
         if (Constants.isLargeScreen(context!!)) {
-            recyclerView!!.layoutManager = GridLayoutManager(context, 2)
+            recyclerView.layoutManager = GridLayoutManager(context, 2)
         } else {
-            recyclerView!!.layoutManager = GridLayoutManager(context, 1)
+            recyclerView.layoutManager = GridLayoutManager(context, 1)
         }
 
         //		if (savedInstanceState == null) refresh(false);
-        Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView!!, emptyView!!)
+        Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView)
         return view
     }
 
@@ -83,9 +83,7 @@ class TeamFragment : Fragment(), RefreshFragment {
     internal inner class LoadEventTeams(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) {
-                mSwipeRefreshLayout!!.isRefreshing = true
-            }
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -96,13 +94,13 @@ class TeamFragment : Fragment(), RefreshFragment {
 
         override fun onPostExecute(result: Void?) {
             if (context != null) {
-                Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView!!, emptyView!!)
+                Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.teamDC.parser.isNewData)
-                if (firstLoad!!) firstLoad = false
+                if (firstLoad) firstLoad = false
                 adapter = TeamAdapter(context!!, DataLoader.teamDC.data, DataLoader.rankDC.data)
-                recyclerView!!.adapter = adapter
-                mSwipeRefreshLayout!!.isRefreshing = false
+                recyclerView.adapter = adapter
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }
