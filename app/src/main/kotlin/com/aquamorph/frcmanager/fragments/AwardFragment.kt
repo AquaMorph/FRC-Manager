@@ -26,16 +26,16 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of awards at a event
  *
  * @author Christian Colglazier
- * @version 2/13/2016
+ * @version 4/2/2018
  */
 class AwardFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
     internal lateinit var prefs: SharedPreferences
-    private var swipeRefreshLayout: SwipeRefreshLayout? = null
-    private var recyclerView: RecyclerView? = null
-    private var emptyView: TextView? = null
-    private var adapter: RecyclerView.Adapter<*>? = null
-    private var firstLoad: Boolean? = true
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyView: TextView
+    private lateinit var adapter: RecyclerView.Adapter<*>
+    private var firstLoad: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,23 +46,23 @@ class AwardFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        swipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
-        swipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
+        swipeRefreshLayout.setColorSchemeResources(R.color.accent)
+        swipeRefreshLayout.setOnRefreshListener { MainActivity.refresh() }
 
         recyclerView = view.findViewById(R.id.rv)
         emptyView = view.findViewById(R.id.empty_view)
         adapter = AwardAdapter(context!!, DataLoader.awardDC.data)
         val llm = LinearLayoutManager(context)
         llm.orientation = LinearLayoutManager.VERTICAL
-        recyclerView!!.adapter = adapter
-        recyclerView!!.layoutManager = llm
-        recyclerView!!.addItemDecoration(Divider(context!!, 2f, 0))
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = llm
+        recyclerView.addItemDecoration(Divider(context!!, 2f, 0))
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
         prefs.registerOnSharedPreferenceChangeListener(this@AwardFragment)
 
         if (savedInstanceState == null) refresh(false)
-        Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView!!, emptyView!!)
+        Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
         return view
     }
 
@@ -92,9 +92,7 @@ class AwardFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
     internal inner class LoadAwards(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (swipeRefreshLayout != null) {
-                swipeRefreshLayout!!.isRefreshing = true
-            }
+            swipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg p0: Void?): Void? {
@@ -104,13 +102,13 @@ class AwardFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
 
         override fun onPostExecute(result: Void?) {
             if (context != null) {
-                Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView!!, emptyView!!)
+                Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.awardDC.parser.isNewData)
                 if (firstLoad!!) firstLoad = false
                 adapter = AwardAdapter(context!!, DataLoader.awardDC.data)
-                recyclerView!!.adapter = adapter
-                swipeRefreshLayout!!.isRefreshing = false
+                recyclerView.adapter = adapter
+                swipeRefreshLayout.isRefreshing = false
             }
         }
     }

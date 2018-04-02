@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.models.Event
@@ -30,23 +29,20 @@ import java.util.Collections.sort
 
 class BracketFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private val TAG = "BracketFragment"
-    private var prefs: SharedPreferences? = null
-    private var mSwipeRefreshLayout: SwipeRefreshLayout? = null
-    private val emptyView: TextView? = null
+    private lateinit var prefs: SharedPreferences
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     private val eventMatches = ArrayList<Match>()
-    //	private ArrayList<Event.Alliances> alliances = new ArrayList<>();
-    private var teamNumber: String? = ""
-    private var eventKey: String? = ""
-    private var parserMatch: Parser<ArrayList<Match>>? = null
-    private var parserEvents: Parser<Event>? = null
-    private var qf18: View? = null
-    private var qf27: View? = null
-    private var qf36: View? = null
-    private var qf45: View? = null
-    private var sf1: View? = null
-    private var sf2: View? = null
-    private var f: View? = null
+    private var teamNumber: String = ""
+    private var eventKey: String = ""
+    private lateinit var parserMatch: Parser<ArrayList<Match>>
+    private lateinit var parserEvents: Parser<Event>
+    private lateinit var qf18: View
+    private lateinit var qf27: View
+    private lateinit var qf36: View
+    private lateinit var qf45: View
+    private lateinit var sf1: View
+    private lateinit var sf2: View
+    private lateinit var f: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,14 +52,14 @@ class BracketFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        prefs!!.registerOnSharedPreferenceChangeListener(this@BracketFragment)
-        teamNumber = prefs!!.getString("teamNumber", "")
-        eventKey = prefs!!.getString("eventKey", "")
+        prefs.registerOnSharedPreferenceChangeListener(this@BracketFragment)
+        teamNumber = prefs.getString("teamNumber", "")
+        eventKey = prefs.getString("eventKey", "")
 
         val view = inflater.inflate(R.layout.bracket, container, false)
         mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        mSwipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
-        mSwipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.accent)
+        mSwipeRefreshLayout.setOnRefreshListener { MainActivity.refresh() }
 
         qf18 = view.findViewById(R.id.qf18)
         qf27 = view.findViewById(R.id.qf27)
@@ -233,33 +229,29 @@ class BracketFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLi
     internal inner class LoadBracket(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            mSwipeRefreshLayout!!.isRefreshing = true
+            mSwipeRefreshLayout.isRefreshing = true
             parserMatch = Parser("eventMatches", Constants.getEventMatches(eventKey!!),
-                    object : TypeToken<ArrayList<Match>>() {
-
-                    }.type, activity!!, force)
-            parserEvents = Parser("Event",
-                    Constants.getEvent(eventKey!!), object : TypeToken<Event>() {
-
-            }.type, activity!!, force)
+                    object : TypeToken<ArrayList<Match>>() {}.type, activity!!, force)
+            parserEvents = Parser("Event", Constants.getEvent(eventKey!!),
+                    object : TypeToken<Event>() {}.type, activity!!, force)
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            parserMatch!!.fetchJSON(true)
-            while (parserMatch!!.parsingComplete);
-            parserEvents!!.fetchJSON(true)
-            while (parserEvents!!.parsingComplete);
+            parserMatch.fetchJSON(true)
+            while (parserMatch.parsingComplete);
+            parserEvents.fetchJSON(true)
+            while (parserEvents.parsingComplete);
             return null
         }
 
         override fun onPostExecute(result: Void?) {
             eventMatches.clear()
-            eventMatches.addAll(parserMatch!!.data!!)
+            eventMatches.addAll(parserMatch.data!!)
             //			alliances.clear();
             //			alliances.addAll(new ArrayList<>(Arrays.asList(parserEvents.getData().alliances)));
             //			Constants.checkNoDataScreen(eventMatches, recyclerView, emptyView);
             filterMatches()
-            mSwipeRefreshLayout!!.isRefreshing = false
+            mSwipeRefreshLayout.isRefreshing = false
             populateBracket()
 
         }

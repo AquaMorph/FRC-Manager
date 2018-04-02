@@ -34,8 +34,8 @@ class EventSlide : Fragment() {
     internal lateinit var eventSpinnder: Spinner
     private lateinit var dataAdapter: EventSpinnerAdapter
     internal var eventList = ArrayList<Event>()
-    private var teamNumber: String? = null
-    private var year: String? = null
+    private lateinit var teamNumber: String
+    private lateinit var year: String
     private lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,11 +67,11 @@ class EventSlide : Fragment() {
         override fun onPreExecute() {
             teamNumber = prefs.getString("teamNumber", "")
             year = prefs.getString("year", "")
-            Logging.info(this, "Team Number: " + teamNumber!!, 0)
+            Logging.info(this, "Team Number: " + teamNumber, 0)
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            val url = Constants.getEventURL("frc" + teamNumber!!, year!!)
+            val url = Constants.getEventURL("frc$teamNumber", year)
             Logging.info(this, "Loading: $url", 0)
             val parser = Parser<ArrayList<Event>>("Event", url, object :
                     TypeToken<ArrayList<Event>>() {}.type, activity!!, force)

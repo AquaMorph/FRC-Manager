@@ -25,16 +25,16 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of matches at an event.
  *
  * @author Christian Colglazier
- * @version 3/31/2018
+ * @version 4/2/2018
  */
 class EventScheduleFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
     internal lateinit var prefs: SharedPreferences
-    private var mSwipeRefreshLayout: SwipeRefreshLayout? = null
-    private var recyclerView: RecyclerView? = null
-    private var emptyView: TextView? = null
-    private var adapter: RecyclerView.Adapter<*>? = null
-    private var firstLoad: Boolean? = true
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyView: TextView
+    private lateinit var adapter: RecyclerView.Adapter<*>
+    private var firstLoad: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

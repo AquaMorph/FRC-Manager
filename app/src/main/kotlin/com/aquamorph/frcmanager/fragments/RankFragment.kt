@@ -28,16 +28,16 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays the ranks of all the teams at an event.
  *
  * @author Christian Colglazier
- * @version 10/20/2016
+ * @version 4/2/2018
  */
 class RankFragment : Fragment(), RefreshFragment {
 
-    private var mSwipeRefreshLayout: SwipeRefreshLayout? = null
-    private var recyclerView: RecyclerView? = null
-    private var emptyView: TextView? = null
-    private var adapter: RecyclerView.Adapter<*>? = null
-    private var prefs: SharedPreferences? = null
-    private var firstLoad: Boolean? = true
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyView: TextView
+    private lateinit var adapter: RecyclerView.Adapter<*>
+    private lateinit var prefs: SharedPreferences
+    private var firstLoad: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,24 +51,24 @@ class RankFragment : Fragment(), RefreshFragment {
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        mSwipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
-        mSwipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.accent)
+        mSwipeRefreshLayout.setOnRefreshListener { MainActivity.refresh() }
 
         recyclerView = view.findViewById(R.id.rv)
-        recyclerView!!.addItemDecoration(Divider(context!!, 2f, 72))
+        recyclerView.addItemDecoration(Divider(context!!, 2f, 72))
         emptyView = view.findViewById(R.id.empty_view)
         adapter = RankAdapter(context!!, DataLoader.rankDC.data, DataLoader.teamDC.data)
         val llm = LinearLayoutManager(context)
         llm.orientation = LinearLayoutManager.VERTICAL
-        recyclerView!!.adapter = adapter
+        recyclerView.adapter = adapter
         if (Constants.isLargeScreen(context!!)) {
-            recyclerView!!.layoutManager = GridLayoutManager(context, 2)
+            recyclerView.layoutManager = GridLayoutManager(context, 2)
         } else {
-            recyclerView!!.layoutManager = GridLayoutManager(context, 1)
+            recyclerView.layoutManager = GridLayoutManager(context, 1)
         }
 
         if (savedInstanceState == null) refresh(false)
-        Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView!!, emptyView!!)
+        Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
         return view
     }
 
@@ -91,9 +91,7 @@ class RankFragment : Fragment(), RefreshFragment {
     private inner class LoadRanks internal constructor(internal var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) {
-                mSwipeRefreshLayout!!.isRefreshing = true
-            }
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -104,7 +102,7 @@ class RankFragment : Fragment(), RefreshFragment {
 
         override fun onPostExecute(result: Void?) {
             if (!DataLoader.rankDC.data.isEmpty()) {
-                val editor = prefs!!.edit()
+                val editor = prefs.edit()
                 editor.putString("teamRank", "")
                 for (i in 0 until DataLoader.rankDC.data[0].rankings.size) {
                     if (DataLoader.rankDC.data[0].rankings[i]!!.team_key == "frc" + DataLoader.teamNumber) {
@@ -112,24 +110,22 @@ class RankFragment : Fragment(), RefreshFragment {
                             editor.putString("teamRank",
                                     Integer.toString(DataLoader.rankDC.data[0].rankings[i]!!.rank))
                         }
-                        if (DataLoader.rankDC.data[0].rankings[i]!!.record != null) {
-                            editor.putString("teamRecord", Rank.recordToString(
-                                    DataLoader.rankDC.data[0].rankings[i]!!.record))
-                        }
+                        editor.putString("teamRecord",
+                                Rank.recordToString(DataLoader.rankDC.data[0].rankings[i]!!.record))
                         editor.apply()
                     }
                 }
             }
             if (context != null) {
-                Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView!!, emptyView!!)
+                Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.rankDC.parser.isNewData)
-                if (firstLoad!!) firstLoad = false
+                if (firstLoad) firstLoad = false
                 adapter = RankAdapter(context!!, DataLoader.rankDC.data, DataLoader.teamDC.data)
                 val llm = LinearLayoutManager(context)
                 llm.orientation = LinearLayoutManager.VERTICAL
-                recyclerView!!.adapter = adapter
-                mSwipeRefreshLayout!!.isRefreshing = false
+                recyclerView.adapter = adapter
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

@@ -32,20 +32,20 @@ import java.util.Collections.sort
  * Displays a list of matches at an event for a given team.
  *
  * @author Christian Colglazier
- * @version 10/19/2016
+ * @version 4/2/2018
  */
 class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, RefreshFragment {
 
     internal lateinit var prefs: SharedPreferences
-    private var mSwipeRefreshLayout: SwipeRefreshLayout? = null
-    private var recyclerView: RecyclerView? = null
-    private var emptyView: TextView? = null
-    private var adapter: Adapter<*>? = null
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyView: TextView
+    private lateinit var adapter: Adapter<*>
     private val teamEventMatches = ArrayList<Match>()
-    private var teamNumber: String? = ""
+    private var teamNumber: String = ""
     private lateinit var view2: View
-    private var getTeamFromSettings: Boolean? = true
-    private var firstLoad: Boolean? = true
+    private var getTeamFromSettings: Boolean = true
+    private var firstLoad: Boolean = true
 
     fun setTeamNumber(teamNumber: String) {
         this.teamNumber = teamNumber
@@ -62,13 +62,13 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
                               savedInstanceState: Bundle?): View? {
         view2 = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         if (savedInstanceState != null) {
-            if (getTeamFromSettings!!) {
-                teamNumber = savedInstanceState.getString("teamNumber")
+            if (getTeamFromSettings) {
+                teamNumber = savedInstanceState.getString("teamNumber", "")
             }
             Logging.info(this, "savedInstanceState teamNumber: $teamNumber", 2)
         }
         listener()
-        Constants.checkNoDataScreen(teamEventMatches, recyclerView!!, emptyView!!)
+        Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
         return view2
     }
 
@@ -97,7 +97,7 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
      * @param force
      */
     override fun refresh(force: Boolean) {
-        Logging.info(this, "teamNumber: " + teamNumber!!, 2)
+        Logging.info(this, "teamNumber: $teamNumber", 2)
         Logging.info(this, "DataLoader is being refreshed", 0)
         if (teamNumber != "" && DataLoader.eventKey != "") {
             LoadTeamSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
@@ -109,7 +109,7 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == "teamNumber" || key == "eventKey") {
-            if (getTeamFromSettings!!) {
+            if (getTeamFromSettings) {
                 teamNumber = sharedPreferences.getString("teamNumber", "")
             }
             listener()
@@ -123,26 +123,26 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
         if (context != null) {
             prefs = PreferenceManager.getDefaultSharedPreferences(context)
             prefs.registerOnSharedPreferenceChangeListener(this@TeamScheduleFragment)
-            if (getTeamFromSettings!!) {
+            if (getTeamFromSettings) {
                 teamNumber = prefs.getString("teamNumber", "")
             }
-            mSwipeRefreshLayout = view2!!.findViewById(R.id.swipeRefreshLayout)
-            mSwipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
-            mSwipeRefreshLayout!!.setOnRefreshListener {
-                if (getTeamFromSettings!!) {
+            mSwipeRefreshLayout = view2.findViewById(R.id.swipeRefreshLayout)
+            mSwipeRefreshLayout.setColorSchemeResources(R.color.accent)
+            mSwipeRefreshLayout.setOnRefreshListener {
+                if (getTeamFromSettings) {
                     MainActivity.refresh()
                 } else {
                     refresh(false)
                 }
             }
 
-            recyclerView = view2!!.findViewById(R.id.rv)
-            emptyView = view2!!.findViewById(R.id.empty_view)
+            recyclerView = view2.findViewById(R.id.rv)
+            emptyView = view2.findViewById(R.id.empty_view)
             adapter = ScheduleAdapter(context!!, teamEventMatches, teamNumber)
             val llm = LinearLayoutManager(context)
             llm.orientation = LinearLayoutManager.VERTICAL
-            recyclerView!!.layoutManager = llm
-            recyclerView!!.adapter = adapter
+            recyclerView.layoutManager = llm
+            recyclerView.adapter = adapter
         }
     }
 
@@ -155,9 +155,7 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
     internal inner class LoadTeamSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) {
-                mSwipeRefreshLayout!!.isRefreshing = true
-            }
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -169,14 +167,14 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
             if (context != null) {
                 teamEventMatches.clear()
                 for (match in DataLoader.matchDC.data) {
-                    if (isTeamInMatch(match, "frc" + teamNumber!!)) teamEventMatches.add(match)
+                    if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
                 }
                 sort(teamEventMatches)
-                Constants.checkNoDataScreen(teamEventMatches, recyclerView!!, emptyView!!)
+                Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.matchDC.parser.isNewData)
-                if (firstLoad!!) firstLoad = false
-                mSwipeRefreshLayout!!.isRefreshing = false
+                if (firstLoad) firstLoad = false
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

@@ -24,15 +24,15 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of alliance for eliminations.
  *
  * @author Christian Colglazier
- * @version 3/31/2018
+ * @version 4/2/2018
  */
 class AllianceFragment : Fragment(), RefreshFragment {
 
-    private var swipeRefreshLayout: SwipeRefreshLayout? = null
-    private var recyclerView: RecyclerView? = null
-    private var emptyView: TextView? = null
-    private var adapter: RecyclerView.Adapter<*>? = null
-    private var firstLoad: Boolean? = true
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyView: TextView
+    private lateinit var adapter: RecyclerView.Adapter<*>
+    private var firstLoad: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,18 +43,18 @@ class AllianceFragment : Fragment(), RefreshFragment {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        swipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
-        swipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
+        swipeRefreshLayout.setColorSchemeResources(R.color.accent)
+        swipeRefreshLayout.setOnRefreshListener { MainActivity.refresh() }
 
         recyclerView = view.findViewById(R.id.rv)
-        recyclerView!!.addItemDecoration(Divider(context!!, 2f, 72))
+        recyclerView.addItemDecoration(Divider(context!!, 2f, 72))
         emptyView = view.findViewById(R.id.empty_view)
         adapter = AllianceAdapter(context!!, DataLoader.allianceDC.data)
         val llm = LinearLayoutManager(context)
         llm.orientation = LinearLayoutManager.VERTICAL
-        recyclerView!!.adapter = adapter
-        recyclerView!!.layoutManager = llm
-        Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView!!, emptyView!!)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = llm
+        Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
         return view
     }
 
@@ -75,9 +75,7 @@ class AllianceFragment : Fragment(), RefreshFragment {
     internal inner class LoadAlliances(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (swipeRefreshLayout != null) {
-                swipeRefreshLayout!!.isRefreshing = true
-            }
+            swipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -87,13 +85,13 @@ class AllianceFragment : Fragment(), RefreshFragment {
 
         override fun onPostExecute(result: Void?) {
             if (context != null) {
-                Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView!!, emptyView!!)
+                Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.allianceDC.parser.isNewData)
                 if (firstLoad!!) firstLoad = false
                 adapter = AllianceAdapter(context!!, DataLoader.allianceDC.data)
-                recyclerView!!.adapter = adapter
-                swipeRefreshLayout!!.isRefreshing = false
+                recyclerView.adapter = adapter
+                swipeRefreshLayout.isRefreshing = false
             }
         }
     }
