@@ -18,7 +18,7 @@ import java.net.URL
  */
 internal class BlueAlliance {
 
-    var conn: HttpURLConnection? = null
+    lateinit var conn: HttpURLConnection
     /**
      * getLastUpdated() returns when the request was last updated from the server.
      *
@@ -39,17 +39,17 @@ internal class BlueAlliance {
         try {
             val url = URL(address)
             conn = url.openConnection() as HttpURLConnection
-            conn!!.readTimeout = 10000
-            conn!!.connectTimeout = 15000
-            conn!!.requestMethod = "GET"
-            conn!!.doInput = true
-            conn!!.setRequestProperty(Constants.TBA_HEADER, Constants.getApiHeader(context))
-            conn!!.setRequestProperty("If-Modified-Since", updated)
-            conn!!.connect()
-            status = conn!!.responseCode
+            conn.readTimeout = 10000
+            conn.connectTimeout = 15000
+            conn.requestMethod = "GET"
+            conn.doInput = true
+            conn.setRequestProperty(Constants.TBA_HEADER, Constants.getApiHeader(context))
+            conn.setRequestProperty("If-Modified-Since", updated)
+            conn.connect()
+            status = conn.responseCode
             Log.i("BA Status", Integer.toString(status))
-            if (status != 304) lastUpdated = conn!!.getHeaderField("last-modified")
-            return conn!!.inputStream
+            if (status != 304) lastUpdated = conn.getHeaderField("last-modified")
+            return conn.inputStream
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -59,9 +59,7 @@ internal class BlueAlliance {
 
     fun close() {
         try {
-            if (conn != null) {
-                conn!!.inputStream.close()
-            }
+            conn.inputStream.close()
         } catch (e: IOException) {
             e.printStackTrace()
         }

@@ -15,12 +15,12 @@ import com.github.paolorotolo.appintro.AppIntro
  * App set up activity gets the desired year, team, and event.
  *
  * @author Christian Colglazier
- * @version 3/31/2018
+ * @version 4/2/2018
  */
 class Setup : AppIntro() {
 
-    private var teamNumberSlide: TeamNumberSlide? = null
-    private var eventSlide: EventSlide? = null
+    private lateinit var teamNumberSlide: TeamNumberSlide
+    private lateinit var eventSlide: EventSlide
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +28,8 @@ class Setup : AppIntro() {
         eventSlide = EventSlide()
 
         addSlide(Slide.newInstance(R.layout.first_slide))
-        addSlide(teamNumberSlide!!)
-        addSlide(eventSlide!!)
+        addSlide(teamNumberSlide)
+        addSlide(eventSlide)
 
         setBarColor(ContextCompat.getColor(this, R.color.primary))
         setSeparatorColor(ContextCompat.getColor(this, R.color.primary_dark))
@@ -46,7 +46,7 @@ class Setup : AppIntro() {
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-        Logging.info(this, "Team Number: " + teamNumberSlide!!.teamNumber, 0)
+        Logging.info(this, "Team Number: " + teamNumberSlide.teamNumber, 0)
         val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
         val editor = prefs.edit()
         editor.putString("teamRank", "")
@@ -58,12 +58,11 @@ class Setup : AppIntro() {
 
     override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {
         super.onSlideChanged(oldFragment, newFragment)
-        if (teamNumberSlide != null &&
-                teamNumberSlide!!.getTeamNumber().matches("[0-9]+".toRegex())) {
+        if (teamNumberSlide.getTeamNumber().matches("[0-9]+".toRegex())) {
             try {
                 Logging.info(this, "Gettings events for Setup", 0)
-                teamNumberSlide!!.setTeamNumber()
-                eventSlide!!.load(true)
+                teamNumberSlide.setTeamNumber()
+                eventSlide.load(true)
             } catch (e: Exception) {}
         }
     }

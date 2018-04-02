@@ -17,15 +17,13 @@ import java.util.*
  * Populates a tab layout with fragments.
  *
  * @author Christian Colglazier
- * @version 2/25/2018
+ * @version 4/2/2018
  */
 class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPager: ViewPager,
                            private val tabLayout: TabLayout, activity: Activity) :
         FragmentStatePagerAdapter(fragmentManager) {
     var act = activity
-
     var tabs = ArrayList<Tab>()
-
     val isDataLoading: Boolean
         get() = (!DataLoader.awardDC.complete || !DataLoader.teamDC.complete || !DataLoader.rankDC.complete
                 || !DataLoader.matchDC.complete || !DataLoader.allianceDC.complete)
@@ -34,13 +32,13 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPag
      * refreshAll() reloads all dataLoader in the fragments.
      */
     fun refreshAll(force: Boolean) {
-        refrestData(force)
+        refreshData(force)
         for (i in tabs.indices) {
             (tabs[i].fragment as RefreshFragment).refresh(force)
         }
     }
 
-    fun refrestData(force: Boolean) {
+    fun refreshData(force: Boolean) {
         DataLoader.teamDC.complete = false
         DataLoader.rankDC.complete = false
         DataLoader.awardDC.complete = false
@@ -63,12 +61,12 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPag
 
     fun addFrag(title: String, fragment: Fragment) {
         tabs.add(Tab(title, fragment))
-        Collections.sort(tabs)
+        tabs.sort()
     }
 
     fun addFrag(tab: Tab) {
         tabs.add(tab)
-        Collections.sort(tabs)
+        tabs.sort()
         notifyDataSetChanged()
     }
 
@@ -80,7 +78,7 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPag
         notifyDataSetChanged()
     }
 
-    fun destroyFragmentView(container: ViewGroup, position: Int, `object`: Any) {
+    private fun destroyFragmentView(container: ViewGroup, position: Int, `object`: Any) {
         val manager = (`object` as Fragment).fragmentManager
         if (manager != null) {
             val trans = manager.beginTransaction()
@@ -89,7 +87,7 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPag
         }
     }
 
-    fun removeTab(position: Int) {
+    private fun removeTab(position: Int) {
         if (tabLayout.childCount > 0) {
             tabLayout.removeTabAt(position)
         }

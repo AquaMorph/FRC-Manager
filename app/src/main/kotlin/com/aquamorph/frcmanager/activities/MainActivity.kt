@@ -24,12 +24,12 @@ import com.aquamorph.frcmanager.utils.Logging
  * Default activity of the app.
  *
  * @author Christian Colglazier
- * @version 3/29/2016
+ * @version 4/2/2018
  */
 class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     private lateinit var eventName: String
     private lateinit var teamRank: String
-    private var teamRecord: String? = null
+    private lateinit var teamRecord: String
     lateinit var dataLoader: DataLoader
     private lateinit var mViewPager: ViewPager
     private lateinit var tabLayout: TabLayout
@@ -65,9 +65,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.registerOnSharedPreferenceChangeListener(this@MainActivity)
         DataLoader.teamNumber = prefs.getString("teamNumber", "")
@@ -75,12 +73,10 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         teamRank = prefs.getString("teamRank", "")
         teamRecord = prefs.getString("teamRecord", "")
         DataLoader.eventKey = prefs.getString("eventKey", "")
-
-
         if (DataLoader.teamNumber == "") openSetup()
-
         listener()
         theme(this)
+        super.onCreate(savedInstanceState)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -167,12 +163,10 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         // Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.container)
         tabLayout = findViewById(R.id.tabs)
-        if (tabLayout != null) {
-            tabLayout!!.setupWithViewPager(mViewPager)
-            tabLayout!!.tabMode = TabLayout.MODE_SCROLLABLE
-        }
+        tabLayout.setupWithViewPager(mViewPager)
+        tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager,
-                mViewPager, tabLayout!!, this)
+                mViewPager, tabLayout, this)
         dataLoader = DataLoader(this, mSectionsPagerAdapter!!)
         mViewPager.offscreenPageLimit = mSectionsPagerAdapter!!.count
         mViewPager.adapter = mSectionsPagerAdapter
@@ -198,7 +192,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         }
 
         fun refreshData(force: Boolean) {
-            mSectionsPagerAdapter!!.refrestData(force)
+            mSectionsPagerAdapter!!.refreshData(force)
         }
 
         fun refresh() {

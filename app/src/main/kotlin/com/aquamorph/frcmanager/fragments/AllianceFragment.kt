@@ -75,7 +75,7 @@ class AllianceFragment : Fragment(), RefreshFragment {
     internal inner class LoadAlliances(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            swipeRefreshLayout.isRefreshing = true
+            if (swipeRefreshLayout != null) swipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -91,7 +91,7 @@ class AllianceFragment : Fragment(), RefreshFragment {
                 if (firstLoad!!) firstLoad = false
                 adapter = AllianceAdapter(context!!, DataLoader.allianceDC.data)
                 recyclerView.adapter = adapter
-                swipeRefreshLayout.isRefreshing = false
+                if (swipeRefreshLayout != null) swipeRefreshLayout.isRefreshing = false
             }
         }
     }

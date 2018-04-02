@@ -17,7 +17,7 @@ import java.util.Collections.sort
  * Loads needed dataLoader.
  *
  * @author Christian Colglazier
- * @version 2/21/2018
+ * @version 4/2/2018
  */
 
 class DataLoader(activity: Activity, adapter: SectionsPagerAdapter) {
@@ -34,9 +34,9 @@ class DataLoader(activity: Activity, adapter: SectionsPagerAdapter) {
 
     internal class Load : AsyncTask<Void?, Void?, Void?> {
 
-        private var dataContainer: DataContainer<*>? = null
-        private var tabs: ArrayList<Tab>? = null
-        private var adapter: SectionsPagerAdapter? = null
+        private var dataContainer: DataContainer<*>
+        private var tabs: ArrayList<Tab>
+        private var adapter: SectionsPagerAdapter
         private var isRank = false
         private var isSortable = false
 
@@ -61,44 +61,44 @@ class DataLoader(activity: Activity, adapter: SectionsPagerAdapter) {
 
         override fun doInBackground(vararg params: Void?): Void? {
             try {
-                dataContainer!!.parser.fetchJSON(true)
+                dataContainer.parser.fetchJSON(true)
             } catch (exception: JsonSyntaxException) {
                 Logging.error(this, "JSON Parsing Error", 0)
                 Logging.error(this, exception.message!!, 0)
             }
 
-            while (dataContainer!!.parser.parsingComplete) {
+            while (dataContainer.parser.parsingComplete) {
                 SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
             }
             return null
         }
 
         override fun onPostExecute(result: Void?) {
-            dataContainer!!.data.clear()
-            if (dataContainer!!.parser.data != null) {
+            dataContainer.data.clear()
+            if (dataContainer.parser.data != null) {
                 if (isRank) {
-                    (dataContainer!!.data as MutableList<Any?>).add(dataContainer!!.parser.data)
+                    (dataContainer.data as MutableList<Any?>).add(dataContainer.parser.data)
                 } else {
-                    dataContainer!!.data.addAll(dataContainer!!.parser.data as Collection<Nothing>)
+                    dataContainer.data.addAll(dataContainer.parser.data as Collection<Nothing>)
                     if (isSortable) {
-                        sort(dataContainer!!.data as List<Nothing>)
+                        sort(dataContainer.data as List<Nothing>)
                     }
                 }
             }
-            if (dataContainer!!.data.isEmpty()) {
-                for (tab in tabs!!) {
-                    if (adapter!!.isTab(tab.name)!!) {
-                        adapter!!.removeFrag(adapter!!.tabPosition(tab.name))
+            if (dataContainer.data.isEmpty()) {
+                for (tab in tabs) {
+                    if (adapter.isTab(tab.name)!!) {
+                        adapter.removeFrag(adapter.tabPosition(tab.name))
                     }
                 }
             } else {
-                for (tab in tabs!!) {
-                    if ((!adapter!!.isTab(tab.name)!!)) {
-                        adapter!!.addFrag(tab)
+                for (tab in tabs) {
+                    if ((!adapter.isTab(tab.name)!!)) {
+                        adapter.addFrag(tab)
                     }
                 }
             }
-            dataContainer!!.complete = true
+            dataContainer.complete = true
         }
     }
 

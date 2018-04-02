@@ -13,7 +13,7 @@ import java.util.*
  * Populates the spinner for the setup screen with a list of events a team is registered for.
  *
  * @author Christian Colglazier
- * @version 3/31/2018
+ * @version 4/2/2018
  */
 class EventSpinnerAdapter(private val eventList: ArrayList<Event>, private val activity: Activity) : BaseAdapter(), SpinnerAdapter {
 
@@ -30,13 +30,12 @@ class EventSpinnerAdapter(private val eventList: ArrayList<Event>, private val a
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val text: TextView
-        if (convertView != null) {
+        val text: TextView = if (convertView != null) {
             // Re-use the recycled view here!
-            text = (convertView as TextView?)!!
+            (convertView as TextView?)!!
         } else {
             // No recycled view, inflate the "original" from the platform:
-            text = activity.layoutInflater.inflate(
+            activity.layoutInflater.inflate(
                     android.R.layout.simple_dropdown_item_1line, parent, false
             ) as TextView
         }

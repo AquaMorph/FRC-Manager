@@ -155,7 +155,7 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
     internal inner class LoadTeamSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            mSwipeRefreshLayout.isRefreshing = true
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -174,7 +174,7 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.matchDC.parser.isNewData)
                 if (firstLoad) firstLoad = false
-                mSwipeRefreshLayout.isRefreshing = false
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

@@ -18,7 +18,7 @@ import java.util.*
  * Populated a view with alliance dataLoader.
  *
  * @author Christian Colglazier
- * @version 3/31/2016
+ * @version 4/2/2018
  */
 class AllianceAdapter(private val context: Context, private val data: ArrayList<Alliance>) :
         RecyclerView.Adapter<AllianceAdapter.MyViewHolder>() {
@@ -31,7 +31,7 @@ class AllianceAdapter(private val context: Context, private val data: ArrayList<
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.allianceNumber.text = Integer.toString(position + 1)
+        holder.allianceNumber.text = String.format((position + 1).toString())
         holder.team1.text = Constants.formatTeamNumber(data[position].picks[0])
         holder.team2.text = Constants.formatTeamNumber(data[position].picks[1])
         holder.team3.text = Constants.formatTeamNumber(data[position].picks[2])
@@ -55,7 +55,6 @@ class AllianceAdapter(private val context: Context, private val data: ArrayList<
         internal var allianceNumber: TextView = itemView.findViewById(R.id.alliance_number)
 
         init {
-
             team1.setOnClickListener {
                 val intent = Intent(context, TeamSummary::class.java)
                 intent.putExtra("teamNumber", team1.text.toString())

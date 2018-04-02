@@ -92,7 +92,7 @@ class AwardFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
     internal inner class LoadAwards(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            swipeRefreshLayout.isRefreshing = true
+            if (swipeRefreshLayout != null) swipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg p0: Void?): Void? {
@@ -108,7 +108,7 @@ class AwardFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
                 if (firstLoad!!) firstLoad = false
                 adapter = AwardAdapter(context!!, DataLoader.awardDC.data)
                 recyclerView.adapter = adapter
-                swipeRefreshLayout.isRefreshing = false
+                if (swipeRefreshLayout != null) swipeRefreshLayout.isRefreshing = false
             }
         }
     }

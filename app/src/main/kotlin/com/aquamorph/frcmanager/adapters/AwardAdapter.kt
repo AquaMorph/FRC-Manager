@@ -16,7 +16,7 @@ import java.util.*
  * Populates the recyclerview with award data
  *
  * @author Christian Colglazier
- * @version 3/31/2018
+ * @version 4/2/2018
  */
 class AwardAdapter(context: Context, private val data: ArrayList<Award>) :
         RecyclerView.Adapter<AwardAdapter.MyViewHolder>() {

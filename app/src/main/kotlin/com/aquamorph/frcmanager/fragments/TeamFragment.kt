@@ -83,7 +83,7 @@ class TeamFragment : Fragment(), RefreshFragment {
     internal inner class LoadEventTeams(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            mSwipeRefreshLayout.isRefreshing = true
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -100,7 +100,7 @@ class TeamFragment : Fragment(), RefreshFragment {
                 if (firstLoad) firstLoad = false
                 adapter = TeamAdapter(context!!, DataLoader.teamDC.data, DataLoader.rankDC.data)
                 recyclerView.adapter = adapter
-                mSwipeRefreshLayout.isRefreshing = false
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

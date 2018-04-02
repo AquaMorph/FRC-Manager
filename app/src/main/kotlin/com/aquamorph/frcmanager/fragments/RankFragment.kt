@@ -91,7 +91,7 @@ class RankFragment : Fragment(), RefreshFragment {
     private inner class LoadRanks internal constructor(internal var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            mSwipeRefreshLayout.isRefreshing = true
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -125,7 +125,7 @@ class RankFragment : Fragment(), RefreshFragment {
                 val llm = LinearLayoutManager(context)
                 llm.orientation = LinearLayoutManager.VERTICAL
                 recyclerView.adapter = adapter
-                mSwipeRefreshLayout.isRefreshing = false
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

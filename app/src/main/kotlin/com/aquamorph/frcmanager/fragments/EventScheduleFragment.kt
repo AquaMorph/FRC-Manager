@@ -95,9 +95,7 @@ class EventScheduleFragment : Fragment(), SharedPreferences.OnSharedPreferenceCh
     internal inner class LoadEventSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) {
-                mSwipeRefreshLayout!!.isRefreshing = true
-            }
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout!!.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -113,7 +111,7 @@ class EventScheduleFragment : Fragment(), SharedPreferences.OnSharedPreferenceCh
                 if (firstLoad!!) firstLoad = false
                 adapter = ScheduleAdapter(context!!, DataLoader.matchDC.data, DataLoader.teamNumber)
                 recyclerView!!.adapter = adapter
-                mSwipeRefreshLayout!!.isRefreshing = false
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout!!.isRefreshing = false
             }
         }
     }
