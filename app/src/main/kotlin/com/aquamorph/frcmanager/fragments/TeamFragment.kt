@@ -29,7 +29,7 @@ import com.aquamorph.frcmanager.utils.Constants
  */
 class TeamFragment : Fragment(), RefreshFragment {
 
-    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: TextView
     private lateinit var adapter: RecyclerView.Adapter<*>
@@ -43,9 +43,9 @@ class TeamFragment : Fragment(), RefreshFragment {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
-        mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.accent)
-        mSwipeRefreshLayout.setOnRefreshListener { MainActivity.refresh() }
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+        swipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
+        swipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
 
         recyclerView = view.findViewById(R.id.rv)
         emptyView = view.findViewById(R.id.empty_view)
@@ -83,7 +83,7 @@ class TeamFragment : Fragment(), RefreshFragment {
     internal inner class LoadEventTeams(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -100,7 +100,7 @@ class TeamFragment : Fragment(), RefreshFragment {
                 if (firstLoad) firstLoad = false
                 adapter = TeamAdapter(context!!, DataLoader.teamDC.data, DataLoader.rankDC.data)
                 recyclerView.adapter = adapter
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = false
             }
         }
     }

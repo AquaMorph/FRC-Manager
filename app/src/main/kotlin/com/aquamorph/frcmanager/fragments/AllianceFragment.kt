@@ -28,7 +28,7 @@ import com.aquamorph.frcmanager.utils.Constants
  */
 class AllianceFragment : Fragment(), RefreshFragment {
 
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: TextView
     private lateinit var adapter: RecyclerView.Adapter<*>
@@ -43,8 +43,8 @@ class AllianceFragment : Fragment(), RefreshFragment {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        swipeRefreshLayout.setColorSchemeResources(R.color.accent)
-        swipeRefreshLayout.setOnRefreshListener { MainActivity.refresh() }
+        swipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
+        swipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
 
         recyclerView = view.findViewById(R.id.rv)
         recyclerView.addItemDecoration(Divider(context!!, 2f, 72))
@@ -75,7 +75,7 @@ class AllianceFragment : Fragment(), RefreshFragment {
     internal inner class LoadAlliances(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (swipeRefreshLayout != null) swipeRefreshLayout.isRefreshing = true
+            if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -91,7 +91,7 @@ class AllianceFragment : Fragment(), RefreshFragment {
                 if (firstLoad!!) firstLoad = false
                 adapter = AllianceAdapter(context!!, DataLoader.allianceDC.data)
                 recyclerView.adapter = adapter
-                if (swipeRefreshLayout != null) swipeRefreshLayout.isRefreshing = false
+                if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = false
             }
         }
     }

@@ -32,7 +32,7 @@ import com.aquamorph.frcmanager.utils.Constants
  */
 class RankFragment : Fragment(), RefreshFragment {
 
-    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: TextView
     private lateinit var adapter: RecyclerView.Adapter<*>
@@ -50,9 +50,9 @@ class RankFragment : Fragment(), RefreshFragment {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-        mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.accent)
-        mSwipeRefreshLayout.setOnRefreshListener { MainActivity.refresh() }
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+        swipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
+        swipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
 
         recyclerView = view.findViewById(R.id.rv)
         recyclerView.addItemDecoration(Divider(context!!, 2f, 72))
@@ -91,7 +91,7 @@ class RankFragment : Fragment(), RefreshFragment {
     private inner class LoadRanks internal constructor(internal var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -125,7 +125,7 @@ class RankFragment : Fragment(), RefreshFragment {
                 val llm = LinearLayoutManager(context)
                 llm.orientation = LinearLayoutManager.VERTICAL
                 recyclerView.adapter = adapter
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = false
             }
         }
     }

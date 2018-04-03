@@ -37,7 +37,7 @@ import java.util.Collections.sort
 class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, RefreshFragment {
 
     internal lateinit var prefs: SharedPreferences
-    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    private var mSwipeRefreshLayout: SwipeRefreshLayout? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: TextView
     private lateinit var adapter: Adapter<*>
@@ -127,8 +127,8 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
                 teamNumber = prefs.getString("teamNumber", "")
             }
             mSwipeRefreshLayout = view2.findViewById(R.id.swipeRefreshLayout)
-            mSwipeRefreshLayout.setColorSchemeResources(R.color.accent)
-            mSwipeRefreshLayout.setOnRefreshListener {
+            mSwipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
+            mSwipeRefreshLayout!!.setOnRefreshListener {
                 if (getTeamFromSettings) {
                     MainActivity.refresh()
                 } else {
@@ -155,7 +155,7 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
     internal inner class LoadTeamSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout!!.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -174,7 +174,7 @@ class TeamScheduleFragment : Fragment(), OnSharedPreferenceChangeListener, Refre
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.matchDC.parser.isNewData)
                 if (firstLoad) firstLoad = false
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout!!.isRefreshing = false
             }
         }
     }
