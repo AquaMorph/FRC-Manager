@@ -10,7 +10,6 @@ import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
-import java.util.*
 import java.util.Collections.sort
 
 /**
@@ -20,7 +19,7 @@ import java.util.Collections.sort
  * @version 4/2/2018
  */
 
-class DataLoader(activity: Activity, adapter: SectionsPagerAdapter) {
+class DataLoader(activity: Activity) {
 
     init {
         matchTabs.add(Tab("Team Schedule", TeamScheduleFragment.newInstance()))
@@ -55,8 +54,13 @@ class DataLoader(activity: Activity, adapter: SectionsPagerAdapter) {
             this.adapter = adapter
         }
 
+        fun isRankEmpty(dataContainer: DataContainer<*>): Boolean {
+            return dataContainer.data.get(0) is Rank &&
+                    (dataContainer.data.get(0) as Rank).rankings.isEmpty()
+        }
+
         override fun onPreExecute() {
-            dataContainer!!.complete = false
+            dataContainer.complete = false
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -85,7 +89,7 @@ class DataLoader(activity: Activity, adapter: SectionsPagerAdapter) {
                     }
                 }
             }
-            if (dataContainer.data.isEmpty()) {
+            if (dataContainer.data.isEmpty() || isRankEmpty(dataContainer)) {
                 for (tab in tabs) {
                     if (adapter.isTab(tab.name)!!) {
                         adapter.removeFrag(adapter.tabPosition(tab.name))
@@ -128,31 +132,16 @@ class DataLoader(activity: Activity, adapter: SectionsPagerAdapter) {
         }
 
         private fun setDataContainers(force: Boolean, activity: Activity) {
-            teamDC = DataContainer(force, activity,
-                    object : TypeToken<ArrayList<Team>>() {
-
-                    }.type, Constants.getEventTeams(eventKey),
-                    "eventTeams")
-            rankDC = DataContainer(force, activity,
-                    object : TypeToken<Rank>() {
-
-                    }.type, Constants.getEventRanks(eventKey),
-                    "eventRank")
-            awardDC = DataContainer(force, activity,
-                    object : TypeToken<ArrayList<Award>>() {
-
-                    }.type, Constants.getEventAwards(eventKey),
-                    "eventAwards")
-            matchDC = DataContainer(force, activity,
-                    object : TypeToken<ArrayList<Match>>() {
-
-                    }.type, Constants.getEventMatches(eventKey),
-                    "eventMatches")
-            allianceDC = DataContainer(force, activity,
-                    object : TypeToken<ArrayList<Alliance>>() {
-
-                    }.type, Constants.getAlliancesURL(eventKey),
-                    "Alliance")
+            teamDC = DataContainer(force, activity, object : TypeToken<ArrayList<Team>>() {
+                    }.type, Constants.getEventTeams(eventKey), "eventTeams")
+            rankDC = DataContainer(force, activity, object : TypeToken<Rank>() {
+                    }.type, Constants.getEventRanks(eventKey),"eventRank")
+            awardDC = DataContainer(force, activity, object : TypeToken<ArrayList<Award>>() {
+                    }.type, Constants.getEventAwards(eventKey),"eventAwards")
+            matchDC = DataContainer(force, activity, object : TypeToken<ArrayList<Match>>() {
+                    }.type, Constants.getEventMatches(eventKey),"eventMatches")
+            allianceDC = DataContainer(force, activity, object : TypeToken<ArrayList<Alliance>>() {
+                    }.type, Constants.getAlliancesURL(eventKey),"Alliance")
         }
     }
 }

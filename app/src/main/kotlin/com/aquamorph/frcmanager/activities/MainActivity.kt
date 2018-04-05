@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager,
                 mViewPager, tabLayout, this)
-        dataLoader = DataLoader(this, mSectionsPagerAdapter!!)
+        dataLoader = DataLoader(this)
         mViewPager.offscreenPageLimit = mSectionsPagerAdapter!!.count
         mViewPager.adapter = mSectionsPagerAdapter
         refreshData(false)
