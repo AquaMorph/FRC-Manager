@@ -34,8 +34,7 @@ class RankAdapter(private val context: Context, private val data: ArrayList<Rank
     private val inflater: LayoutInflater = from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = inflater.inflate(R.layout.rank, parent, false)
-        return MyViewHolder(view)
+        return MyViewHolder(inflater.inflate(R.layout.rank, parent, false))
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -56,8 +55,6 @@ class RankAdapter(private val context: Context, private val data: ArrayList<Rank
                     String.format("%." + data[0].sort_order_info[i]!!.precision +
                             "f", data[0].rankings[position]!!.sort_orders!![i])))
         }
-        //		ranks.add(new RankInfo("Played: ",
-        //				Integer.toString(data.get(0).rankings[position].matches_played)));
         ranks.add(RankInfo("Record: ",
                 Rank.recordToString(data[0].rankings[position]!!.record)))
 

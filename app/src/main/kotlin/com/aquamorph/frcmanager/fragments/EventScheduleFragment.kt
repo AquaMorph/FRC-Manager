@@ -4,68 +4,46 @@ import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
-import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
 import com.aquamorph.frcmanager.decoration.Animations
+import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
+import com.aquamorph.frcmanager.utils.Logging
 
 /**
  * Displays a list of matches at an event.
  *
  * @author Christian Colglazier
- * @version 4/2/2018
+ * @version 4/14/2018
  */
-class EventScheduleFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
+class EventScheduleFragment :
+        TabFragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
-    internal lateinit var prefs: SharedPreferences
-    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var emptyView: TextView
-    private lateinit var adapter: RecyclerView.Adapter<*>
-    private var firstLoad: Boolean = true
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-    }
+    private var matches: ArrayList<Match> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        prefs.registerOnSharedPreferenceChangeListener(this@EventScheduleFragment)
-
         val view = inflater.inflate(R.layout.fragment_fastscroll, container, false)
-        mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        mSwipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
-        mSwipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
-
-        recyclerView = view.findViewById(R.id.rv)
-        emptyView = view.findViewById(R.id.empty_view)
-        adapter = ScheduleAdapter(context!!, DataLoader.matchDC.data, DataLoader.teamNumber)
-        val llm = LinearLayoutManager(context)
-        llm.orientation = LinearLayoutManager.VERTICAL
-        recyclerView!!.adapter = adapter
-        recyclerView!!.layoutManager = llm
-
-        Constants.checkNoDataScreen(DataLoader.matchDC.data, recyclerView!!, emptyView!!)
+        super.onCreateView(view, DataLoader.matchDC.data)
+        prefs.registerOnSharedPreferenceChangeListener(this)
         return view
+    }
+
+    override fun dataUpdate() {
+        matches.clear()
+        matches.addAll(DataLoader.matchDC.data)
+        Logging.debug(this, matches.size.toString(),0)
     }
 
     override fun onResume() {
         super.onResume()
-        if (DataLoader.matchDC.data.size == 0)
+        if (matches.isEmpty())
             refresh(false)
     }
 
@@ -81,13 +59,12 @@ class EventScheduleFragment : Fragment(), SharedPreferences.OnSharedPreferenceCh
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == "teamNumber" || key == "eventKey") {
             if (context != null) {
-                adapter = ScheduleAdapter(context!!, DataLoader.matchDC.data,
-                        DataLoader.teamNumber)
+                adapter = ScheduleAdapter(context!!, matches, DataLoader.teamNumber)
             }
             val llm = LinearLayoutManager(context)
             llm.orientation = LinearLayoutManager.VERTICAL
-            recyclerView!!.adapter = adapter
-            recyclerView!!.layoutManager = llm
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = llm
             refresh(true)
         }
     }
@@ -95,7 +72,7 @@ class EventScheduleFragment : Fragment(), SharedPreferences.OnSharedPreferenceCh
     internal inner class LoadEventSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout!!.isRefreshing = true
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -105,13 +82,12 @@ class EventScheduleFragment : Fragment(), SharedPreferences.OnSharedPreferenceCh
 
         override fun onPostExecute(result: Void?) {
             if (context != null) {
-                Constants.checkNoDataScreen(DataLoader.matchDC.data, recyclerView!!, emptyView!!)
+                dataUpdate()
+                Constants.checkNoDataScreen(matches, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.matchDC.parser.isNewData)
-                if (firstLoad!!) firstLoad = false
-                adapter = ScheduleAdapter(context!!, DataLoader.matchDC.data, DataLoader.teamNumber)
-                recyclerView!!.adapter = adapter
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout!!.isRefreshing = false
+                if (firstLoad) firstLoad = false
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

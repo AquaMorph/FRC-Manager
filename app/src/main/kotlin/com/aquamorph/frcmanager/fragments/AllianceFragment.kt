@@ -17,6 +17,7 @@ import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.AllianceAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
+import com.aquamorph.frcmanager.models.Alliance
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 
@@ -24,7 +25,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of alliance for eliminations.
  *
  * @author Christian Colglazier
- * @version 4/2/2018
+ * @version 4/14/2018
  */
 class AllianceFragment : Fragment(), RefreshFragment {
 
@@ -33,6 +34,7 @@ class AllianceFragment : Fragment(), RefreshFragment {
     private lateinit var emptyView: TextView
     private lateinit var adapter: RecyclerView.Adapter<*>
     private var firstLoad: Boolean = true
+    private var alliances: ArrayList<Alliance> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +51,7 @@ class AllianceFragment : Fragment(), RefreshFragment {
         recyclerView = view.findViewById(R.id.rv)
         recyclerView.addItemDecoration(Divider(context!!, 2f, 72))
         emptyView = view.findViewById(R.id.empty_view)
-        adapter = AllianceAdapter(context!!, DataLoader.allianceDC.data)
+        adapter = AllianceAdapter(context!!, alliances)
         val llm = LinearLayoutManager(context)
         llm.orientation = LinearLayoutManager.VERTICAL
         recyclerView.adapter = adapter
@@ -88,9 +90,11 @@ class AllianceFragment : Fragment(), RefreshFragment {
                 Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.allianceDC.parser.isNewData)
-                if (firstLoad!!) firstLoad = false
-                adapter = AllianceAdapter(context!!, DataLoader.allianceDC.data)
-                recyclerView.adapter = adapter
+                if (firstLoad) firstLoad = false
+                if (DataLoader.allianceDC.parser.isNewData) {
+                    alliances.clear()
+                    alliances.addAll(DataLoader.allianceDC.data)
+                }
                 if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = false
             }
         }

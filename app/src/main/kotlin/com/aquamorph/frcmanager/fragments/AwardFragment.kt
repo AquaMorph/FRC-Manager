@@ -19,6 +19,7 @@ import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.AwardAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
+import com.aquamorph.frcmanager.models.Award
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 
@@ -36,6 +37,7 @@ class AwardFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
     private lateinit var emptyView: TextView
     private lateinit var adapter: RecyclerView.Adapter<*>
     private var firstLoad: Boolean = true
+    private var awards: ArrayList<Award> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +53,7 @@ class AwardFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
 
         recyclerView = view.findViewById(R.id.rv)
         emptyView = view.findViewById(R.id.empty_view)
-        adapter = AwardAdapter(context!!, DataLoader.awardDC.data)
+        adapter = AwardAdapter(context!!, awards)
         val llm = LinearLayoutManager(context)
         llm.orientation = LinearLayoutManager.VERTICAL
         recyclerView.adapter = adapter
@@ -105,9 +107,11 @@ class AwardFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
                 Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.awardDC.parser.isNewData)
-                if (firstLoad!!) firstLoad = false
-                adapter = AwardAdapter(context!!, DataLoader.awardDC.data)
-                recyclerView.adapter = adapter
+                if (firstLoad) firstLoad = false
+                if (DataLoader.awardDC.parser.isNewData) {
+                    awards.clear()
+                    awards.addAll(DataLoader.awardDC.data)
+                }
                 if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = false
             }
         }

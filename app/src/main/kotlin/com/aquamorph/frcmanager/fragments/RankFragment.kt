@@ -14,13 +14,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.RankAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Rank
+import com.aquamorph.frcmanager.models.Team
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 
@@ -28,16 +28,18 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays the ranks of all the teams at an event.
  *
  * @author Christian Colglazier
- * @version 4/2/2018
+ * @version 4/14/2018
  */
 class RankFragment : Fragment(), RefreshFragment {
 
-    private var swipeRefreshLayout: SwipeRefreshLayout? = null
+    private var mSwipeRefreshLayout: SwipeRefreshLayout? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var emptyView: TextView
-    private lateinit var adapter: RecyclerView.Adapter<*>
     private lateinit var prefs: SharedPreferences
     private var firstLoad: Boolean = true
+
+    private var ranks : ArrayList<Rank> = ArrayList()
+    private var teams : ArrayList<Team> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,17 +52,16 @@ class RankFragment : Fragment(), RefreshFragment {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        swipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
-        swipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
+        mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
+        mSwipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
+        mSwipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
 
         recyclerView = view.findViewById(R.id.rv)
         recyclerView.addItemDecoration(Divider(context!!, 2f, 72))
         emptyView = view.findViewById(R.id.empty_view)
-        adapter = RankAdapter(context!!, DataLoader.rankDC.data, DataLoader.teamDC.data)
         val llm = LinearLayoutManager(context)
         llm.orientation = LinearLayoutManager.VERTICAL
-        recyclerView.adapter = adapter
+        recyclerView.adapter = RankAdapter(context!!, DataLoader.rankDC.data, DataLoader.teamDC.data)
         if (Constants.isLargeScreen(context!!)) {
             recyclerView.layoutManager = GridLayoutManager(context, 2)
         } else {
@@ -70,6 +71,13 @@ class RankFragment : Fragment(), RefreshFragment {
         if (savedInstanceState == null) refresh(false)
         Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
         return view
+    }
+
+    fun dataUpdate() {
+        ranks.clear()
+        ranks.addAll(DataLoader.rankDC.data)
+        teams.clear()
+        teams.addAll(DataLoader.teamDC.data)
     }
 
     override fun onResume() {
@@ -82,16 +90,15 @@ class RankFragment : Fragment(), RefreshFragment {
      * refrest() loads dataLoader needed for this fragment.
      */
     override fun refresh(force: Boolean) {
-        if (DataLoader.eventKey != "" && DataLoader.teamNumber != ""
-                && context != null) {
-            LoadRanks(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        if (DataLoader.eventKey != "" && DataLoader.teamNumber != "" && context != null) {
+            LoadRanks().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
     }
 
-    private inner class LoadRanks internal constructor(internal var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadRanks(): AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = true
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout!!.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -118,14 +125,13 @@ class RankFragment : Fragment(), RefreshFragment {
             }
             if (context != null) {
                 Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
-                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
+                Animations.loadAnimation(context, recyclerView, recyclerView.adapter, firstLoad,
                         DataLoader.rankDC.parser.isNewData)
                 if (firstLoad) firstLoad = false
-                adapter = RankAdapter(context!!, DataLoader.rankDC.data, DataLoader.teamDC.data)
-                val llm = LinearLayoutManager(context)
-                llm.orientation = LinearLayoutManager.VERTICAL
-                recyclerView.adapter = adapter
-                if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = false
+                if (DataLoader.rankDC.parser.isNewData || DataLoader.teamDC.parser.isNewData) {
+                    dataUpdate()
+                }
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout!!.isRefreshing = false
             }
         }
     }

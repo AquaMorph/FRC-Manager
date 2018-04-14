@@ -35,7 +35,7 @@ class Match : Comparable<Match> {
         val compareMatchNumber = other.match_number
         val compareLevel = other.comp_level
         return if (getCompLevelValue(compareLevel) == getCompLevelValue(this.comp_level)) {
-            this.match_number!! - compareMatchNumber!!
+            this.match_number - compareMatchNumber
         } else {
             getCompLevelValue(this.comp_level) - getCompLevelValue(compareLevel)
         }
