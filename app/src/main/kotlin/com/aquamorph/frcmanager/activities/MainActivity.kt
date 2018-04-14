@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     /**
      * openSettings() launches the settings activity.
      */
-    fun openSettings() {
+    private fun openSettings() {
         val intent = Intent(this, Settings::class.java)
         startActivity(intent)
     }
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
      * @param amount length to shorten
      * @return shorten string with ... at the end
      */
-    fun shorten(text: String?, amount: Int): String {
+    private fun shorten(text: String?, amount: Int): String {
         return if (text!!.length > amount) {
             text.substring(0, amount) + "..."
         } else {
@@ -168,7 +168,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager,
                 mViewPager, tabLayout, this)
         dataLoader = DataLoader(this)
-        mViewPager.offscreenPageLimit = mSectionsPagerAdapter!!.count
+        mViewPager.offscreenPageLimit = Constants.MAX_NUMBER_OF_TABS
         mViewPager.adapter = mSectionsPagerAdapter
         refreshData(false)
     }

@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
-import com.aquamorph.frcmanager.utils.Logging
 
 /**
  * Displays a list of matches at an event.
@@ -30,7 +28,8 @@ class EventScheduleFragment :
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_fastscroll, container, false)
-        super.onCreateView(view, DataLoader.matchDC.data)
+        super.onCreateView(view, DataLoader.matchDC.data,
+                ScheduleAdapter(context!!, DataLoader.matchDC.data, DataLoader.teamNumber))
         prefs.registerOnSharedPreferenceChangeListener(this)
         return view
     }
@@ -38,7 +37,6 @@ class EventScheduleFragment :
     override fun dataUpdate() {
         matches.clear()
         matches.addAll(DataLoader.matchDC.data)
-        Logging.debug(this, matches.size.toString(),0)
     }
 
     override fun onResume() {
@@ -58,13 +56,6 @@ class EventScheduleFragment :
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == "teamNumber" || key == "eventKey") {
-            if (context != null) {
-                adapter = ScheduleAdapter(context!!, matches, DataLoader.teamNumber)
-            }
-            val llm = LinearLayoutManager(context)
-            llm.orientation = LinearLayoutManager.VERTICAL
-            recyclerView.adapter = adapter
-            recyclerView.layoutManager = llm
             refresh(true)
         }
     }

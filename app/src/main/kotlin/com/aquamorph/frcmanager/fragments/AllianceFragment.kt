@@ -3,17 +3,10 @@ package com.aquamorph.frcmanager.fragments
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.AllianceAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
@@ -27,13 +20,8 @@ import com.aquamorph.frcmanager.utils.Constants
  * @author Christian Colglazier
  * @version 4/14/2018
  */
-class AllianceFragment : Fragment(), RefreshFragment {
+class AllianceFragment : TabFragment(), RefreshFragment {
 
-    private var swipeRefreshLayout: SwipeRefreshLayout? = null
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var emptyView: TextView
-    private lateinit var adapter: RecyclerView.Adapter<*>
-    private var firstLoad: Boolean = true
     private var alliances: ArrayList<Alliance> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,19 +32,9 @@ class AllianceFragment : Fragment(), RefreshFragment {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        swipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
-        swipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
-
-        recyclerView = view.findViewById(R.id.rv)
+        super.onCreateView(view, DataLoader.allianceDC.data,
+                AllianceAdapter(context!!, DataLoader.allianceDC.data))
         recyclerView.addItemDecoration(Divider(context!!, 2f, 72))
-        emptyView = view.findViewById(R.id.empty_view)
-        adapter = AllianceAdapter(context!!, alliances)
-        val llm = LinearLayoutManager(context)
-        llm.orientation = LinearLayoutManager.VERTICAL
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = llm
-        Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
         return view
     }
 
@@ -74,10 +52,15 @@ class AllianceFragment : Fragment(), RefreshFragment {
         LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
+    override fun dataUpdate() {
+        alliances.clear()
+        alliances.addAll(DataLoader.allianceDC.data)
+    }
+
     internal inner class LoadAlliances(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = true
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -87,15 +70,12 @@ class AllianceFragment : Fragment(), RefreshFragment {
 
         override fun onPostExecute(result: Void?) {
             if (context != null) {
+                dataUpdate()
                 Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.allianceDC.parser.isNewData)
                 if (firstLoad) firstLoad = false
-                if (DataLoader.allianceDC.parser.isNewData) {
-                    alliances.clear()
-                    alliances.addAll(DataLoader.allianceDC.data)
-                }
-                if (swipeRefreshLayout != null) swipeRefreshLayout!!.isRefreshing = false
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

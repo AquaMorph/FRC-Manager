@@ -7,12 +7,11 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.Adapter
 import android.view.View
 import android.widget.TextView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
-import com.aquamorph.frcmanager.adapters.ScheduleAdapter
-import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 
 abstract class TabFragment : Fragment() {
@@ -21,7 +20,7 @@ abstract class TabFragment : Fragment() {
     protected lateinit var recyclerView: RecyclerView
     protected lateinit var emptyView: TextView
     protected var firstLoad: Boolean = true
-    protected lateinit var adapter: RecyclerView.Adapter<*>
+    protected lateinit var adapter: Adapter<*>
     abstract fun dataUpdate()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +28,13 @@ abstract class TabFragment : Fragment() {
         retainInstance = true
     }
 
-    fun onCreateView(view: View, data : ArrayList<*>) {
+    fun onCreateView(view: View, data : ArrayList<*>, adp: RecyclerView.Adapter<*>,
+                    decor: RecyclerView.ItemDecoration) {
+        onCreateView(view, data, adp)
+        recyclerView.addItemDecoration(decor)
+    }
+
+    fun onCreateView(view: View, data : ArrayList<*>, adp: RecyclerView.Adapter<*>) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
 
@@ -40,7 +45,7 @@ abstract class TabFragment : Fragment() {
         mSwipeRefreshLayout.setColorSchemeResources(R.color.accent)
         mSwipeRefreshLayout.setOnRefreshListener { MainActivity.refresh() }
 
-        adapter = ScheduleAdapter(context!!, DataLoader.matchDC.data, DataLoader.teamNumber)
+        adapter = adp
         val llm = LinearLayoutManager(context)
         llm.orientation = LinearLayoutManager.VERTICAL
         recyclerView.adapter = adapter

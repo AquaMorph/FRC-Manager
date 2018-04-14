@@ -22,6 +22,7 @@ object Constants {
     val TRACING_LEVEL = 3
     const val MAX_EVENT_TITLE_LENGTH = 20
     const val THREAD_WAIT_TIME = 10
+    const val MAX_NUMBER_OF_TABS = 7
 
     /**
      * getStatusURL() returns the url for the status of FIRST's server.
