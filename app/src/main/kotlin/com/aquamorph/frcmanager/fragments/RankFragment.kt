@@ -1,21 +1,12 @@
 package com.aquamorph.frcmanager.fragments
 
-import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
-import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.RankAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
@@ -30,50 +21,21 @@ import com.aquamorph.frcmanager.utils.Constants
  * @author Christian Colglazier
  * @version 4/14/2018
  */
-class RankFragment : Fragment(), RefreshFragment {
-
-    private var mSwipeRefreshLayout: SwipeRefreshLayout? = null
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var emptyView: TextView
-    private lateinit var prefs: SharedPreferences
-    private var firstLoad: Boolean = true
+class RankFragment : TabFragment(), RefreshFragment {
 
     private var ranks : ArrayList<Rank> = ArrayList()
     private var teams : ArrayList<Team> = ArrayList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-        mSwipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
-        mSwipeRefreshLayout!!.setColorSchemeResources(R.color.accent)
-        mSwipeRefreshLayout!!.setOnRefreshListener { MainActivity.refresh() }
-
-        recyclerView = view.findViewById(R.id.rv)
-        recyclerView.addItemDecoration(Divider(context!!, 2f, 72))
-        emptyView = view.findViewById(R.id.empty_view)
-        val llm = LinearLayoutManager(context)
-        llm.orientation = LinearLayoutManager.VERTICAL
-        recyclerView.adapter = RankAdapter(context!!, DataLoader.rankDC.data, DataLoader.teamDC.data)
-        if (Constants.isLargeScreen(context!!)) {
-            recyclerView.layoutManager = GridLayoutManager(context, 2)
-        } else {
-            recyclerView.layoutManager = GridLayoutManager(context, 1)
-        }
-
-        if (savedInstanceState == null) refresh(false)
-        Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
+        super.onCreateView(view, DataLoader.rankDC.data,
+                RankAdapter(context!!, DataLoader.rankDC.data, DataLoader.teamDC.data),
+                Divider(context!!, 2f, 72))
         return view
     }
 
-    fun dataUpdate() {
+    override fun dataUpdate() {
         ranks.clear()
         ranks.addAll(DataLoader.rankDC.data)
         teams.clear()
@@ -98,7 +60,7 @@ class RankFragment : Fragment(), RefreshFragment {
     internal inner class LoadRanks(): AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout!!.isRefreshing = true
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -131,7 +93,7 @@ class RankFragment : Fragment(), RefreshFragment {
                 if (DataLoader.rankDC.parser.isNewData || DataLoader.teamDC.parser.isNewData) {
                     dataUpdate()
                 }
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout!!.isRefreshing = false
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

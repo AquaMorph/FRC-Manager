@@ -37,7 +37,6 @@ abstract class TabFragment : Fragment() {
     fun onCreateView(view: View, data : ArrayList<*>, adp: RecyclerView.Adapter<*>) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-
         recyclerView = view.findViewById(R.id.rv)
         emptyView = view.findViewById(R.id.empty_view)
 

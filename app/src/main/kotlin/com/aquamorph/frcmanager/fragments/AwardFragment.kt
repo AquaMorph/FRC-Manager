@@ -19,7 +19,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of awards at a event
  *
  * @author Christian Colglazier
- * @version 4/2/2018
+ * @version 4/14/2018
  */
 class AwardFragment :
         TabFragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
@@ -29,8 +29,8 @@ class AwardFragment :
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
-        super.onCreateView(view, DataLoader.awardDC.data,
-                AwardAdapter(context!!, DataLoader.awardDC.data),
+        super.onCreateView(view, awards,
+                AwardAdapter(context!!, awards),
                 Divider(context!!, 2f, 0))
         prefs.registerOnSharedPreferenceChangeListener(this)
         return view
