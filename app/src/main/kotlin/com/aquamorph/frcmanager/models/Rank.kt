@@ -1,6 +1,6 @@
 package com.aquamorph.frcmanager.models
 
-import java.util.*
+import java.util.Locale
 
 /**
  * Stores rank information at an event.
