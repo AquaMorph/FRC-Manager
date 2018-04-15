@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.aquamorph.frcmanager.fragments.RefreshFragment
 import com.aquamorph.frcmanager.models.Tab
 import com.aquamorph.frcmanager.network.DataLoader
+import com.aquamorph.frcmanager.utils.Logging
 import java.util.*
 
 /**
@@ -60,11 +61,13 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPag
     }
 
     fun addFrag(tab: Tab) {
-//        if (!tabs.contains(tab)) {
+        try {
             tabs.add(tab)
             tabs.sort()
             notifyDataSetChanged()
-//        }
+        } catch (e : IllegalStateException) {
+            Logging.error(this, e.toString(), 0)
+        }
     }
 
     fun removeFrag(position: Int) {
