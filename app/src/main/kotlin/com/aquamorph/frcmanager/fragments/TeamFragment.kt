@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.TeamAdapter
 import com.aquamorph.frcmanager.decoration.Animations
+import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
@@ -22,24 +23,27 @@ import com.aquamorph.frcmanager.utils.Constants
 open class TeamFragment : TabFragment(), RefreshFragment {
 
     private var teams: ArrayList<Team> = ArrayList()
+    private var ranks: ArrayList<Rank> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         super.onCreateView(view, teams,
-                TeamAdapter(context!!, teams, DataLoader.rankDC.data))
+                TeamAdapter(context!!, teams, ranks))
         return view
     }
 
     override fun onResume() {
         super.onResume()
-        if (DataLoader.teamDC.data.size == 0)
+        if (teams.isEmpty())
             refresh(false)
     }
 
     override fun dataUpdate() {
         teams.clear()
         teams.addAll(DataLoader.teamDC.data)
+        ranks.clear()
+        ranks.addAll(DataLoader.rankDC.data)
     }
 
     /**
@@ -47,11 +51,11 @@ open class TeamFragment : TabFragment(), RefreshFragment {
      */
     override fun refresh(force: Boolean) {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "") {
-            LoadEventTeams(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            LoadEventTeams().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
     }
 
-    internal inner class LoadEventTeams(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadEventTeams() : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
@@ -66,7 +70,7 @@ open class TeamFragment : TabFragment(), RefreshFragment {
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(DataLoader.teamDC.data, recyclerView, emptyView)
+                Constants.checkNoDataScreen(teams, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.teamDC.parser.isNewData)
                 if (firstLoad) firstLoad = false

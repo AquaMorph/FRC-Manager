@@ -44,7 +44,7 @@ class RankFragment : TabFragment(), RefreshFragment {
 
     override fun onResume() {
         super.onResume()
-        if (DataLoader.rankDC.data.size == 0)
+        if (ranks.isEmpty())
             refresh(false)
     }
 
@@ -86,13 +86,11 @@ class RankFragment : TabFragment(), RefreshFragment {
                 }
             }
             if (context != null) {
+                dataUpdate()
                 Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, recyclerView.adapter, firstLoad,
                         DataLoader.rankDC.parser.isNewData)
                 if (firstLoad) firstLoad = false
-                if (DataLoader.rankDC.parser.isNewData || DataLoader.teamDC.parser.isNewData) {
-                    dataUpdate()
-                }
                 if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }
         }

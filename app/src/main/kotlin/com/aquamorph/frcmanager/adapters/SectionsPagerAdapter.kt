@@ -59,15 +59,12 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPag
         return tabs.size
     }
 
-    fun addFrag(title: String, fragment: Fragment) {
-        tabs.add(Tab(title, fragment))
-        tabs.sort()
-    }
-
     fun addFrag(tab: Tab) {
-        tabs.add(tab)
-        tabs.sort()
-        notifyDataSetChanged()
+//        if (!tabs.contains(tab)) {
+            tabs.add(tab)
+            tabs.sort()
+            notifyDataSetChanged()
+//        }
     }
 
     fun removeFrag(position: Int) {
