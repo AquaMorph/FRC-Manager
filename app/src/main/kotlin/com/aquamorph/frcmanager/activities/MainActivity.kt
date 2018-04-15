@@ -170,7 +170,11 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         dataLoader = DataLoader(this)
         mViewPager.offscreenPageLimit = Constants.MAX_NUMBER_OF_TABS
         mViewPager.adapter = mSectionsPagerAdapter
-        refreshData(false)
+        try {
+            refreshData(false)
+        } catch (e : Exception) {
+            Logging.error(this, e.toString(), 0)
+        }
     }
 
     companion object {
