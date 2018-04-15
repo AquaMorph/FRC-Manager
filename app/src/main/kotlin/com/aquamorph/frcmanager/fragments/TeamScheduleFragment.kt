@@ -48,6 +48,9 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         }
         super.onCreateView(view, teamEventMatches,
                 ScheduleAdapter(context!!, teamEventMatches, teamNumber))
+        if (!getTeamFromSettings) {
+            mSwipeRefreshLayout.isEnabled = false
+        }
         listener()
         Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
         return view
@@ -102,11 +105,13 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
             if (getTeamFromSettings) {
                 teamNumber = prefs.getString("teamNumber", "")
             }
-            if (getTeamFromSettings) {
+//            if (getTeamFromSettings) {
 //                MainActivity.refresh()
-            } else {
-                refresh(false)
-            }
+//            } else {
+//                MainActivity.refresh()
+//                refresh(false)
+//                mSwipeRefreshLayout.isRefreshing = false
+//            }
         }
     }
 
