@@ -28,8 +28,8 @@ class AllianceFragment : TabFragment(), RefreshFragment {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         super.onCreateView(view, DataLoader.allianceDC.data,
-                AllianceAdapter(context!!, DataLoader.allianceDC.data))
-        recyclerView.addItemDecoration(Divider(context!!, 2f, 72))
+                AllianceAdapter(context!!, DataLoader.allianceDC.data),
+                Divider(context!!, 2f, 72))
         return view
     }
 
