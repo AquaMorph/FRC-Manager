@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         get() = if (teamRank == "") {
             ""
         } else {
-            String.format("Rank #%s %s", teamRank, teamRecord)
+            String.format("Rank #%s (%s)", teamRank, teamRecord)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {

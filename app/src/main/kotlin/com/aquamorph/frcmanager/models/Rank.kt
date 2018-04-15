@@ -42,7 +42,7 @@ class Rank {
 
     companion object {
         fun recordToString(record: WLTRecord): String {
-            return String.format(Locale.ENGLISH, "(%d-%d-%d)",
+            return String.format(Locale.ENGLISH, "%d-%d-%d",
                     record.wins, record.losses, record.ties)
         }
     }
