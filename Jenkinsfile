@@ -22,12 +22,12 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh './gradlew clean assemble build'
+                sh './gradlew --no-daemon clean assemble build'
             }
         }
         stage('Analyse') {
             steps {
-                sh './gradlew pmd findbugs checkstyle'
+                sh './gradlew --no-daemon pmd findbugs checkstyle'
             }
         }
     }
