@@ -4,9 +4,11 @@ import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
 import com.aquamorph.frcmanager.decoration.Animations
@@ -28,8 +30,8 @@ class EventScheduleFragment :
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_fastscroll, container, false)
-        super.onCreateView(view, DataLoader.matchDC.data,
-                ScheduleAdapter(context!!, DataLoader.matchDC.data, DataLoader.teamNumber))
+        super.onCreateView(view, matches,
+                ScheduleAdapter(context!!, matches, DataLoader.teamNumber))
         prefs.registerOnSharedPreferenceChangeListener(this)
         return view
     }

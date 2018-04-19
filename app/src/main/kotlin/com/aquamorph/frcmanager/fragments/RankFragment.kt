@@ -29,8 +29,8 @@ class RankFragment : TabFragment(), RefreshFragment {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
-        super.onCreateView(view, DataLoader.rankDC.data,
-                RankAdapter(context!!, DataLoader.rankDC.data, DataLoader.teamDC.data),
+        super.onCreateView(view, ranks,
+                RankAdapter(context!!, ranks, teams),
                 Divider(context!!, 2f, 72))
         return view
     }
@@ -40,6 +40,7 @@ class RankFragment : TabFragment(), RefreshFragment {
         ranks.addAll(DataLoader.rankDC.data)
         teams.clear()
         teams.addAll(DataLoader.teamDC.data)
+        adapter.notifyDataSetChanged()
     }
 
     override fun onResume() {
