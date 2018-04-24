@@ -70,7 +70,6 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:1.7.1'
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:animated-vector-drawable:27.1.1'
     implementation 'com.android.support:support-v13:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'

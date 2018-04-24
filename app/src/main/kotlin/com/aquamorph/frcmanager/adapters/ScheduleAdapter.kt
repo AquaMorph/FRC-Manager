@@ -37,7 +37,8 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.matchNumber.text = String.format("%S-%s", data[position].comp_level, data[position].match_number)
+        holder.matchNumber.text = String.format("%S-%s", data[position].comp_level,
+                data[position].match_number)
         holder.redTeam1.text = parseTeamNumber(true, 0, position)
         holder.redTeam2.text = parseTeamNumber(true, 1, position)
         holder.redTeam3.text = parseTeamNumber(true, 2, position)
@@ -63,17 +64,19 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
         }
 
         //Bolds winning score
-
-        //Bolds winning score
-        if (data[position].alliances.red.score == data[position].alliances.blue.score) {
-            holder.redScore.setTypeface(null, Typeface.BOLD)
-            holder.blueScore.setTypeface(null, Typeface.BOLD)
-        } else if (data[position].alliances.red.score > data[position].alliances.blue.score) {
-            holder.redScore.setTypeface(null, Typeface.BOLD)
-            holder.blueScore.setTypeface(null, Typeface.NORMAL)
-        } else {
-            holder.redScore.setTypeface(null, Typeface.NORMAL)
-            holder.blueScore.setTypeface(null, Typeface.BOLD)
+        when {
+            data[position].alliances.red.score == data[position].alliances.blue.score -> {
+                holder.redScore.setTypeface(null, Typeface.BOLD)
+                holder.blueScore.setTypeface(null, Typeface.BOLD)
+            }
+            data[position].alliances.red.score > data[position].alliances.blue.score -> {
+                holder.redScore.setTypeface(null, Typeface.BOLD)
+                holder.blueScore.setTypeface(null, Typeface.NORMAL)
+            }
+            else -> {
+                holder.redScore.setTypeface(null, Typeface.NORMAL)
+                holder.blueScore.setTypeface(null, Typeface.BOLD)
+            }
         }
 
         if (data[position].alliances.red.score != -1) {
