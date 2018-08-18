@@ -79,6 +79,13 @@ dependencies {
     implementation 'com.github.apl-devs:appintro:v4.2.2'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.40'
 
+    // Retrofit and OkHttp
+    // OkHttp interceptors for logging
+    implementation "com.squareup.retrofit2:retrofit:2.4.0"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.3.0"
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
+
     // Android runner and rules support
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'

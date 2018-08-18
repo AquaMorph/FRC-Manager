@@ -43,7 +43,7 @@ internal class BlueAlliance {
             conn.connectTimeout = 15000
             conn.requestMethod = "GET"
             conn.doInput = true
-            conn.setRequestProperty(Constants.TBA_HEADER, Constants.getApiHeader(context))
+            conn.setRequestProperty(Constants.TBA_HEADER, Constants.getApiHeader())
             conn.setRequestProperty("If-Modified-Since", updated)
             conn.connect()
             status = conn.responseCode

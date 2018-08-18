@@ -16,7 +16,7 @@ import java.util.*
  */
 object Constants {
 
-    private const val URL = "https://www.thebluealliance.com/api/v3"
+    const val URL = "https://www.thebluealliance.com/api/v3/"
     const val TBA_HEADER = "X-TBA-Auth-Key"
     const val FORCE_DATA_RELOAD = false
     val TRACING_LEVEL = 3
@@ -30,7 +30,7 @@ object Constants {
      * @return url to server status
      */
     val statusURL: String
-        get() = "$URL/status"
+        get() = "${URL}status"
 
     /**
      * getEventURL() returns the url for a list of events a team is registered.
@@ -39,7 +39,7 @@ object Constants {
      * @return url to team events
      */
     fun getEventURL(team: String, year: String): String {
-        return String.format("%s/team/%s/events/%s", URL, team, year)
+        return String.format("%steam/%s/events/%s", URL, team, year)
     }
 
     /**
@@ -49,7 +49,7 @@ object Constants {
      * @return url to event
      */
     fun getEvent(event: String): String {
-        return String.format("%s/event/%s", URL, event)
+        return String.format("%sevent/%s", URL, event)
     }
 
     /**
@@ -59,7 +59,7 @@ object Constants {
      * @return url to list of teams at an event
      */
     fun getEventTeams(event: String): String {
-        return String.format("%s/event/%s/teams", URL, event)
+        return String.format("%sevent/%s/teams", URL, event)
     }
 
     /**
@@ -70,7 +70,7 @@ object Constants {
      * @return url to team matches for an event
      */
     fun getEventTeamMatches(team: String, event: String): String {
-        return String.format("%s/team/%s/event/%s/matches", URL, team, event)
+        return String.format("%steam/%s/event/%s/matches", URL, team, event)
     }
 
     /**
@@ -80,7 +80,7 @@ object Constants {
      * @return url to matches at en event
      */
     fun getEventMatches(event: String): String {
-        return String.format("%s/event/%s/matches", URL, event)
+        return String.format("%sevent/%s/matches", URL, event)
     }
 
     /**
@@ -100,7 +100,7 @@ object Constants {
      * @return url to event rankings
      */
     fun getEventRanks(event: String): String {
-        return String.format("%s/event/%s/rankings", URL, event)
+        return String.format("%sevent/%s/rankings", URL, event)
     }
 
     /**
@@ -110,7 +110,7 @@ object Constants {
      * @return url to event awards
      */
     fun getEventAwards(event: String): String {
-        return String.format("%s/event/%s/awards", URL, event)
+        return String.format("%sevent/%s/awards", URL, event)
     }
 
     /**
@@ -119,7 +119,7 @@ object Constants {
      * @return url to alliances at an event
      */
     fun getAlliancesURL(event: String): String {
-        return String.format("%s/event/%s/alliances", URL, event)
+        return String.format("%sevent/%s/alliances", URL, event)
     }
 
     /**
@@ -127,7 +127,7 @@ object Constants {
      *
      * @return the Blue Alliance header
      */
-    fun getApiHeader(context: Context): String {
+    fun getApiHeader(): String {
         return BuildConfig.TBA_KEY
     }
 
