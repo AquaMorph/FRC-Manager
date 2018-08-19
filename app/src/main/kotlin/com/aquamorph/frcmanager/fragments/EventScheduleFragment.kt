@@ -11,7 +11,7 @@ import com.aquamorph.frcmanager.adapters.ScheduleAdapter
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.network.RetrofitInstance
-import com.aquamorph.frcmanager.network.TbaApiService
+import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -67,11 +67,11 @@ class EventScheduleFragment :
     internal inner class LoadEventSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            disposable = RetrofitInstance.getRetrofit().create(TbaApiService::class.java).getEventMatches(DataLoader.eventKey)
+            disposable = RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventMatches(DataLoader.eventKey)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { result -> matches.clear()
@@ -83,7 +83,7 @@ class EventScheduleFragment :
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 Constants.checkNoDataScreen(matches, recyclerView, emptyView)
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

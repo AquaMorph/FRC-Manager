@@ -20,14 +20,12 @@ import java.util.*
  * @author Christian Colglazier
  * @version 4/2/2018
  */
-class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPager: ViewPager,
-                           private val tabLayout: TabLayout, activity: Activity) :
-        FragmentStatePagerAdapter(fragmentManager) {
-    var act = activity
+class SectionsPagerAdapter(fragmentManager: FragmentManager,
+                           private val viewPager: ViewPager,
+                           private val tabLayout: TabLayout,
+                           activity: Activity) : FragmentStatePagerAdapter(fragmentManager) {
+    var activity = activity
     var tabs = ArrayList<Tab>()
-    val isDataLoading: Boolean
-        get() = (!DataLoader.awardDC.complete || !DataLoader.teamDC.complete || !DataLoader.rankDC.complete
-                || !DataLoader.matchDC.complete || !DataLoader.allianceDC.complete)
 
     /**
      * refreshAll() reloads all dataLoader in the fragments.
@@ -45,7 +43,7 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPag
         DataLoader.awardDC.complete = false
         DataLoader.allianceDC.complete = false
         DataLoader.matchDC.complete = false
-        DataLoader.refresh(force, this, act)
+        DataLoader.refresh(force, this, activity)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

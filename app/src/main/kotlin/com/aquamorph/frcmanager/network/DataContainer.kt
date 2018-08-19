@@ -1,6 +1,7 @@
 package com.aquamorph.frcmanager.network
 
 import android.app.Activity
+import io.reactivex.Observable
 import java.lang.reflect.Type
 import java.util.*
 
@@ -15,4 +16,5 @@ class DataContainer<T> internal constructor(var force: Boolean, activity: Activi
     var parser: Parser<Any> = Parser(name, url, type, activity, force)
     var data = ArrayList<T>()
     var complete: Boolean = false
+    val obs = RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventMatches(DataLoader.eventKey)
 }

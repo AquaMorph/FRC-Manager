@@ -10,7 +10,11 @@ import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.util.Collections.sort
+import kotlin.collections.ArrayList
 
 /**
  * Loads needed dataLoader.
@@ -79,7 +83,7 @@ class DataLoader(activity: Activity) {
 
         override fun onPostExecute(result: Void?) {
             dataContainer.data.clear()
-            if (dataContainer.parser.data != null) {
+            if (result != null) {
                 if (isRank) {
                     (dataContainer.data as MutableList<Any?>).add(dataContainer.parser.data)
                 } else {
@@ -120,10 +124,62 @@ class DataLoader(activity: Activity) {
         private val matchTabs = ArrayList<Tab>()
         private val allianceTabs = ArrayList<Tab>()
 
+        private var disposable: Disposable? = null
+
+        fun isRankEmpty(dataContainer: DataContainer<*>): Boolean {
+            return dataContainer.data.get(0) is Rank &&
+                    (dataContainer.data.get(0) as Rank).rankings.isEmpty()
+        }
+
+        fun getData(dataContainer: DataContainer<*>,
+                    isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
+                    adapter: SectionsPagerAdapter) {
+
+
+            dataContainer.complete = false
+            var obs = RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventMatches(DataLoader.eventKey)
+            disposable = obs.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { result ->
+                        updateData(dataContainer, isRank, isSortable, tabs, adapter, result)
+                    }
+        }
+
+        fun updateData(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
+                       adapter: SectionsPagerAdapter,
+                       result: ArrayList<*>) {
+            dataContainer.data.clear()
+            if (result != null) {
+                if (isRank) {
+                    (dataContainer.data as MutableList<Any?>).add(result)
+                } else {
+                    dataContainer.data.addAll(result as Collection<Nothing>)
+                    if (isSortable) {
+                        sort(dataContainer.data as List<Nothing>)
+                    }
+                }
+            }
+            if (dataContainer.data.isEmpty() || isRankEmpty(dataContainer)) {
+                for (tab in tabs) {
+                    if (adapter.isTab(tab.name)!!) {
+                        adapter.removeFrag(adapter.tabPosition(tab.name))
+                    }
+                }
+            } else {
+                for (tab in tabs) {
+                    if ((!adapter.isTab(tab.name)!!)) {
+                        adapter.addFrag(tab)
+                    }
+                }
+            }
+            dataContainer.complete = true
+        }
+
         fun refresh(force: Boolean, adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
                 setDataContainers(force, activity)
-                Load(matchDC, false, true, matchTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getData(matchDC, false, true, matchTabs, adapter)
+//                Load(matchDC, false, true, matchTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 Load(teamDC, false, true, teamTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 Load(rankDC, true, false, rankTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 Load(awardDC, awardTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
