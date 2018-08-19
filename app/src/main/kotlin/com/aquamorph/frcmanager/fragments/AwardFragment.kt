@@ -48,7 +48,7 @@ class AwardFragment :
     }
 
     /**
-     * refrest() loads dataLoader needed for this fragment
+     * refresh() loads dataLoader needed for this fragment
      *
      * @param force force reload dataLoader
      */

@@ -78,14 +78,12 @@ class DataLoader(activity: Activity) {
                        adapter: SectionsPagerAdapter,
                        result: Any) {
             dataContainer.data.clear()
-            if (result != null) {
-                if (isRank) {
-                    (dataContainer.data as MutableList<Any?>).add(result)
-                } else {
-                    dataContainer.data.addAll(result as Collection<Nothing>)
-                    if (isSortable) {
-                        sort(dataContainer.data as List<Nothing>)
-                    }
+            if (isRank) {
+                (dataContainer.data as MutableList<Any?>).add(result)
+            } else {
+                dataContainer.data.addAll(result as Collection<Nothing>)
+                if (isSortable) {
+                    sort(dataContainer.data as List<Nothing>)
                 }
             }
             if (dataContainer.data.isEmpty() || isRankEmpty(dataContainer)) {
@@ -111,7 +109,7 @@ class DataLoader(activity: Activity) {
                 getData(teamDC, false, true, teamTabs, adapter, 1)
                 getData(rankDC, true, false, rankTabs, adapter, 2)
                 getData(awardDC, false, false, awardTabs, adapter, 3)
-                getData(allianceDC, false, false, allianceTabs, adapter, 4)
+//                getData(allianceDC, false, false, allianceTabs, adapter, 4)
             }
         }
 
