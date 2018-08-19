@@ -5,6 +5,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,16 +14,10 @@ import com.aquamorph.frcmanager.adapters.ScheduleAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
-import com.aquamorph.frcmanager.network.RetrofitInstance
-import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import java.util.*
 import java.util.Collections.sort
-import kotlin.collections.ArrayList
 
 /**
  * Displays a list of matches at an event for a given team.
@@ -31,14 +26,10 @@ import kotlin.collections.ArrayList
  * @version 4/14/2018
  */
 class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, RefreshFragment {
-    override fun dataUpdate() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     private var teamEventMatches = ArrayList<Match>()
     private var teamNumber: String = ""
     private var getTeamFromSettings: Boolean = true
-    private var disposable: Disposable? = null
 
     fun setTeamNumber(teamNumber: String) {
         this.teamNumber = teamNumber
@@ -73,6 +64,8 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
+//        view2 = (context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+//                .inflate(R.layout.fragment_team_schedule, null)
         listener()
         Logging.info(this, "Configuration Changed", 3)
     }
@@ -112,40 +105,43 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
             if (getTeamFromSettings) {
                 teamNumber = prefs.getString("teamNumber", "")
             }
+//            if (getTeamFromSettings) {
+//                MainActivity.refresh()
+//            } else {
+//                MainActivity.refresh()
+//                refresh(false)
+//                mSwipeRefreshLayout.isRefreshing = false
+//            }
         }
     }
 
-    fun dataUpdate(data: ArrayList<Match>) {
+    override fun dataUpdate() {
         teamEventMatches.clear()
-        for (match in data) {
+        for (match in DataLoader.matchDC.data) {
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
         }
-        teamEventMatches.sort()
     }
 
     internal inner class LoadTeamSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            mSwipeRefreshLayout.isRefreshing = true
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            disposable = RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventMatches(DataLoader.eventKey)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { result -> dataUpdate(result)}
+            while (!DataLoader.matchDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
             return null
         }
 
         override fun onPostExecute(result: Void?) {
             if (context != null) {
-//                dataUpdate()
+                dataUpdate()
                 sort(teamEventMatches)
                 Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
                 Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                         DataLoader.matchDC.parser.isNewData)
                 if (firstLoad) firstLoad = false
-                mSwipeRefreshLayout.isRefreshing = false
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

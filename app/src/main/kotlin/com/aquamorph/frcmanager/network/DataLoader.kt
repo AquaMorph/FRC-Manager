@@ -34,7 +34,7 @@ class DataLoader(activity: Activity) {
         awardTabs.add(Tab("Awards", AwardFragment.newInstance()))
         setDataContainers(false, activity)
     }
-    
+
     companion object {
         var eventKey = ""
         var teamNumber = ""

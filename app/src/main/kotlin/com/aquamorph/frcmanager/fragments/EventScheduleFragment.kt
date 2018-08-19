@@ -3,19 +3,18 @@ package com.aquamorph.frcmanager.fragments
 import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.SystemClock
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
+import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
-import com.aquamorph.frcmanager.network.RetrofitInstance
-import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 
 /**
  * Displays a list of matches at an event.
@@ -27,7 +26,6 @@ class EventScheduleFragment :
         TabFragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
     private var matches: ArrayList<Match> = ArrayList()
-    private var disposable: Disposable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -67,23 +65,22 @@ class EventScheduleFragment :
     internal inner class LoadEventSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            mSwipeRefreshLayout.isRefreshing = true
+            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            disposable = RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventMatches(DataLoader.eventKey)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { result -> matches.clear()
-                        matches.addAll(result)
-                        matches.sort()}
+            while (!DataLoader.matchDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
             return null
         }
 
         override fun onPostExecute(result: Void?) {
             if (context != null) {
+                dataUpdate()
                 Constants.checkNoDataScreen(matches, recyclerView, emptyView)
-                mSwipeRefreshLayout.isRefreshing = false
+                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
+                        DataLoader.matchDC.parser.isNewData)
+                if (firstLoad) firstLoad = false
+                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }
