@@ -34,82 +34,7 @@ class DataLoader(activity: Activity) {
         awardTabs.add(Tab("Awards", AwardFragment.newInstance()))
         setDataContainers(false, activity)
     }
-
-    internal class Load : AsyncTask<Void?, Void?, Void?> {
-
-        private var dataContainer: DataContainer<*>
-        private var tabs: ArrayList<Tab>
-        private var adapter: SectionsPagerAdapter
-        private var isRank = false
-        private var isSortable = false
-
-        constructor(dataContainer: DataContainer<*>, tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
-            this.dataContainer = dataContainer
-            this.tabs = tabs
-            this.adapter = adapter
-        }
-
-        constructor(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
-                    adapter: SectionsPagerAdapter) {
-            this.dataContainer = dataContainer
-            this.isRank = isRank
-            this.isSortable = isSortable
-            this.tabs = tabs
-            this.adapter = adapter
-        }
-
-        fun isRankEmpty(dataContainer: DataContainer<*>): Boolean {
-            return dataContainer.data.get(0) is Rank &&
-                    (dataContainer.data.get(0) as Rank).rankings.isEmpty()
-        }
-
-        override fun onPreExecute() {
-            dataContainer.complete = false
-        }
-
-        override fun doInBackground(vararg params: Void?): Void? {
-            try {
-                dataContainer.parser.fetchJSON(true)
-            } catch (exception: JsonSyntaxException) {
-                Logging.error(this, "JSON Parsing Error", 0)
-                Logging.error(this, exception.message!!, 0)
-            }
-
-            while (dataContainer.parser.parsingComplete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: Void?) {
-            dataContainer.data.clear()
-            if (result != null) {
-                if (isRank) {
-                    (dataContainer.data as MutableList<Any?>).add(dataContainer.parser.data)
-                } else {
-                    dataContainer.data.addAll(dataContainer.parser.data as Collection<Nothing>)
-                    if (isSortable) {
-                        sort(dataContainer.data as List<Nothing>)
-                    }
-                }
-            }
-            if (dataContainer.data.isEmpty() || isRankEmpty(dataContainer)) {
-                for (tab in tabs) {
-                    if (adapter.isTab(tab.name)!!) {
-                        adapter.removeFrag(adapter.tabPosition(tab.name))
-                    }
-                }
-            } else {
-                for (tab in tabs) {
-                    if ((!adapter.isTab(tab.name)!!)) {
-                        adapter.addFrag(tab)
-                    }
-                }
-            }
-            dataContainer.complete = true
-        }
-    }
-
+    
     companion object {
         var eventKey = ""
         var teamNumber = ""
@@ -133,21 +58,25 @@ class DataLoader(activity: Activity) {
 
         fun getData(dataContainer: DataContainer<*>,
                     isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
-                    adapter: SectionsPagerAdapter) {
+                    adapter: SectionsPagerAdapter, observer: Int) {
 
 
             dataContainer.complete = false
-            var obs = RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventMatches(DataLoader.eventKey)
-            disposable = obs.subscribeOn(Schedulers.io())
+            var t = arrayOf(RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventMatches(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventTeams(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventRankings(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventAwards(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventAlliances(DataLoader.eventKey))
+            disposable = t[observer].subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { result ->
-                        updateData(dataContainer, isRank, isSortable, tabs, adapter, result)
+                        updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any)
                     }
         }
 
         fun updateData(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
                        adapter: SectionsPagerAdapter,
-                       result: ArrayList<*>) {
+                       result: Any) {
             dataContainer.data.clear()
             if (result != null) {
                 if (isRank) {
@@ -178,12 +107,11 @@ class DataLoader(activity: Activity) {
         fun refresh(force: Boolean, adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
                 setDataContainers(force, activity)
-                getData(matchDC, false, true, matchTabs, adapter)
-//                Load(matchDC, false, true, matchTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                Load(teamDC, false, true, teamTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                Load(rankDC, true, false, rankTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                Load(awardDC, awardTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                Load(allianceDC, allianceTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getData(matchDC, false, true, matchTabs, adapter, 0)
+                getData(teamDC, false, true, teamTabs, adapter, 1)
+                getData(rankDC, true, false, rankTabs, adapter, 2)
+                getData(awardDC, false, false, awardTabs, adapter, 3)
+                getData(allianceDC, false, false, allianceTabs, adapter, 4)
             }
         }
 
