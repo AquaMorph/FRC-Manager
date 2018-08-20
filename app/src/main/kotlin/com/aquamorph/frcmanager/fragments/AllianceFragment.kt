@@ -13,6 +13,7 @@ import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Alliance
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
+import com.aquamorph.frcmanager.utils.Logging
 
 /**
  * Displays a list of alliance for eliminations.
@@ -27,7 +28,7 @@ class AllianceFragment : TabFragment(), RefreshFragment {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
-        super.onCreateView(view, DataLoader.allianceDC.data,
+        super.onCreateView(view, alliances,
                 AllianceAdapter(context!!, alliances),
                 Divider(context!!, 2f, 72))
         return view
@@ -35,7 +36,7 @@ class AllianceFragment : TabFragment(), RefreshFragment {
 
     override fun onResume() {
         super.onResume()
-        if (DataLoader.allianceDC.data.size == 0) {
+        if (alliances.isEmpty()) {
             refresh(false)
         }
     }
@@ -50,6 +51,7 @@ class AllianceFragment : TabFragment(), RefreshFragment {
     override fun dataUpdate() {
         alliances.clear()
         alliances.addAll(DataLoader.allianceDC.data)
+        Logging.debug(this, "Data Loader: ${DataLoader.allianceDC.data.size} Alliance: ${alliances.size}", 0)
     }
 
     internal inner class LoadAlliances(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {

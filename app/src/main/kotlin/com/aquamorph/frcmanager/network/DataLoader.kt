@@ -69,21 +69,22 @@ class DataLoader(activity: Activity) {
                     RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventAlliances(DataLoader.eventKey))
             disposable = t[observer].subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { result ->
-                        updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any)
-                    }
+                    .subscribe( { result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
+                                { error -> Logging.error(this, error.toString(), 0) })
         }
 
         fun updateData(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
                        adapter: SectionsPagerAdapter,
                        result: Any) {
             dataContainer.data.clear()
-            if (isRank) {
-                (dataContainer.data as MutableList<Any?>).add(result)
-            } else {
-                dataContainer.data.addAll(result as Collection<Nothing>)
-                if (isSortable) {
-                    sort(dataContainer.data as List<Nothing>)
+            if (result != null) {
+                if (isRank) {
+                    (dataContainer.data as MutableList<Any?>).add(result)
+                } else {
+                    dataContainer.data.addAll(result as Collection<Nothing>)
+                    if (isSortable) {
+                        sort(dataContainer.data as List<Nothing>)
+                    }
                 }
             }
             if (dataContainer.data.isEmpty() || isRankEmpty(dataContainer)) {
@@ -109,7 +110,7 @@ class DataLoader(activity: Activity) {
                 getData(teamDC, false, true, teamTabs, adapter, 1)
                 getData(rankDC, true, false, rankTabs, adapter, 2)
                 getData(awardDC, false, false, awardTabs, adapter, 3)
-//                getData(allianceDC, false, false, allianceTabs, adapter, 4)
+                getData(allianceDC, false, false, allianceTabs, adapter, 4)
             }
         }
 

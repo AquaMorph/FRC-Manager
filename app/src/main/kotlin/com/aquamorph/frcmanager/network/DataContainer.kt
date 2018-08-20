@@ -16,5 +16,4 @@ class DataContainer<T> internal constructor(var force: Boolean, activity: Activi
     var parser: Parser<Any> = Parser(name, url, type, activity, force)
     var data = ArrayList<T>()
     var complete: Boolean = false
-    val obs = RetrofitInstance.getRetrofit().create(TbaApi::class.java).getEventMatches(DataLoader.eventKey)
 }
