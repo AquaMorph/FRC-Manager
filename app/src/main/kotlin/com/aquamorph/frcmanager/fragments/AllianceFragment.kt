@@ -8,12 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.AllianceAdapter
-import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Alliance
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
-import com.aquamorph.frcmanager.utils.Logging
 
 /**
  * Displays a list of alliance for eliminations.
@@ -51,13 +49,12 @@ class AllianceFragment : TabFragment(), RefreshFragment {
     override fun dataUpdate() {
         alliances.clear()
         alliances.addAll(DataLoader.allianceDC.data)
-        Logging.debug(this, "Data Loader: ${DataLoader.allianceDC.data.size} Alliance: ${alliances.size}", 0)
     }
 
     internal inner class LoadAlliances(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -69,10 +66,7 @@ class AllianceFragment : TabFragment(), RefreshFragment {
             if (context != null) {
                 dataUpdate()
                 Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
-                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
-                        DataLoader.allianceDC.parser.isNewData)
-                if (firstLoad) firstLoad = false
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

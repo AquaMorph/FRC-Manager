@@ -79,8 +79,8 @@ class AwardFragment :
             if (context != null) {
                 dataUpdate()
                 Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
-                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
-                        DataLoader.awardDC.parser.isNewData)
+//                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
+//                        DataLoader.awardDC.parser.isNewData)
                 if (firstLoad) firstLoad = false
                 if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }

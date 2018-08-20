@@ -1,15 +1,10 @@
 package com.aquamorph.frcmanager.network
 
 import android.app.Activity
-import android.os.AsyncTask
-import android.os.SystemClock
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
 import com.aquamorph.frcmanager.fragments.*
 import com.aquamorph.frcmanager.models.*
-import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
-import com.google.gson.JsonSyntaxException
-import com.google.gson.reflect.TypeToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -20,7 +15,7 @@ import kotlin.collections.ArrayList
  * Loads needed dataLoader.
  *
  * @author Christian Colglazier
- * @version 4/2/2018
+ * @version 8/19/2018
  */
 
 class DataLoader(activity: Activity) {
@@ -77,7 +72,6 @@ class DataLoader(activity: Activity) {
                        adapter: SectionsPagerAdapter,
                        result: Any) {
             dataContainer.data.clear()
-            if (result != null) {
                 if (isRank) {
                     (dataContainer.data as MutableList<Any?>).add(result)
                 } else {
@@ -86,7 +80,6 @@ class DataLoader(activity: Activity) {
                         sort(dataContainer.data as List<Nothing>)
                     }
                 }
-            }
             if (dataContainer.data.isEmpty() || isRankEmpty(dataContainer)) {
                 for (tab in tabs) {
                     if (adapter.isTab(tab.name)!!) {
@@ -115,16 +108,11 @@ class DataLoader(activity: Activity) {
         }
 
         private fun setDataContainers(force: Boolean, activity: Activity) {
-            teamDC = DataContainer(force, activity, object : TypeToken<ArrayList<Team>>() {
-                    }.type, Constants.getEventTeams(eventKey), "eventTeams")
-            rankDC = DataContainer(force, activity, object : TypeToken<Rank>() {
-                    }.type, Constants.getEventRanks(eventKey),"eventRank")
-            awardDC = DataContainer(force, activity, object : TypeToken<ArrayList<Award>>() {
-                    }.type, Constants.getEventAwards(eventKey),"eventAwards")
-            matchDC = DataContainer(force, activity, object : TypeToken<ArrayList<Match>>() {
-                    }.type, Constants.getEventMatches(eventKey),"eventMatches")
-            allianceDC = DataContainer(force, activity, object : TypeToken<ArrayList<Alliance>>() {
-                    }.type, Constants.getAlliancesURL(eventKey),"Alliance")
+            teamDC = DataContainer("eventTeams")
+            rankDC = DataContainer("eventRankings")
+            awardDC = DataContainer("eventAwards")
+            matchDC = DataContainer("eventMatches")
+            allianceDC = DataContainer("eventAlliances")
         }
     }
 }

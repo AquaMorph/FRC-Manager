@@ -12,8 +12,7 @@ import java.util.*
  * @version 3/31/2018
  */
 
-class DataContainer<T> internal constructor(var force: Boolean, activity: Activity, type: Type, url: String, name: String) {
-    var parser: Parser<Any> = Parser(name, url, type, activity, force)
+class DataContainer<T> internal constructor(name: String) {
     var data = ArrayList<T>()
     var complete: Boolean = false
 }

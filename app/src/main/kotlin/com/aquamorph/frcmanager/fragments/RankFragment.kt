@@ -89,8 +89,8 @@ class RankFragment : TabFragment(), RefreshFragment {
             if (context != null) {
                 dataUpdate()
                 Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
-                Animations.loadAnimation(context, recyclerView, recyclerView.adapter, firstLoad,
-                        DataLoader.rankDC.parser.isNewData)
+//                Animations.loadAnimation(context, recyclerView, recyclerView.adapter, firstLoad,
+//                        DataLoader.rankDC.parser.isNewData)
                 if (firstLoad) firstLoad = false
                 if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
             }
