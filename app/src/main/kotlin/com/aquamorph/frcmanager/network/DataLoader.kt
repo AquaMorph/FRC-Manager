@@ -18,7 +18,7 @@ import kotlin.collections.ArrayList
  * @version 8/19/2018
  */
 
-class DataLoader(activity: Activity) {
+class DataLoader() {
 
     init {
         matchTabs.add(Tab("Team Schedule", TeamScheduleFragment.newInstance()))
@@ -27,17 +27,16 @@ class DataLoader(activity: Activity) {
         teamTabs.add(Tab("Teams", TeamFragment.newInstance()))
         allianceTabs.add(Tab("Alliances", AllianceFragment.newInstance()))
         awardTabs.add(Tab("Awards", AwardFragment.newInstance()))
-        setDataContainers()
     }
 
     companion object {
         var eventKey = ""
         var teamNumber = ""
-        lateinit var teamDC: DataContainer<Team>
-        lateinit var rankDC: DataContainer<Rank>
-        lateinit var awardDC: DataContainer<Award>
-        lateinit var matchDC: DataContainer<Match>
-        lateinit var allianceDC: DataContainer<Alliance>
+        val teamDC = DataContainer<Team>("eventTeams")
+        val rankDC = DataContainer<Rank>("eventRankings")
+        val awardDC = DataContainer<Award>("eventAwards")
+        val matchDC = DataContainer<Match>("eventMatches")
+        val allianceDC = DataContainer<Alliance>("eventAlliances")
         private val teamTabs = ArrayList<Tab>()
         private val rankTabs = ArrayList<Tab>()
         private val awardTabs = ArrayList<Tab>()
@@ -98,21 +97,12 @@ class DataLoader(activity: Activity) {
 
         fun refresh(adapter: SectionsPagerAdapter) {
             if (eventKey != "") {
-                setDataContainers()
                 getData(matchDC, false, true, matchTabs, adapter, 0)
                 getData(teamDC, false, true, teamTabs, adapter, 1)
                 getData(rankDC, true, false, rankTabs, adapter, 2)
                 getData(awardDC, false, false, awardTabs, adapter, 3)
                 getData(allianceDC, false, false, allianceTabs, adapter, 4)
             }
-        }
-
-        private fun setDataContainers() {
-            teamDC = DataContainer("eventTeams")
-            rankDC = DataContainer("eventRankings")
-            awardDC = DataContainer("eventAwards")
-            matchDC = DataContainer("eventMatches")
-            allianceDC = DataContainer("eventAlliances")
         }
     }
 }
