@@ -36,7 +36,7 @@ open class TeamFragment : TabFragment(), RefreshFragment {
     override fun onResume() {
         super.onResume()
         if (teams.isEmpty())
-            refresh(false)
+            refresh()
     }
 
     override fun dataUpdate() {
@@ -49,7 +49,7 @@ open class TeamFragment : TabFragment(), RefreshFragment {
     /**
      * refresh() loads dataLoader needed for this fragment.
      */
-    override fun refresh(force: Boolean) {
+    override fun refresh() {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "") {
             LoadEventTeams().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }

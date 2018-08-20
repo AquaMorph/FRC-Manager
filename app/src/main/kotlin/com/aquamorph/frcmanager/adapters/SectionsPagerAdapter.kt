@@ -30,20 +30,20 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
     /**
      * refreshAll() reloads all dataLoader in the fragments.
      */
-    fun refreshAll(force: Boolean) {
-        refreshData(force)
+    fun refreshAll() {
+        refreshData()
         for (i in tabs.indices) {
-            (tabs[i].fragment as RefreshFragment).refresh(force)
+            (tabs[i].fragment as RefreshFragment).refresh()
         }
     }
 
-    fun refreshData(force: Boolean) {
+    fun refreshData() {
         DataLoader.teamDC.complete = false
         DataLoader.rankDC.complete = false
         DataLoader.awardDC.complete = false
         DataLoader.allianceDC.complete = false
         DataLoader.matchDC.complete = false
-        DataLoader.refresh(force, this, activity)
+        DataLoader.refresh(this)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

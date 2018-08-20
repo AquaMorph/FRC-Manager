@@ -94,8 +94,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> openSettings()
-            R.id.refresh_all -> mSectionsPagerAdapter!!.refreshAll(false)
-            else -> mSectionsPagerAdapter!!.refreshAll(false)
+            R.id.refresh_all -> mSectionsPagerAdapter!!.refreshAll()
+            else -> mSectionsPagerAdapter!!.refreshAll()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -138,8 +138,6 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         when (key) {
             "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")
             "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")
-            else -> {
-            }
         }
 
         if (supportActionBar != null) {
@@ -171,7 +169,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         mViewPager.offscreenPageLimit = Constants.MAX_NUMBER_OF_TABS
         mViewPager.adapter = mSectionsPagerAdapter
         try {
-            refreshData(false)
+            refresh()
         } catch (e : Exception) {
             Logging.error(this, e.toString(), 0)
         }
@@ -195,16 +193,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
             }
         }
 
-        fun refreshData(force: Boolean) {
-            mSectionsPagerAdapter!!.refreshData(force)
-        }
-
         fun refresh() {
-            mSectionsPagerAdapter!!.refreshAll(false)
-        }
-
-        fun refresh(force: Boolean?) {
-            mSectionsPagerAdapter!!.refreshAll(force!!)
+            mSectionsPagerAdapter!!.refreshAll()
         }
     }
 }

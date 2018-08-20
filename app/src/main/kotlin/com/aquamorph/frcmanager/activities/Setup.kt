@@ -52,7 +52,7 @@ class Setup : AppIntro() {
         editor.putString("teamRank", "")
         editor.putString("teamRecord", "")
         editor.apply()
-        MainActivity.refresh(true)
+        MainActivity.refresh()
         this.finish()
     }
 

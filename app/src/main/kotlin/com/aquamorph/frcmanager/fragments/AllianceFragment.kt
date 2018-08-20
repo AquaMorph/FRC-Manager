@@ -35,15 +35,15 @@ class AllianceFragment : TabFragment(), RefreshFragment {
     override fun onResume() {
         super.onResume()
         if (alliances.isEmpty()) {
-            refresh(false)
+            refresh()
         }
     }
 
     /**
      * refresh() loads dataLoader needed for this fragment.
      */
-    override fun refresh(force: Boolean) {
-        LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+    override fun refresh() {
+        LoadAlliances().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     override fun dataUpdate() {
@@ -51,7 +51,7 @@ class AllianceFragment : TabFragment(), RefreshFragment {
         alliances.addAll(DataLoader.allianceDC.data)
     }
 
-    internal inner class LoadAlliances(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadAlliances() : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true

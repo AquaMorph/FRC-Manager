@@ -42,28 +42,28 @@ class EventScheduleFragment :
     override fun onResume() {
         super.onResume()
         if (matches.isEmpty())
-            refresh(false)
+            refresh()
     }
 
     /**
      * refresh reloads the event schedule and repopulates the listview
      */
-    override fun refresh(force: Boolean) {
+    override fun refresh() {
         if (DataLoader.eventKey != "") {
-            LoadEventSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            LoadEventSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == "teamNumber" || key == "eventKey") {
-            refresh(true)
+            refresh()
         }
     }
 
-    internal inner class LoadEventSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadEventSchedule() : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -75,10 +75,7 @@ class EventScheduleFragment :
             if (context != null) {
                 dataUpdate()
                 Constants.checkNoDataScreen(matches, recyclerView, emptyView)
-//                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
-//                        DataLoader.matchDC.parser.isNewData)
-                if (firstLoad) firstLoad = false
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

@@ -27,7 +27,7 @@ class DataLoader(activity: Activity) {
         teamTabs.add(Tab("Teams", TeamFragment.newInstance()))
         allianceTabs.add(Tab("Alliances", AllianceFragment.newInstance()))
         awardTabs.add(Tab("Awards", AwardFragment.newInstance()))
-        setDataContainers(false, activity)
+        setDataContainers()
     }
 
     companion object {
@@ -96,9 +96,9 @@ class DataLoader(activity: Activity) {
             dataContainer.complete = true
         }
 
-        fun refresh(force: Boolean, adapter: SectionsPagerAdapter, activity: Activity) {
+        fun refresh(adapter: SectionsPagerAdapter) {
             if (eventKey != "") {
-                setDataContainers(force, activity)
+                setDataContainers()
                 getData(matchDC, false, true, matchTabs, adapter, 0)
                 getData(teamDC, false, true, teamTabs, adapter, 1)
                 getData(rankDC, true, false, rankTabs, adapter, 2)
@@ -107,7 +107,7 @@ class DataLoader(activity: Activity) {
             }
         }
 
-        private fun setDataContainers(force: Boolean, activity: Activity) {
+        private fun setDataContainers() {
             teamDC = DataContainer("eventTeams")
             rankDC = DataContainer("eventRankings")
             awardDC = DataContainer("eventAwards")

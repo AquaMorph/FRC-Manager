@@ -8,5 +8,5 @@ package com.aquamorph.frcmanager.fragments
  */
 
 interface RefreshFragment {
-    fun refresh(force: Boolean)
+    fun refresh()
 }
