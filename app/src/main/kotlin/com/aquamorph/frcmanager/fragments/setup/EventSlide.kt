@@ -1,9 +1,7 @@
 package com.aquamorph.frcmanager.fragments.setup
 
 import android.content.SharedPreferences
-import android.os.AsyncTask
 import android.os.Bundle
-import android.os.SystemClock
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -15,11 +13,12 @@ import android.widget.TextView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.EventSpinnerAdapter
 import com.aquamorph.frcmanager.models.Event
-import com.aquamorph.frcmanager.network.Parser
+import com.aquamorph.frcmanager.network.RetrofitInstance
+import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.AppConfig
-import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
-import com.google.gson.reflect.TypeToken
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 import java.util.Collections.sort
 
@@ -27,15 +26,13 @@ import java.util.Collections.sort
  * Loads events a team is signed up for and allows for the selection of that event.
  *
  * @author Christian Colglazier
- * @version 3/31/2018
+ * @version 8/20/2018
  */
 class EventSlide : Fragment() {
 
     internal lateinit var eventSpinnder: Spinner
     private lateinit var dataAdapter: EventSpinnerAdapter
     internal var eventList = ArrayList<Event>()
-    private lateinit var teamNumber: String
-    private lateinit var year: String
     private lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,45 +54,18 @@ class EventSlide : Fragment() {
     /**
      * load() loads the team events
      */
-    fun load(force: Boolean) {
-        val loadTeamEvents = LoadTeamEvents(force)
-        loadTeamEvents.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-    }
-
-    internal inner class LoadTeamEvents(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
-
-        override fun onPreExecute() {
-            teamNumber = prefs.getString("teamNumber", "")
-            year = prefs.getString("year", "")
-            Logging.info(this, "Team Number: " + teamNumber, 0)
-        }
-
-        override fun doInBackground(vararg params: Void?): Void? {
-            val url = Constants.getEventURL("frc$teamNumber", year)
-            Logging.info(this, "Loading: $url", 0)
-            val parser = Parser<ArrayList<Event>>("Event", url, object :
-                    TypeToken<ArrayList<Event>>() {}.type, activity!!, force)
-            try {
-                parser.fetchJSON(false, false)
-                while (parser.parsingComplete) {
-                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-                }
-                if (parser.data != null) {
+    fun load() {
+        RetrofitInstance.getRetrofit().create(TbaApi::class.java)
+                .getTeamEvents("frc${prefs.getString("teamNumber", "")}",
+                        prefs.getString("year", "")).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ result -> if (result != null) {
                     eventList.clear()
-                    eventList.addAll(parser.data!!)
+                    eventList.addAll(result)
                     sort(eventList)
-                }
-                Logging.info(this, "Event size: " + eventList.size, 0)
-            } catch (e: Exception) {
-                Logging.error(this, e.message!!, 0)
-            }
-
-            return null
-        }
-
-        override fun onPostExecute(result: Void?) {
-            dataAdapter.notifyDataSetChanged()
-        }
+                    dataAdapter.notifyDataSetChanged()
+                }},
+                        { error -> Logging.error(this, error.toString(), 0) })
     }
 
     private inner class EventSpinnerListener : AdapterView.OnItemSelectedListener {

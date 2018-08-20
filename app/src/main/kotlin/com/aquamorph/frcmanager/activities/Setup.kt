@@ -62,7 +62,7 @@ class Setup : AppIntro() {
             try {
                 Logging.info(this, "Gettings events for Setup", 0)
                 teamNumberSlide.setTeamNumber()
-                eventSlide.load(true)
+                eventSlide.load()
             } catch (e: Exception) {}
         }
     }

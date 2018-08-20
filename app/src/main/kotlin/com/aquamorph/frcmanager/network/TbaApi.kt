@@ -25,8 +25,8 @@ interface TbaApi {
      *
      * @param team team identification "frc####"
      */
-    @GET("team/{team}/events/{event}")
-    fun getTeamEvents(@Path("team") team: String, @Path("event") event: String)
+    @GET("team/{team}/events/{year}")
+    fun getTeamEvents(@Path("team") team: String, @Path("year") event: String)
             : Observable<ArrayList<Event>>
 
     /**
