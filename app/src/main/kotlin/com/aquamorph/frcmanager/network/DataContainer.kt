@@ -1,9 +1,6 @@
 package com.aquamorph.frcmanager.network
 
-import android.app.Activity
-import io.reactivex.Observable
-import java.lang.reflect.Type
-import java.util.*
+import java.util.ArrayList
 
 /**
  * DataLoader structure for parser and parsed dataLoader.

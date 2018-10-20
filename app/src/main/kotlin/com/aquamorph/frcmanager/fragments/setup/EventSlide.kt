@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.fragments.setup
 
+import android.app.Activity
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -45,7 +46,7 @@ class EventSlide : Fragment() {
         val view = inflater.inflate(R.layout.event_slide, container, false)
 
         eventSpinnder = view.findViewById(R.id.event_spinner)
-        dataAdapter = EventSpinnerAdapter(eventList, activity!!)
+        dataAdapter = EventSpinnerAdapter(eventList, activity as Activity)
         eventSpinnder.adapter = dataAdapter
         eventSpinnder.onItemSelectedListener = EventSpinnerListener()
         return view
@@ -55,7 +56,7 @@ class EventSlide : Fragment() {
      * load() loads the team events
      */
     fun load() {
-        RetrofitInstance.getRetrofit().create(TbaApi::class.java)
+        RetrofitInstance.getRetrofit(context!!).create(TbaApi::class.java)
                 .getTeamEvents("frc${prefs.getString("teamNumber", "")}",
                         prefs.getString("year", "")).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

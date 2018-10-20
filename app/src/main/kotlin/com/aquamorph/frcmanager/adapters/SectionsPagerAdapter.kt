@@ -43,7 +43,7 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
         DataLoader.awardDC.complete = false
         DataLoader.allianceDC.complete = false
         DataLoader.matchDC.complete = false
-        DataLoader.refresh(this)
+        DataLoader.refresh(this, activity)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
