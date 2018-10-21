@@ -94,8 +94,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> openSettings()
-            R.id.refresh_all -> mSectionsPagerAdapter!!.refreshAll()
-            else -> mSectionsPagerAdapter!!.refreshAll()
+            R.id.refresh_all -> refresh()
+            else -> refresh()
         }
         return super.onOptionsItemSelected(item)
     }
