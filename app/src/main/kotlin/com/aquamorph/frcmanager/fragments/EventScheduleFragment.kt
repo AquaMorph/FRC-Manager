@@ -37,6 +37,7 @@ class EventScheduleFragment :
     override fun dataUpdate() {
         matches.clear()
         matches.addAll(DataLoader.matchDC.data)
+        adapter.notifyDataSetChanged()
     }
 
     override fun onResume() {

@@ -75,7 +75,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     }
 
     /**
-     * refrest() loads dataLoader needed for this fragment.
+     * refresh() loads dataLoader needed for this fragment.
      * @param force
      */
     override fun refresh() {
@@ -112,6 +112,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
         }
         sort(teamEventMatches)
+        adapter.notifyDataSetChanged()
     }
 
     internal inner class LoadTeamSchedule() : AsyncTask<Void?, Void?, Void?>() {

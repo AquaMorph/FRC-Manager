@@ -44,6 +44,7 @@ open class TeamFragment : TabFragment(), RefreshFragment {
         teams.addAll(DataLoader.teamDC.data)
         ranks.clear()
         ranks.addAll(DataLoader.rankDC.data)
+        adapter.notifyDataSetChanged()
     }
 
     /**

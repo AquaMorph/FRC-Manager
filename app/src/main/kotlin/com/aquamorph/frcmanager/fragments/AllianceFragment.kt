@@ -49,6 +49,7 @@ class AllianceFragment : TabFragment(), RefreshFragment {
     override fun dataUpdate() {
         alliances.clear()
         alliances.addAll(DataLoader.allianceDC.data)
+        adapter.notifyDataSetChanged()
     }
 
     internal inner class LoadAlliances() : AsyncTask<Void?, Void?, Void?>() {

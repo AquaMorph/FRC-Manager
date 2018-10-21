@@ -39,6 +39,7 @@ class AwardFragment :
     override fun dataUpdate() {
         awards.clear()
         awards.addAll(DataLoader.awardDC.data)
+        adapter.notifyDataSetChanged()
     }
 
     override fun onResume() {
