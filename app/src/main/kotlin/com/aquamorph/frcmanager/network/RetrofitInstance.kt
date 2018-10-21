@@ -14,8 +14,7 @@ class RetrofitInstance {
         private lateinit var retrofit: Retrofit
 
         fun getRetrofit(context: Context): Retrofit {
-            val cacheSize = (10 * 1024 * 1024).toLong()
-            val myCache = Cache(context.cacheDir, cacheSize)
+            val myCache = Cache(context.cacheDir, Constants.CACHE_SIZE)
 
             val client = OkHttpClient.Builder().cache(myCache)
                     .addInterceptor { chain ->

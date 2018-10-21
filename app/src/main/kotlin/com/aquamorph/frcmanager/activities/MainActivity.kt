@@ -47,9 +47,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
      * getAppTitle() returns the text for the app.
      * @return title for the app
      */
-    val appTitle: String
-        get() = String.format("%s - %s", DataLoader.teamNumber,
-                shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH))
+    private val appTitle: String
+        get() = String.format("%s - %s", DataLoader.teamNumber, eventName)
 
     /**
      * getAppSubTitle() returns the subtitle string for the toolbar with the event name,
@@ -114,21 +113,6 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     private fun openSettings() {
         val intent = Intent(this, Settings::class.java)
         startActivity(intent)
-    }
-
-    /**
-     * shorten() returns a shortened string with ... at the end.
-     *
-     * @param text   to be shortened
-     * @param amount length to shorten
-     * @return shorten string with ... at the end
-     */
-    private fun shorten(text: String?, amount: Int): String {
-        return if (text!!.length > amount) {
-            text.substring(0, amount) + "..."
-        } else {
-            text
-        }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {

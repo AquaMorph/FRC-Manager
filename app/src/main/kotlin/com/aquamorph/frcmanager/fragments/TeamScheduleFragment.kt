@@ -64,8 +64,6 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
-//        view2 = (context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-//                .inflate(R.layout.fragment_team_schedule, null)
         listener()
         Logging.info(this, "Configuration Changed", 3)
     }
@@ -91,7 +89,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == "teamNumber" || key == "eventKey") {
             if (getTeamFromSettings) {
-                teamNumber = sharedPreferences.getString("teamNumber", "")
+                teamNumber = DataLoader.teamNumber
             }
             listener()
         }
@@ -103,7 +101,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     private fun listener() {
         if (context != null) {
             if (getTeamFromSettings) {
-                teamNumber = prefs.getString("teamNumber", "")
+                teamNumber = DataLoader.teamNumber
             }
         }
     }

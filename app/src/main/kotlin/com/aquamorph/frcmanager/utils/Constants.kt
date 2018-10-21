@@ -19,9 +19,9 @@ object Constants {
     const val URL = "https://www.thebluealliance.com/api/v3/"
     const val TBA_HEADER = "X-TBA-Auth-Key"
     const val TRACING_LEVEL = 3
-    const val MAX_EVENT_TITLE_LENGTH = 20
-    const val THREAD_WAIT_TIME = 10
+    const val THREAD_WAIT_TIME = 100
     const val MAX_NUMBER_OF_TABS = 7
+    const val CACHE_SIZE = (10 * 1024 * 1024).toLong()
 
     /**
      * getApiHeader() returns the header needed to get access to the Blue Alliance.
