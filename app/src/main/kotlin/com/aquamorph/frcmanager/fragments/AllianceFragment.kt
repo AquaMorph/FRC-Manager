@@ -52,7 +52,7 @@ class AllianceFragment : TabFragment(), RefreshFragment {
         adapter.notifyDataSetChanged()
     }
 
-    internal inner class LoadAlliances() : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadAlliances : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true

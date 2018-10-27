@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
-import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
@@ -61,7 +60,7 @@ class EventScheduleFragment :
         }
     }
 
-    internal inner class LoadEventSchedule() : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadEventSchedule : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true

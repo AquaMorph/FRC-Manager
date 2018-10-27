@@ -9,7 +9,7 @@ import java.util.ArrayList
  * @version 3/31/2018
  */
 
-class DataContainer<T> internal constructor(name: String) {
+class DataContainer<T> internal constructor() {
     var data = ArrayList<T>()
     var complete: Boolean = false
 }

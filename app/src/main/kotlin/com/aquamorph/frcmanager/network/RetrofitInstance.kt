@@ -1,7 +1,6 @@
 package com.aquamorph.frcmanager.network
 
 import android.content.Context
-import com.aquamorph.frcmanager.network.NetworkCheck.Companion.hasNetwork
 import com.aquamorph.frcmanager.utils.Constants
 import okhttp3.Cache
 import okhttp3.OkHttpClient

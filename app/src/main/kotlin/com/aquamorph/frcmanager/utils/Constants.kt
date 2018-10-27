@@ -1,9 +1,8 @@
 package com.aquamorph.frcmanager.utils
 
-import android.app.Activity
-import android.content.Context
-import android.net.ConnectivityManager
-import android.util.DisplayMetrics
+import android.os.Build
+import android.text.Html
+import android.text.Spanned
 import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
 import java.util.*
@@ -12,7 +11,7 @@ import java.util.*
  * A collection of constants needed to interact with the Blue Alliance.
  *
  * @author Christian Colglazier
- * @version 8/20/2018
+ * @version 10/27/2018
  */
 object Constants {
 
@@ -30,18 +29,6 @@ object Constants {
      */
     fun getApiHeader(): String {
         return BuildConfig.TBA_KEY
-    }
-
-    /**
-     * isNetworkAvailable() returns if a connection to the internet is available.
-     *
-     * @param context fragment or activity the request takes place from
-     * @return is internet available
-     */
-    fun isNetworkAvailable(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo = connectivityManager.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
     /**
@@ -83,6 +70,18 @@ object Constants {
         } else {
             recyclerView.visibility = View.VISIBLE
             emptyView.visibility = View.GONE
+        }
+    }
+
+    /**
+     * fromHtml() converts HTML code to a string.
+     */
+    @SuppressWarnings("deprecation")
+    fun fromHtml(html: String): Spanned? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            Html.fromHtml(html)
         }
     }
 }

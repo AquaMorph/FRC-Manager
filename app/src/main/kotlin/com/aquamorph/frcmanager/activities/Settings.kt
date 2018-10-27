@@ -30,7 +30,7 @@ class Settings : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChange
         }
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        fragmentManager.beginTransaction().replace(R.id.content_frame,
+        supportFragmentManager.beginTransaction().replace(R.id.content_frame,
                 SettingsFragment()).commit()
         MainActivity.theme(this)
     }

@@ -50,17 +50,17 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
         team = String.format("%4s", team)
         when (team) {
             parseTeamNumber(true, 0, position) ->
-                holder.redTeam1.text = Html.fromHtml(Constants.underlineText(team!!))
+                holder.redTeam1.text = Constants.fromHtml(Constants.underlineText(team!!))
             parseTeamNumber(true, 1, position) ->
-                holder.redTeam2.text = Html.fromHtml(Constants.underlineText(team!!))
+                holder.redTeam2.text = Constants.fromHtml(Constants.underlineText(team!!))
             parseTeamNumber(true, 2, position) ->
-                holder.redTeam3.text = Html.fromHtml(Constants.underlineText(team!!))
+                holder.redTeam3.text = Constants.fromHtml(Constants.underlineText(team!!))
             parseTeamNumber(false, 0, position) ->
-                holder.blueTeam1.text = Html.fromHtml(Constants.underlineText(team!!))
+                holder.blueTeam1.text = Constants.fromHtml(Constants.underlineText(team!!))
             parseTeamNumber(false, 1, position) ->
-                holder.blueTeam2.text = Html.fromHtml(Constants.underlineText(team!!))
+                holder.blueTeam2.text = Constants.fromHtml(Constants.underlineText(team!!))
             parseTeamNumber(false, 2, position) ->
-                holder.blueTeam3.text = Html.fromHtml(Constants.underlineText(team!!))
+                holder.blueTeam3.text = Constants.fromHtml(Constants.underlineText(team!!))
         }
 
         //Bolds winning score
@@ -118,7 +118,7 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
             holder.matchTime.visibility = View.VISIBLE
             holder.scoreTable.visibility = View.GONE
             val time = Date()
-            val df = SimpleDateFormat("hh:mm aa")
+            val df = SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
             time.time = data[position].time * 1000
             holder.matchTime.text = df.format(time)
         }

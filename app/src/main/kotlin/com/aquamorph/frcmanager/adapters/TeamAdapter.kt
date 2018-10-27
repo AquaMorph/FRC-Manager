@@ -58,7 +58,7 @@ class TeamAdapter(private val context: Context, private val data: ArrayList<Team
 
         holder.rankNumber.text = data[position].team_number.toString()
         holder.teamNumber.setText(spannableStringBuilder, TextView.BufferType.SPANNABLE)
-        holder.details.text = data[position].city + ", " + data[position].state_prov
+        holder.details.text = String.format("%s, %s", data[position].city, data[position].state_prov)
     }
 
     override fun getItemCount(): Int {

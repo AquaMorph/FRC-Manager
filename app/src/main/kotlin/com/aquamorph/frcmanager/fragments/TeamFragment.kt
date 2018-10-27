@@ -56,7 +56,7 @@ open class TeamFragment : TabFragment(), RefreshFragment {
         }
     }
 
-    internal inner class LoadEventTeams() : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadEventTeams : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true

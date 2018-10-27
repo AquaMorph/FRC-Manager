@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
-import android.view.ViewGroup
 import com.aquamorph.frcmanager.fragments.RefreshFragment
 import com.aquamorph.frcmanager.models.Tab
 import com.aquamorph.frcmanager.network.DataLoader
@@ -23,8 +22,7 @@ import java.util.*
 class SectionsPagerAdapter(fragmentManager: FragmentManager,
                            private val viewPager: ViewPager,
                            private val tabLayout: TabLayout,
-                           activity: Activity) : FragmentStatePagerAdapter(fragmentManager) {
-    var activity = activity
+                           var activity: Activity) : FragmentStatePagerAdapter(fragmentManager) {
     var tabs = ArrayList<Tab>()
 
     /**
@@ -37,7 +35,7 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
         }
     }
 
-    fun refreshData() {
+    private fun refreshData() {
         DataLoader.teamDC.complete = false
         DataLoader.rankDC.complete = false
         DataLoader.awardDC.complete = false
@@ -69,14 +67,13 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
     }
 
     fun removeFrag(position: Int) {
-        val fragment = tabs[position].fragment
-        destroyFragmentView(viewPager, position, fragment)
+        destroyFragmentView(viewPager)
         removeTab(position)
         tabs.removeAt(position)
         notifyDataSetChanged()
     }
 
-    private fun destroyFragmentView(container: ViewGroup, position: Int, `object`: Any) {
+    private fun destroyFragmentView(`object`: Any) {
         val manager = (`object` as Fragment).fragmentManager
         if (manager != null) {
             val trans = manager.beginTransaction()

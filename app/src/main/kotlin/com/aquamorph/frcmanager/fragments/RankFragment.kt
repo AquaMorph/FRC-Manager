@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.RankAdapter
-import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
@@ -58,7 +57,7 @@ class RankFragment : TabFragment(), RefreshFragment {
         }
     }
 
-    internal inner class LoadRanks(): AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadRanks: AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true

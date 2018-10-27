@@ -37,11 +37,11 @@ class DataLoader {
     companion object {
         var eventKey = ""
         var teamNumber = ""
-        val teamDC = DataContainer<Team>("eventTeams")
-        val rankDC = DataContainer<Rank>("eventRankings")
-        val awardDC = DataContainer<Award>("eventAwards")
-        val matchDC = DataContainer<Match>("eventMatches")
-        val allianceDC = DataContainer<Alliance>("eventAlliances")
+        val teamDC = DataContainer<Team>()
+        val rankDC = DataContainer<Rank>()
+        val awardDC = DataContainer<Award>()
+        val matchDC = DataContainer<Match>()
+        val allianceDC = DataContainer<Alliance>()
         private val teamTabs = ArrayList<Tab>()
         private val rankTabs = ArrayList<Tab>()
         private val awardTabs = ArrayList<Tab>()

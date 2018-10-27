@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.AwardAdapter
-import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Award
 import com.aquamorph.frcmanager.network.DataLoader
@@ -65,7 +64,7 @@ class AwardFragment :
         }
     }
 
-    internal inner class LoadAwards() : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadAwards : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true
