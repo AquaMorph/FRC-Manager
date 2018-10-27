@@ -1,6 +1,10 @@
 package com.aquamorph.frcmanager.network
 
+import android.app.Activity
 import android.content.Context
+import android.support.design.widget.Snackbar
+import android.view.View
+import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
 import com.aquamorph.frcmanager.fragments.*
 import com.aquamorph.frcmanager.models.*
@@ -54,15 +58,13 @@ class DataLoader {
         fun getData(dataContainer: DataContainer<*>,
                     isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
                     adapter: SectionsPagerAdapter, observer: Int,
-                    context: Context) {
-
-
+                    activity: Activity) {
             dataContainer.complete = false
-            var t = arrayOf(RetrofitInstance.getRetrofit(context).create(TbaApi::class.java).getEventMatches(DataLoader.eventKey),
-                    RetrofitInstance.getRetrofit(context).create(TbaApi::class.java).getEventTeams(DataLoader.eventKey),
-                    RetrofitInstance.getRetrofit(context).create(TbaApi::class.java).getEventRankings(DataLoader.eventKey),
-                    RetrofitInstance.getRetrofit(context).create(TbaApi::class.java).getEventAwards(DataLoader.eventKey),
-                    RetrofitInstance.getRetrofit(context).create(TbaApi::class.java).getEventAlliances(DataLoader.eventKey))
+            val t = arrayOf(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventMatches(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventTeams(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventRankings(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAwards(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAlliances(DataLoader.eventKey))
             disposable = t[observer].subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
@@ -97,13 +99,18 @@ class DataLoader {
             dataContainer.complete = true
         }
 
-        fun refresh(adapter: SectionsPagerAdapter, context: Context) {
+        fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
-                getData(matchDC, false, true, matchTabs, adapter, 0, context)
-                getData(teamDC, false, true, teamTabs, adapter, 1, context)
-                getData(rankDC, true, false, rankTabs, adapter, 2, context)
-                getData(awardDC, false, false, awardTabs, adapter, 3, context)
-                getData(allianceDC, false, false, allianceTabs, adapter, 4, context)
+                // Checks for internet connections
+                if(!NetworkCheck.hasNetwork(activity)) {
+                    Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                            R.string.no_connection_message, Snackbar.LENGTH_LONG).show()
+                }
+                getData(matchDC, false, true, matchTabs, adapter, 0, activity)
+                getData(teamDC, false, true, teamTabs, adapter, 1, activity)
+                getData(rankDC, true, false, rankTabs, adapter, 2, activity)
+                getData(awardDC, false, false, awardTabs, adapter, 3, activity)
+                getData(allianceDC, false, false, allianceTabs, adapter, 4, activity)
             }
         }
     }
