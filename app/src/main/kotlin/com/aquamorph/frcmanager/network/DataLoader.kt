@@ -12,6 +12,7 @@ import com.aquamorph.frcmanager.utils.Logging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 import java.util.Collections.sort
 import kotlin.collections.ArrayList
 
@@ -111,6 +112,20 @@ class DataLoader {
                 getData(rankDC, true, false, rankTabs, adapter, 2, activity)
                 getData(awardDC, false, false, awardTabs, adapter, 3, activity)
                 getData(allianceDC, false, false, allianceTabs, adapter, 4, activity)
+                // Check if FIRST or event feed is down
+                RetrofitInstance.getRetrofit(activity!!).create(TbaApi::class.java)
+                        .getStatus().subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ result -> if (result != null) {
+                            if (result.is_datafeed_down) {
+                                Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                                        R.string.first_server_down, Snackbar.LENGTH_LONG).show()
+                            } else if (Arrays.asList(*result.down_events!!).contains(eventKey)) {
+                                Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                                        R.string.event_server_down, Snackbar.LENGTH_LONG).show()
+                            }
+                        }},
+                    { error -> Logging.error(this, error.toString(), 0) })
             }
         }
     }
