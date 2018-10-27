@@ -46,13 +46,13 @@ class RankFragment : TabFragment(), RefreshFragment {
     override fun onResume() {
         super.onResume()
         if (ranks.isEmpty())
-            refresh(false)
+            refresh()
     }
 
     /**
      * refrest() loads dataLoader needed for this fragment.
      */
-    override fun refresh(force: Boolean) {
+    override fun refresh() {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "" && context != null) {
             LoadRanks().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
@@ -61,7 +61,7 @@ class RankFragment : TabFragment(), RefreshFragment {
     internal inner class LoadRanks(): AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -89,10 +89,7 @@ class RankFragment : TabFragment(), RefreshFragment {
             if (context != null) {
                 dataUpdate()
                 Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
-                Animations.loadAnimation(context, recyclerView, recyclerView.adapter, firstLoad,
-                        DataLoader.rankDC.parser.isNewData)
-                if (firstLoad) firstLoad = false
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

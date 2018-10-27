@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.AllianceAdapter
-import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Alliance
 import com.aquamorph.frcmanager.network.DataLoader
@@ -27,7 +26,7 @@ class AllianceFragment : TabFragment(), RefreshFragment {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
-        super.onCreateView(view, DataLoader.allianceDC.data,
+        super.onCreateView(view, alliances,
                 AllianceAdapter(context!!, alliances),
                 Divider(context!!, 2f, 72))
         return view
@@ -35,27 +34,28 @@ class AllianceFragment : TabFragment(), RefreshFragment {
 
     override fun onResume() {
         super.onResume()
-        if (DataLoader.allianceDC.data.size == 0) {
-            refresh(false)
+        if (alliances.isEmpty()) {
+            refresh()
         }
     }
 
     /**
      * refresh() loads dataLoader needed for this fragment.
      */
-    override fun refresh(force: Boolean) {
-        LoadAlliances(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+    override fun refresh() {
+        LoadAlliances().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     override fun dataUpdate() {
         alliances.clear()
         alliances.addAll(DataLoader.allianceDC.data)
+        adapter.notifyDataSetChanged()
     }
 
-    internal inner class LoadAlliances(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadAlliances() : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -67,10 +67,7 @@ class AllianceFragment : TabFragment(), RefreshFragment {
             if (context != null) {
                 dataUpdate()
                 Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
-                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
-                        DataLoader.allianceDC.parser.isNewData)
-                if (firstLoad) firstLoad = false
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

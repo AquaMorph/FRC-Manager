@@ -65,17 +65,47 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
 
         //Bolds winning score
         when {
-            data[position].alliances.red.score == data[position].alliances.blue.score -> {
+            data[position].alliances.red.score == data[position].alliances.blue.score &&
+                    data[position].alliances.red.score != -1 &&
+                    data[position].alliances.blue.score != -1-> {
+                holder.redTeam1.setTypeface(null, Typeface.BOLD)
+                holder.redTeam2.setTypeface(null, Typeface.BOLD)
+                holder.redTeam3.setTypeface(null, Typeface.BOLD)
                 holder.redScore.setTypeface(null, Typeface.BOLD)
+                holder.blueTeam1.setTypeface(null, Typeface.BOLD)
+                holder.blueTeam2.setTypeface(null, Typeface.BOLD)
+                holder.blueTeam3.setTypeface(null, Typeface.BOLD)
                 holder.blueScore.setTypeface(null, Typeface.BOLD)
             }
             data[position].alliances.red.score > data[position].alliances.blue.score -> {
+                holder.redTeam1.setTypeface(null, Typeface.BOLD)
+                holder.redTeam2.setTypeface(null, Typeface.BOLD)
+                holder.redTeam3.setTypeface(null, Typeface.BOLD)
                 holder.redScore.setTypeface(null, Typeface.BOLD)
+                holder.blueTeam1.setTypeface(null, Typeface.NORMAL)
+                holder.blueTeam2.setTypeface(null, Typeface.NORMAL)
+                holder.blueTeam3.setTypeface(null, Typeface.NORMAL)
                 holder.blueScore.setTypeface(null, Typeface.NORMAL)
             }
-            else -> {
+            data[position].alliances.red.score < data[position].alliances.blue.score -> {
+                holder.redTeam1.setTypeface(null, Typeface.NORMAL)
+                holder.redTeam2.setTypeface(null, Typeface.NORMAL)
+                holder.redTeam3.setTypeface(null, Typeface.NORMAL)
                 holder.redScore.setTypeface(null, Typeface.NORMAL)
+                holder.blueTeam1.setTypeface(null, Typeface.BOLD)
+                holder.blueTeam2.setTypeface(null, Typeface.BOLD)
+                holder.blueTeam3.setTypeface(null, Typeface.BOLD)
                 holder.blueScore.setTypeface(null, Typeface.BOLD)
+            }
+            else -> {
+                holder.redTeam1.setTypeface(null, Typeface.NORMAL)
+                holder.redTeam2.setTypeface(null, Typeface.NORMAL)
+                holder.redTeam3.setTypeface(null, Typeface.NORMAL)
+                holder.redScore.setTypeface(null, Typeface.NORMAL)
+                holder.blueTeam1.setTypeface(null, Typeface.NORMAL)
+                holder.blueTeam2.setTypeface(null, Typeface.NORMAL)
+                holder.blueTeam3.setTypeface(null, Typeface.NORMAL)
+                holder.blueScore.setTypeface(null, Typeface.NORMAL)
             }
         }
 

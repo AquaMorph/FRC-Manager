@@ -47,9 +47,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
      * getAppTitle() returns the text for the app.
      * @return title for the app
      */
-    val appTitle: String
-        get() = String.format("%s - %s", DataLoader.teamNumber,
-                shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH))
+    private val appTitle: String
+        get() = String.format("%s - %s", DataLoader.teamNumber, eventName)
 
     /**
      * getAppSubTitle() returns the subtitle string for the toolbar with the event name,
@@ -94,8 +93,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> openSettings()
-            R.id.refresh_all -> mSectionsPagerAdapter!!.refreshAll(false)
-            else -> mSectionsPagerAdapter!!.refreshAll(false)
+            R.id.refresh_all -> refresh()
+            else -> refresh()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -116,21 +115,6 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         startActivity(intent)
     }
 
-    /**
-     * shorten() returns a shortened string with ... at the end.
-     *
-     * @param text   to be shortened
-     * @param amount length to shorten
-     * @return shorten string with ... at the end
-     */
-    private fun shorten(text: String?, amount: Int): String {
-        return if (text!!.length > amount) {
-            text.substring(0, amount) + "..."
-        } else {
-            text
-        }
-    }
-
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         eventName = sharedPreferences.getString("eventShortName", "North Carolina")
         teamRank = sharedPreferences.getString("teamRank", "")
@@ -138,8 +122,6 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         when (key) {
             "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")
             "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")
-            else -> {
-            }
         }
 
         if (supportActionBar != null) {
@@ -167,11 +149,11 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager,
                 mViewPager, tabLayout, this)
-        dataLoader = DataLoader(this)
+        dataLoader = DataLoader()
         mViewPager.offscreenPageLimit = Constants.MAX_NUMBER_OF_TABS
         mViewPager.adapter = mSectionsPagerAdapter
         try {
-            refreshData(false)
+            refresh()
         } catch (e : Exception) {
             Logging.error(this, e.toString(), 0)
         }
@@ -195,16 +177,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
             }
         }
 
-        fun refreshData(force: Boolean) {
-            mSectionsPagerAdapter!!.refreshData(force)
-        }
-
         fun refresh() {
-            mSectionsPagerAdapter!!.refreshAll(false)
-        }
-
-        fun refresh(force: Boolean?) {
-            mSectionsPagerAdapter!!.refreshAll(force!!)
+            mSectionsPagerAdapter!!.refreshAll()
         }
     }
 }

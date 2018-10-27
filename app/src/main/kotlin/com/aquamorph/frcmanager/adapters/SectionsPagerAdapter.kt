@@ -20,32 +20,30 @@ import java.util.*
  * @author Christian Colglazier
  * @version 4/2/2018
  */
-class SectionsPagerAdapter(fragmentManager: FragmentManager, private val viewPager: ViewPager,
-                           private val tabLayout: TabLayout, activity: Activity) :
-        FragmentStatePagerAdapter(fragmentManager) {
-    var act = activity
+class SectionsPagerAdapter(fragmentManager: FragmentManager,
+                           private val viewPager: ViewPager,
+                           private val tabLayout: TabLayout,
+                           activity: Activity) : FragmentStatePagerAdapter(fragmentManager) {
+    var activity = activity
     var tabs = ArrayList<Tab>()
-    val isDataLoading: Boolean
-        get() = (!DataLoader.awardDC.complete || !DataLoader.teamDC.complete || !DataLoader.rankDC.complete
-                || !DataLoader.matchDC.complete || !DataLoader.allianceDC.complete)
 
     /**
      * refreshAll() reloads all dataLoader in the fragments.
      */
-    fun refreshAll(force: Boolean) {
-        refreshData(force)
+    fun refreshAll() {
+        refreshData()
         for (i in tabs.indices) {
-            (tabs[i].fragment as RefreshFragment).refresh(force)
+            (tabs[i].fragment as RefreshFragment).refresh()
         }
     }
 
-    fun refreshData(force: Boolean) {
+    fun refreshData() {
         DataLoader.teamDC.complete = false
         DataLoader.rankDC.complete = false
         DataLoader.awardDC.complete = false
         DataLoader.allianceDC.complete = false
         DataLoader.matchDC.complete = false
-        DataLoader.refresh(force, this, act)
+        DataLoader.refresh(this, activity)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

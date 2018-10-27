@@ -52,7 +52,7 @@ class Setup : AppIntro() {
         editor.putString("teamRank", "")
         editor.putString("teamRecord", "")
         editor.apply()
-        MainActivity.refresh(true)
+        MainActivity.refresh()
         this.finish()
     }
 
@@ -62,7 +62,7 @@ class Setup : AppIntro() {
             try {
                 Logging.info(this, "Gettings events for Setup", 0)
                 teamNumberSlide.setTeamNumber()
-                eventSlide.load(true)
+                eventSlide.load()
             } catch (e: Exception) {}
         }
     }

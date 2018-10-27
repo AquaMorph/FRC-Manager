@@ -1,25 +1,29 @@
 package com.aquamorph.frcmanager.network
 
 import android.app.Activity
-import android.os.AsyncTask
-import android.os.SystemClock
+import android.content.Context
+import android.support.design.widget.Snackbar
+import android.view.View
+import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
 import com.aquamorph.frcmanager.fragments.*
 import com.aquamorph.frcmanager.models.*
-import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
-import com.google.gson.JsonSyntaxException
-import com.google.gson.reflect.TypeToken
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import java.util.*
 import java.util.Collections.sort
+import kotlin.collections.ArrayList
 
 /**
  * Loads needed dataLoader.
  *
  * @author Christian Colglazier
- * @version 4/2/2018
+ * @version 8/19/2018
  */
 
-class DataLoader(activity: Activity) {
+class DataLoader {
 
     init {
         matchTabs.add(Tab("Team Schedule", TeamScheduleFragment.newInstance()))
@@ -28,67 +32,58 @@ class DataLoader(activity: Activity) {
         teamTabs.add(Tab("Teams", TeamFragment.newInstance()))
         allianceTabs.add(Tab("Alliances", AllianceFragment.newInstance()))
         awardTabs.add(Tab("Awards", AwardFragment.newInstance()))
-        setDataContainers(false, activity)
     }
 
-    internal class Load : AsyncTask<Void?, Void?, Void?> {
+    companion object {
+        var eventKey = ""
+        var teamNumber = ""
+        val teamDC = DataContainer<Team>("eventTeams")
+        val rankDC = DataContainer<Rank>("eventRankings")
+        val awardDC = DataContainer<Award>("eventAwards")
+        val matchDC = DataContainer<Match>("eventMatches")
+        val allianceDC = DataContainer<Alliance>("eventAlliances")
+        private val teamTabs = ArrayList<Tab>()
+        private val rankTabs = ArrayList<Tab>()
+        private val awardTabs = ArrayList<Tab>()
+        private val matchTabs = ArrayList<Tab>()
+        private val allianceTabs = ArrayList<Tab>()
 
-        private var dataContainer: DataContainer<*>
-        private var tabs: ArrayList<Tab>
-        private var adapter: SectionsPagerAdapter
-        private var isRank = false
-        private var isSortable = false
 
-        constructor(dataContainer: DataContainer<*>, tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
-            this.dataContainer = dataContainer
-            this.tabs = tabs
-            this.adapter = adapter
-        }
-
-        constructor(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
-                    adapter: SectionsPagerAdapter) {
-            this.dataContainer = dataContainer
-            this.isRank = isRank
-            this.isSortable = isSortable
-            this.tabs = tabs
-            this.adapter = adapter
-        }
+        private var disposable: Disposable? = null
 
         fun isRankEmpty(dataContainer: DataContainer<*>): Boolean {
             return dataContainer.data.get(0) is Rank &&
                     (dataContainer.data.get(0) as Rank).rankings.isEmpty()
         }
 
-        override fun onPreExecute() {
+        fun getData(dataContainer: DataContainer<*>,
+                    isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
+                    adapter: SectionsPagerAdapter, observer: Int,
+                    activity: Activity) {
             dataContainer.complete = false
+            val t = arrayOf(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventMatches(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventTeams(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventRankings(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAwards(DataLoader.eventKey),
+                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAlliances(DataLoader.eventKey))
+            disposable = t[observer].subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe( { result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
+                                { error -> Logging.error(this, error.toString(), 0) })
         }
 
-        override fun doInBackground(vararg params: Void?): Void? {
-            try {
-                dataContainer.parser.fetchJSON(true)
-            } catch (exception: JsonSyntaxException) {
-                Logging.error(this, "JSON Parsing Error", 0)
-                Logging.error(this, exception.message!!, 0)
-            }
-
-            while (dataContainer.parser.parsingComplete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: Void?) {
+        fun updateData(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
+                       adapter: SectionsPagerAdapter,
+                       result: Any) {
             dataContainer.data.clear()
-            if (dataContainer.parser.data != null) {
                 if (isRank) {
-                    (dataContainer.data as MutableList<Any?>).add(dataContainer.parser.data)
+                    (dataContainer.data as MutableList<Any?>).add(result)
                 } else {
-                    dataContainer.data.addAll(dataContainer.parser.data as Collection<Nothing>)
+                    dataContainer.data.addAll(result as Collection<Nothing>)
                     if (isSortable) {
                         sort(dataContainer.data as List<Nothing>)
                     }
                 }
-            }
             if (dataContainer.data.isEmpty() || isRankEmpty(dataContainer)) {
                 for (tab in tabs) {
                     if (adapter.isTab(tab.name)!!) {
@@ -104,44 +99,34 @@ class DataLoader(activity: Activity) {
             }
             dataContainer.complete = true
         }
-    }
 
-    companion object {
-        var eventKey = ""
-        var teamNumber = ""
-        lateinit var teamDC: DataContainer<Team>
-        lateinit var rankDC: DataContainer<Rank>
-        lateinit var awardDC: DataContainer<Award>
-        lateinit var matchDC: DataContainer<Match>
-        lateinit var allianceDC: DataContainer<Alliance>
-        private val teamTabs = ArrayList<Tab>()
-        private val rankTabs = ArrayList<Tab>()
-        private val awardTabs = ArrayList<Tab>()
-        private val matchTabs = ArrayList<Tab>()
-        private val allianceTabs = ArrayList<Tab>()
-
-        fun refresh(force: Boolean, adapter: SectionsPagerAdapter, activity: Activity) {
+        fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
-                setDataContainers(force, activity)
-                Load(matchDC, false, true, matchTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                Load(teamDC, false, true, teamTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                Load(rankDC, true, false, rankTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                Load(awardDC, awardTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-                Load(allianceDC, allianceTabs, adapter).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                // Checks for internet connections
+                if(!NetworkCheck.hasNetwork(activity)) {
+                    Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                            R.string.no_connection_message, Snackbar.LENGTH_LONG).show()
+                }
+                getData(matchDC, false, true, matchTabs, adapter, 0, activity)
+                getData(teamDC, false, true, teamTabs, adapter, 1, activity)
+                getData(rankDC, true, false, rankTabs, adapter, 2, activity)
+                getData(awardDC, false, false, awardTabs, adapter, 3, activity)
+                getData(allianceDC, false, false, allianceTabs, adapter, 4, activity)
+                // Check if FIRST or event feed is down
+                RetrofitInstance.getRetrofit(activity!!).create(TbaApi::class.java)
+                        .getStatus().subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ result -> if (result != null) {
+                            if (result.is_datafeed_down) {
+                                Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                                        R.string.first_server_down, Snackbar.LENGTH_LONG).show()
+                            } else if (Arrays.asList(*result.down_events!!).contains(eventKey)) {
+                                Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                                        R.string.event_server_down, Snackbar.LENGTH_LONG).show()
+                            }
+                        }},
+                    { error -> Logging.error(this, error.toString(), 0) })
             }
-        }
-
-        private fun setDataContainers(force: Boolean, activity: Activity) {
-            teamDC = DataContainer(force, activity, object : TypeToken<ArrayList<Team>>() {
-                    }.type, Constants.getEventTeams(eventKey), "eventTeams")
-            rankDC = DataContainer(force, activity, object : TypeToken<Rank>() {
-                    }.type, Constants.getEventRanks(eventKey),"eventRank")
-            awardDC = DataContainer(force, activity, object : TypeToken<ArrayList<Award>>() {
-                    }.type, Constants.getEventAwards(eventKey),"eventAwards")
-            matchDC = DataContainer(force, activity, object : TypeToken<ArrayList<Match>>() {
-                    }.type, Constants.getEventMatches(eventKey),"eventMatches")
-            allianceDC = DataContainer(force, activity, object : TypeToken<ArrayList<Alliance>>() {
-                    }.type, Constants.getAlliancesURL(eventKey),"Alliance")
         }
     }
 }
