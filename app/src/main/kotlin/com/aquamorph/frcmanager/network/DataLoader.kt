@@ -1,7 +1,6 @@
 package com.aquamorph.frcmanager.network
 
 import android.app.Activity
-import android.content.Context
 import android.support.design.widget.Snackbar
 import android.view.View
 import com.aquamorph.frcmanager.R
@@ -9,6 +8,7 @@ import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
 import com.aquamorph.frcmanager.fragments.*
 import com.aquamorph.frcmanager.models.*
 import com.aquamorph.frcmanager.utils.Logging
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -32,41 +32,45 @@ class DataLoader {
         teamTabs.add(Tab("Teams", TeamFragment.newInstance()))
         allianceTabs.add(Tab("Alliances", AllianceFragment.newInstance()))
         awardTabs.add(Tab("Awards", AwardFragment.newInstance()))
+        districtRankTabs.add(Tab("District Rankings", RankFragment.newInstance()))
     }
 
     companion object {
         var eventKey = ""
         var teamNumber = ""
+        var districtKey = ""
         val teamDC = DataContainer<Team>()
         val rankDC = DataContainer<Rank>()
         val awardDC = DataContainer<Award>()
         val matchDC = DataContainer<Match>()
         val allianceDC = DataContainer<Alliance>()
+        val districtRankDC = DataContainer<DistrictRank>()
         private val teamTabs = ArrayList<Tab>()
         private val rankTabs = ArrayList<Tab>()
         private val awardTabs = ArrayList<Tab>()
         private val matchTabs = ArrayList<Tab>()
         private val allianceTabs = ArrayList<Tab>()
-
+        private val districtRankTabs = ArrayList<Tab>()
 
         private var disposable: Disposable? = null
 
-        fun isRankEmpty(dataContainer: DataContainer<*>): Boolean {
+        private fun isRankEmpty(dataContainer: DataContainer<*>): Boolean {
             return dataContainer.data.get(0) is Rank &&
                     (dataContainer.data.get(0) as Rank).rankings.isEmpty()
         }
 
-        fun getData(dataContainer: DataContainer<*>,
-                    isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
-                    adapter: SectionsPagerAdapter, observer: Int,
-                    activity: Activity) {
+        private fun getData(dataContainer: DataContainer<*>,
+                            isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
+                            adapter: SectionsPagerAdapter, observer: Int,
+                            activity: Activity) {
             dataContainer.complete = false
-            val t = arrayOf(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventMatches(DataLoader.eventKey),
-                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventTeams(DataLoader.eventKey),
-                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventRankings(DataLoader.eventKey),
-                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAwards(DataLoader.eventKey),
-                    RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAlliances(DataLoader.eventKey))
-            disposable = t[observer].subscribeOn(Schedulers.io())
+            val retrofit: ArrayList<Observable<out Any>> = arrayListOf(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventMatches(DataLoader.eventKey))
+                retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventTeams(DataLoader.eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventRankings(DataLoader.eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAwards(DataLoader.eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAlliances(DataLoader.eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictRankings(districtKey))
+            disposable = retrofit[observer].subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
                                 { error -> Logging.error(this, error.toString(), 0) })
@@ -112,6 +116,9 @@ class DataLoader {
                 getData(rankDC, true, false, rankTabs, adapter, 2, activity)
                 getData(awardDC, false, false, awardTabs, adapter, 3, activity)
                 getData(allianceDC, false, false, allianceTabs, adapter, 4, activity)
+                if (districtKey != "") {
+                    getData(districtRankDC, false, false, districtRankTabs, adapter, 5, activity)
+                }
                 // Check if FIRST or event feed is down
                 RetrofitInstance.getRetrofit(activity!!).create(TbaApi::class.java)
                         .getStatus().subscribeOn(Schedulers.io())

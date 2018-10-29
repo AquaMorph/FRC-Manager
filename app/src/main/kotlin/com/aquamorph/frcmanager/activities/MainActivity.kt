@@ -67,11 +67,12 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         setContentView(R.layout.activity_main)
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.registerOnSharedPreferenceChangeListener(this@MainActivity)
-        DataLoader.teamNumber = prefs.getString("teamNumber", "")
-        eventName = prefs.getString("eventShortName", "")
-        teamRank = prefs.getString("teamRank", "")
-        teamRecord = prefs.getString("teamRecord", "")
-        DataLoader.eventKey = prefs.getString("eventKey", "")
+        DataLoader.teamNumber = prefs.getString("teamNumber", "")!!
+        eventName = prefs.getString("eventShortName", "")!!
+        teamRank = prefs.getString("teamRank", "")!!
+        teamRecord = prefs.getString("teamRecord", "")!!
+        DataLoader.eventKey = prefs.getString("eventKey", "")!!
+        DataLoader.districtKey = prefs.getString("districtKey", "")!!
         if (DataLoader.teamNumber == "") openSetup()
         listener()
         theme(this)
@@ -116,12 +117,13 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        eventName = sharedPreferences.getString("eventShortName", "North Carolina")
-        teamRank = sharedPreferences.getString("teamRank", "")
-        teamRecord = sharedPreferences.getString("teamRecord", "")
+        eventName = sharedPreferences.getString("eventShortName", "North Carolina")!!
+        teamRank = sharedPreferences.getString("teamRank", "")!!
+        teamRecord = sharedPreferences.getString("teamRecord", "")!!
         when (key) {
-            "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")
-            "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")
+            "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")!!
+            "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")!!
+            "districtKey" -> DataLoader.districtKey = sharedPreferences.getString("districtKey", "")!!
         }
 
         if (supportActionBar != null) {

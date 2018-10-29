@@ -91,4 +91,13 @@ interface TbaApi {
     @GET("event/{event}/alliances")
     fun getEventAlliances(@Path("event") event: String)
             : Observable<ArrayList<Alliance>>
+
+    /**
+     * getEventAlliances() returns list of event alliances.
+     *
+     * @param event event identification
+     */
+    @GET("district/{districtKey}/rankings")
+    fun getDistrictRankings(@Path("districtKey") event: String)
+            : Observable<ArrayList<DistrictRank>>
 }
