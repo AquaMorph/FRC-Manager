@@ -32,7 +32,7 @@ class DataLoader {
         teamTabs.add(Tab("Teams", TeamFragment.newInstance()))
         allianceTabs.add(Tab("Alliances", AllianceFragment.newInstance()))
         awardTabs.add(Tab("Awards", AwardFragment.newInstance()))
-        districtRankTabs.add(Tab("District Rankings", RankFragment.newInstance()))
+        districtRankTabs.add(Tab("District Rankings", DistrictRankFragment.newInstance()))
     }
 
     companion object {
@@ -45,6 +45,7 @@ class DataLoader {
         val matchDC = DataContainer<Match>()
         val allianceDC = DataContainer<Alliance>()
         val districtRankDC = DataContainer<DistrictRank>()
+        val districtTeamDC = DataContainer<Team>()
         private val teamTabs = ArrayList<Tab>()
         private val rankTabs = ArrayList<Tab>()
         private val awardTabs = ArrayList<Tab>()
@@ -69,11 +70,14 @@ class DataLoader {
             retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventRankings(DataLoader.eventKey))
             retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAwards(DataLoader.eventKey))
             retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAlliances(DataLoader.eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictRankings(districtKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictRankings(DataLoader.districtKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictTeams(DataLoader.districtKey))
             disposable = retrofit[observer].subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
-                                { error -> Logging.error(this, error.toString(), 0) })
+                                { error ->
+                                    Logging.error(this, error.toString(), 0)
+                                })
         }
 
         fun updateData(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
@@ -118,6 +122,7 @@ class DataLoader {
                 getData(allianceDC, false, false, allianceTabs, adapter, 4, activity)
                 if (districtKey != "") {
                     getData(districtRankDC, false, false, districtRankTabs, adapter, 5, activity)
+                    getData(districtTeamDC, false, true, districtRankTabs, adapter, 6, activity)
                 }
                 // Check if FIRST or event feed is down
                 RetrofitInstance.getRetrofit(activity!!).create(TbaApi::class.java)

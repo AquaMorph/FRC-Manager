@@ -93,11 +93,20 @@ interface TbaApi {
             : Observable<ArrayList<Alliance>>
 
     /**
-     * getEventAlliances() returns list of event alliances.
+     * getDistrictRankings() returns list of district rankings.
      *
-     * @param event event identification
+     * @param districtKey district identification
      */
     @GET("district/{districtKey}/rankings")
-    fun getDistrictRankings(@Path("districtKey") event: String)
+    fun getDistrictRankings(@Path("districtKey") districtKey: String)
             : Observable<ArrayList<DistrictRank>>
+
+    /**
+    * getDistrictTeams() returns list of teams in a district.
+    *
+    * @param districtKey district identification
+    */
+    @GET("district/{districtKey}/teams")
+    fun getDistrictTeams(@Path("districtKey") districtKey: String)
+            : Observable<ArrayList<Team>>
 }
