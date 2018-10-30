@@ -49,58 +49,42 @@ class DistrictRankAdapter(private val context: Context, private val data: ArrayL
         val theme = context.theme
         theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
 
-//        val ranks = ArrayList<RankInfo>()
-//        for (i in 0 until data[0].sort_order_info.size) {
-//            ranks.add(RankInfo(String.format("%s: ", data[0].sort_order_info[i]!!.name),
-//                    String.format("%." + data[0].sort_order_info[i]!!.precision +
-//                            "f", data[0].rankings[position]!!.sort_orders!![i])))
-//        }
-//        ranks.add(RankInfo("Record: ",
-//                Rank.recordToString(data[0].rankings[position]!!.record)))
-//
-//        var i = 0
-//        while (i < ranks.size) {
-//            val column1 = TextView(context)
-//            val column2 = TextView(context)
-//            val column3 = TextView(context)
-//            val column4 = TextView(context)
-//            val rowHeader = TableRow(context)
-//
-//            column1.text = ranks[i].name
-//            column2.text = ranks[i].value
-//
-//            if (i + 1 < ranks.size) {
-//                column3.text = ranks[i + 1].name
-//                column4.text = ranks[i + 1].value
-//            } else {
-//                column3.text = ""
-//                column4.text = ""
-//            }
-//
-//            if (Build.VERSION.SDK_INT >= 26) {
-//                TextViewCompat.setAutoSizeTextTypeWithDefaults(column1,
-//                        TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM)
-//                TextViewCompat.setAutoSizeTextTypeWithDefaults(column2,
-//                        TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM)
-//                TextViewCompat.setAutoSizeTextTypeWithDefaults(column3,
-//                        TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM)
-//                TextViewCompat.setAutoSizeTextTypeWithDefaults(column4,
-//                        TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM)
-//            }
-//
-//            column1.setTextColor(typedValue.data)
-//            column2.setTypeface(null, Typeface.ITALIC)
-//            column2.setTextColor(typedValue.data)
-//            column3.setTextColor(typedValue.data)
-//            column4.setTypeface(null, Typeface.ITALIC)
-//            column4.setTextColor(typedValue.data)
-//            rowHeader.addView(column1)
-//            rowHeader.addView(column2)
-//            rowHeader.addView(column3)
-//            rowHeader.addView(column4)
-//            holder.table.addView(rowHeader)
-//            i += 2
-//        }
+
+            val column1 = TextView(context)
+            val column2 = TextView(context)
+            val column3 = TextView(context)
+            val column4 = TextView(context)
+            val rowHeader = TableRow(context)
+
+            column1.text = "Point Total: "
+            column2.text = data[position].point_total.toString()
+            column3.text = "Rookie Bonus: "
+            column4.text = data[position].rookie_bonus.toString()
+
+
+            if (Build.VERSION.SDK_INT >= 26) {
+                TextViewCompat.setAutoSizeTextTypeWithDefaults(column1,
+                        TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+                TextViewCompat.setAutoSizeTextTypeWithDefaults(column2,
+                        TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+                TextViewCompat.setAutoSizeTextTypeWithDefaults(column3,
+                        TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+                TextViewCompat.setAutoSizeTextTypeWithDefaults(column4,
+                        TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+            }
+
+            column1.setTextColor(typedValue.data)
+            column2.setTypeface(null, Typeface.ITALIC)
+            column2.setTextColor(typedValue.data)
+            column3.setTextColor(typedValue.data)
+            column4.setTypeface(null, Typeface.ITALIC)
+            column4.setTextColor(typedValue.data)
+            rowHeader.addView(column1)
+            rowHeader.addView(column2)
+            rowHeader.addView(column3)
+            rowHeader.addView(column4)
+            holder.table.addView(rowHeader)
+
     }
 
     override fun getItemCount(): Int {
