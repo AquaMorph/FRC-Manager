@@ -78,9 +78,9 @@ class DataLoader {
                                 { error -> Logging.error(this, error.toString(), 0) })
         }
 
-        fun updateData(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
-                       adapter: SectionsPagerAdapter,
-                       result: Any) {
+        private fun updateData(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
+                               adapter: SectionsPagerAdapter,
+                               result: Any) {
             dataContainer.data.clear()
                 if (isRank) {
                     (dataContainer.data as MutableList<Any?>).add(result)
@@ -91,19 +91,27 @@ class DataLoader {
                     }
                 }
             if (dataContainer.data.isEmpty() || isRankEmpty(dataContainer)) {
-                for (tab in tabs) {
-                    if (adapter.isTab(tab.name)!!) {
-                        adapter.removeFrag(adapter.tabPosition(tab.name))
-                    }
-                }
+                removeTab(tabs, adapter)
             } else {
-                for (tab in tabs) {
-                    if ((!adapter.isTab(tab.name)!!)) {
-                        adapter.addFrag(tab)
-                    }
-                }
+                addTab(tabs, adapter)
             }
             dataContainer.complete = true
+        }
+
+        private fun removeTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
+            for (tab in tabs) {
+                if (adapter.isTab(tab.name)!!) {
+                    adapter.removeFrag(adapter.tabPosition(tab.name))
+                }
+            }
+        }
+
+        private fun addTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
+            for (tab in tabs) {
+                if ((!adapter.isTab(tab.name)!!)) {
+                    adapter.addFrag(tab)
+                }
+            }
         }
 
         fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
@@ -121,6 +129,9 @@ class DataLoader {
                 if (districtKey != "") {
                     getData(districtRankDC, false, false, districtRankTabs, adapter, 5, activity)
                     getData(districtTeamDC, false, true, districtRankTabs, adapter, 6, activity)
+                    addTab(districtRankTabs, adapter)
+                } else {
+                    removeTab(districtRankTabs, adapter)
                 }
                 // Check if FIRST or event feed is down
                 RetrofitInstance.getRetrofit(activity!!).create(TbaApi::class.java)

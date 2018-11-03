@@ -11,7 +11,6 @@ import com.aquamorph.frcmanager.fragments.RefreshFragment
 import com.aquamorph.frcmanager.models.Tab
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Logging
-import java.util.*
 
 /**
  * Populates a tab layout with fragments.
@@ -41,6 +40,8 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
         DataLoader.awardDC.complete = false
         DataLoader.allianceDC.complete = false
         DataLoader.matchDC.complete = false
+        DataLoader.districtRankDC.complete = false
+        DataLoader.districtTeamDC.complete = false
         DataLoader.refresh(this, activity)
     }
 
@@ -74,11 +75,15 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
     }
 
     private fun destroyFragmentView(`object`: Any) {
-        val manager = (`object` as Fragment).fragmentManager
-        if (manager != null) {
-            val trans = manager.beginTransaction()
-            trans.remove(`object`)
-            trans.commitAllowingStateLoss()
+        try {
+            val manager = (`object` as Fragment).fragmentManager
+            if (manager != null) {
+                val trans = manager.beginTransaction()
+                trans.remove(`object`)
+                trans.commitAllowingStateLoss()
+            }
+        } catch (e : Exception) {
+            Logging.error(this, e.toString(), 0)
         }
     }
 

@@ -150,6 +150,4 @@ class DistrictRankAdapter(private val context: Context, private val data: ArrayL
             context.startActivity(intent)
         }
     }
-
-    inner class RankInfo internal constructor(internal var name: String, internal var value: String)
 }
