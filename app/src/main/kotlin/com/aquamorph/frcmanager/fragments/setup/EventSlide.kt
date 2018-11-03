@@ -75,6 +75,11 @@ class EventSlide : Fragment() {
             AppConfig.setEventKey(eventList[position].key, context!!)
             Logging.info(this, "Key:" + eventList[position].key, 0)
             Logging.info(this, "Short Name:" + eventList[position].short_name, 0)
+            if (eventList[position].district != null) {
+                AppConfig.setDistictKey(eventList[position].district.key, context!!)
+            } else {
+                AppConfig.setDistictKey("", context!!)
+            }
             AppConfig.setEventShortName(eventList[position].short_name, context!!)
             (eventSpinnder.selectedView as TextView).setTextColor(resources
                     .getColor(R.color.icons))
