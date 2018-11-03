@@ -22,10 +22,10 @@ import com.aquamorph.frcmanager.utils.Constants
 import java.util.*
 
 /**
- * Populates a RecyclerView with the ranks and team names and number for an event.
+ * Populates a RecyclerView with the ranks and team names and number for a district.
  *
  * @author Christian Colglazier
- * @version 12/30/2017
+ * @version 11/3/2018
  */
 class DistrictRankAdapter(private val context: Context, private val data: ArrayList<DistrictRank>,
                           private val teams: ArrayList<Team>) :
@@ -49,18 +49,36 @@ class DistrictRankAdapter(private val context: Context, private val data: ArrayL
         val theme = context.theme
         theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
 
-
+        for (i in 1..3) {
             val column1 = TextView(context)
             val column2 = TextView(context)
             val column3 = TextView(context)
             val column4 = TextView(context)
             val rowHeader = TableRow(context)
 
-            column1.text = "Point Total: "
-            column2.text = data[position].point_total.toString()
-            column3.text = "Rookie Bonus: "
-            column4.text = data[position].rookie_bonus.toString()
-
+            if (i == 1) {
+                column1.text = "Point Total: "
+                column2.text = data[position].point_total.toString()
+                column3.text = "Rookie Bonus: "
+                column4.text = data[position].rookie_bonus.toString()
+            }
+            if (i == 2 && data[position].event_points.isNotEmpty()) {
+                column1.text = "Event 1: "
+                column2.text = data[position].event_points[0]!!.total.toString()
+                if (data[position].event_points.size >= 2) {
+                    column3.text = "Event 2: "
+                    column4.text = data[position].event_points[1]!!.total.toString()
+                } else {
+                    column3.text = ""
+                    column4.text = ""
+                }
+            }
+            if (i == 3 && data[position].event_points.size > 2) {
+                column1.text = "District Champ: "
+                column2.text = data[position].event_points[2]!!.total.toString()
+                column3.text = ""
+                column4.text = ""
+            }
 
             if (Build.VERSION.SDK_INT >= 26) {
                 TextViewCompat.setAutoSizeTextTypeWithDefaults(column1,
@@ -83,8 +101,13 @@ class DistrictRankAdapter(private val context: Context, private val data: ArrayL
             rowHeader.addView(column2)
             rowHeader.addView(column3)
             rowHeader.addView(column4)
-            holder.table.addView(rowHeader)
-
+            if ((i == 1 || data[position].event_points.size >= 3) ||
+                    (i == 2 && data[position].event_points.size != 1 &&
+                            data[position].event_points.isNotEmpty()) ||
+                    (i == 3 && data[position].event_points.size > 2)) {
+                holder.table.addView(rowHeader)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
