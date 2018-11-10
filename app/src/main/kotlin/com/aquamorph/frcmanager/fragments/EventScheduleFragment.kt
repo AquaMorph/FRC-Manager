@@ -30,12 +30,14 @@ class EventScheduleFragment :
         super.onCreateView(view, matches,
                 ScheduleAdapter(context!!, matches, DataLoader.teamNumber))
         prefs.registerOnSharedPreferenceChangeListener(this)
+
         return view
     }
 
     override fun dataUpdate() {
         matches.clear()
         matches.addAll(DataLoader.matchDC.data)
+        prefs.edit().putString("nextMatch", "%s".format(nextMatch(matches))).apply()
         adapter.notifyDataSetChanged()
     }
 
@@ -58,6 +60,18 @@ class EventScheduleFragment :
         if (key == "teamNumber" || key == "eventKey") {
             refresh()
         }
+    }
+
+    /**
+     * nextMatch() returns the next match to be played in the event.
+     */
+    private fun nextMatch(matches: ArrayList<Match>): String {
+        for (match in matches) {
+            if (match.post_result_time <= 0) {
+                return "Playing %S-%s".format(match.comp_level, match.match_number)
+            }
+        }
+        return ""
     }
 
     internal inner class LoadEventSchedule : AsyncTask<Void?, Void?, Void?>() {

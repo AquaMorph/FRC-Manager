@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     private lateinit var eventName: String
     private lateinit var teamRank: String
     private lateinit var teamRecord: String
+    private lateinit var nextMatch: String
     lateinit var dataLoader: DataLoader
     private lateinit var mViewPager: ViewPager
     private lateinit var tabLayout: TabLayout
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         get() = if (teamRank == "") {
             ""
         } else {
-            String.format("Rank #%s (%s)", teamRank, teamRecord)
+            String.format("Rank #%s (%s) %s", teamRank, teamRecord, nextMatch)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +72,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         eventName = prefs.getString("eventShortName", "")!!
         teamRank = prefs.getString("teamRank", "")!!
         teamRecord = prefs.getString("teamRecord", "")!!
+        nextMatch = prefs.getString("nextMatch", "")!!
         DataLoader.eventKey = prefs.getString("eventKey", "")!!
         DataLoader.districtKey = prefs.getString("districtKey", "")!!
         if (DataLoader.teamNumber == "") openSetup()
@@ -120,6 +122,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         eventName = sharedPreferences.getString("eventShortName", "North Carolina")!!
         teamRank = sharedPreferences.getString("teamRank", "")!!
         teamRecord = sharedPreferences.getString("teamRecord", "")!!
+        nextMatch = sharedPreferences.getString("nextMatch", "")!!
+
         when (key) {
             "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")!!
             "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")!!
