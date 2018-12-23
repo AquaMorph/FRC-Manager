@@ -1,15 +1,12 @@
 package com.aquamorph.frcmanager.activities
 
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.fragments.SettingsFragment
-import com.aquamorph.frcmanager.utils.Logging
 
 /**
  * Settings activity to take users input about how the app should be set up as well as
@@ -18,7 +15,7 @@ import com.aquamorph.frcmanager.utils.Logging
  * @author Christian Colglazier
  * @version 3/31/2018
  */
-class Settings : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class Settings : AppCompatActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +32,11 @@ class Settings : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChange
         if (fragment == null) {
             supportFragmentManager.beginTransaction().replace(R.id.content_frame,
                     SettingsFragment()).commit()
+        } else {
+            supportFragmentManager.beginTransaction().remove(fragment).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.content_frame,
+                    SettingsFragment()).commit()
         }
-        MainActivity.theme(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -44,14 +44,5 @@ class Settings : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChange
             android.R.id.home -> this.finish()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        Logging.info(this, "Settings Changed", 0)
-        if (key == "theme") {
-            Logging.info(this, "Theme Changed", 0)
-            this.recreate()
-        }
     }
 }
