@@ -2,6 +2,7 @@ package com.aquamorph.frcmanager.activities
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
@@ -30,16 +31,17 @@ class Settings : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChange
         }
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportFragmentManager.beginTransaction().replace(R.id.content_frame,
-                SettingsFragment()).commit()
+        val fragment = supportFragmentManager.findFragmentById(R.id.content_frame)
+        if (fragment == null) {
+            supportFragmentManager.beginTransaction().replace(R.id.content_frame,
+                    SettingsFragment()).commit()
+        }
         MainActivity.theme(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> this.finish()
-            else -> {
-            }
         }
         return super.onOptionsItemSelected(item)
     }

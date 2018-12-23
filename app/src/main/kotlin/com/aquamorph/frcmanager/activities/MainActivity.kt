@@ -106,16 +106,14 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
      * openSetup() launches the set up activity.
      */
     private fun openSetup() {
-        val intent = Intent(this, Setup::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, Setup::class.java))
     }
 
     /**
      * openSettings() launches the settings activity.
      */
     private fun openSettings() {
-        val intent = Intent(this, Settings::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, Settings::class.java))
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
