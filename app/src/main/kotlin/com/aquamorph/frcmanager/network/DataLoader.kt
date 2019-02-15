@@ -75,7 +75,8 @@ class DataLoader {
             disposable = retrofit[observer].subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
-                                { error -> Logging.error(this, error.toString(), 0) })
+                                { error -> Logging.error(this, error.toString(), 0)
+                                removeTab(tabs, adapter)})
         }
 
         private fun updateData(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,

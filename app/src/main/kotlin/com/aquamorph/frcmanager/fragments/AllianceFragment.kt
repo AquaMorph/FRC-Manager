@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.fragments
 
+import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
@@ -19,7 +20,9 @@ import com.aquamorph.frcmanager.utils.Constants
  * @author Christian Colglazier
  * @version 4/14/2018
  */
-class AllianceFragment : TabFragment(), RefreshFragment {
+class AllianceFragment : TabFragment(),
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        RefreshFragment {
 
     private var alliances: ArrayList<Alliance> = ArrayList()
 
@@ -29,6 +32,7 @@ class AllianceFragment : TabFragment(), RefreshFragment {
         super.onCreateView(view, alliances,
                 AllianceAdapter(context!!, alliances),
                 Divider(context!!, 2f, 72))
+        prefs.registerOnSharedPreferenceChangeListener(this)
         return view
     }
 
@@ -44,6 +48,12 @@ class AllianceFragment : TabFragment(), RefreshFragment {
      */
     override fun refresh() {
         LoadAlliances().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == "eventKey") {
+            refresh()
+        }
     }
 
     override fun dataUpdate() {
