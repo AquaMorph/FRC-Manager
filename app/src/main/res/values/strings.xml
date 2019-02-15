@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE resources [
-    <!ENTITY appversion "1-1-2">
+    <!ENTITY appversion "1-2-0">
     ]>
 
 <resources>
@@ -23,6 +23,7 @@
     <string name="first_server_down">The FIRST server is currently offline.</string>
     <string name="event_server_down">The feed for the event is down.</string>
     <string-array name="year_array">
+        <item>2019</item>
         <item>2018</item>
         <item>2017</item>
         <item>2016</item>
