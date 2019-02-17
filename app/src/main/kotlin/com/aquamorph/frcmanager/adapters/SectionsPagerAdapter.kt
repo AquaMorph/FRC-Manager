@@ -62,7 +62,7 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
             tabs.add(tab)
             tabs.sort()
             notifyDataSetChanged()
-        } catch (e : IllegalStateException) {
+        } catch (e : Exception) {
             Logging.error(this, e.toString(), 0)
         }
     }

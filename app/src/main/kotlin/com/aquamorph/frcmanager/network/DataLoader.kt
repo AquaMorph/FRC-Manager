@@ -76,7 +76,8 @@ class DataLoader {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( { result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
                                 { error -> Logging.error(this, error.toString(), 0)
-                                removeTab(tabs, adapter)})
+                                removeTab(tabs, adapter)
+                                dataContainer.complete = true})
         }
 
         private fun updateData(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,

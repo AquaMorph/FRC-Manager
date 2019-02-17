@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.fragments
 
+import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
@@ -20,7 +21,8 @@ import com.aquamorph.frcmanager.utils.Constants
  * @author Christian Colglazier
  * @version 4/14/2018
  */
-open class TeamFragment : TabFragment(), RefreshFragment {
+open class TeamFragment : TabFragment(), RefreshFragment,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var teams: ArrayList<Team> = ArrayList()
     private var ranks: ArrayList<Rank> = ArrayList()
@@ -53,6 +55,12 @@ open class TeamFragment : TabFragment(), RefreshFragment {
     override fun refresh() {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "") {
             LoadEventTeams().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        }
+    }
+
+    override fun onSharedPreferenceChanged(sp: SharedPreferences?, key: String?) {
+        if (key.equals("eventKey") || key.equals("teamNumber")) {
+            refresh()
         }
     }
 
