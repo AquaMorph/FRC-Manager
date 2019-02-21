@@ -64,4 +64,17 @@ object AppConfig {
         editor.putString("eventShortName", name)
         editor.apply()
     }
+
+    /**
+     * setDistictKey() set the shared variable of the district key.
+     *
+     * @param key district key
+     * @param context app context
+     */
+    fun setDistictKey(key: String, context: Context) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = prefs.edit()
+        editor.putString("districtKey", key)
+        editor.apply()
+    }
 }

@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.AwardAdapter
-import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Award
 import com.aquamorph.frcmanager.network.DataLoader
@@ -39,35 +38,36 @@ class AwardFragment :
     override fun dataUpdate() {
         awards.clear()
         awards.addAll(DataLoader.awardDC.data)
+        adapter.notifyDataSetChanged()
     }
 
     override fun onResume() {
         super.onResume()
         if (awards.isEmpty())
-            refresh(false)
+            refresh()
     }
 
     /**
-     * refrest() loads dataLoader needed for this fragment
+     * refresh() loads dataLoader needed for this fragment
      *
      * @param force force reload dataLoader
      */
-    override fun refresh(force: Boolean) {
+    override fun refresh() {
         if (DataLoader.eventKey != "") {
-            LoadAwards(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            LoadAwards().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == "eventKey") {
-            refresh(true)
+            refresh()
         }
     }
 
-    internal inner class LoadAwards(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadAwards : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg p0: Void?): Void? {
@@ -79,10 +79,7 @@ class AwardFragment :
             if (context != null) {
                 dataUpdate()
                 Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
-                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
-                        DataLoader.awardDC.parser.isNewData)
-                if (firstLoad) firstLoad = false
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

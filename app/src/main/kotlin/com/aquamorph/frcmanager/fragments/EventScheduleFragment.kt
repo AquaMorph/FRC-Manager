@@ -4,14 +4,11 @@ import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
-import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
@@ -33,39 +30,54 @@ class EventScheduleFragment :
         super.onCreateView(view, matches,
                 ScheduleAdapter(context!!, matches, DataLoader.teamNumber))
         prefs.registerOnSharedPreferenceChangeListener(this)
+
         return view
     }
 
     override fun dataUpdate() {
         matches.clear()
         matches.addAll(DataLoader.matchDC.data)
+        prefs.edit().putString("nextMatch", "%s".format(nextMatch(matches))).apply()
+        adapter.notifyDataSetChanged()
     }
 
     override fun onResume() {
         super.onResume()
         if (matches.isEmpty())
-            refresh(false)
+            refresh()
     }
 
     /**
      * refresh reloads the event schedule and repopulates the listview
      */
-    override fun refresh(force: Boolean) {
+    override fun refresh() {
         if (DataLoader.eventKey != "") {
-            LoadEventSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            LoadEventSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == "teamNumber" || key == "eventKey") {
-            refresh(true)
+            refresh()
         }
     }
 
-    internal inner class LoadEventSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
+    /**
+     * nextMatch() returns the next match to be played in the event.
+     */
+    private fun nextMatch(matches: ArrayList<Match>): String {
+        for (match in matches) {
+            if (match.post_result_time <= 0) {
+                return "Playing %S-%s".format(match.comp_level, match.match_number)
+            }
+        }
+        return ""
+    }
+
+    internal inner class LoadEventSchedule : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -77,10 +89,7 @@ class EventScheduleFragment :
             if (context != null) {
                 dataUpdate()
                 Constants.checkNoDataScreen(matches, recyclerView, emptyView)
-                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
-                        DataLoader.matchDC.parser.isNewData)
-                if (firstLoad) firstLoad = false
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

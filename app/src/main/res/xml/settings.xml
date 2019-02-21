@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    >
-
-    <PreferenceCategory
-        android:summary="@string/general_summary"
-        android:title="@string/general_title">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/general_title">
         <PreferenceScreen
             android:summary="Relaunches the setup screen"
             android:title="Reset Team and Event">
@@ -19,9 +15,7 @@
             android:title="App Theme"/>
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:summary="About"
-        android:title="About">
+    <PreferenceCategory android:title="About">
         <PreferenceScreen
             android:key="settings_version"
             android:summary="Created by Christian Colglazier"
@@ -41,5 +35,4 @@
                 android:data="https://www.thebluealliance.com"/>
         </Preference>
     </PreferenceCategory>
-
 </PreferenceScreen>

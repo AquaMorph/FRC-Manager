@@ -64,8 +64,6 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
 
     override fun onConfigurationChanged(newConfig: Configuration?) {
         super.onConfigurationChanged(newConfig)
-//        view2 = (context!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-//                .inflate(R.layout.fragment_team_schedule, null)
         listener()
         Logging.info(this, "Configuration Changed", 3)
     }
@@ -73,16 +71,16 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     override fun onResume() {
         super.onResume()
         if (teamEventMatches.size == 0)
-            refresh(false)
+            refresh()
     }
 
     /**
-     * refrest() loads dataLoader needed for this fragment.
+     * refresh() loads dataLoader needed for this fragment.
      * @param force
      */
-    override fun refresh(force: Boolean) {
+    override fun refresh() {
         if (teamNumber != "" && DataLoader.eventKey != "") {
-            LoadTeamSchedule(force).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            LoadTeamSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         } else {
             Logging.error(this, "Team or event key not set", 0)
         }
@@ -91,7 +89,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == "teamNumber" || key == "eventKey") {
             if (getTeamFromSettings) {
-                teamNumber = sharedPreferences.getString("teamNumber", "")
+                teamNumber = DataLoader.teamNumber
             }
             listener()
         }
@@ -103,15 +101,8 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     private fun listener() {
         if (context != null) {
             if (getTeamFromSettings) {
-                teamNumber = prefs.getString("teamNumber", "")
+                teamNumber = DataLoader.teamNumber
             }
-//            if (getTeamFromSettings) {
-//                MainActivity.refresh()
-//            } else {
-//                MainActivity.refresh()
-//                refresh(false)
-//                mSwipeRefreshLayout.isRefreshing = false
-//            }
         }
     }
 
@@ -120,12 +111,14 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         for (match in DataLoader.matchDC.data) {
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
         }
+        sort(teamEventMatches)
+        adapter.notifyDataSetChanged()
     }
 
-    internal inner class LoadTeamSchedule(var force: Boolean) : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadTeamSchedule() : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -136,12 +129,8 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                sort(teamEventMatches)
                 Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
-                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
-                        DataLoader.matchDC.parser.isNewData)
-                if (firstLoad) firstLoad = false
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

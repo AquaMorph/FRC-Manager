@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.fragments
 
+import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
@@ -8,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.TeamAdapter
-import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
@@ -21,7 +21,8 @@ import com.aquamorph.frcmanager.utils.Constants
  * @author Christian Colglazier
  * @version 4/14/2018
  */
-open class TeamFragment : TabFragment(), RefreshFragment {
+open class TeamFragment : TabFragment(), RefreshFragment,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var teams: ArrayList<Team> = ArrayList()
     private var ranks: ArrayList<Rank> = ArrayList()
@@ -37,7 +38,7 @@ open class TeamFragment : TabFragment(), RefreshFragment {
     override fun onResume() {
         super.onResume()
         if (teams.isEmpty())
-            refresh(false)
+            refresh()
     }
 
     override fun dataUpdate() {
@@ -45,21 +46,28 @@ open class TeamFragment : TabFragment(), RefreshFragment {
         teams.addAll(DataLoader.teamDC.data)
         ranks.clear()
         ranks.addAll(DataLoader.rankDC.data)
+        adapter.notifyDataSetChanged()
     }
 
     /**
      * refresh() loads dataLoader needed for this fragment.
      */
-    override fun refresh(force: Boolean) {
+    override fun refresh() {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "") {
             LoadEventTeams().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
     }
 
-    internal inner class LoadEventTeams() : AsyncTask<Void?, Void?, Void?>() {
+    override fun onSharedPreferenceChanged(sp: SharedPreferences?, key: String?) {
+        if (key.equals("eventKey") || key.equals("teamNumber")) {
+            refresh()
+        }
+    }
+
+    internal inner class LoadEventTeams : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
-            if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = true
+            mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
@@ -72,10 +80,7 @@ open class TeamFragment : TabFragment(), RefreshFragment {
             if (context != null) {
                 dataUpdate()
                 Constants.checkNoDataScreen(teams, recyclerView, emptyView)
-                Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
-                        DataLoader.teamDC.parser.isNewData)
-                if (firstLoad) firstLoad = false
-                if (mSwipeRefreshLayout != null) mSwipeRefreshLayout.isRefreshing = false
+                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

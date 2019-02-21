@@ -19,7 +19,6 @@ abstract class TabFragment : Fragment() {
     protected lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
     protected lateinit var recyclerView: RecyclerView
     protected lateinit var emptyView: TextView
-    protected var firstLoad: Boolean = true
     protected lateinit var adapter: Adapter<*>
     abstract fun dataUpdate()
 

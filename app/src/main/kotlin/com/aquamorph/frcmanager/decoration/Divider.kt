@@ -34,21 +34,21 @@ class Divider(context: Context, width: Float, indent: Int) : RecyclerView.ItemDe
                 context.resources.displayMetrics).toInt()
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         val params = view.layoutParams as RecyclerView.LayoutParams
 
         // we retrieve the position in the list
         val position = params.viewAdapterPosition
 
         // add space for the separator to the bottom of every view but the last one
-        if (position < state!!.itemCount) {
+        if (position < state.itemCount) {
             outRect.set(0, 0, 0, mPaint.strokeWidth.toInt()) // left, top, right, bottom
         } else {
             outRect.setEmpty() // 0, 0, 0, 0
         }
     }
 
-    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         // a line will draw half its size to top and bottom,
         // hence the offset to place it correctly
         val offset = (mPaint.strokeWidth / 2).toInt()
@@ -63,7 +63,7 @@ class Divider(context: Context, width: Float, indent: Int) : RecyclerView.ItemDe
             val position = params.viewAdapterPosition
 
             // and finally draw the separator
-            if (position < state!!.itemCount) {
+            if (position < state.itemCount) {
                 // apply alpha to support animations
                 mPaint.alpha = (view.alpha * mAlpha).toInt()
 

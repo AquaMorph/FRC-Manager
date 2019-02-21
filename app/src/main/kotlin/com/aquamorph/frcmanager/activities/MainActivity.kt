@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     private lateinit var eventName: String
     private lateinit var teamRank: String
     private lateinit var teamRecord: String
+    private lateinit var nextMatch: String
     lateinit var dataLoader: DataLoader
     private lateinit var mViewPager: ViewPager
     private lateinit var tabLayout: TabLayout
@@ -47,9 +48,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
      * getAppTitle() returns the text for the app.
      * @return title for the app
      */
-    val appTitle: String
-        get() = String.format("%s - %s", DataLoader.teamNumber,
-                shorten(eventName, Constants.MAX_EVENT_TITLE_LENGTH))
+    private val appTitle: String
+        get() = String.format("%s - %s", DataLoader.teamNumber, eventName)
 
     /**
      * getAppSubTitle() returns the subtitle string for the toolbar with the event name,
@@ -61,18 +61,20 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         get() = if (teamRank == "") {
             ""
         } else {
-            String.format("Rank #%s (%s)", teamRank, teamRecord)
+            String.format("Rank #%s (%s) %s", teamRank, teamRecord, nextMatch)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.registerOnSharedPreferenceChangeListener(this@MainActivity)
-        DataLoader.teamNumber = prefs.getString("teamNumber", "")
-        eventName = prefs.getString("eventShortName", "")
-        teamRank = prefs.getString("teamRank", "")
-        teamRecord = prefs.getString("teamRecord", "")
-        DataLoader.eventKey = prefs.getString("eventKey", "")
+        DataLoader.teamNumber = prefs.getString("teamNumber", "")!!
+        eventName = prefs.getString("eventShortName", "")!!
+        teamRank = prefs.getString("teamRank", "")!!
+        teamRecord = prefs.getString("teamRecord", "")!!
+        nextMatch = prefs.getString("nextMatch", "")!!
+        DataLoader.eventKey = prefs.getString("eventKey", "")!!
+        DataLoader.districtKey = prefs.getString("districtKey", "")!!
         if (DataLoader.teamNumber == "") openSetup()
         listener()
         theme(this)
@@ -94,8 +96,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> openSettings()
-            R.id.refresh_all -> mSectionsPagerAdapter!!.refreshAll(false)
-            else -> mSectionsPagerAdapter!!.refreshAll(false)
+            R.id.refresh_all -> refresh()
+            else -> refresh()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -104,42 +106,26 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
      * openSetup() launches the set up activity.
      */
     private fun openSetup() {
-        val intent = Intent(this, Setup::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, Setup::class.java))
     }
 
     /**
      * openSettings() launches the settings activity.
      */
     private fun openSettings() {
-        val intent = Intent(this, Settings::class.java)
-        startActivity(intent)
-    }
-
-    /**
-     * shorten() returns a shortened string with ... at the end.
-     *
-     * @param text   to be shortened
-     * @param amount length to shorten
-     * @return shorten string with ... at the end
-     */
-    private fun shorten(text: String?, amount: Int): String {
-        return if (text!!.length > amount) {
-            text.substring(0, amount) + "..."
-        } else {
-            text
-        }
+        startActivity(Intent(this, Settings::class.java))
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        eventName = sharedPreferences.getString("eventShortName", "North Carolina")
-        teamRank = sharedPreferences.getString("teamRank", "")
-        teamRecord = sharedPreferences.getString("teamRecord", "")
+        eventName = sharedPreferences.getString("eventShortName", "North Carolina")!!
+        teamRank = sharedPreferences.getString("teamRank", "")!!
+        teamRecord = sharedPreferences.getString("teamRecord", "")!!
+        nextMatch = sharedPreferences.getString("nextMatch", "")!!
+
         when (key) {
-            "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")
-            "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")
-            else -> {
-            }
+            "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")!!
+            "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")!!
+            "districtKey" -> DataLoader.districtKey = sharedPreferences.getString("districtKey", "")!!
         }
 
         if (supportActionBar != null) {
@@ -167,11 +153,11 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager,
                 mViewPager, tabLayout, this)
-        dataLoader = DataLoader(this)
+        dataLoader = DataLoader()
         mViewPager.offscreenPageLimit = Constants.MAX_NUMBER_OF_TABS
         mViewPager.adapter = mSectionsPagerAdapter
         try {
-            refreshData(false)
+            refresh()
         } catch (e : Exception) {
             Logging.error(this, e.toString(), 0)
         }
@@ -195,16 +181,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
             }
         }
 
-        fun refreshData(force: Boolean) {
-            mSectionsPagerAdapter!!.refreshData(force)
-        }
-
         fun refresh() {
-            mSectionsPagerAdapter!!.refreshAll(false)
-        }
-
-        fun refresh(force: Boolean?) {
-            mSectionsPagerAdapter!!.refreshAll(force!!)
+            mSectionsPagerAdapter!!.refreshAll()
         }
     }
 }

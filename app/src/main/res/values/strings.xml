@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE resources [
-    <!ENTITY appversion "1-1-2">
+    <!ENTITY appversion "1-2-0">
     ]>
 
 <resources>
@@ -14,7 +14,6 @@
     <string name="team_number_prompt">Please enter your team number</string>
     <string name="event_prompt">Please select your event</string>
     <string name="year_prompt">Please select the desired year</string>
-    <string name="general_summary">General</string>
     <string name="general_title">General</string>
     <string name="refresh_icon">Refresh</string>
     <string name="version">&appversion;</string>
@@ -24,6 +23,7 @@
     <string name="first_server_down">The FIRST server is currently offline.</string>
     <string name="event_server_down">The feed for the event is down.</string>
     <string-array name="year_array">
+        <item>2019</item>
         <item>2018</item>
         <item>2017</item>
         <item>2016</item>
