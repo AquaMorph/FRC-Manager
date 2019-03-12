@@ -5,6 +5,7 @@ import android.text.Html
 import android.text.Spanned
 import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
+import com.aquamorph.frcmanager.network.DataLoader
 import java.util.*
 
 /**
@@ -83,5 +84,67 @@ object Constants {
         } else {
             Html.fromHtml(html)
         }
+    }
+
+    /**
+     * getTeamName() returns the name of a team.
+     *
+     * @param number of the team
+     * @return name of the team
+     */
+    fun getTeamName(number: String): String {
+        if (isDistrict()) {
+            for (i in DataLoader.districtTeamDC.data.indices) {
+                if (number == DataLoader.districtTeamDC.data[i].key) {
+                    return DataLoader.districtTeamDC.data[i].nickname
+                }
+            }
+        } else {
+            for (i in DataLoader.teamDC.data.indices) {
+                if (number == DataLoader.teamDC.data[i].key) {
+                    return DataLoader.teamDC.data[i].nickname
+                }
+            }
+        }
+        return ""
+    }
+
+    /**
+     * getTeamRecord() returns the record of a team.
+     *
+     * @param number of the team
+     * @return record of the team
+     */
+    fun getTeamRecord(number: String): String {
+        for (i in DataLoader.rankDC.data[0].rankings.indices) {
+            if (number == DataLoader.rankDC.data[0].rankings[i]!!.team_key) {
+                val record = DataLoader.rankDC.data[0].rankings[i]!!.record
+                return "(" + record.wins + "-" + record.losses + "-" + record.ties + ")"
+            }
+        }
+        return ""
+    }
+
+    /**
+     * getTeamRecord() returns the rank of a team.
+     *
+     * @param number of the team
+     * @return rank of the team
+     */
+    fun getTeamRank(number: String): String {
+        for (i in DataLoader.rankDC.data[0].rankings.indices) {
+            if (number == DataLoader.rankDC.data[0].rankings[i]!!.team_key) {
+                val rank = DataLoader.rankDC.data[0].rankings[i]!!.rank
+                return "Rank #$rank"
+            }
+        }
+        return ""
+    }
+
+    /**
+     * isDistrict() returns if the event is a district.
+     */
+    fun isDistrict(): Boolean {
+        return DataLoader.districtKey != ""
     }
 }
