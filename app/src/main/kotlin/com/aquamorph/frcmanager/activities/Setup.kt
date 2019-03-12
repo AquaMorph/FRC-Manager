@@ -60,7 +60,7 @@ class Setup : AppIntro() {
         super.onSlideChanged(oldFragment, newFragment)
         if (teamNumberSlide.getTeamNumber().matches("[0-9]+".toRegex())) {
             try {
-                Logging.info(this, "Gettings events for Setup", 0)
+                Logging.info(this, "Getting events for Setup", 0)
                 teamNumberSlide.setTeamNumber()
                 eventSlide.load()
             } catch (e: Exception) {}
