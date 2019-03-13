@@ -109,4 +109,8 @@ interface TbaApi {
     @GET("district/{districtKey}/teams")
     fun getDistrictTeams(@Path("districtKey") districtKey: String)
             : Observable<ArrayList<Team>>
+
+    @GET("match/{matchKey}")
+    fun getMatch2019(@Path("matchKey") matchKey: String)
+            : Observable<MatchScore2019>
 }

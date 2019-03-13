@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TextView
 import com.aquamorph.frcmanager.R
+import com.aquamorph.frcmanager.activities.MatchSummaryActivity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.utils.Constants
@@ -37,6 +38,7 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.matchKey = data[position].key
         holder.matchNumber.text = String.format("%S-%s", data[position].comp_level,
                 data[position].match_number)
         holder.redTeam1.text = parseTeamNumber(true, 0, position)
@@ -164,6 +166,7 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
         internal val redScore: TextView = itemView.findViewById(R.id.red_score)
         internal val blueScore: TextView = itemView.findViewById(R.id.blue_score)
         internal val scoreTable: TableLayout = itemView.findViewById(R.id.score_table)
+        var matchKey = ""
 
         init {
             redTeam1.setOnClickListener {
@@ -194,6 +197,11 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
             blueTeam3.setOnClickListener {
                 val intent = Intent(context, TeamSummary::class.java)
                 intent.putExtra("teamNumber", blueTeam3.text.toString())
+                context.startActivity(intent)
+            }
+            matchNumber.setOnClickListener {
+                val intent = Intent(context, MatchSummaryActivity::class.java)
+                intent.putExtra("matchKey", matchKey)
                 context.startActivity(intent)
             }
         }
