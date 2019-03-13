@@ -2,6 +2,7 @@ package com.aquamorph.frcmanager.network
 
 import com.aquamorph.frcmanager.models.*
 import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -112,5 +113,5 @@ interface TbaApi {
 
     @GET("match/{matchKey}")
     fun getMatch2019(@Path("matchKey") matchKey: String)
-            : Observable<MatchScore2019>
+            : Call<MatchScore2019>
 }
