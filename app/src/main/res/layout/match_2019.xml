@@ -23,21 +23,21 @@
 
     <include
         android:id="@+id/totalScore"
-        layout="@layout/match_text"/>
+        layout="@layout/match_text_h1"/>
     <include
         android:id="@+id/rankPoints"
-        layout="@layout/match_text"/>
+        layout="@layout/match_text_h2"/>
     <include
         android:id="@+id/sandstormTotal"
-        layout="@layout/match_text"/>
+        layout="@layout/match_text_h1"/>
     <include
         android:id="@+id/hatchTotal"
-        layout="@layout/match_text"/>
+        layout="@layout/match_text_h2"/>
     <include
         android:id="@+id/cargoTotal"
-        layout="@layout/match_text"/>
+        layout="@layout/match_text_h2"/>
     <include
         android:id="@+id/habTotal"
-        layout="@layout/match_text"/>
+        layout="@layout/match_text_h2"/>
 
 </LinearLayout>
