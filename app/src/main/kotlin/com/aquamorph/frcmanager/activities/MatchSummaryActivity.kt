@@ -10,6 +10,7 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.models.MatchScore2019
 import com.aquamorph.frcmanager.network.RetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
+import com.aquamorph.frcmanager.utils.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +24,9 @@ import retrofit2.Response
 class MatchSummaryActivity : AppCompatActivity() {
 
     private var matchKey = ""
+    private var compLevel = ""
+    private var setNumber = 0
+    private var matchNumber = 0
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +36,15 @@ class MatchSummaryActivity : AppCompatActivity() {
         val extras = intent.extras
         if (extras != null) {
             matchKey = extras.getString("matchKey")!!
+            compLevel = extras.getString("compLevel")!!
+            setNumber = extras.getInt("setNumber")
+            matchNumber = extras.getInt("matchNumber")
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         if (toolbar != null) {
-            toolbar.title = "Match Summary $matchKey"
+            toolbar.title = Constants.matchTypeToString(compLevel) +
+                    setToString() + " Match $matchNumber"
         }
         setSupportActionBar(toolbar)
         if (supportActionBar != null) {
@@ -97,6 +105,13 @@ class MatchSummaryActivity : AppCompatActivity() {
         })
     }
 
+    fun setToString(): String {
+        return if (compLevel != "qm") {
+            " $setNumber"
+        } else {
+            ""
+        }
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

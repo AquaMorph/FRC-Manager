@@ -39,6 +39,10 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.matchKey = data[position].key
+        holder.compLevel = data[position].comp_level
+        holder.setNumber = data[position].set_number
+        holder.matchNumberKey = data[position].match_number
+
         holder.matchNumber.text = String.format("%S-%s", data[position].comp_level,
                 data[position].match_number)
         holder.redTeam1.text = parseTeamNumber(true, 0, position)
@@ -167,6 +171,9 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
         internal val blueScore: TextView = itemView.findViewById(R.id.blue_score)
         internal val scoreTable: TableLayout = itemView.findViewById(R.id.score_table)
         var matchKey = ""
+        var compLevel = ""
+        var setNumber = 0
+        var matchNumberKey = 0
 
         init {
             redTeam1.setOnClickListener {
@@ -202,6 +209,9 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
             matchNumber.setOnClickListener {
                 val intent = Intent(context, MatchSummaryActivity::class.java)
                 intent.putExtra("matchKey", matchKey)
+                intent.putExtra("compLevel", compLevel)
+                intent.putExtra("setNumber", setNumber)
+                intent.putExtra("matchNumber", matchNumberKey)
                 context.startActivity(intent)
             }
         }

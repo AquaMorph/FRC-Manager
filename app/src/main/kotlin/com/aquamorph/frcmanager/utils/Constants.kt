@@ -147,4 +147,15 @@ object Constants {
     fun isDistrict(): Boolean {
         return DataLoader.districtKey != ""
     }
+
+    fun matchTypeToString(compLevel: String): String {
+        return when (compLevel) {
+            "qm" -> "Qualification"
+            "ef" -> "Octofinal"
+            "qf" -> "Quarterfinal"
+            "sf" -> "Semifinal"
+            "f" -> "Final"
+            else -> ""
+        }
+    }
 }

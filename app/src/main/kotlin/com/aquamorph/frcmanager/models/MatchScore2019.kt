@@ -5,6 +5,8 @@ class MatchScore2019 {
     lateinit var score_breakdown: ScoreBreakDown
 
     inner class ScoreBreakDown {
+        lateinit var comp_level: String
+        var match_number: Int = 0
         lateinit var blue: BreakDown2019
         lateinit var red: BreakDown2019
     }
