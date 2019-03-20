@@ -117,6 +117,19 @@ class DataLoader {
             }
         }
 
+        /**
+         * clearData()
+         */
+        fun clearData() {
+            teamDC.data.clear()
+            rankDC.data.clear()
+            awardDC.data.clear()
+            matchDC.data.clear()
+            allianceDC.data.clear()
+            districtRankDC.data.clear()
+            districtTeamDC.data.clear()
+        }
+
         fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
                 // Checks for internet connections

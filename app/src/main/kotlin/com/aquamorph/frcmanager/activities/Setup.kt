@@ -8,6 +8,7 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.fragments.setup.EventSlide
 import com.aquamorph.frcmanager.fragments.setup.Slide
 import com.aquamorph.frcmanager.fragments.setup.TeamNumberSlide
+import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Logging
 import com.github.paolorotolo.appintro.AppIntro
 
@@ -52,6 +53,7 @@ class Setup : AppIntro() {
         editor.putString("teamRank", "")
         editor.putString("teamRecord", "")
         editor.apply()
+        DataLoader.clearData()
         MainActivity.refresh()
         this.finish()
     }

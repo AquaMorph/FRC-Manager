@@ -116,10 +116,12 @@ object Constants {
      * @return record of the team
      */
     fun getTeamRecord(number: String): String {
-        for (i in DataLoader.rankDC.data[0].rankings.indices) {
-            if (number == DataLoader.rankDC.data[0].rankings[i]!!.team_key) {
-                val record = DataLoader.rankDC.data[0].rankings[i]!!.record
-                return "(" + record.wins + "-" + record.losses + "-" + record.ties + ")"
+        if (DataLoader.rankDC.data.isNotEmpty()) {
+            for (i in DataLoader.rankDC.data[0].rankings.indices) {
+                if (number == DataLoader.rankDC.data[0].rankings[i]!!.team_key) {
+                    val record = DataLoader.rankDC.data[0].rankings[i]!!.record
+                    return "(" + record.wins + "-" + record.losses + "-" + record.ties + ")"
+                }
             }
         }
         return ""
@@ -132,10 +134,12 @@ object Constants {
      * @return rank of the team
      */
     fun getTeamRank(number: String): String {
-        for (i in DataLoader.rankDC.data[0].rankings.indices) {
-            if (number == DataLoader.rankDC.data[0].rankings[i]!!.team_key) {
-                val rank = DataLoader.rankDC.data[0].rankings[i]!!.rank
-                return "Rank #$rank"
+        if (DataLoader.rankDC.data.isNotEmpty()) {
+            for (i in DataLoader.rankDC.data[0].rankings.indices) {
+                if (number == DataLoader.rankDC.data[0].rankings[i]!!.team_key) {
+                    val rank = DataLoader.rankDC.data[0].rankings[i]!!.rank
+                    return "Rank #$rank"
+                }
             }
         }
         return ""
