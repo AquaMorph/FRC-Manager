@@ -46,12 +46,16 @@ class MatchSummaryActivity : AppCompatActivity() {
             compLevel = extras.getString("compLevel")!!
             setNumber = extras.getInt("setNumber")
             matchNumber = extras.getInt("matchNumber")
-            redRobot1 = extras.getString("redRobot1")!!
-            redRobot2 = extras.getString("redRobot2")!!
-            redRobot3 = extras.getString("redRobot3")!!
-            blueRobot1 = extras.getString("blueRobot1")!!
-            blueRobot2 = extras.getString("blueRobot2")!!
-            blueRobot3 = extras.getString("blueRobot3")!!
+            try {
+                redRobot1 = extras.getString("redRobot1")!!
+                redRobot2 = extras.getString("redRobot2")!!
+                redRobot3 = extras.getString("redRobot3")!!
+                blueRobot1 = extras.getString("blueRobot1")!!
+                blueRobot2 = extras.getString("blueRobot2")!!
+                blueRobot3 = extras.getString("blueRobot3")!!
+            } catch (e :Exception) {
+
+            }
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -103,25 +107,34 @@ class MatchSummaryActivity : AppCompatActivity() {
         call.enqueue(object : Callback<MatchScore2019> {
             override fun onResponse(call: Call<MatchScore2019>, response: Response<MatchScore2019>) {
                 if(response.isSuccessful) {
-                    val match = response.body()!!.score_breakdown
+                    try {
+                        val match = response.body()!!.score_breakdown
 
-                    totalScore.findViewById<TextView>(R.id.redText).text = match.red.totalPoints.toString()
-                    totalScore.findViewById<TextView>(R.id.blueText).text = match.blue.totalPoints.toString()
+                        totalScore.findViewById<TextView>(R.id.redText).text = match.red.totalPoints.toString()
+                        totalScore.findViewById<TextView>(R.id.blueText).text = match.blue.totalPoints.toString()
 
-                    rankPoints.findViewById<TextView>(R.id.redText).text = match.red.rp.toString()
-                    rankPoints.findViewById<TextView>(R.id.blueText).text = match.blue.rp.toString()
+                        rankPoints.findViewById<TextView>(R.id.redText).text = match.red.rp.toString()
+                        rankPoints.findViewById<TextView>(R.id.blueText).text = match.blue.rp.toString()
 
-                    sandstormTotal.findViewById<TextView>(R.id.redText).text = match.red.autoPoints.toString()
-                    sandstormTotal.findViewById<TextView>(R.id.blueText).text = match.blue.autoPoints.toString()
+                        sandstormTotal.findViewById<TextView>(R.id.redText).text = match.red.autoPoints.toString()
+                        sandstormTotal.findViewById<TextView>(R.id.blueText).text = match.blue.autoPoints.toString()
 
-                    hatchTotal.findViewById<TextView>(R.id.redText).text = match.red.hatchPanelPoints.toString()
-                    hatchTotal.findViewById<TextView>(R.id.blueText).text = match.blue.hatchPanelPoints.toString()
+                        hatchTotal.findViewById<TextView>(R.id.redText).text = match.red.hatchPanelPoints.toString()
+                        hatchTotal.findViewById<TextView>(R.id.blueText).text = match.blue.hatchPanelPoints.toString()
 
-                    cargoTotal.findViewById<TextView>(R.id.redText).text = match.red.cargoPoints.toString()
-                    cargoTotal.findViewById<TextView>(R.id.blueText).text = match.blue.cargoPoints.toString()
+                        cargoTotal.findViewById<TextView>(R.id.redText).text = match.red.cargoPoints.toString()
+                        cargoTotal.findViewById<TextView>(R.id.blueText).text = match.blue.cargoPoints.toString()
 
-                    habTotal.findViewById<TextView>(R.id.redText).text = match.red.habClimbPoints.toString()
-                    habTotal.findViewById<TextView>(R.id.blueText).text = match.blue.habClimbPoints.toString()
+                        habTotal.findViewById<TextView>(R.id.redText).text = match.red.habClimbPoints.toString()
+                        habTotal.findViewById<TextView>(R.id.blueText).text = match.blue.habClimbPoints.toString()
+                    } catch (e : UninitializedPropertyAccessException) {
+                        totalScore.visibility = View.GONE
+                        rankPoints.visibility = View.GONE
+                        sandstormTotal.visibility = View.GONE
+                        hatchTotal.visibility = View.GONE
+                        cargoTotal.visibility = View.GONE
+                        habTotal.visibility = View.GONE
+                    }
                 }
             }
 
