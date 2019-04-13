@@ -43,8 +43,9 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
         holder.setNumber = data[position].set_number
         holder.matchNumberKey = data[position].match_number
 
-        holder.matchNumber.text = String.format("%S-%s", data[position].comp_level,
-                data[position].match_number)
+        holder.matchNumber.text = Constants.matchString(data[position].comp_level,
+                data[position].set_number, data[position].match_number)
+
         holder.redTeam1.text = parseTeamNumber(true, 0, position)
         holder.redTeam2.text = parseTeamNumber(true, 1, position)
         holder.redTeam3.text = parseTeamNumber(true, 2, position)
