@@ -33,6 +33,7 @@ class TeamSummary : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         if (toolbar != null) {
             toolbar.title = "$teamNumber - " + getTeamName("frc$teamNumber")
+
             if (getTeamRecord("frc$teamNumber").isNotEmpty() &&
                     getTeamRank("frc$teamNumber").isNotEmpty()) {
                 toolbar.subtitle = getTeamRank("frc$teamNumber") + " " +

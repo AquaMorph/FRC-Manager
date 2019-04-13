@@ -116,11 +116,13 @@ object Constants {
      * @return record of the team
      */
     fun getTeamRecord(number: String): String {
-        if (DataLoader.rankDC.data.isNotEmpty()) {
-            for (i in DataLoader.rankDC.data[0].rankings.indices) {
-                if (number == DataLoader.rankDC.data[0].rankings[i]!!.team_key) {
-                    val record = DataLoader.rankDC.data[0].rankings[i]!!.record
-                    return "(" + record.wins + "-" + record.losses + "-" + record.ties + ")"
+        if (DataLoader.rankDC.data != null && DataLoader.rankDC.data.isNotEmpty()) {
+            if (DataLoader.rankDC.data[0].rankings != null && DataLoader.rankDC.data[0].rankings.isNotEmpty()) {
+                for (i in DataLoader.rankDC.data[0].rankings.indices) {
+                    if (number == DataLoader.rankDC.data[0].rankings[i]!!.team_key) {
+                        val record = DataLoader.rankDC.data[0].rankings[i]!!.record
+                        return "(" + record.wins + "-" + record.losses + "-" + record.ties + ")"
+                    }
                 }
             }
         }
