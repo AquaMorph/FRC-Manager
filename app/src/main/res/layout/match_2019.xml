@@ -22,6 +22,15 @@
     </android.support.design.widget.AppBarLayout>
 
     <include
+        android:id="@+id/team1"
+        layout="@layout/match_text_h1"/>
+    <include
+        android:id="@+id/team2"
+        layout="@layout/match_text_h1"/>
+    <include
+        android:id="@+id/team3"
+        layout="@layout/match_text_h1"/>
+    <include
         android:id="@+id/totalScore"
         layout="@layout/match_text_h1"/>
     <include

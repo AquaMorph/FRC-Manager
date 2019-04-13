@@ -14,6 +14,7 @@ import com.aquamorph.frcmanager.utils.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 /**
  * Activity with a summary of the scoring of a match.
@@ -27,6 +28,12 @@ class MatchSummaryActivity : AppCompatActivity() {
     private var compLevel = ""
     private var setNumber = 0
     private var matchNumber = 0
+    private var redRobot1 = ""
+    private var redRobot2 = ""
+    private var redRobot3 = ""
+    private var blueRobot1 = ""
+    private var blueRobot2 = ""
+    private var blueRobot3 = ""
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +46,12 @@ class MatchSummaryActivity : AppCompatActivity() {
             compLevel = extras.getString("compLevel")!!
             setNumber = extras.getInt("setNumber")
             matchNumber = extras.getInt("matchNumber")
+            redRobot1 = extras.getString("redRobot1")!!
+            redRobot2 = extras.getString("redRobot2")!!
+            redRobot3 = extras.getString("redRobot3")!!
+            blueRobot1 = extras.getString("blueRobot1")!!
+            blueRobot2 = extras.getString("blueRobot2")!!
+            blueRobot3 = extras.getString("blueRobot3")!!
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -50,6 +63,19 @@ class MatchSummaryActivity : AppCompatActivity() {
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }
+        val team1 = findViewById<View>(R.id.team1)
+        team1.findViewById<TextView>(R.id.text).text = "Team 1"
+        val team2 = findViewById<View>(R.id.team2)
+        team2.findViewById<TextView>(R.id.text).text = "Team 2"
+        val team3 = findViewById<View>(R.id.team3)
+        team3.findViewById<TextView>(R.id.text).text = "Team 3"
+
+        team1.findViewById<TextView>(R.id.redText).text = redRobot1
+        team1.findViewById<TextView>(R.id.blueText).text = blueRobot1
+        team2.findViewById<TextView>(R.id.redText).text = redRobot2
+        team2.findViewById<TextView>(R.id.blueText).text = blueRobot2
+        team3.findViewById<TextView>(R.id.redText).text = redRobot3
+        team3.findViewById<TextView>(R.id.blueText).text = blueRobot3
 
         val totalScore = findViewById<View>(R.id.totalScore)
         totalScore.findViewById<TextView>(R.id.text).text = "Total Score"

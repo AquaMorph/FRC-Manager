@@ -164,7 +164,7 @@ object Constants {
             else -> ""
         }
     }
-    
+
     fun matchString(compLevel: String, setNumber: Int, matchNumber: Int): String {
         return if (compLevel == "qm") {
             String.format("%S-%s", compLevel, matchNumber)

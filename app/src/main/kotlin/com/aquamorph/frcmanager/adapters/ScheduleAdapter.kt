@@ -213,6 +213,12 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
                 intent.putExtra("compLevel", compLevel)
                 intent.putExtra("setNumber", setNumber)
                 intent.putExtra("matchNumber", matchNumberKey)
+                intent.putExtra("redRobot1", redTeam1.text)
+                intent.putExtra("redRobot2", redTeam2.text)
+                intent.putExtra("redRobot3", redTeam3.text)
+                intent.putExtra("blueRobot1", blueTeam1.text)
+                intent.putExtra("blueRobot2", blueTeam2.text)
+                intent.putExtra("blueRobot3", blueTeam3.text)
                 context.startActivity(intent)
             }
         }
