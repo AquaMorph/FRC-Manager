@@ -7,4 +7,7 @@
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="team_number_text">17sp</dimen>
     <dimen name="divider_padding">72dp</dimen>
+    <dimen name="match_score_text">20sp</dimen>
+    <dimen name="match_help_text_h1">25sp</dimen>
+    <dimen name="match_help_text_h2">21sp</dimen>
 </resources>

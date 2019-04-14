@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TextView
 import com.aquamorph.frcmanager.R
+import com.aquamorph.frcmanager.activities.MatchSummaryActivity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.utils.Constants
@@ -37,8 +38,14 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.matchNumber.text = String.format("%S-%s", data[position].comp_level,
-                data[position].match_number)
+        holder.matchKey = data[position].key
+        holder.compLevel = data[position].comp_level
+        holder.setNumber = data[position].set_number
+        holder.matchNumberKey = data[position].match_number
+
+        holder.matchNumber.text = Constants.matchString(data[position].comp_level,
+                data[position].set_number, data[position].match_number)
+
         holder.redTeam1.text = parseTeamNumber(true, 0, position)
         holder.redTeam2.text = parseTeamNumber(true, 1, position)
         holder.redTeam3.text = parseTeamNumber(true, 2, position)
@@ -164,6 +171,10 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
         internal val redScore: TextView = itemView.findViewById(R.id.red_score)
         internal val blueScore: TextView = itemView.findViewById(R.id.blue_score)
         internal val scoreTable: TableLayout = itemView.findViewById(R.id.score_table)
+        var matchKey = ""
+        var compLevel = ""
+        var setNumber = 0
+        var matchNumberKey = 0
 
         init {
             redTeam1.setOnClickListener {
@@ -194,6 +205,20 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
             blueTeam3.setOnClickListener {
                 val intent = Intent(context, TeamSummary::class.java)
                 intent.putExtra("teamNumber", blueTeam3.text.toString())
+                context.startActivity(intent)
+            }
+            matchNumber.setOnClickListener {
+                val intent = Intent(context, MatchSummaryActivity::class.java)
+                intent.putExtra("matchKey", matchKey)
+                intent.putExtra("compLevel", compLevel)
+                intent.putExtra("setNumber", setNumber)
+                intent.putExtra("matchNumber", matchNumberKey)
+                intent.putExtra("redRobot1", redTeam1.text.toString())
+                intent.putExtra("redRobot2", redTeam2.text.toString())
+                intent.putExtra("redRobot3", redTeam3.text.toString())
+                intent.putExtra("blueRobot1", blueTeam1.text.toString())
+                intent.putExtra("blueRobot2", blueTeam2.text.toString())
+                intent.putExtra("blueRobot3", blueTeam3.text.toString())
                 context.startActivity(intent)
             }
         }

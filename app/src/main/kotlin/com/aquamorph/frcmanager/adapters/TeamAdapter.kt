@@ -33,9 +33,11 @@ class TeamAdapter(private val context: Context, private val data: ArrayList<Team
 
     private fun getTeamRank(teamNumber: String, ranks: ArrayList<Rank>?): String {
         if (ranks != null && ranks.size > 0) {
-            for (i in 0 until ranks[0].rankings.size) {
-                if (ranks[0].rankings[i]!!.team_key == teamNumber)
-                    return " Ranked #" + ranks[0].rankings[i]!!.rank
+            if (ranks[0].rankings != null && ranks[0].rankings.isNotEmpty()) {
+                for (i in 0 until ranks[0].rankings.size) {
+                    if (ranks[0].rankings[i]!!.team_key == teamNumber)
+                        return " Ranked #" + ranks[0].rankings[i]!!.rank
+                }
             }
         }
         return ""

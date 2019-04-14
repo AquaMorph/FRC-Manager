@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.activities
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
@@ -165,7 +166,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
 
     companion object {
 
-        private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
+        @SuppressLint("StaticFieldLeak")
+        private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
 
         /**
          * theme() sets the app theme based on user selection from settings.
@@ -182,7 +184,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         }
 
         fun refresh() {
-            mSectionsPagerAdapter!!.refreshAll()
+            mSectionsPagerAdapter.refreshAll()
         }
     }
 }

@@ -7,6 +7,9 @@ import android.view.MenuItem
 
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment
+import com.aquamorph.frcmanager.utils.Constants.getTeamName
+import com.aquamorph.frcmanager.utils.Constants.getTeamRank
+import com.aquamorph.frcmanager.utils.Constants.getTeamRecord
 
 /**
  * Activiy with a summary of the schedule for a given team number.
@@ -29,7 +32,13 @@ class TeamSummary : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         if (toolbar != null) {
-            toolbar.title = teamNumber
+            toolbar.title = "$teamNumber - " + getTeamName("frc$teamNumber")
+
+            if (getTeamRecord("frc$teamNumber").isNotEmpty() &&
+                    getTeamRank("frc$teamNumber").isNotEmpty()) {
+                toolbar.subtitle = getTeamRank("frc$teamNumber") + " " +
+                        getTeamRecord("frc$teamNumber")
+            }
         }
         setSupportActionBar(toolbar)
         if (supportActionBar != null) {
@@ -44,8 +53,6 @@ class TeamSummary : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> this.finish()
-            else -> {
-            }
         }
         return super.onOptionsItemSelected(item)
     }

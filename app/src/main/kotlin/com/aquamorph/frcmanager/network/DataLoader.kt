@@ -7,6 +7,7 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
 import com.aquamorph.frcmanager.fragments.*
 import com.aquamorph.frcmanager.models.*
+import com.aquamorph.frcmanager.utils.Constants.isDistrict
 import com.aquamorph.frcmanager.utils.Logging
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -116,6 +117,19 @@ class DataLoader {
             }
         }
 
+        /**
+         * clearData()
+         */
+        fun clearData() {
+            teamDC.data.clear()
+            rankDC.data.clear()
+            awardDC.data.clear()
+            matchDC.data.clear()
+            allianceDC.data.clear()
+            districtRankDC.data.clear()
+            districtTeamDC.data.clear()
+        }
+
         fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
                 // Checks for internet connections
@@ -128,7 +142,7 @@ class DataLoader {
                 getData(rankDC, true, false, rankTabs, adapter, 2, activity)
                 getData(awardDC, false, false, awardTabs, adapter, 3, activity)
                 getData(allianceDC, false, false, allianceTabs, adapter, 4, activity)
-                if (districtKey != "") {
+                if (isDistrict()) {
                     getData(districtRankDC, false, false, districtRankTabs, adapter, 5, activity)
                     getData(districtTeamDC, false, true, districtRankTabs, adapter, 6, activity)
                     addTab(districtRankTabs, adapter)
