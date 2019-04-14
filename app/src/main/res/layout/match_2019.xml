@@ -17,64 +17,91 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <include
-        android:id="@+id/team1"
-        layout="@layout/match_text_h1"/>
-    <include
-        android:id="@+id/team2"
-        layout="@layout/match_text_h1"/>
-    <include
-        android:id="@+id/team3"
-        layout="@layout/match_text_h1"/>
-    <include
-        android:id="@+id/totalScore"
-        layout="@layout/match_text_h1"/>
-    <include
-        android:id="@+id/fouls"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/adjustments"
-        android:visibility="gone"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/sandstormTotal"
-        layout="@layout/match_text_h1"/>
-    <include
-        android:id="@+id/habLineRobot1"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/habLineRobot2"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/habLineRobot3"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/teleTotal"
-        layout="@layout/match_text_h1"/>
-    <include
-        android:id="@+id/hatchTotal"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/cargoTotal"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/habTotal"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/habRobot1"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/habRobot2"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/habRobot3"
-        layout="@layout/match_text_h2"/>
-    <include
-        android:id="@+id/rankPoints"
-        layout="@layout/match_text_h1"/>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/team1"
+                layout="@layout/match_text_h1" />
+
+            <include
+                android:id="@+id/team2"
+                layout="@layout/match_text_h1" />
+
+            <include
+                android:id="@+id/team3"
+                layout="@layout/match_text_h1" />
+
+            <include
+                android:id="@+id/totalScore"
+                layout="@layout/match_text_h1" />
+
+            <include
+                android:id="@+id/fouls"
+                layout="@layout/match_text_h2" />
+
+            <include
+                android:id="@+id/adjustments"
+                layout="@layout/match_text_h2"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/sandstormTotal"
+                layout="@layout/match_text_h1" />
+
+            <include
+                android:id="@+id/habLineRobot1"
+                layout="@layout/match_text_h2" />
+
+            <include
+                android:id="@+id/habLineRobot2"
+                layout="@layout/match_text_h2" />
+
+            <include
+                android:id="@+id/habLineRobot3"
+                layout="@layout/match_text_h2" />
+
+            <include
+                android:id="@+id/teleTotal"
+                layout="@layout/match_text_h1" />
+
+            <include
+                android:id="@+id/hatchTotal"
+                layout="@layout/match_text_h2" />
+
+            <include
+                android:id="@+id/cargoTotal"
+                layout="@layout/match_text_h2" />
+
+            <include
+                android:id="@+id/habTotal"
+                layout="@layout/match_text_h2" />
+
+            <include
+                android:id="@+id/habRobot1"
+                layout="@layout/match_text_h2" />
+
+            <include
+                android:id="@+id/habRobot2"
+                layout="@layout/match_text_h2" />
+
+            <include
+                android:id="@+id/habRobot3"
+                layout="@layout/match_text_h2" />
+
+            <include
+                android:id="@+id/rankPoints"
+                layout="@layout/match_text_h1" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

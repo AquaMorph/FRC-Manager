@@ -182,14 +182,19 @@ class MatchSummaryActivity : AppCompatActivity() {
                         habRobot3.findViewById<TextView>(R.id.blueText).text = habClimb(match.blue.endgameRobot3)
                     } catch (e : UninitializedPropertyAccessException) {
                         totalScore.visibility = View.GONE
-                        rankPoints.visibility = View.GONE
+                        fouls.visibility = View.GONE
                         sandstormTotal.visibility = View.GONE
                         habLineRobot1.visibility = View.GONE
                         habLineRobot2.visibility = View.GONE
                         habLineRobot3.visibility = View.GONE
+                        teleTotal.visibility = View.GONE
                         hatchTotal.visibility = View.GONE
                         cargoTotal.visibility = View.GONE
                         habTotal.visibility = View.GONE
+                        habRobot1.visibility = View.GONE
+                        habRobot2.visibility = View.GONE
+                        habRobot3.visibility = View.GONE
+                        rankPoints.visibility = View.GONE
                     }
                 }
             }
