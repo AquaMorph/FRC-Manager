@@ -34,10 +34,26 @@
         android:id="@+id/totalScore"
         layout="@layout/match_text_h1"/>
     <include
-        android:id="@+id/rankPoints"
+        android:id="@+id/fouls"
+        layout="@layout/match_text_h2"/>
+    <include
+        android:id="@+id/adjustments"
+        android:visibility="gone"
         layout="@layout/match_text_h2"/>
     <include
         android:id="@+id/sandstormTotal"
+        layout="@layout/match_text_h1"/>
+    <include
+        android:id="@+id/habLineRobot1"
+        layout="@layout/match_text_h2"/>
+    <include
+        android:id="@+id/habLineRobot2"
+        layout="@layout/match_text_h2"/>
+    <include
+        android:id="@+id/habLineRobot3"
+        layout="@layout/match_text_h2"/>
+    <include
+        android:id="@+id/teleTotal"
         layout="@layout/match_text_h1"/>
     <include
         android:id="@+id/hatchTotal"
@@ -48,5 +64,17 @@
     <include
         android:id="@+id/habTotal"
         layout="@layout/match_text_h2"/>
+    <include
+        android:id="@+id/habRobot1"
+        layout="@layout/match_text_h2"/>
+    <include
+        android:id="@+id/habRobot2"
+        layout="@layout/match_text_h2"/>
+    <include
+        android:id="@+id/habRobot3"
+        layout="@layout/match_text_h2"/>
+    <include
+        android:id="@+id/rankPoints"
+        layout="@layout/match_text_h1"/>
 
 </LinearLayout>

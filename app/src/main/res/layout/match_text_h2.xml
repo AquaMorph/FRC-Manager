@@ -9,7 +9,7 @@
         android:layout_weight="3"
         android:gravity="start|center_vertical"
         android:textSize="@dimen/match_help_text_h2"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="?textOnBackground"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -22,19 +22,19 @@
         android:id="@+id/redText"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:gravity="start|center_vertical"
+        android:gravity="end|center_vertical"
         android:background="?redAllianceBackground"
         android:textColor="?redAllianceText"
-        android:paddingLeft="4dp" />
+        android:paddingRight="4dp" />
     <TextView
         android:layout_weight="1"
         android:textSize="@dimen/match_score_text"
         android:id="@+id/blueText"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:gravity="start|center_vertical"
+        android:gravity="end|center_vertical"
         android:background="?blueAllianceBackground"
         android:textColor="?blueAllianceText"
-        android:paddingLeft="4dp" />
+        android:paddingRight="4dp" />
 
 </TableRow>
