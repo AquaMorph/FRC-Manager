@@ -1,10 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply from: "$project.rootDir/tools/pmd.gradle"
-apply from: "$project.rootDir/tools/findbugs.gradle"
-apply from: "$project.rootDir/tools/checkstyle.gradle"
-apply from: "$project.rootDir/tools/jacoco.gradle"
-
 
 // Get keys from file not contained in git
 def getProps(String propName) {
@@ -32,11 +27,6 @@ android {
         buildConfigField("String", "TBA_KEY", getProps("TBA_KEY"))
     }
     testOptions {
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
-        }
     }
     buildTypes {
         debug {
