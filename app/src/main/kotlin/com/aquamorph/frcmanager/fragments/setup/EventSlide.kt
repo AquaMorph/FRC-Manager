@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,7 +58,7 @@ class EventSlide : Fragment() {
     fun load() {
         RetrofitInstance.getRetrofit(context!!).create(TbaApi::class.java)
                 .getTeamEvents("frc${prefs.getString("teamNumber", "")}",
-                        prefs.getString("year", "")).subscribeOn(Schedulers.io())
+                        prefs.getString("year", "")!!).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result -> if (result != null) {
                     eventList.clear()

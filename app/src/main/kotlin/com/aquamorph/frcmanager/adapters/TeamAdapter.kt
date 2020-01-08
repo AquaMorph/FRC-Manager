@@ -3,7 +3,7 @@ package com.aquamorph.frcmanager.adapters
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan

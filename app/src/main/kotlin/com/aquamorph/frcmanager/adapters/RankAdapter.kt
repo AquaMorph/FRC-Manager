@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
-import android.support.v4.widget.TextViewCompat
-import android.support.v7.widget.RecyclerView
+import androidx.core.widget.TextViewCompat
+import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from

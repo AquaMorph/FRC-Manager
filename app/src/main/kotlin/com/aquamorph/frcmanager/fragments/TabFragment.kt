@@ -3,11 +3,11 @@ package com.aquamorph.frcmanager.fragments
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.Adapter
+import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Adapter
 import android.view.View
 import android.widget.TextView
 import com.aquamorph.frcmanager.R
@@ -28,7 +28,7 @@ abstract class TabFragment : Fragment() {
     }
 
     fun onCreateView(view: View, data : ArrayList<*>, adp: RecyclerView.Adapter<*>,
-                    decor: RecyclerView.ItemDecoration) {
+                     decor: RecyclerView.ItemDecoration) {
         onCreateView(view, data, adp)
         recyclerView.addItemDecoration(decor)
     }

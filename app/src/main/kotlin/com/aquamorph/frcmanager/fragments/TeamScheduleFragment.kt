@@ -62,7 +62,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         Logging.info(this, "onSaveInstanceState", 3)
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         listener()
         Logging.info(this, "Configuration Changed", 3)

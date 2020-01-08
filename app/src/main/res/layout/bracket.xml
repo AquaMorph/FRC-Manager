@@ -5,7 +5,7 @@
                 android:background="?backgroundColor"
                 android:orientation="vertical">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -232,5 +232,5 @@
             </LinearLayout>
 
         </LinearLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </RelativeLayout>
