@@ -1,19 +1,31 @@
 package com.aquamorph.frcmanager.network
 
 import android.app.Activity
-import com.google.android.material.snackbar.Snackbar
 import android.view.View
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
-import com.aquamorph.frcmanager.fragments.*
-import com.aquamorph.frcmanager.models.*
+import com.aquamorph.frcmanager.fragments.AllianceFragment
+import com.aquamorph.frcmanager.fragments.AwardFragment
+import com.aquamorph.frcmanager.fragments.DistrictRankFragment
+import com.aquamorph.frcmanager.fragments.EventScheduleFragment
+import com.aquamorph.frcmanager.fragments.RankFragment
+import com.aquamorph.frcmanager.fragments.TeamFragment
+import com.aquamorph.frcmanager.fragments.TeamScheduleFragment
+import com.aquamorph.frcmanager.models.Alliance
+import com.aquamorph.frcmanager.models.Award
+import com.aquamorph.frcmanager.models.DistrictRank
+import com.aquamorph.frcmanager.models.Match
+import com.aquamorph.frcmanager.models.Rank
+import com.aquamorph.frcmanager.models.Tab
+import com.aquamorph.frcmanager.models.Team
 import com.aquamorph.frcmanager.utils.Constants.isDistrict
 import com.aquamorph.frcmanager.utils.Logging
+import com.google.android.material.snackbar.Snackbar
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.util.*
+import java.util.Arrays
 import java.util.Collections.sort
 import kotlin.collections.ArrayList
 
@@ -61,10 +73,15 @@ class DataLoader {
                     (dataContainer.data.get(0) as Rank).rankings.isEmpty()
         }
 
-        private fun getData(dataContainer: DataContainer<*>,
-                            isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
-                            adapter: SectionsPagerAdapter, observer: Int,
-                            activity: Activity) {
+        private fun getData(
+            dataContainer: DataContainer<*>,
+            isRank: Boolean,
+            isSortable: Boolean,
+            tabs: ArrayList<Tab>,
+            adapter: SectionsPagerAdapter,
+            observer: Int,
+            activity: Activity
+        ) {
             dataContainer.complete = false
             val retrofit: ArrayList<Observable<out Any>> = arrayListOf(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventMatches(DataLoader.eventKey))
                 retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventTeams(DataLoader.eventKey))
@@ -75,15 +92,20 @@ class DataLoader {
             retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictTeams(DataLoader.districtKey))
             disposable = retrofit[observer].subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe( { result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
+                    .subscribe({ result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
                                 { error -> Logging.error(this, error.toString(), 0)
                                 removeTab(tabs, adapter)
-                                dataContainer.complete = true})
+                                dataContainer.complete = true })
         }
 
-        private fun updateData(dataContainer: DataContainer<*>, isRank: Boolean, isSortable: Boolean, tabs: ArrayList<Tab>,
-                               adapter: SectionsPagerAdapter,
-                               result: Any) {
+        private fun updateData(
+            dataContainer: DataContainer<*>,
+            isRank: Boolean,
+            isSortable: Boolean,
+            tabs: ArrayList<Tab>,
+            adapter: SectionsPagerAdapter,
+            result: Any
+        ) {
             dataContainer.data.clear()
                 if (isRank) {
                     (dataContainer.data as MutableList<Any?>).add(result)
@@ -133,7 +155,7 @@ class DataLoader {
         fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
                 // Checks for internet connections
-                if(!NetworkCheck.hasNetwork(activity)) {
+                if (!NetworkCheck.hasNetwork(activity)) {
                     Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
                             R.string.no_connection_message, Snackbar.LENGTH_LONG).show()
                 }
@@ -161,7 +183,7 @@ class DataLoader {
                                 Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
                                         R.string.event_server_down, Snackbar.LENGTH_LONG).show()
                             }
-                        }},
+                        } },
                     { error -> Logging.error(this, error.toString(), 0) })
             }
         }

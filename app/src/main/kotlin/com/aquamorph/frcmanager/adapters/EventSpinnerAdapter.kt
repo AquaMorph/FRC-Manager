@@ -7,7 +7,6 @@ import android.widget.BaseAdapter
 import android.widget.SpinnerAdapter
 import android.widget.TextView
 import com.aquamorph.frcmanager.models.Event
-import java.util.*
 
 /**
  * Populates the spinner for the setup screen with a list of events a team is registered for.
@@ -42,7 +41,4 @@ class EventSpinnerAdapter(private val eventList: ArrayList<Event>, private val a
         text.text = eventList[position].name
         return text
     }
-
-
 }
-

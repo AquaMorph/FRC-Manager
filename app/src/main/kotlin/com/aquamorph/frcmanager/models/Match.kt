@@ -10,7 +10,7 @@ class Match : Comparable<Match> {
     var key: String = ""
     var comp_level: String = ""
     var set_number: Int = 0
-    var match_number: Int =0
+    var match_number: Int = 0
     var alliances: Alliances = Alliances()
     var winning_alliance: String = ""
     var event_key: String = ""

@@ -3,7 +3,6 @@ package com.aquamorph.frcmanager.fragments
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
-
 import com.aquamorph.frcmanager.R
 
 /**

@@ -11,12 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
-import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
-import java.util.*
+import java.util.Arrays
 import java.util.Collections.sort
 
 /**
@@ -36,8 +35,11 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         getTeamFromSettings = false
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
 
         if (savedInstanceState != null) {

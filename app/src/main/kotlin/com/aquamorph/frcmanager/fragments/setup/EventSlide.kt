@@ -4,13 +4,13 @@ import android.app.Activity
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.EventSpinnerAdapter
 import com.aquamorph.frcmanager.models.Event
@@ -20,7 +20,6 @@ import com.aquamorph.frcmanager.utils.AppConfig
 import com.aquamorph.frcmanager.utils.Logging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 import java.util.Collections.sort
 
 /**
@@ -41,8 +40,11 @@ class EventSlide : Fragment() {
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.event_slide, container, false)
 
         eventSpinnder = view.findViewById(R.id.event_spinner)
@@ -65,7 +67,7 @@ class EventSlide : Fragment() {
                     eventList.addAll(result)
                     sort(eventList)
                     dataAdapter.notifyDataSetChanged()
-                }},
+                } },
                         { error -> Logging.error(this, error.toString(), 0) })
     }
 

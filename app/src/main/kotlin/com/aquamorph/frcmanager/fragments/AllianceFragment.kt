@@ -26,8 +26,11 @@ class AllianceFragment : TabFragment(),
 
     private var alliances: ArrayList<Alliance> = ArrayList()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         super.onCreateView(view, alliances,
                 AllianceAdapter(context!!, alliances),

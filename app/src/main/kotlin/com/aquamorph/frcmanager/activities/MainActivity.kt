@@ -8,18 +8,17 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
 import android.os.Bundle
 import android.preference.PreferenceManager
-import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.viewpager.widget.ViewPager
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
+import com.google.android.material.tabs.TabLayout
 
 /**
  * Default activity of the app.
@@ -159,7 +158,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         mViewPager.adapter = mSectionsPagerAdapter
         try {
             refresh()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Logging.error(this, e.toString(), 0)
         }
     }

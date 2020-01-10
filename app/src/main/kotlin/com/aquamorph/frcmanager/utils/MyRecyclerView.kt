@@ -1,10 +1,10 @@
 package com.aquamorph.frcmanager.utils
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * Custom loading animation.
@@ -36,12 +36,12 @@ class MyRecyclerView @JvmOverloads constructor(context: Context, attrs: Attribut
     }
 
     private fun animate(view: View, pos: Int) {
-        //		view.animate().cancel();
-        //		Animation animation = AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left);
-        //		view.startAnimation(animation);
+        // 		view.animate().cancel();
+        // 		Animation animation = AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left);
+        // 		view.startAnimation(animation);
 
-        //		view.setTranslationY(200);
-        //		view.setAlpha(0);
-        //		view.animate().alpha(1.0f).translationY(0).setDuration(300).setStartDelay(pos * 125);
+        // 		view.setTranslationY(200);
+        // 		view.setAlpha(0);
+        // 		view.animate().alpha(1.0f).translationY(0).setDuration(300).setStartDelay(pos * 125);
     }
 }

@@ -1,7 +1,7 @@
 package com.aquamorph.frcmanager.models
 
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 /**
  * Stores information about an event.
@@ -21,7 +21,7 @@ class Event : Comparable<Event> {
     var start_date: String = ""
     var end_date: String = ""
     var year: Int = 0
-    var short_name: String  = ""
+    var short_name: String = ""
     var event_type_string: String = ""
     var week: Int = 0
     var address: String = ""
@@ -29,7 +29,7 @@ class Event : Comparable<Event> {
     var gmaps_place_id: String = ""
     var gmaps_url: String = ""
     var lat: Double = 0.0
-    var lng: Double =0.0
+    var lng: Double = 0.0
     var location_name: String = ""
     var timezone: String = ""
     var website: String = ""

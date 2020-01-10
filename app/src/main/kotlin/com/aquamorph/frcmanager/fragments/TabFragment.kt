@@ -3,13 +3,13 @@ package com.aquamorph.frcmanager.fragments
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import android.view.View
-import android.widget.TextView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.utils.Constants
@@ -27,13 +27,17 @@ abstract class TabFragment : Fragment() {
         retainInstance = true
     }
 
-    fun onCreateView(view: View, data : ArrayList<*>, adp: RecyclerView.Adapter<*>,
-                     decor: RecyclerView.ItemDecoration) {
+    fun onCreateView(
+        view: View,
+        data: ArrayList<*>,
+        adp: RecyclerView.Adapter<*>,
+        decor: RecyclerView.ItemDecoration
+    ) {
         onCreateView(view, data, adp)
         recyclerView.addItemDecoration(decor)
     }
 
-    fun onCreateView(view: View, data : ArrayList<*>, adp: RecyclerView.Adapter<*>) {
+    fun onCreateView(view: View, data: ArrayList<*>, adp: RecyclerView.Adapter<*>) {
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         recyclerView = view.findViewById(R.id.rv)

@@ -31,7 +31,7 @@ class Rank {
     }
 
     inner class ExtraStatsInfo {
-        var name: String  = ""
+        var name: String = ""
         var precision: Int = 0
     }
 

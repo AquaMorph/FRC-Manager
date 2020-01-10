@@ -22,11 +22,14 @@ import com.aquamorph.frcmanager.utils.Constants
  */
 class RankFragment : TabFragment(), RefreshFragment {
 
-    private var ranks : ArrayList<Rank> = ArrayList()
-    private var teams : ArrayList<Team> = ArrayList()
+    private var ranks: ArrayList<Rank> = ArrayList()
+    private var teams: ArrayList<Team> = ArrayList()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         super.onCreateView(view, ranks,
                 RankAdapter(context!!, ranks, teams),
@@ -57,7 +60,7 @@ class RankFragment : TabFragment(), RefreshFragment {
         }
     }
 
-    internal inner class LoadRanks: AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadRanks : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true

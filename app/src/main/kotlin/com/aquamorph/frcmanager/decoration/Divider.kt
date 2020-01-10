@@ -4,9 +4,9 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 
 /**
@@ -52,7 +52,6 @@ class Divider(context: Context, width: Float, indent: Int) : RecyclerView.ItemDe
         // a line will draw half its size to top and bottom,
         // hence the offset to place it correctly
         val offset = (mPaint.strokeWidth / 2).toInt()
-
 
         // this will iterate over every visible view
         for (i in 0 until parent.childCount) {

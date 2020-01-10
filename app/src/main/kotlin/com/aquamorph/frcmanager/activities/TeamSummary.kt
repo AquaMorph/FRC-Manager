@@ -1,10 +1,9 @@
 package com.aquamorph.frcmanager.activities
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import android.view.MenuItem
-
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment
 import com.aquamorph.frcmanager.utils.Constants.getTeamName

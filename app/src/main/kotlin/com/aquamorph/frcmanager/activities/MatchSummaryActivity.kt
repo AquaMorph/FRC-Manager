@@ -1,20 +1,20 @@
 package com.aquamorph.frcmanager.activities
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.models.MatchScore2019
 import com.aquamorph.frcmanager.network.RetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants
+import java.lang.Exception
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 
 /**
  * Activity with a summary of the scoring of a match.
@@ -53,8 +53,7 @@ class MatchSummaryActivity : AppCompatActivity() {
                 blueRobot1 = extras.getString("blueRobot1")!!
                 blueRobot2 = extras.getString("blueRobot2")!!
                 blueRobot3 = extras.getString("blueRobot3")!!
-            } catch (e :Exception) {
-
+            } catch (e: Exception) {
             }
         }
 
@@ -118,15 +117,15 @@ class MatchSummaryActivity : AppCompatActivity() {
         val habRobot3 = findViewById<View>(R.id.habRobot3)
         habRobot3.findViewById<TextView>(R.id.text).text = "Robot 3 Hab Climb"
 
-        //val teamScheduleFragment = TeamScheduleFragment.newInstance()
-        //teamScheduleFragment.setTeamNumber(teamNumber)
-        //supportFragmentManager.beginTransaction().replace(R.id.content_frame, teamScheduleFragment).commit()
+        // val teamScheduleFragment = TeamScheduleFragment.newInstance()
+        // teamScheduleFragment.setTeamNumber(teamNumber)
+        // supportFragmentManager.beginTransaction().replace(R.id.content_frame, teamScheduleFragment).commit()
         MainActivity.theme(this)
         val call = RetrofitInstance.getRetrofit(this).create(TbaApi::class.java).getMatch2019(matchKey)
 
         call.enqueue(object : Callback<MatchScore2019> {
             override fun onResponse(call: Call<MatchScore2019>, response: Response<MatchScore2019>) {
-                if(response.isSuccessful) {
+                if (response.isSuccessful) {
                     try {
                         val match = response.body()!!.score_breakdown
 
@@ -180,7 +179,7 @@ class MatchSummaryActivity : AppCompatActivity() {
                         habRobot2.findViewById<TextView>(R.id.blueText).text = habClimb(match.blue.endgameRobot2)
                         habRobot3.findViewById<TextView>(R.id.redText).text = habClimb(match.red.endgameRobot3)
                         habRobot3.findViewById<TextView>(R.id.blueText).text = habClimb(match.blue.endgameRobot3)
-                    } catch (e : UninitializedPropertyAccessException) {
+                    } catch (e: UninitializedPropertyAccessException) {
                         totalScore.visibility = View.GONE
                         fouls.visibility = View.GONE
                         sandstormTotal.visibility = View.GONE
@@ -213,8 +212,8 @@ class MatchSummaryActivity : AppCompatActivity() {
         }
     }
 
-    fun habScore(preMatchLevelRobot: String, habLineRobot: String) : String {
-        return if(habLineRobot == "CrossedHabLineInSandstorm") {
+    fun habScore(preMatchLevelRobot: String, habLineRobot: String): String {
+        return if (habLineRobot == "CrossedHabLineInSandstorm") {
             if (preMatchLevelRobot == "HabLevel1") {
                 "3"
             } else {
@@ -225,7 +224,7 @@ class MatchSummaryActivity : AppCompatActivity() {
         }
     }
 
-    fun habClimb(endgameRobot: String) : String {
+    fun habClimb(endgameRobot: String): String {
         return when (endgameRobot) {
             "HabLevel3" -> "12"
             "HabLevel2" -> "6"

@@ -1,7 +1,6 @@
 package com.aquamorph.frcmanager.adapters
 
 import android.app.Activity
-import com.google.android.material.tabs.TabLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -11,6 +10,7 @@ import com.aquamorph.frcmanager.fragments.RefreshFragment
 import com.aquamorph.frcmanager.models.Tab
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Logging
+import com.google.android.material.tabs.TabLayout
 
 /**
  * Populates a tab layout with fragments.
@@ -18,10 +18,12 @@ import com.aquamorph.frcmanager.utils.Logging
  * @author Christian Colglazier
  * @version 4/2/2018
  */
-class SectionsPagerAdapter(fragmentManager: FragmentManager,
-                           private val viewPager: ViewPager,
-                           private val tabLayout: TabLayout,
-                           var activity: Activity) : FragmentStatePagerAdapter(fragmentManager) {
+class SectionsPagerAdapter(
+    fragmentManager: FragmentManager,
+    private val viewPager: ViewPager,
+    private val tabLayout: TabLayout,
+    var activity: Activity
+) : FragmentStatePagerAdapter(fragmentManager) {
     var tabs = ArrayList<Tab>()
 
     /**
@@ -62,7 +64,7 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
             tabs.add(tab)
             tabs.sort()
             notifyDataSetChanged()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Logging.error(this, e.toString(), 0)
         }
     }
@@ -82,7 +84,7 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
                 trans.remove(`object`)
                 trans.commitAllowingStateLoss()
             }
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Logging.error(this, e.toString(), 0)
         }
     }

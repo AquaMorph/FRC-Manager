@@ -3,7 +3,6 @@ package com.aquamorph.frcmanager.adapters
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import androidx.recyclerview.widget.RecyclerView
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.RelativeSizeSpan
@@ -13,11 +12,11 @@ import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
-import java.util.*
 
 /**
  * Populates a RecyclerView with teams at an event.
@@ -25,8 +24,11 @@ import java.util.*
  * @author Christian Colglazier
  * @version 3/31/2018
  */
-class TeamAdapter(private val context: Context, private val data: ArrayList<Team>,
-                  private val ranks: ArrayList<Rank>) :
+class TeamAdapter(
+    private val context: Context,
+    private val data: ArrayList<Team>,
+    private val ranks: ArrayList<Rank>
+) :
         RecyclerView.Adapter<TeamAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater = from(context)

@@ -3,8 +3,6 @@ package com.aquamorph.frcmanager.adapters
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
-import androidx.recyclerview.widget.RecyclerView
-import android.text.Html
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from
@@ -12,13 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MatchSummaryActivity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.utils.Constants
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * Populates a RecyclerView with the schedule for a team.
@@ -26,8 +26,11 @@ import java.util.*
  * @author Christian Colglazier
  * @version 3/31/2018
  */
-class ScheduleAdapter(private val context: Context, private val data: ArrayList<Match>,
-                      private var team: String?) :
+class ScheduleAdapter(
+    private val context: Context,
+    private val data: ArrayList<Match>,
+    private var team: String?
+) :
         RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater = from(context)
@@ -70,11 +73,11 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
                 holder.blueTeam3.text = Constants.fromHtml(Constants.underlineText(team!!))
         }
 
-        //Bolds winning score
+        // Bolds winning score
         when {
             data[position].alliances.red.score == data[position].alliances.blue.score &&
                     data[position].alliances.red.score != -1 &&
-                    data[position].alliances.blue.score != -1-> {
+                    data[position].alliances.blue.score != -1 -> {
                 holder.redTeam1.setTypeface(null, Typeface.BOLD)
                 holder.redTeam2.setTypeface(null, Typeface.BOLD)
                 holder.redTeam3.setTypeface(null, Typeface.BOLD)
@@ -145,8 +148,8 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
     /**
      * parseTeamNumber returns a formatted team number.
      *
-     * @param red      is the robot red or blue
-     * @param robot    position of the team
+     * @param red is the robot red or blue
+     * @param robot position of the team
      * @param position dataLoader position
      * @return team number
      */

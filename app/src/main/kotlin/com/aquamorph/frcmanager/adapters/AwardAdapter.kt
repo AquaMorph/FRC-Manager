@@ -1,16 +1,15 @@
 package com.aquamorph.frcmanager.adapters
 
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.models.Award
 import com.aquamorph.frcmanager.utils.Constants
-import java.util.*
 
 /**
  * Populates the recyclerview with award data
@@ -34,7 +33,7 @@ class AwardAdapter(context: Context, private val data: ArrayList<Award>) :
         var awardee = ""
 
         var i = 0
-        while (i in 0..(data[position].recipient_list.size-1)) {
+        while (i in 0..(data[position].recipient_list.size - 1)) {
             if (data[position].recipient_list[i].team_key != null) {
                 if (i > 0) team += "\n"
                 team += Constants.formatTeamNumber(data[position].recipient_list[i].team_key)

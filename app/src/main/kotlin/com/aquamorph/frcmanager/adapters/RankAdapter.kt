@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
-import androidx.core.widget.TextViewCompat
-import androidx.recyclerview.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from
@@ -14,12 +12,13 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.core.widget.TextViewCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
 import com.aquamorph.frcmanager.utils.Constants
-import java.util.*
 
 /**
  * Populates a RecyclerView with the ranks and team names and number for an event.
@@ -27,8 +26,11 @@ import java.util.*
  * @author Christian Colglazier
  * @version 12/30/2017
  */
-class RankAdapter(private val context: Context, private val data: ArrayList<Rank>,
-                  private val teams: ArrayList<Team>) :
+class RankAdapter(
+    private val context: Context,
+    private val data: ArrayList<Rank>,
+    private val teams: ArrayList<Team>
+) :
         RecyclerView.Adapter<RankAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater = from(context)

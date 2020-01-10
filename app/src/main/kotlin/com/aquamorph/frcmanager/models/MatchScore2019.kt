@@ -1,7 +1,7 @@
 package com.aquamorph.frcmanager.models
 
 class MatchScore2019 {
-    
+
     lateinit var score_breakdown: ScoreBreakDown
 
     inner class ScoreBreakDown {
@@ -23,7 +23,7 @@ class MatchScore2019 {
         var bay7: String = ""
         var bay8: String = ""
         var cargoPoints: Int = 0
-        var completeRocketRankingPoint:	Boolean = false
+        var completeRocketRankingPoint: Boolean = false
         var completedRocketFar: Boolean = false
         var completedRocketNear: Boolean = false
         var endgameRobot1: String = ""
@@ -32,11 +32,11 @@ class MatchScore2019 {
         var foulCount: Int = 0
         var foulPoints: Int = 0
         var habClimbPoints: Int = 0
-        var habDockingRankingPoint:	Boolean = false
+        var habDockingRankingPoint: Boolean = false
         var habLineRobot1: String = ""
         var habLineRobot2: String = ""
         var habLineRobot3: String = ""
-        var hatchPanelPoints	: Int = 0
+        var hatchPanelPoints: Int = 0
         var lowLeftRocketFar: String = ""
         var lowLeftRocketNear: String = ""
         var lowRightRocketFar: String = ""
@@ -54,14 +54,14 @@ class MatchScore2019 {
         var preMatchLevelRobot1: String = ""
         var preMatchLevelRobot2: String = ""
         var preMatchLevelRobot3: String = ""
-        var rp	: Int = 0
-        var sandStormBonusPoints	: Int = 0
-        var techFoulCount	: Int = 0
-        var teleopPoints	: Int = 0
+        var rp: Int = 0
+        var sandStormBonusPoints: Int = 0
+        var techFoulCount: Int = 0
+        var teleopPoints: Int = 0
         var topLeftRocketFar: String = ""
         var topLeftRocketNear: String = ""
         var topRightRocketFar: String = ""
         var topRightRocketNear: String = ""
-        var totalPoints	: Int = 0
+        var totalPoints: Int = 0
     }
 }

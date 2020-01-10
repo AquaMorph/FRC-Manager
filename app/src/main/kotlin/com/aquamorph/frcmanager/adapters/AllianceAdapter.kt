@@ -2,17 +2,16 @@ package com.aquamorph.frcmanager.adapters
 
 import android.content.Context
 import android.content.Intent
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.Alliance
 import com.aquamorph.frcmanager.utils.Constants
-import java.util.*
 
 /**
  * Populated a view with alliance dataLoader.

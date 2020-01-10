@@ -6,7 +6,6 @@ import android.text.Spanned
 import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
 import com.aquamorph.frcmanager.network.DataLoader
-import java.util.*
 
 /**
  * A collection of constants needed to interact with the Blue Alliance.
