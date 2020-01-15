@@ -33,10 +33,12 @@
         <item>light</item>
         <item>dark</item>
         <item>amoled</item>
+        <item>system</item>
     </string-array>
     <string-array name="theme">
         <item>Light Theme</item>
         <item>Dark Theme</item>
         <item>AMOLED Theme</item>
+        <item>System Setting</item>
     </string-array>
 </resources>

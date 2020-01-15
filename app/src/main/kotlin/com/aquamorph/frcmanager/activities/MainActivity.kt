@@ -7,11 +7,11 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
@@ -174,10 +174,15 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
          * @param activity
          */
         fun theme(activity: Activity) {
+            val currentNightMode = activity.applicationContext.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
             when (prefs.getString("theme", "")) {
                 "amoled" -> activity.setTheme(R.style.OMOLEDTheme)
                 "dark" -> activity.setTheme(R.style.DarkTheme)
+                "system" -> when (currentNightMode) {
+                 Configuration.UI_MODE_NIGHT_YES -> activity.setTheme(R.style.DarkTheme)
+                    else -> activity.setTheme(R.style.LightTheme)
+                }
                 else -> activity.setTheme(R.style.LightTheme)
             }
         }
