@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
                 "amoled" -> activity.setTheme(R.style.OMOLEDTheme)
                 "dark" -> activity.setTheme(R.style.DarkTheme)
                 "system" -> when (currentNightMode) {
-                 Configuration.UI_MODE_NIGHT_YES -> activity.setTheme(R.style.DarkTheme)
+                    Configuration.UI_MODE_NIGHT_YES -> activity.setTheme(R.style.DarkTheme)
                     else -> activity.setTheme(R.style.LightTheme)
                 }
                 else -> activity.setTheme(R.style.LightTheme)
