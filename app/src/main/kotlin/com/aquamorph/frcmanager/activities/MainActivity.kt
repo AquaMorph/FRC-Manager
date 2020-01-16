@@ -24,7 +24,7 @@ import com.google.android.material.tabs.TabLayout
  * Default activity of the app.
  *
  * @author Christian Colglazier
- * @version 4/2/2018
+ * @version 1/16/2020
  */
 class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     private lateinit var eventName: String
@@ -165,6 +165,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
 
     companion object {
 
+        var appTheme = Constants.Theme.LIGHT
+
         @SuppressLint("StaticFieldLeak")
         private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
 
@@ -176,14 +178,19 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         fun theme(activity: Activity) {
             val currentNightMode = activity.applicationContext.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
-            when (prefs.getString("theme", "")) {
-                "amoled" -> activity.setTheme(R.style.OMOLEDTheme)
-                "dark" -> activity.setTheme(R.style.DarkTheme)
+            appTheme = when (prefs.getString("theme", "")) {
+                "amoled" -> Constants.Theme.BATTERY_SAVER
+                "dark" -> Constants.Theme.DARK
                 "system" -> when (currentNightMode) {
-                    Configuration.UI_MODE_NIGHT_YES -> activity.setTheme(R.style.DarkTheme)
-                    else -> activity.setTheme(R.style.LightTheme)
+                    Configuration.UI_MODE_NIGHT_YES -> Constants.Theme.DARK
+                    else -> Constants.Theme.LIGHT
                 }
-                else -> activity.setTheme(R.style.LightTheme)
+                else -> Constants.Theme.LIGHT
+            }
+            when (appTheme) {
+                Constants.Theme.LIGHT -> activity.setTheme(R.style.LightTheme)
+                Constants.Theme.DARK -> activity.setTheme(R.style.DarkTheme)
+                Constants.Theme.BATTERY_SAVER -> activity.setTheme(R.style.OMOLEDTheme)
             }
         }
 

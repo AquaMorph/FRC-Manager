@@ -21,6 +21,7 @@ object Constants {
     const val THREAD_WAIT_TIME = 100
     const val MAX_NUMBER_OF_TABS = 7
     const val CACHE_SIZE = (10 * 1024 * 1024).toLong()
+    const val DIVIDER_WIDTH = 4f
 
     /**
      * getApiHeader() returns the header needed to get access to the Blue Alliance.
@@ -49,14 +50,13 @@ object Constants {
      * @return returns formatted team number
      */
     fun underlineText(text: String): String {
-        var text = text
-        text = text.replace(" ", "")
-        val spaces = 4 - text.length
+        val tmp = text.replace(" ", "")
+        val spaces = 4 - tmp.length
         val spacesText = StringBuilder()
         for (i in 0 until spaces) {
             spacesText.append("&nbsp;")
         }
-        return String.format("<pre>%s<u>%s</u></pre>", spacesText.toString(), text)
+        return String.format("<pre>%s<u>%s</u></pre>", spacesText.toString(), tmp)
     }
 
     /**
@@ -170,5 +170,9 @@ object Constants {
         } else {
             String.format("%S-%s-%s", compLevel, setNumber, matchNumber)
         }
+    }
+
+    enum class Theme {
+        LIGHT, DARK, BATTERY_SAVER
     }
 }

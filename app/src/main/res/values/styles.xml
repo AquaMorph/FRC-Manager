@@ -52,8 +52,8 @@
         <item name="textOnBackground">@color/icons</item>
         <item name="bubbleText">@color/icons</item>
         <item name="android:textColorPrimary">@color/icons</item>
-        <item name="android:textColorSecondary">#616180</item>
-        <item name="android:textColorTertiary">#616180</item>
+        <item name="android:textColorSecondary">#8A8080</item>
+        <item name="android:textColorTertiary">#8A8080</item>
         <item name="android:listDivider">@color/icons</item>
         <item name="scroll_line">@drawable/line_omoled</item>
         <item name="dividerColor">@color/divider_dark</item>

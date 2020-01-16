@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
+import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
+import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
@@ -30,8 +32,14 @@ class EventScheduleFragment :
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_fastscroll, container, false)
-        super.onCreateView(view, matches,
-                ScheduleAdapter(context!!, matches, DataLoader.teamNumber))
+        if (MainActivity.appTheme == Constants.Theme.BATTERY_SAVER) {
+            super.onCreateView(view, matches,
+                    ScheduleAdapter(context!!, matches, DataLoader.teamNumber),
+                    Divider(context!!, Constants.DIVIDER_WIDTH, 0))
+        } else {
+            super.onCreateView(view, matches,
+                    ScheduleAdapter(context!!, matches, DataLoader.teamNumber))
+        }
         prefs.registerOnSharedPreferenceChangeListener(this)
 
         return view

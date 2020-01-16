@@ -10,19 +10,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
+import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
+import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
-import java.util.Arrays
 import java.util.Collections.sort
 
 /**
  * Displays a list of matches at an event for a given team.
  *
  * @author Christian Colglazier
- * @version 4/14/2018
+ * @version 1/16/2020
  */
 class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, RefreshFragment {
 
@@ -48,8 +49,14 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
             }
             Logging.info(this, "savedInstanceState teamNumber: $teamNumber", 2)
         }
-        super.onCreateView(view, teamEventMatches,
-                ScheduleAdapter(context!!, teamEventMatches, teamNumber))
+        if (MainActivity.appTheme == Constants.Theme.BATTERY_SAVER) {
+            super.onCreateView(view, teamEventMatches,
+                    ScheduleAdapter(context!!, teamEventMatches, teamNumber),
+                    Divider(context!!, Constants.DIVIDER_WIDTH, 0))
+        } else {
+            super.onCreateView(view, teamEventMatches,
+                    ScheduleAdapter(context!!, teamEventMatches, teamNumber))
+        }
         if (!getTeamFromSettings) {
             mSwipeRefreshLayout.isEnabled = false
         }
@@ -117,7 +124,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         adapter.notifyDataSetChanged()
     }
 
-    internal inner class LoadTeamSchedule() : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadTeamSchedule : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true
@@ -150,8 +157,8 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     }
 
     private fun isTeamInMatch(match: Match, team: String): Boolean {
-        return if (Arrays.asList(*match.alliances.red.team_keys).contains(team))
+        return if (arrayListOf(*match.alliances.red.team_keys).contains(team))
             true
-        else Arrays.asList(*match.alliances.blue.team_keys).contains(team)
+        else arrayListOf(*match.alliances.blue.team_keys).contains(team)
     }
 }
