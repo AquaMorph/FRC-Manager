@@ -36,9 +36,9 @@
         <item>system</item>
     </string-array>
     <string-array name="theme">
-        <item>Light Theme</item>
-        <item>Dark Theme</item>
-        <item>AMOLED Theme</item>
-        <item>System Setting</item>
+        <item>Light theme</item>
+        <item>Dark theme</item>
+        <item>Battery saver theme</item>
+        <item>Use system setting</item>
     </string-array>
 </resources>
