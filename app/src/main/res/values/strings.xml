@@ -22,6 +22,7 @@
     <string name="no_connection_message">No Connection. Loading from last refresh.</string>
     <string name="first_server_down">The FIRST server is currently offline.</string>
     <string name="event_server_down">The feed for the event is down.</string>
+    <string name="toolBarDefault">Rank #\$r (\$R) \$n</string>
     <string-array name="year_array">
         <item>2019</item>
         <item>2018</item>
