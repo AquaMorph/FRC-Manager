@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         teamRank = prefs.getString("teamRank", "")!!
         teamRecord = prefs.getString("teamRecord", "")!!
         nextMatch = prefs.getString("nextMatch", "")!!
-        toolbarText = prefs.getString("toolbarText", "")!!
+        toolbarText = prefs.getString("toolbarText", getString(R.string.toolBarDefault))!!
         DataLoader.eventKey = prefs.getString("eventKey", "")!!
         DataLoader.districtKey = prefs.getString("districtKey", "")!!
         if (DataLoader.teamNumber == "") openSetup()
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         teamRank = sharedPreferences.getString("teamRank", "")!!
         teamRecord = sharedPreferences.getString("teamRecord", "")!!
         nextMatch = sharedPreferences.getString("nextMatch", "")!!
-        toolbarText = sharedPreferences.getString("toolbarText", "")!!
+        toolbarText = sharedPreferences.getString("toolbarText", getString(R.string.toolBarDefault))!!
 
         when (key) {
             "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")!!

@@ -19,7 +19,7 @@
         <EditTextPreference
             android:title="Custom Toolbar Text"
             android:summary="Set custom toolbar using the shortcode options below. Variables will be replaces with the value."
-            android:defaultValue="Rank"
+            android:defaultValue="@string/toolBarDefault"
             android:key="toolbarText"
             android:selectAllOnFocus="true"
             android:singleLine="true"/>
