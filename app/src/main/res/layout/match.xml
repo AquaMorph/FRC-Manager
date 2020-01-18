@@ -8,7 +8,6 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/view"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -37,8 +36,8 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="?textOnBackground" />
 
-            <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                         android:layout_width="0dp"
+            <TableLayout
+                android:layout_width="0dp"
                          android:layout_height="fill_parent"
                          android:layout_weight="4"
                          android:orientation="horizontal">
@@ -148,7 +147,6 @@
 
             <TableLayout
                 android:id="@+id/score_table"
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1.8"
