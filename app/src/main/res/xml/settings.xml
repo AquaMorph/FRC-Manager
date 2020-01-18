@@ -15,17 +15,15 @@
             android:title="App Theme"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Toolbar Customization">
+    <PreferenceCategory android:title="Advanced Features">
         <EditTextPreference
             android:title="Custom Toolbar Text"
-            android:summary="Set custom toolbar using the shortcode options below. Variables will be replaces with the value."
+            android:summary="Set custom toolbar using the shortcode options below. Variables will be replaces with the value.\n\n$r = rank\n$R = record\n$n = next match number"
             android:defaultValue="@string/toolBarDefault"
             android:key="toolbarText"
             android:selectAllOnFocus="true"
             android:singleLine="true"/>
-        <Preference
-            android:summary="$r = rank\n$R = record\n$n = next match number"
-            android:title="Shortcode List"/>
+
 
     </PreferenceCategory>
 
