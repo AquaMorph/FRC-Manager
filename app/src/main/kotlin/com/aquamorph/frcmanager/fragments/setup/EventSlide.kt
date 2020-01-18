@@ -30,7 +30,7 @@ import java.util.Collections.sort
  */
 class EventSlide : Fragment() {
 
-    internal lateinit var eventSpinnder: Spinner
+    internal lateinit var eventSpinner: Spinner
     private lateinit var dataAdapter: EventSpinnerAdapter
     internal var eventList = ArrayList<Event>()
     private lateinit var prefs: SharedPreferences
@@ -47,10 +47,10 @@ class EventSlide : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.event_slide, container, false)
 
-        eventSpinnder = view.findViewById(R.id.event_spinner)
+        eventSpinner = view.findViewById(R.id.event_spinner)
         dataAdapter = EventSpinnerAdapter(eventList, activity as Activity)
-        eventSpinnder.adapter = dataAdapter
-        eventSpinnder.onItemSelectedListener = EventSpinnerListener()
+        eventSpinner.adapter = dataAdapter
+        eventSpinner.onItemSelectedListener = EventSpinnerListener()
         return view
     }
 
@@ -78,12 +78,12 @@ class EventSlide : Fragment() {
             Logging.info(this, "Key:" + eventList[position].key, 0)
             Logging.info(this, "Short Name:" + eventList[position].short_name, 0)
             if (eventList[position].district != null) {
-                AppConfig.setDistictKey(eventList[position].district.key, context!!)
+                AppConfig.setDistrictKey(eventList[position].district.key, context!!)
             } else {
-                AppConfig.setDistictKey("", context!!)
+                AppConfig.setDistrictKey("", context!!)
             }
             AppConfig.setEventShortName(eventList[position].short_name, context!!)
-            (eventSpinnder.selectedView as TextView).setTextColor(resources
+            (eventSpinner.selectedView as TextView).setTextColor(resources
                     .getColor(R.color.icons))
         }
 

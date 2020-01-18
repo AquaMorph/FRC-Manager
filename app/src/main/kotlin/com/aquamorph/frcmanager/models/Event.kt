@@ -42,9 +42,8 @@ class Event : Comparable<Event> {
 
     override operator fun compareTo(other: Event): Int {
         try {
-            val first = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(this.start_date)
-            val second = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(other.start_date)
-            return first.compareTo(second)
+            return SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(this.start_date)!!
+                    .compareTo(SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(other.start_date))
         } catch (e: Exception) {
             e.printStackTrace()
         }

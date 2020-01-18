@@ -50,7 +50,7 @@ class TeamAdapter(
         return MyViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TeamAdapter.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val spannableStringBuilder = SpannableStringBuilder()
         val teamName = SpannableString(data[position].nickname)
         teamName.setSpan(StyleSpan(Typeface.BOLD), 0, teamName.length, 0)
