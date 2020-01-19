@@ -1,22 +1,21 @@
 package com.aquamorph.frcmanager.fragments.setup
 
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Spinner
-import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.adapters.EventSpinnerAdapter
+import com.aquamorph.frcmanager.adapters.EventAdapter
 import com.aquamorph.frcmanager.models.Event
 import com.aquamorph.frcmanager.network.RetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
-import com.aquamorph.frcmanager.utils.AppConfig
 import com.aquamorph.frcmanager.utils.Logging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -26,13 +25,12 @@ import java.util.Collections.sort
  * Loads events a team is signed up for and allows for the selection of that event.
  *
  * @author Christian Colglazier
- * @version 8/20/2018
+ * @version 1/19/2020
  */
 class EventSlide : Fragment() {
-
-    internal lateinit var eventSpinner: Spinner
-    private lateinit var dataAdapter: EventSpinnerAdapter
-    internal var eventList = ArrayList<Event>()
+    private var recyclerView: RecyclerView? = null
+    private var eventAdapter: EventAdapter? = null
+    private var eventList = ArrayList<Event>()
     private lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,16 +45,18 @@ class EventSlide : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.event_slide, container, false)
 
-        eventSpinner = view.findViewById(R.id.event_spinner)
-        dataAdapter = EventSpinnerAdapter(eventList, activity as Activity)
-        eventSpinner.adapter = dataAdapter
-        eventSpinner.onItemSelectedListener = EventSpinnerListener()
+        recyclerView = view.findViewById(R.id.eventRecyclerView)
+        recyclerView!!.layoutManager = LinearLayoutManager(context)
+        recyclerView!!.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+        eventAdapter = EventAdapter(context, eventList)
+        recyclerView!!.adapter = eventAdapter
         return view
     }
 
     /**
      * load() loads the team events
      */
+    @SuppressLint("CheckResult")
     fun load() {
         RetrofitInstance.getRetrofit(context!!).create(TbaApi::class.java)
                 .getTeamEvents("frc${prefs.getString("teamNumber", "")}",
@@ -66,27 +66,8 @@ class EventSlide : Fragment() {
                     eventList.clear()
                     eventList.addAll(result)
                     sort(eventList)
-                    dataAdapter.notifyDataSetChanged()
+                    eventAdapter!!.notifyDataSetChanged()
                 } },
                         { error -> Logging.error(this, error.toString(), 0) })
-    }
-
-    private inner class EventSpinnerListener : AdapterView.OnItemSelectedListener {
-
-        override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-            AppConfig.setEventKey(eventList[position].key, context!!)
-            Logging.info(this, "Key:" + eventList[position].key, 0)
-            Logging.info(this, "Short Name:" + eventList[position].short_name, 0)
-            if (eventList[position].district != null) {
-                AppConfig.setDistrictKey(eventList[position].district.key, context!!)
-            } else {
-                AppConfig.setDistrictKey("", context!!)
-            }
-            AppConfig.setEventShortName(eventList[position].short_name, context!!)
-            (eventSpinner.selectedView as TextView).setTextColor(resources
-                    .getColor(R.color.icons))
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>) {}
     }
 }

@@ -13,27 +13,17 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:fontFamily="sans-serif-thin"
         android:gravity="center"
         android:text="@string/event_prompt"
         android:textColor="@color/icons"
         android:textSize="28sp"/>
 
-    <Spinner
-        android:id="@+id/event_spinner"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        />
-
-    <TextView
-        android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"/>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="64dp"/>
+        android:id="@+id/eventRecyclerView"
+        android:layout_weight="5" />
 
 </LinearLayout>
