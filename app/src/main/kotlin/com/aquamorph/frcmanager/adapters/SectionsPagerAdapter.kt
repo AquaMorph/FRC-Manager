@@ -61,9 +61,11 @@ class SectionsPagerAdapter(
 
     fun addFrag(tab: Tab) {
         try {
-            tabs.add(tab)
-            tabs.sort()
-            notifyDataSetChanged()
+            if (!tabs.contains(tab)) {
+                tabs.add(tab)
+                tabs.sort()
+                notifyDataSetChanged()
+            }
         } catch (e: Exception) {
             Logging.error(this, e.toString(), 0)
         }
