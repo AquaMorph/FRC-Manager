@@ -28,8 +28,8 @@ import java.util.Collections.sort
  * @version 1/19/2020
  */
 class EventSlide : Fragment() {
-    private var recyclerView: RecyclerView? = null
-    private var eventAdapter: EventAdapter? = null
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var eventAdapter: EventAdapter
     private var eventList = ArrayList<Event>()
     private lateinit var prefs: SharedPreferences
 
@@ -44,12 +44,11 @@ class EventSlide : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.event_slide, container, false)
-
         recyclerView = view.findViewById(R.id.eventRecyclerView)
-        recyclerView!!.layoutManager = LinearLayoutManager(context)
-        recyclerView!!.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
         eventAdapter = EventAdapter(context, eventList)
-        recyclerView!!.adapter = eventAdapter
+        recyclerView.adapter = eventAdapter
         return view
     }
 
@@ -66,7 +65,7 @@ class EventSlide : Fragment() {
                     eventList.clear()
                     eventList.addAll(result)
                     sort(eventList)
-                    eventAdapter!!.notifyDataSetChanged()
+                    eventAdapter.notifyDataSetChanged()
                 } },
                         { error -> Logging.error(this, error.toString(), 0) })
     }

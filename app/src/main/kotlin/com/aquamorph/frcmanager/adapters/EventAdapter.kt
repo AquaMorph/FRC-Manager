@@ -12,6 +12,10 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.models.Event
 import com.aquamorph.frcmanager.utils.AppConfig
 import com.aquamorph.frcmanager.utils.Logging
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import kotlin.collections.ArrayList
 
 class EventAdapter(private val context: Context?, private var events: ArrayList<Event>) : RecyclerView.Adapter<EventAdapter.SingleViewHolder>() {
     // if checkedPosition = 0, 1st item is selected by default
@@ -19,7 +23,7 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
 
     @NonNull
     override fun onCreateViewHolder(@NonNull viewGroup: ViewGroup, i: Int): SingleViewHolder {
-        val view: View = LayoutInflater.from(context).inflate(R.layout.item_employee, viewGroup, false)
+        val view: View = LayoutInflater.from(context).inflate(R.layout.item_event, viewGroup, false)
         return SingleViewHolder(view)
     }
 
@@ -32,22 +36,26 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
     }
 
     inner class SingleViewHolder(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textView: TextView = itemView.findViewById(R.id.textView)
-        private val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        private val eventNameView: TextView = itemView.findViewById(R.id.eventName)
+        private val eventDateView: TextView = itemView.findViewById(R.id.eventDate)
+        private val checkView: ImageView = itemView.findViewById(R.id.check)
         fun bind(event: Event) {
             if (checkedPosition == -1) {
-                imageView.visibility = View.GONE
+                checkView.visibility = View.GONE
             } else {
                 if (checkedPosition == adapterPosition) {
-                    imageView.visibility = View.VISIBLE
+                    checkView.visibility = View.VISIBLE
                     setEvent(event)
                 } else {
-                    imageView.visibility = View.GONE
+                    checkView.visibility = View.GONE
                 }
             }
-            textView.text = event.name
+            eventNameView.text = event.name
+            eventDateView.text = eventDateToString(
+                    stringToDate(event.start_date),
+                    stringToDate(event.end_date))
             itemView.setOnClickListener {
-                imageView.visibility = View.VISIBLE
+                checkView.visibility = View.VISIBLE
                 if (checkedPosition != adapterPosition) {
                     notifyItemChanged(checkedPosition)
                     checkedPosition = adapterPosition
@@ -67,5 +75,19 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
             AppConfig.setDistrictKey("", context)
         }
         AppConfig.setEventShortName(event.short_name, context)
+    }
+
+    private fun stringToDate(text: String): Date {
+        return SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(text)
+    }
+
+    private fun eventDateToString(start: Date, end: Date): String {
+        if (start.month == end.month) {
+            return "%s to %s".format(SimpleDateFormat("MMMM d", Locale.US)
+                    .format(start), SimpleDateFormat("d yyyy", Locale.US).format(end))
+        } else {
+            return "%s to %s".format(SimpleDateFormat("MMMM d", Locale.US)
+                .format(start), SimpleDateFormat("MMMM d yyyy", Locale.US).format(end))
+        }
     }
 }
