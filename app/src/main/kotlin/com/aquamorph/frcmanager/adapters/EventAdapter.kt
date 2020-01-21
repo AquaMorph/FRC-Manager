@@ -82,12 +82,16 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
     }
 
     private fun eventDateToString(start: Date, end: Date): String {
-        if (start.month == end.month) {
-            return "%s to %s".format(SimpleDateFormat("MMMM d", Locale.US)
-                    .format(start), SimpleDateFormat("d yyyy", Locale.US).format(end))
+        return if (start.month == end.month) {
+            if (start.day == end.day) {
+                SimpleDateFormat("MMMM d yyyy", Locale.US).format(start)
+            } else {
+                "%s to %s".format(SimpleDateFormat("MMMM d", Locale.US)
+                        .format(start), SimpleDateFormat("d yyyy", Locale.US).format(end))
+            }
         } else {
-            return "%s to %s".format(SimpleDateFormat("MMMM d", Locale.US)
-                .format(start), SimpleDateFormat("MMMM d yyyy", Locale.US).format(end))
+            "%s to %s".format(SimpleDateFormat("MMMM d", Locale.US)
+                    .format(start), SimpleDateFormat("MMMM d yyyy", Locale.US).format(end))
         }
     }
 }
