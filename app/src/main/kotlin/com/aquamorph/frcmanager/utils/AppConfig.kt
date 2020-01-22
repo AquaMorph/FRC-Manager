@@ -77,4 +77,14 @@ object AppConfig {
         editor.putString("districtKey", key)
         editor.apply()
     }
+
+    /**
+     * setEventAddress() set the shared variable of the event address.
+     */
+    fun setEventAddress(address: String, context: Context) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = prefs.edit()
+        editor.putString("eventAddress", address)
+        editor.apply()
+    }
 }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     private lateinit var teamRank: String
     private lateinit var teamRecord: String
     private lateinit var nextMatch: String
+    private lateinit var eventAddress: String
     private lateinit var toolbarText: String
     lateinit var dataLoader: DataLoader
     private lateinit var mViewPager: ViewPager
@@ -77,6 +79,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         teamRecord = prefs.getString("teamRecord", "")!!
         nextMatch = prefs.getString("nextMatch", "")!!
         toolbarText = prefs.getString("toolbarText", getString(R.string.toolBarDefault))!!
+        eventAddress = prefs.getString("eventAddress", "")!!
         DataLoader.eventKey = prefs.getString("eventKey", "")!!
         DataLoader.districtKey = prefs.getString("districtKey", "")!!
         if (DataLoader.teamNumber == "") openSetup()
@@ -101,6 +104,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         when (item.itemId) {
             R.id.action_settings -> openSettings()
             R.id.refresh_all -> refresh()
+            R.id.actionDirections -> showMap(eventAddress)
             else -> refresh()
         }
         return super.onOptionsItemSelected(item)
@@ -131,6 +135,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
             "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")!!
             "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")!!
             "districtKey" -> DataLoader.districtKey = sharedPreferences.getString("districtKey", "")!!
+            "eventAddress" -> eventAddress = sharedPreferences.getString("eventAddress", "")!!
         }
 
         if (supportActionBar != null) {
@@ -166,6 +171,15 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         } catch (e: Exception) {
             Logging.error(this, e.toString(), 0)
         }
+    }
+
+    /**
+     * showMap() starts map application
+     */
+    private fun showMap(location: String) {
+        val intent = Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?daddr=%s".format(location)))
+        startActivity(intent)
     }
 
     companion object {

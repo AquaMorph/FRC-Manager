@@ -75,6 +75,7 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
             AppConfig.setDistrictKey("", context)
         }
         AppConfig.setEventShortName(event.short_name, context)
+        AppConfig.setEventAddress(event.address, context)
     }
 
     private fun stringToDate(text: String): Date {
