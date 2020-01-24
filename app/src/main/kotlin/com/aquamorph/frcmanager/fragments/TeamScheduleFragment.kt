@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
+import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
@@ -23,7 +24,7 @@ import java.util.Collections.sort
  * Displays a list of matches at an event for a given team.
  *
  * @author Christian Colglazier
- * @version 1/16/2020
+ * @version 1/23/2020
  */
 class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, RefreshFragment {
 
@@ -89,7 +90,9 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
      */
     override fun refresh() {
         if (teamNumber != "" && DataLoader.eventKey != "") {
-            LoadTeamSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            if (task == null || task!!.status != AsyncTask.Status.RUNNING) {
+                task = LoadTeamSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            }
         } else {
             Logging.error(this, "Team or event key not set", 0)
         }
@@ -116,12 +119,16 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     }
 
     override fun dataUpdate() {
+        val teamEventMatchesOld = teamEventMatches
         teamEventMatches.clear()
         for (match in DataLoader.matchDC.data) {
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
         }
         sort(teamEventMatches)
         adapter.notifyDataSetChanged()
+        Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
+        Animations.loadAnimation(context, view, adapter, firstLoad, teamEventMatchesOld != teamEventMatches)
+        firstLoad = false
     }
 
     internal inner class LoadTeamSchedule : AsyncTask<Void?, Void?, Void?>() {
@@ -138,7 +145,6 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }

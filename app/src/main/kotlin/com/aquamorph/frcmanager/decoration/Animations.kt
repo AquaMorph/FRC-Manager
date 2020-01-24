@@ -20,8 +20,8 @@ object Animations {
         context: Context?,
         view: View?,
         adapter: RecyclerView.Adapter<*>?,
-        firstLoad: Boolean?,
-        isNewData: Boolean?
+        firstLoad: Boolean,
+        isNewData: Boolean
     ) {
         if (context != null && view != null && adapter != null) {
             val slideOut = AnimationUtils.loadAnimation(context, android.R.anim.slide_out_right)
@@ -37,12 +37,10 @@ object Animations {
 
                 override fun onAnimationRepeat(animation: Animation) {}
             })
-            if (isNewData!!) {
-                if (firstLoad!!) {
-                    view.startAnimation(slideIn)
-                } else {
-                    view.startAnimation(slideOut)
-                }
+            if (firstLoad) {
+                view.startAnimation(slideIn)
+            } else if (isNewData) {
+                view.startAnimation(slideOut)
             }
         }
     }

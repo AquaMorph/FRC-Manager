@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.TeamAdapter
+import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
@@ -19,7 +20,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of teams at an event.
  *
  * @author Christian Colglazier
- * @version 4/14/2018
+ * @version 1/23/2020
  */
 open class TeamFragment : TabFragment(), RefreshFragment,
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -45,11 +46,16 @@ open class TeamFragment : TabFragment(), RefreshFragment,
     }
 
     override fun dataUpdate() {
+        val teamsOld = teams
+        val ranksOld = ranks
         teams.clear()
         teams.addAll(DataLoader.teamDC.data)
         ranks.clear()
         ranks.addAll(DataLoader.rankDC.data)
         adapter.notifyDataSetChanged()
+        Constants.checkNoDataScreen(teams, recyclerView, emptyView)
+        Animations.loadAnimation(context, view, adapter, firstLoad, teamsOld != teams || ranksOld != ranks)
+        firstLoad = false
     }
 
     /**
@@ -57,7 +63,9 @@ open class TeamFragment : TabFragment(), RefreshFragment,
      */
     override fun refresh() {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "") {
-            LoadEventTeams().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            if (task == null || task!!.status != AsyncTask.Status.RUNNING) {
+                task = LoadEventTeams().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            }
         }
     }
 
@@ -82,7 +90,6 @@ open class TeamFragment : TabFragment(), RefreshFragment,
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(teams, recyclerView, emptyView)
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }

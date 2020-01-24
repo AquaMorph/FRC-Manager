@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
+import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
@@ -19,7 +20,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of matches at an event.
  *
  * @author Christian Colglazier
- * @version 4/14/2018
+ * @version 1/23/2020
  */
 class EventScheduleFragment :
         TabFragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
@@ -46,10 +47,14 @@ class EventScheduleFragment :
     }
 
     override fun dataUpdate() {
+        val matchesOld = matches
         matches.clear()
         matches.addAll(DataLoader.matchDC.data)
         prefs.edit().putString("nextMatch", "%s".format(nextMatch(matches))).apply()
         adapter.notifyDataSetChanged()
+        Constants.checkNoDataScreen(matches, recyclerView, emptyView)
+        Animations.loadAnimation(context, view, adapter, firstLoad, matchesOld != matches)
+        firstLoad = false
     }
 
     override fun onResume() {
@@ -63,7 +68,9 @@ class EventScheduleFragment :
      */
     override fun refresh() {
         if (DataLoader.eventKey != "") {
-            LoadEventSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            if (task == null || task!!.status != AsyncTask.Status.RUNNING) {
+                task = LoadEventSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            }
         }
     }
 
@@ -99,7 +106,6 @@ class EventScheduleFragment :
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(matches, recyclerView, emptyView)
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }

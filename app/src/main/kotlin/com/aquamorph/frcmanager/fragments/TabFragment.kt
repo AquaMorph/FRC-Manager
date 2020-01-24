@@ -1,6 +1,7 @@
 package com.aquamorph.frcmanager.fragments
 
 import android.content.SharedPreferences
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -20,6 +21,9 @@ abstract class TabFragment : Fragment() {
     protected lateinit var recyclerView: RecyclerView
     protected lateinit var emptyView: TextView
     protected lateinit var adapter: Adapter<*>
+    protected var firstLoad = true
+    protected var task: AsyncTask<Void?, Void?, Void?>? = null
+
     abstract fun dataUpdate()
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.RankAdapter
+import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
@@ -18,7 +19,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays the ranks of all the teams at an event.
  *
  * @author Christian Colglazier
- * @version 4/14/2018
+ * @version 2/23/2020
  */
 class RankFragment : TabFragment(), RefreshFragment {
 
@@ -38,11 +39,16 @@ class RankFragment : TabFragment(), RefreshFragment {
     }
 
     override fun dataUpdate() {
+        val ranksOld = ranks
+        val teamsOld = teams
         ranks.clear()
         ranks.addAll(DataLoader.rankDC.data)
         teams.clear()
         teams.addAll(DataLoader.teamDC.data)
         adapter.notifyDataSetChanged()
+        Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
+        Animations.loadAnimation(context, view, adapter, firstLoad, ranksOld != ranks || teamsOld != teams)
+        firstLoad = false
     }
 
     override fun onResume() {
@@ -90,7 +96,6 @@ class RankFragment : TabFragment(), RefreshFragment {
             }
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.DistrictRankAdapter
+import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.DistrictRank
 import com.aquamorph.frcmanager.models.Team
@@ -18,7 +19,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays the ranks of all the teams at an event.
  *
  * @author Christian Colglazier
- * @version 10/29/2018
+ * @version 1/23/2020
  */
 class DistrictRankFragment : TabFragment(), RefreshFragment {
 
@@ -38,11 +39,16 @@ class DistrictRankFragment : TabFragment(), RefreshFragment {
     }
 
     override fun dataUpdate() {
+        val ranksOld = ranks
+        val teamsOld = teams
         ranks.clear()
         ranks.addAll(DataLoader.districtRankDC.data)
         teams.clear()
         teams.addAll(DataLoader.districtTeamDC.data)
         adapter.notifyDataSetChanged()
+        Constants.checkNoDataScreen(DataLoader.districtRankDC.data, recyclerView, emptyView)
+        Animations.loadAnimation(context, view, adapter, firstLoad, ranksOld != ranks || teamsOld != teams)
+        firstLoad = false
     }
 
     override fun onResume() {
@@ -56,7 +62,9 @@ class DistrictRankFragment : TabFragment(), RefreshFragment {
      */
     override fun refresh() {
         if (DataLoader.districtKey != "" && context != null) {
-            LoadRanks().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            if (task == null || task!!.status != AsyncTask.Status.RUNNING) {
+                task = LoadRanks().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            }
         }
     }
 
@@ -75,7 +83,6 @@ class DistrictRankFragment : TabFragment(), RefreshFragment {
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(DataLoader.districtRankDC.data, recyclerView, emptyView)
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }

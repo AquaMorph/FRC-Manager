@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.AwardAdapter
+import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Award
 import com.aquamorph.frcmanager.network.DataLoader
@@ -18,7 +19,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of awards at a event
  *
  * @author Christian Colglazier
- * @version 4/14/2018
+ * @version 1/23/2020
  */
 class AwardFragment :
         TabFragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
@@ -39,9 +40,13 @@ class AwardFragment :
     }
 
     override fun dataUpdate() {
+        val awardsOld = awards
         awards.clear()
         awards.addAll(DataLoader.awardDC.data)
         adapter.notifyDataSetChanged()
+        Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
+        Animations.loadAnimation(context, view, adapter, firstLoad, awardsOld != awards)
+        firstLoad = false
     }
 
     override fun onResume() {
@@ -57,7 +62,9 @@ class AwardFragment :
      */
     override fun refresh() {
         if (DataLoader.eventKey != "") {
-            LoadAwards().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            if (task == null || task!!.status != AsyncTask.Status.RUNNING) {
+                task = LoadAwards().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            }
         }
     }
 
@@ -81,7 +88,6 @@ class AwardFragment :
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }

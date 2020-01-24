@@ -83,13 +83,13 @@ class DataLoader {
             activity: Activity
         ) {
             dataContainer.complete = false
-            val retrofit: ArrayList<Observable<out Any>> = arrayListOf(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventMatches(DataLoader.eventKey))
-                retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventTeams(DataLoader.eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventRankings(DataLoader.eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAwards(DataLoader.eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAlliances(DataLoader.eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictRankings(DataLoader.districtKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictTeams(DataLoader.districtKey))
+            val retrofit: ArrayList<Observable<out Any>> = arrayListOf(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventMatches(eventKey))
+                retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventTeams(eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventRankings(eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAwards(eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAlliances(eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictRankings(districtKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictTeams(districtKey))
             disposable = retrofit[observer].subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
