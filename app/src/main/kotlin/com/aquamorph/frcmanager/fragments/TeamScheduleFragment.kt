@@ -18,7 +18,7 @@ import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
-import java.util.Collections.sort
+import com.aquamorph.frcmanager.utils.MatchSort
 
 /**
  * Displays a list of matches at an event for a given team.
@@ -63,6 +63,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         }
         listener()
         Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
+        prefs.registerOnSharedPreferenceChangeListener(this)
         return view
     }
 
@@ -102,6 +103,8 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
                 teamNumber = DataLoader.teamNumber
             }
             listener()
+        } else if (key == "matchSort") {
+            refresh()
         }
     }
 
@@ -122,7 +125,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         for (match in DataLoader.matchDC.data) {
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
         }
-        sort(teamEventMatches)
+        MatchSort.sortMatches(teamEventMatches, prefs.getString("matchSort", ""))
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter, firstLoad, teamEventMatchesOld != teamEventMatches)

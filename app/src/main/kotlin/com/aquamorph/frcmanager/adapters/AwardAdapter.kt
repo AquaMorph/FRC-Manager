@@ -33,7 +33,7 @@ class AwardAdapter(context: Context, private val data: ArrayList<Award>) :
         var awardee = ""
 
         var i = 0
-        while (i in 0..(data[position].recipient_list.size - 1)) {
+        while (i in data[position].recipient_list.indices) {
             if (data[position].recipient_list[i].team_key != null) {
                 if (i > 0) team += "\n"
                 team += Constants.formatTeamNumber(data[position].recipient_list[i].team_key)

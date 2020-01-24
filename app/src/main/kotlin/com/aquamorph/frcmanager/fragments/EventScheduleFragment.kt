@@ -15,6 +15,7 @@ import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
+import com.aquamorph.frcmanager.utils.MatchSort
 
 /**
  * Displays a list of matches at an event.
@@ -42,7 +43,6 @@ class EventScheduleFragment :
                     ScheduleAdapter(context!!, matches, DataLoader.teamNumber))
         }
         prefs.registerOnSharedPreferenceChangeListener(this)
-
         return view
     }
 
@@ -51,6 +51,7 @@ class EventScheduleFragment :
         matches.clear()
         matches.addAll(DataLoader.matchDC.data)
         prefs.edit().putString("nextMatch", "%s".format(nextMatch(matches))).apply()
+        MatchSort.sortMatches(matches, prefs.getString("matchSort", ""))
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(matches, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter, firstLoad, matchesOld != matches)
@@ -73,7 +74,7 @@ class EventScheduleFragment :
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        if (key == "teamNumber" || key == "eventKey") {
+        if (key == "teamNumber" || key == "eventKey" || key == "matchSort") {
             refresh()
         }
     }
@@ -82,6 +83,7 @@ class EventScheduleFragment :
      * nextMatch() returns the next match to be played in the event.
      */
     private fun nextMatch(matches: ArrayList<Match>): String {
+        matches.sort()
         for (match in matches) {
             if (match.post_result_time <= 0) {
                 return "Playing %S-%s".format(match.comp_level, match.match_number)
