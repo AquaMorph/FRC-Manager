@@ -90,9 +90,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
      */
     override fun refresh() {
         if (teamNumber != "" && DataLoader.eventKey != "") {
-            if (task == null || task!!.status != AsyncTask.Status.RUNNING) {
-                task = LoadTeamSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-            }
+            task = Constants.runRefresh(task, LoadTeamSchedule())
         } else {
             Logging.error(this, "Team or event key not set", 0)
         }
@@ -127,7 +125,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         sort(teamEventMatches)
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
-        Animations.loadAnimation(context, view, adapter, firstLoad, teamEventMatchesOld != teamEventMatches)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, teamEventMatchesOld != teamEventMatches)
         firstLoad = false
     }
 

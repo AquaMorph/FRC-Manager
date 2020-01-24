@@ -47,7 +47,7 @@ class DistrictRankFragment : TabFragment(), RefreshFragment {
         teams.addAll(DataLoader.districtTeamDC.data)
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(DataLoader.districtRankDC.data, recyclerView, emptyView)
-        Animations.loadAnimation(context, view, adapter, firstLoad, ranksOld != ranks || teamsOld != teams)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, ranksOld != ranks || teamsOld != teams)
         firstLoad = false
     }
 
@@ -62,9 +62,7 @@ class DistrictRankFragment : TabFragment(), RefreshFragment {
      */
     override fun refresh() {
         if (DataLoader.districtKey != "" && context != null) {
-            if (task == null || task!!.status != AsyncTask.Status.RUNNING) {
-                task = LoadRanks().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-            }
+            task = Constants.runRefresh(task, LoadRanks())
         }
     }
 

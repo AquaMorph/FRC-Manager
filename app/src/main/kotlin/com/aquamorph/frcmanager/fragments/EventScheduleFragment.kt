@@ -53,7 +53,7 @@ class EventScheduleFragment :
         prefs.edit().putString("nextMatch", "%s".format(nextMatch(matches))).apply()
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(matches, recyclerView, emptyView)
-        Animations.loadAnimation(context, view, adapter, firstLoad, matchesOld != matches)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, matchesOld != matches)
         firstLoad = false
     }
 
@@ -68,9 +68,7 @@ class EventScheduleFragment :
      */
     override fun refresh() {
         if (DataLoader.eventKey != "") {
-            if (task == null || task!!.status != AsyncTask.Status.RUNNING) {
-                task = LoadEventSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-            }
+            task = Constants.runRefresh(task, LoadEventSchedule())
         }
     }
 

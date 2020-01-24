@@ -1,10 +1,12 @@
 package com.aquamorph.frcmanager.utils
 
+import android.os.AsyncTask
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
+import com.aquamorph.frcmanager.fragments.AllianceFragment
 import com.aquamorph.frcmanager.network.DataLoader
 
 /**
@@ -170,6 +172,16 @@ object Constants {
         } else {
             String.format("%S-%s-%s", compLevel, setNumber, matchNumber)
         }
+    }
+
+    /**
+     * runRefresh()
+     */
+    internal fun runRefresh(task: AsyncTask<Void?, Void?, Void?>?, loader: Any): AsyncTask<Void?, Void?, Void?> {
+        if (task == null || task.status != AsyncTask.Status.RUNNING) {
+            return (loader as AsyncTask<Void?, Void?, Void?>).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        }
+        return task
     }
 
     enum class Theme {

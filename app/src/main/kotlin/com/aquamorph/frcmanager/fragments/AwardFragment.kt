@@ -45,7 +45,7 @@ class AwardFragment :
         awards.addAll(DataLoader.awardDC.data)
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
-        Animations.loadAnimation(context, view, adapter, firstLoad, awardsOld != awards)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, awardsOld != awards)
         firstLoad = false
     }
 
@@ -62,9 +62,7 @@ class AwardFragment :
      */
     override fun refresh() {
         if (DataLoader.eventKey != "") {
-            if (task == null || task!!.status != AsyncTask.Status.RUNNING) {
-                task = LoadAwards().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-            }
+            task = Constants.runRefresh(task, LoadAwards())
         }
     }
 

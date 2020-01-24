@@ -51,9 +51,7 @@ class AllianceFragment : TabFragment(),
      * refresh() loads dataLoader needed for this fragment.
      */
     override fun refresh() {
-        if (task == null || task!!.status != AsyncTask.Status.RUNNING) {
-            task = LoadAlliances().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        }
+        task = Constants.runRefresh(task, LoadAlliances())
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -68,7 +66,7 @@ class AllianceFragment : TabFragment(),
         alliances.addAll(DataLoader.allianceDC.data)
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
-        Animations.loadAnimation(context, view, adapter, firstLoad, oldAlliances != alliances)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, oldAlliances != alliances)
         firstLoad = false
     }
 
