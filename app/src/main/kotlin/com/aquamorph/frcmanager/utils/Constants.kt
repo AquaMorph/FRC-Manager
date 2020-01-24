@@ -6,7 +6,6 @@ import android.text.Html
 import android.text.Spanned
 import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
-import com.aquamorph.frcmanager.fragments.AllianceFragment
 import com.aquamorph.frcmanager.network.DataLoader
 
 /**
