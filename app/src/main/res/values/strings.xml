@@ -43,4 +43,14 @@
         <item>Battery saver theme</item>
         <item>Use system setting</item>
     </string-array>
+    <string-array name="matchSortValues">
+        <item>linear</item>
+        <item>upcoming</item>
+        <item>upcomingLast</item>
+    </string-array>
+    <string-array name="matchSort">
+        <item>Linear time</item>
+        <item>Upcoming matches first</item>
+        <item>Upcoming matches plus last match</item>
+    </string-array>
 </resources>
