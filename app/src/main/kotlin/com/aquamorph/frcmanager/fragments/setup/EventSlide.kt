@@ -64,7 +64,7 @@ class EventSlide : Fragment() {
                 .subscribe({ result -> if (result != null) {
                     eventList.clear()
                     eventList.addAll(result)
-                    sort(eventList)
+                    eventList.sort()
                     eventAdapter.notifyDataSetChanged()
                 } },
                         { error -> Logging.error(this, error.toString(), 0) })

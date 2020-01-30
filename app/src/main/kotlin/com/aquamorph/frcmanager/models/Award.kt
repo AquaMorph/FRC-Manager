@@ -1,20 +1,28 @@
 package com.aquamorph.frcmanager.models
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 /**
  * Contains information about awards given at an event
  *
  * @author Christian Colglazier
- * @version 3/30/2018
+ * @version 1/30/2020
  */
-class Award {
-    var name: String = ""
-    var award_type: Int = 0
-    var event_key: String = ""
-    var recipient_list: Array<RecipientList> = emptyArray()
-    var year: String = ""
-
-    inner class RecipientList {
-        var team_key: String = ""
-        var awardee: String = ""
-    }
-}
+data class Award(
+    @Expose
+@SerializedName("name")
+var name: String,
+    @Expose
+@SerializedName("award_type")
+var awardType: Int,
+    @Expose
+@SerializedName("event_key")
+var eventKey: String,
+    @Expose
+@SerializedName("recipient_list")
+var recipientList: ArrayList<AwardRecipient>,
+    @Expose
+@SerializedName("year")
+var year: String
+)
