@@ -29,13 +29,13 @@ object MatchSort {
             }
             "upcomingLast" -> {
                 matches.sortWith(compareBy(Match::post_result_time, Match::time))
-                Collections.rotate(matches, -matchNext(matches)+1)
+                Collections.rotate(matches, -matchNext(matches) + 1)
             }
             else -> matches.sort()
         }
     }
 
-    private fun matchNext(matches: ArrayList<Match>) : Int {
+    private fun matchNext(matches: ArrayList<Match>): Int {
         var count = 0
         matches.forEach { match ->
             if (match.post_result_time <= 0) return count
