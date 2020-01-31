@@ -14,7 +14,7 @@
             android:summary="Choose between different color schemes"
             android:title="App Theme"/>
         <ListPreference
-            android:defaultValue="linear"
+            android:defaultValue="seriesGrouping"
             android:entries="@array/matchSort"
             android:entryValues="@array/matchSortValues"
             android:key="matchSort"

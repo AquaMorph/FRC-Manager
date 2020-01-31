@@ -41,7 +41,7 @@ class Match : Comparable<Match> {
         }
     }
 
-    private fun getCompLevelValue(comp_level: String?): Int {
+    fun getCompLevelValue(comp_level: String?): Int {
         return when (comp_level) {
             "qm" -> 1
             "ef" -> 2

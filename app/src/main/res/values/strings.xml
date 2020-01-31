@@ -44,12 +44,16 @@
         <item>Use system setting</item>
     </string-array>
     <string-array name="matchSortValues">
-        <item>linear</item>
+        <item>seriesGrouping</item>
+        <item>chronological</item>
+        <item>reverseChronological</item>
         <item>upcoming</item>
         <item>upcomingLast</item>
     </string-array>
     <string-array name="matchSort">
-        <item>Linear time</item>
+        <item>Series grouping</item>
+        <item>Chronological</item>
+        <item>Reverse chronological</item>
         <item>Upcoming matches first</item>
         <item>Upcoming matches plus last match</item>
     </string-array>
