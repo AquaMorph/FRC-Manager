@@ -25,7 +25,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.util.Arrays
 import java.util.Collections.sort
 import kotlin.collections.ArrayList
 
@@ -176,10 +175,10 @@ class DataLoader {
                         .getStatus().subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ result -> if (result != null) {
-                            if (result.is_datafeed_down) {
+                            if (result.isDatafeedDown) {
                                 Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
                                         R.string.first_server_down, Snackbar.LENGTH_LONG).show()
-                            } else if (Arrays.asList(*result.down_events!!).contains(eventKey)) {
+                            } else if (result.downEvents.contains(eventKey)) {
                                 Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
                                         R.string.event_server_down, Snackbar.LENGTH_LONG).show()
                             }

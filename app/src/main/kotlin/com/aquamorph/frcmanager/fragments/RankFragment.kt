@@ -46,7 +46,7 @@ class RankFragment : TabFragment(), RefreshFragment {
         teams.clear()
         teams.addAll(DataLoader.teamDC.data)
         adapter.notifyDataSetChanged()
-        Constants.checkNoDataScreen(DataLoader.rankDC.data, recyclerView, emptyView)
+        Constants.checkNoDataScreen(ranks, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter, firstLoad, ranksOld != ranks || teamsOld != teams)
         firstLoad = false
     }
@@ -79,17 +79,17 @@ class RankFragment : TabFragment(), RefreshFragment {
         }
 
         override fun onPostExecute(result: Void?) {
-            if (!DataLoader.rankDC.data.isEmpty()) {
+            if (DataLoader.rankDC.data.isNotEmpty()) {
                 val editor = prefs.edit()
                 editor.putString("teamRank", "")
                 for (i in 0 until DataLoader.rankDC.data[0].rankings.size) {
-                    if (DataLoader.rankDC.data[0].rankings[i]!!.team_key == "frc" + DataLoader.teamNumber) {
-                        if (Integer.toString(DataLoader.rankDC.data[0].rankings[i]!!.rank) != null) {
+                    if (DataLoader.rankDC.data[0].rankings[i]!!.teamKey == "frc" + DataLoader.teamNumber) {
+                        if (DataLoader.rankDC.data[0].rankings[i]!!.rank.toString() != null) {
                             editor.putString("teamRank",
-                                    Integer.toString(DataLoader.rankDC.data[0].rankings[i]!!.rank))
+                                    DataLoader.rankDC.data[0].rankings[i].rank.toString())
                         }
                         editor.putString("teamRecord",
-                                Rank.recordToString(DataLoader.rankDC.data[0].rankings[i]!!.record))
+                                Rank.recordToString(DataLoader.rankDC.data[0].rankings[i].record))
                         editor.apply()
                     }
                 }

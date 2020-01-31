@@ -52,8 +52,8 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
             }
             eventNameView.text = event.name
             eventDateView.text = eventDateToString(
-                    stringToDate(event.start_date),
-                    stringToDate(event.end_date))
+                    stringToDate(event.startDate),
+                    stringToDate(event.endDate))
             itemView.setOnClickListener {
                 checkView.visibility = View.VISIBLE
                 if (checkedPosition != adapterPosition) {
@@ -68,13 +68,13 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
     fun setEvent(event: Event) {
         AppConfig.setEventKey(event.key, context!!)
         Logging.info(this, "Key:" + event.key, 0)
-        Logging.info(this, "Short Name:" + event.short_name, 0)
+        Logging.info(this, "Short Name:" + event.shortName, 0)
         if (event.district != null) {
             AppConfig.setDistrictKey(event.district.key, context)
         } else {
             AppConfig.setDistrictKey("", context)
         }
-        AppConfig.setEventShortName(event.short_name, context)
+        AppConfig.setEventShortName(event.shortName, context)
         AppConfig.setEventAddress(event.address, context)
     }
 

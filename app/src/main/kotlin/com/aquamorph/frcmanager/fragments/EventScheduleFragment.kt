@@ -85,8 +85,8 @@ class EventScheduleFragment :
     private fun nextMatch(matches: ArrayList<Match>): String {
         matches.sort()
         for (match in matches) {
-            if (match.post_result_time <= 0) {
-                return "Playing %S-%s".format(match.comp_level, match.match_number)
+            if (match.postResultTime <= 0) {
+                return "Playing %S-%s".format(match.compLevel, match.matchNumber)
             }
         }
         return ""
