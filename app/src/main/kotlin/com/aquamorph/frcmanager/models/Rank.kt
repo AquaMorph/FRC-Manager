@@ -1,42 +1,80 @@
 package com.aquamorph.frcmanager.models
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import java.util.Locale
 
 /**
  * Stores rank information at an event.
  *
  * @author Christian Colglazier
- * @version 1/30/2020
+ * @version 1/31/2020
  */
 data class Rank(
+    @Expose
+    @SerializedName("rankings")
     var rankings: ArrayList<Rankings>,
-    var extra_stats_info: ArrayList<ExtraStatsInfo>,
-    var sort_order_info: ArrayList<SortOrderInfo>
+    @Expose
+    @SerializedName("extra_stats_info")
+    var extraStatsInfo: ArrayList<ExtraStatsInfo>,
+    @Expose
+    @SerializedName("sort_order_info")
+    var sortOrderInfo: ArrayList<SortOrderInfo>
 ) {
     inner class Rankings(
+        @Expose
+        @SerializedName("dq")
         var dq: Int,
-        var matches_played: Int,
+        @Expose
+        @SerializedName("matches_played")
+        var matchesPlayed: Int,
+        @Expose
+        @SerializedName("qual_average")
         var qual_average: Double,
+        @Expose
+        @SerializedName("rank")
         var rank: Int,
+        @Expose
+        @SerializedName("record")
         var record: WLTRecord,
-        var extra_stats: DoubleArray,
-        var sort_orders: DoubleArray,
-        var team_key: String
+        @Expose
+        @SerializedName("extra_stats")
+        var extraStats: DoubleArray,
+        @Expose
+        @SerializedName("sort_orders")
+        var sortOrders: DoubleArray,
+        @Expose
+        @SerializedName("team_key")
+        var teamKey: String
     )
 
     data class WLTRecord(
+        @Expose
+        @SerializedName("losses")
         var losses: Int,
+        @Expose
+        @SerializedName("wins")
         var wins: Int,
+        @Expose
+        @SerializedName("ties")
         var ties: Int
     )
 
     data class ExtraStatsInfo(
+        @Expose
+        @SerializedName("name")
         var name: String,
+        @Expose
+        @SerializedName("precision")
         var precision: Int
     )
 
     data class SortOrderInfo(
+        @Expose
+        @SerializedName("name")
         var name: String,
+        @Expose
+        @SerializedName("precision")
         var precision: Int
     )
 

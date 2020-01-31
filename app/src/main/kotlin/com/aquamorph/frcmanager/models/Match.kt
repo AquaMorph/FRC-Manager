@@ -1,44 +1,81 @@
 package com.aquamorph.frcmanager.models
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 /**
  * Stores match information at an event.
  *
  * @author Christian Colglazier
- * @version 1/30/2020
+ * @version 1/31/2020
  */
 class Match(
+    @Expose
+    @SerializedName("key")
     var key: String,
-    var comp_level: String,
-    var set_number: Int,
-    var match_number: Int,
+    @Expose
+    @SerializedName("comp_level")
+    var compLevel: String,
+    @Expose
+    @SerializedName("set_number")
+    var setNumber: Int,
+    @Expose
+    @SerializedName("match_number")
+    var matchNumber: Int,
+    @Expose
+    @SerializedName("alliances")
     var alliances: Alliances,
-    var winning_alliance: String,
-    var event_key: String,
+    @Expose
+    @SerializedName("winning_alliance")
+    var winningAlliance: String,
+    @Expose
+    @SerializedName("event_key")
+    var eventKey: String,
+    @Expose
+    @SerializedName("time")
     var time: Long,
-    var actual_time: Long,
-    var predicted_time: Long,
-    var post_result_time: Long
+    @Expose
+    @SerializedName("actual_time")
+    var actualTime: Long,
+    @Expose
+    @SerializedName("predicted_time")
+    var predictedTime: Long,
+    @Expose
+    @SerializedName("post_result_time")
+    var postResultTime: Long
 ) : Comparable<Match> {
 
     data class Alliances(
+        @Expose
+        @SerializedName("blue")
         var blue: MatchAlliance,
+        @Expose
+        @SerializedName("red")
         var red: MatchAlliance
     )
 
     data class MatchAlliance(
+        @Expose
+        @SerializedName("score")
         var score: Int,
-        var team_keys: ArrayList<String>,
-        var surrogate_team_keys: ArrayList<String>,
-        var dq_team_keys: ArrayList<String>
+        @Expose
+        @SerializedName("team_keys")
+        var teamKeys: ArrayList<String>,
+        @Expose
+        @SerializedName("surrogate_team_keys")
+        var surrogateTeamKeys: ArrayList<String>,
+        @Expose
+        @SerializedName("dq_team_keys")
+        var dqTeamKeys: ArrayList<String>
     )
 
     override operator fun compareTo(other: Match): Int {
-        val compareMatchNumber = other.match_number
-        val compareLevel = other.comp_level
-        return if (getCompLevelValue(compareLevel) == getCompLevelValue(this.comp_level)) {
-            this.match_number - compareMatchNumber
+        val compareMatchNumber = other.matchNumber
+        val compareLevel = other.compLevel
+        return if (getCompLevelValue(compareLevel) == getCompLevelValue(this.compLevel)) {
+            this.matchNumber - compareMatchNumber
         } else {
-            getCompLevelValue(this.comp_level) - getCompLevelValue(compareLevel)
+            getCompLevelValue(this.compLevel) - getCompLevelValue(compareLevel)
         }
     }
 

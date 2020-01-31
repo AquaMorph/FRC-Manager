@@ -37,7 +37,7 @@ class TeamAdapter(
         if (ranks != null && ranks.size > 0) {
             if (ranks[0].rankings != null && ranks[0].rankings.isNotEmpty()) {
                 for (i in 0 until ranks[0].rankings.size) {
-                    if (ranks[0].rankings[i]!!.team_key == teamNumber)
+                    if (ranks[0].rankings[i]!!.teamKey == teamNumber)
                         return " Ranked #" + ranks[0].rankings[i]!!.rank
                 }
             }
@@ -60,9 +60,9 @@ class TeamAdapter(
         rank.setSpan(StyleSpan(Typeface.ITALIC), 0, rank.length, 0)
         spannableStringBuilder.append(rank)
 
-        holder.rankNumber.text = data[position].team_number.toString()
+        holder.rankNumber.text = data[position].teamNumber.toString()
         holder.teamNumber.setText(spannableStringBuilder, TextView.BufferType.SPANNABLE)
-        holder.details.text = String.format("%s, %s", data[position].city, data[position].state_prov)
+        holder.details.text = String.format("%s, %s", data[position].city, data[position].stateProv)
     }
 
     override fun getItemCount(): Int {

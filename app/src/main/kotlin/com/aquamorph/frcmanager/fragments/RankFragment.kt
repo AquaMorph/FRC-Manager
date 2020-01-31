@@ -83,7 +83,7 @@ class RankFragment : TabFragment(), RefreshFragment {
                 val editor = prefs.edit()
                 editor.putString("teamRank", "")
                 for (i in 0 until DataLoader.rankDC.data[0].rankings.size) {
-                    if (DataLoader.rankDC.data[0].rankings[i]!!.team_key == "frc" + DataLoader.teamNumber) {
+                    if (DataLoader.rankDC.data[0].rankings[i]!!.teamKey == "frc" + DataLoader.teamNumber) {
                         if (DataLoader.rankDC.data[0].rankings[i]!!.rank.toString() != null) {
                             editor.putString("teamRank",
                                     DataLoader.rankDC.data[0].rankings[i].rank.toString())

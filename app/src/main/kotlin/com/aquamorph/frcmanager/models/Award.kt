@@ -7,22 +7,22 @@ import com.google.gson.annotations.SerializedName
  * Contains information about awards given at an event
  *
  * @author Christian Colglazier
- * @version 1/30/2020
+ * @version 1/31/2020
  */
 data class Award(
     @Expose
-@SerializedName("name")
-var name: String,
+    @SerializedName("name")
+    var name: String,
     @Expose
-@SerializedName("award_type")
-var awardType: Int,
+    @SerializedName("award_type")
+    var awardType: Int,
     @Expose
-@SerializedName("event_key")
-var eventKey: String,
+    @SerializedName("event_key")
+    var eventKey: String,
     @Expose
-@SerializedName("recipient_list")
-var recipientList: ArrayList<AwardRecipient>,
+    @SerializedName("recipient_list")
+    var recipientList: ArrayList<AwardRecipient>,
     @Expose
-@SerializedName("year")
-var year: String
+    @SerializedName("year")
+    var year: String
 )

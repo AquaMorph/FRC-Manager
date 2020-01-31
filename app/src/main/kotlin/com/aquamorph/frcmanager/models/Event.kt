@@ -1,5 +1,7 @@
 package com.aquamorph.frcmanager.models
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -7,43 +9,101 @@ import java.util.Locale
  * Stores information about an event.
  *
  * @author Christian Colglazier
- * @version 1/30/2020
+ * @version 1/31/2020
  */
 data class Event(
+    @Expose
+    @SerializedName("key")
     var key: String,
+    @Expose
+    @SerializedName("name")
     var name: String,
-    var event_code: String,
-    var event_type: Int,
+    @Expose
+    @SerializedName("event_code")
+    var eventCode: String,
+    @Expose
+    @SerializedName("event_type")
+    var eventType: Int,
+    @Expose
+    @SerializedName("district")
     var district: DistrictList,
+    @Expose
+    @SerializedName("city")
     var city: String,
-    var state_prov: String,
+    @Expose
+    @SerializedName("state_prov")
+    var stateProv: String,
+    @Expose
+    @SerializedName("country")
     var country: String,
-    var start_date: String,
-    var end_date: String,
+    @Expose
+    @SerializedName("start_date")
+    var startDate: String,
+    @Expose
+    @SerializedName("end_date")
+    var endDate: String,
+    @Expose
+    @SerializedName("year")
     var year: Int,
-    var short_name: String,
-    var event_type_string: String,
+    @Expose
+    @SerializedName("short_name")
+    var shortName: String,
+    @Expose
+    @SerializedName("event_type_string")
+    var eventTypeString: String,
+    @Expose
+    @SerializedName("week")
     var week: Int,
+    @Expose
+    @SerializedName("address")
     var address: String,
-    var postal_code: String,
-    var gmaps_place_id: String,
-    var gmaps_url: String,
+    @Expose
+    @SerializedName("postal_code")
+    var postalCode: String,
+    @Expose
+    @SerializedName("gmaps_place_id")
+    var gmapsPlaceId: String,
+    @Expose
+    @SerializedName("gmaps_url")
+    var gmapsUrl: String,
+    @Expose
+    @SerializedName("lat")
     var lat: Double,
+    @Expose
+    @SerializedName("lng")
     var lng: Double,
-    var location_name: String,
+    @Expose
+    @SerializedName("location_name")
+    var locationName: String,
+    @Expose
+    @SerializedName("timezone")
     var timezone: String,
+    @Expose
+    @SerializedName("website")
     var website: String,
-    var first_event_id: String,
-    var first_event_code: String,
+    @Expose
+    @SerializedName("first_event_id")
+    var firstEventId: String,
+    @Expose
+    @SerializedName("first_event_code")
+    var firstEventCode: String,
+//    @Expose
+//    @SerializedName("webcasts")
 //    var webcasts: Array<WebCast>?
-    var division_keys: ArrayList<String>,
-    var playoff_type: Int,
-    var playoff_type_string: String
+    @Expose
+    @SerializedName("division_keys")
+    var divisionKeys: ArrayList<String>,
+    @Expose
+    @SerializedName("playoff_type")
+    var playoffType: Int,
+    @Expose
+    @SerializedName("playoff_type_string")
+    var playoffTypeString: String
 ) : Comparable<Event> {
     override operator fun compareTo(other: Event): Int {
         try {
-            return SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(this.start_date)!!
-                    .compareTo(SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(other.start_date))
+            return SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(this.startDate)!!
+                    .compareTo(SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(other.startDate))
         } catch (e: Exception) {
             e.printStackTrace()
         }

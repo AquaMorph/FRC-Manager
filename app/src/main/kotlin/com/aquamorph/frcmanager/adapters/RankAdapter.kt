@@ -41,9 +41,9 @@ class RankAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.teamNumber.text = String.format("%s. %s", position + 1,
-                getTeamName(data[0].rankings[position]!!.team_key))
+                getTeamName(data[0].rankings[position]!!.teamKey))
         holder.teamNumber.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-        holder.rankNumber.text = Constants.formatTeamNumber(data[0].rankings[position]!!.team_key)
+        holder.rankNumber.text = Constants.formatTeamNumber(data[0].rankings[position]!!.teamKey)
         holder.details.visibility = View.GONE
         holder.table.removeAllViews()
 
@@ -52,10 +52,10 @@ class RankAdapter(
         theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
 
         val ranks = ArrayList<RankInfo>()
-        for (i in 0 until data[0].sort_order_info.size) {
-            ranks.add(RankInfo(String.format("%s: ", data[0].sort_order_info[i]!!.name),
-                    String.format("%." + data[0].sort_order_info[i]!!.precision +
-                            "f", data[0].rankings[position]!!.sort_orders!![i])))
+        for (i in 0 until data[0].sortOrderInfo.size) {
+            ranks.add(RankInfo(String.format("%s: ", data[0].sortOrderInfo[i]!!.name),
+                    String.format("%." + data[0].sortOrderInfo[i]!!.precision +
+                            "f", data[0].rankings[position]!!.sortOrders!![i])))
         }
         ranks.add(RankInfo("Record: ",
                 Rank.recordToString(data[0].rankings[position]!!.record)))

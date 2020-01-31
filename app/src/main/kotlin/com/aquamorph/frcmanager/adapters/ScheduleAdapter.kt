@@ -42,12 +42,12 @@ class ScheduleAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.matchKey = data[position].key
-        holder.compLevel = data[position].comp_level
-        holder.setNumber = data[position].set_number
-        holder.matchNumberKey = data[position].match_number
+        holder.compLevel = data[position].compLevel
+        holder.setNumber = data[position].setNumber
+        holder.matchNumberKey = data[position].matchNumber
 
-        holder.matchNumber.text = Constants.matchString(data[position].comp_level,
-                data[position].set_number, data[position].match_number)
+        holder.matchNumber.text = Constants.matchString(data[position].compLevel,
+                data[position].setNumber, data[position].matchNumber)
 
         holder.redTeam1.text = parseTeamNumber(true, 0, position)
         holder.redTeam2.text = parseTeamNumber(true, 1, position)
@@ -155,9 +155,9 @@ class ScheduleAdapter(
      */
     private fun parseTeamNumber(red: Boolean, robot: Int, position: Int): String {
         return if (red) {
-            Constants.formatTeamNumber(data[position].alliances.red.team_keys[robot])
+            Constants.formatTeamNumber(data[position].alliances.red.teamKeys[robot])
         } else {
-            Constants.formatTeamNumber(data[position].alliances.blue.team_keys[robot])
+            Constants.formatTeamNumber(data[position].alliances.blue.teamKeys[robot])
         }
     }
 

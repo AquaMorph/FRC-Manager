@@ -164,8 +164,8 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     }
 
     private fun isTeamInMatch(match: Match, team: String): Boolean {
-        return if (match.alliances.red.team_keys.contains(team))
+        return if (match.alliances.red.teamKeys.contains(team))
             true
-        else match.alliances.blue.team_keys.contains(team)
+        else match.alliances.blue.teamKeys.contains(team)
     }
 }

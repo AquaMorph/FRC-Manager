@@ -127,7 +127,7 @@ class MatchSummaryActivity : AppCompatActivity() {
             override fun onResponse(call: Call<MatchScore2019>, response: Response<MatchScore2019>) {
                 if (response.isSuccessful) {
                     try {
-                        val match = response.body()!!.score_breakdown
+                        val match = response.body()!!.scoreBreakdown
 
                         if (compLevel != "qm") {
                             rankPoints.visibility = View.GONE

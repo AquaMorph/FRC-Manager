@@ -41,9 +41,9 @@ class DistrictRankAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.teamNumber.text = String.format("%s. %s", position + 1,
-                getTeamName(data[position].team_key))
+                getTeamName(data[position].teamKey))
         holder.teamNumber.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-        holder.rankNumber.text = Constants.formatTeamNumber(data[position].team_key)
+        holder.rankNumber.text = Constants.formatTeamNumber(data[position].teamKey)
         holder.details.visibility = View.GONE
         holder.table.removeAllViews()
 
@@ -60,24 +60,24 @@ class DistrictRankAdapter(
 
             if (i == 1) {
                 column1.text = "Point Total: "
-                column2.text = data[position].point_total.toString()
+                column2.text = data[position].pointTotal.toString()
                 column3.text = "Rookie Bonus: "
-                column4.text = data[position].rookie_bonus.toString()
+                column4.text = data[position].rookieBonus.toString()
             }
-            if (i == 2 && data[position].event_points.isNotEmpty()) {
+            if (i == 2 && data[position].eventPoints.isNotEmpty()) {
                 column1.text = "Event 1: "
-                column2.text = data[position].event_points[0]!!.total.toString()
-                if (data[position].event_points.size >= 2) {
+                column2.text = data[position].eventPoints[0]!!.total.toString()
+                if (data[position].eventPoints.size >= 2) {
                     column3.text = "Event 2: "
-                    column4.text = data[position].event_points[1]!!.total.toString()
+                    column4.text = data[position].eventPoints[1]!!.total.toString()
                 } else {
                     column3.text = ""
                     column4.text = ""
                 }
             }
-            if (i == 3 && data[position].event_points.size > 2) {
+            if (i == 3 && data[position].eventPoints.size > 2) {
                 column1.text = "District Champ: "
-                column2.text = data[position].event_points[2]!!.total.toString()
+                column2.text = data[position].eventPoints[2]!!.total.toString()
                 column3.text = ""
                 column4.text = ""
             }
@@ -103,10 +103,10 @@ class DistrictRankAdapter(
             rowHeader.addView(column2)
             rowHeader.addView(column3)
             rowHeader.addView(column4)
-            if ((i == 1 || data[position].event_points.size >= 3) ||
-                    (i == 2 && data[position].event_points.size != 1 &&
-                            data[position].event_points.isNotEmpty()) ||
-                    (i == 3 && data[position].event_points.size > 2)) {
+            if ((i == 1 || data[position].eventPoints.size >= 3) ||
+                    (i == 2 && data[position].eventPoints.size != 1 &&
+                            data[position].eventPoints.isNotEmpty()) ||
+                    (i == 3 && data[position].eventPoints.size > 2)) {
                 holder.table.addView(rowHeader)
             }
         }
