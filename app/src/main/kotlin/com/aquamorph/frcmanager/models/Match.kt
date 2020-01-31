@@ -4,32 +4,33 @@ package com.aquamorph.frcmanager.models
  * Stores match information at an event.
  *
  * @author Christian Colglazier
- * @version 3/30/2018
+ * @version 1/30/2020
  */
-class Match : Comparable<Match> {
-    var key: String = ""
-    var comp_level: String = ""
-    var set_number: Int = 0
-    var match_number: Int = 0
-    var alliances: Alliances = Alliances()
-    var winning_alliance: String = ""
-    var event_key: String = ""
-    var time: Long = 0L
-    var actual_time: Long = 0L
-    var predicted_time: Long = 0L
-    var post_result_time: Long = 0L
+class Match(
+    var key: String,
+    var comp_level: String,
+    var set_number: Int,
+    var match_number: Int,
+    var alliances: Alliances,
+    var winning_alliance: String,
+    var event_key: String,
+    var time: Long,
+    var actual_time: Long,
+    var predicted_time: Long,
+    var post_result_time: Long
+) : Comparable<Match> {
 
-    inner class Alliances {
-        var blue: MatchAlliance = MatchAlliance()
-        var red: MatchAlliance = MatchAlliance()
-    }
+    data class Alliances(
+        var blue: MatchAlliance,
+        var red: MatchAlliance
+    )
 
-    inner class MatchAlliance {
-        var score: Int = 0
-        var team_keys: Array<String> = emptyArray()
-        var surrogate_team_keys: Array<String> = emptyArray()
-        var dq_team_keys: Array<String> = emptyArray()
-    }
+    data class MatchAlliance(
+        var score: Int,
+        var team_keys: ArrayList<String>,
+        var surrogate_team_keys: ArrayList<String>,
+        var dq_team_keys: ArrayList<String>
+    )
 
     override operator fun compareTo(other: Match): Int {
         val compareMatchNumber = other.match_number

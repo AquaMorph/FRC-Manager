@@ -6,39 +6,39 @@ import java.util.Locale
  * Stores rank information at an event.
  *
  * @author Christian Colglazier
- * @version 3/30/2017
+ * @version 1/30/2020
  */
-class Rank {
-    var rankings = arrayOfNulls<Rankings>(0)
-    var extra_stats_info = arrayOfNulls<ExtraStatsInfo>(0)
-    var sort_order_info = arrayOfNulls<SortOrderInfo>(0)
+data class Rank(
+    var rankings: ArrayList<Rankings>,
+    var extra_stats_info: ArrayList<ExtraStatsInfo>,
+    var sort_order_info: ArrayList<SortOrderInfo>
+) {
+    inner class Rankings(
+        var dq: Int,
+        var matches_played: Int,
+        var qual_average: Double,
+        var rank: Int,
+        var record: WLTRecord,
+        var extra_stats: DoubleArray,
+        var sort_orders: DoubleArray,
+        var team_key: String
+    )
 
-    inner class Rankings {
-        var dq: Int = 0
-        var matches_played: Int = 0
-        var qual_average: Double = 0.0
-        var rank: Int = 0
-        var record: WLTRecord = WLTRecord()
-        var extra_stats: DoubleArray? = null
-        var sort_orders: DoubleArray? = null
-        var team_key: String = ""
-    }
+    data class WLTRecord(
+        var losses: Int,
+        var wins: Int,
+        var ties: Int
+    )
 
-    inner class WLTRecord {
-        var losses: Int = 0
-        var wins: Int = 0
-        var ties: Int = 0
-    }
+    data class ExtraStatsInfo(
+        var name: String,
+        var precision: Int
+    )
 
-    inner class ExtraStatsInfo {
-        var name: String = ""
-        var precision: Int = 0
-    }
-
-    inner class SortOrderInfo {
-        var name: String = ""
-        var precision: Int = 0
-    }
+    data class SortOrderInfo(
+        var name: String,
+        var precision: Int
+    )
 
     companion object {
         fun recordToString(record: WLTRecord): String {
