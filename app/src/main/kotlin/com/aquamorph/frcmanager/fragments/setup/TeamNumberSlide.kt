@@ -22,7 +22,7 @@ import com.aquamorph.frcmanager.utils.Logging
  */
 class TeamNumberSlide : Fragment(), AdapterView.OnItemSelectedListener {
 
-    private lateinit var yearSpinnder: Spinner
+    private lateinit var yearSpinner: Spinner
     internal lateinit var teamNumber: EditText
 
     override fun onCreateView(
@@ -32,15 +32,15 @@ class TeamNumberSlide : Fragment(), AdapterView.OnItemSelectedListener {
     ): View? {
         val view = inflater.inflate(R.layout.team_number_slide, container, false)
         teamNumber = view.findViewById(R.id.teamNumberEditText)
-        yearSpinnder = view.findViewById(R.id.year_spinner)
-        yearSpinnder.onItemSelectedListener = this
-        if (BuildConfig.APP_DEBUG) yearSpinnder.visibility = View.VISIBLE
+        yearSpinner = view.findViewById(R.id.year_spinner)
+        yearSpinner.onItemSelectedListener = this
+        if (BuildConfig.APP_DEBUG) yearSpinner.visibility = View.VISIBLE
         return view
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         try {
-            (yearSpinnder.selectedView as TextView).setTextColor(resources.getColor(R.color.icons))
+            (yearSpinner.selectedView as TextView).setTextColor(resources.getColor(R.color.icons))
             AppConfig.setYear(parent.getItemAtPosition(position).toString(), context!!)
         } catch (e: Exception) {
             Logging.error(this, e.message!!, 0)

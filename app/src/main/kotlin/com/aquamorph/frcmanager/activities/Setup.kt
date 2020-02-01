@@ -1,9 +1,9 @@
 package com.aquamorph.frcmanager.activities
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.fragments.setup.EventSlide
 import com.aquamorph.frcmanager.fragments.setup.Slide
