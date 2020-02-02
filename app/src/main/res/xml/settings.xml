@@ -20,6 +20,13 @@
             android:key="matchSort"
             android:title="Match Sorting"
             android:summary="Choose match order sorting"/>
+        <ListPreference
+            android:defaultValue="none"
+            android:entries="@array/predictions"
+            android:entryValues="@array/predictionsValues"
+            android:key="predictions"
+            android:title="@string/predictionsTitle"
+            android:summary="@string/predictionsSummary"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Advanced Features">
@@ -30,8 +37,6 @@
             android:key="toolbarText"
             android:selectAllOnFocus="true"
             android:singleLine="true"/>
-
-
     </PreferenceCategory>
 
     <PreferenceCategory android:title="About">

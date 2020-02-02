@@ -57,4 +57,14 @@
         <item>Upcoming matches first</item>
         <item>Upcoming matches plus last match</item>
     </string-array>
+    <string name="predictionsTitle">Predictions</string>
+    <string name="predictionsSummary">Choose prediction match algorithm</string>
+    <string-array name="predictionsValues">
+        <item>none</item>
+        <item>tba</item>
+    </string-array>
+    <string-array name="predictions">
+        <item>None</item>
+        <item>The Blue Alliance</item>
+    </string-array>
 </resources>
