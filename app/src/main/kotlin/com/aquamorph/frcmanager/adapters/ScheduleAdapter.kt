@@ -139,6 +139,35 @@ class ScheduleAdapter(
         holder.blueTeam1.gravity = Gravity.CENTER
         holder.blueTeam2.gravity = Gravity.CENTER
         holder.blueTeam3.gravity = Gravity.CENTER
+
+        var redRP = 0
+        var blueRP = 0
+
+        when (data[position].winningAlliance) {
+            "red" -> {
+                redRP = data[position].scoreBreakDown.red.rp - 2
+                blueRP = data[position].scoreBreakDown.blue.rp
+            }
+            "blue" -> {
+                redRP = data[position].scoreBreakDown.red.rp
+                blueRP = data[position].scoreBreakDown.blue.rp - 2
+            }
+            else -> {
+                redRP = data[position].scoreBreakDown.red.rp - 1
+                blueRP = data[position].scoreBreakDown.blue.rp - 1
+            }
+        }
+
+        holder.redScore.text = "%s%4s".format(rpToString(redRP), holder.redScore.text)
+        holder.blueScore.text = "%s%4s".format(rpToString(blueRP), holder.blueScore.text)
+    }
+
+    fun rpToString(rp: Int): String {
+        return when (rp) {
+            1 -> "⬤"
+            2 -> "⬤⬤"
+            else -> ""
+        }
     }
 
     override fun getItemCount(): Int {

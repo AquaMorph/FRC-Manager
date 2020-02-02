@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
  * @author Christian Colglazier
  * @version 1/31/2020
  */
-class Match(
+data class Match(
     @Expose
     @SerializedName("key")
     var key: String,
@@ -42,7 +42,10 @@ class Match(
     var predictedTime: Long,
     @Expose
     @SerializedName("post_result_time")
-    var postResultTime: Long
+    var postResultTime: Long,
+    @Expose
+    @SerializedName("score_breakdown")
+    var scoreBreakDown: MatchScore.ScoreBreakDown
 ) : Comparable<Match> {
 
     data class Alliances(

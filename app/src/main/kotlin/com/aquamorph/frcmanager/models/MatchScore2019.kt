@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
  * @author Christian Colglazier
  * @version 1/31/2020
  */
-class MatchScore2019(
+data class MatchScore2019(
     @Expose
     @SerializedName("score_breakdown")
     var scoreBreakdown: ScoreBreakDown
