@@ -24,12 +24,15 @@ object MatchSort {
                 matches.reverse()
             }
             "upcoming" -> {
-                matches.sortWith(compareBy(Match::postResultTime, Match::time))
-                Collections.rotate(matches, -matchNext(matches))
+                matches.sortWith(compareBy{it.time})
+                Collections.rotate(matches, matches.size - matchNext(matches))
             }
             "upcomingLast" -> {
-                matches.sortWith(compareBy(Match::postResultTime, Match::time))
-                Collections.rotate(matches, -matchNext(matches) + 1)
+                matches.sortWith(compareBy(Match::time))
+                val c = matchNext(matches)
+                if (c != matches.size) {
+                    Collections.rotate(matches, matches.size - c + 1)
+                }
             }
             else -> matches.sort()
         }
@@ -38,7 +41,7 @@ object MatchSort {
     private fun matchNext(matches: ArrayList<Match>): Int {
         var count = 0
         matches.forEach { match ->
-            if (match.postResultTime <= 0) return count
+            if (match.alliances.red.score <= 0 || match.alliances.blue.score <= 0) return count
             count++
         }
         return count
