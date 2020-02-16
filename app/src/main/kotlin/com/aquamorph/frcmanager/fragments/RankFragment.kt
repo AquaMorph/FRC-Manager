@@ -79,7 +79,7 @@ class RankFragment : TabFragment(), RefreshFragment {
         }
 
         override fun onPostExecute(result: Void?) {
-            if (DataLoader.rankDC.data.isNotEmpty()) {
+            if (DataLoader.rankDC.data.isNotEmpty() && DataLoader.rankDC.data != null) {
                 val editor = prefs.edit()
                 editor.putString("teamRank", "")
                 for (i in 0 until DataLoader.rankDC.data[0].rankings.size) {

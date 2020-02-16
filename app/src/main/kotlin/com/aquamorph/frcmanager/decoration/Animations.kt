@@ -44,4 +44,14 @@ object Animations {
             }
         }
     }
+
+    fun loadMatchBreakdownAnimation(
+        context: Context?,
+        view: View?
+    ) {
+        if (context != null && view != null) {
+            val slideIn = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left)
+            view.startAnimation(slideIn)
+        }
+    }
 }

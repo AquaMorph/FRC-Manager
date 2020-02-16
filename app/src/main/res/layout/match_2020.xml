@@ -20,11 +20,16 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     </com.google.android.material.appbar.AppBarLayout>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
         <TableLayout
+            android:id="@+id/scoreMatch2020"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -142,12 +147,15 @@
                     android:textColor="?blueAllianceText"
                     android:paddingRight="4dp" />
             </TableRow>
+        <TableLayout
+            android:id="@+id/scoreBreakdown2020"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <TableRow
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="2dp"
                 android:layout_height="wrap_content">
-
                 <TextView
                     android:layout_weight="@dimen/match_2020_text_weight"
                     android:gravity="start|center_vertical"
@@ -779,6 +787,8 @@
                     android:paddingRight="4dp" />
             </TableRow>
         </TableLayout>
+        </TableLayout>
 
     </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>
