@@ -12,7 +12,7 @@ import com.google.gson.annotations.SerializedName
 data class MatchScore2020(
     @Expose
     @SerializedName("score_breakdown")
-    var scoreBreakdown: MatchScore2019.ScoreBreakDown
+    var scoreBreakdown: ScoreBreakDown
 ) {
     data class ScoreBreakDown(
         @Expose

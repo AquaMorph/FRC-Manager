@@ -24,7 +24,7 @@ object MatchSort {
                 matches.reverse()
             }
             "upcoming" -> {
-                matches.sortWith(compareBy{it.time})
+                matches.sortWith(compareBy { it.time })
                 Collections.rotate(matches, matches.size - matchNext(matches))
             }
             "upcomingLast" -> {

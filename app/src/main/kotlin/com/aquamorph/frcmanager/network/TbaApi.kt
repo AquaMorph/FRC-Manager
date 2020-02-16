@@ -6,6 +6,7 @@ import com.aquamorph.frcmanager.models.DistrictRank
 import com.aquamorph.frcmanager.models.Event
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.models.MatchScore2019
+import com.aquamorph.frcmanager.models.MatchScore2020
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Status
 import com.aquamorph.frcmanager.models.Team
@@ -122,4 +123,8 @@ interface TbaApi {
     @GET("match/{matchKey}")
     fun getMatch2019(@Path("matchKey") matchKey: String):
             Call<MatchScore2019>
+
+    @GET("match/{matchKey}")
+    fun getMatch2020(@Path("matchKey") matchKey: String):
+            Call<MatchScore2020>
 }

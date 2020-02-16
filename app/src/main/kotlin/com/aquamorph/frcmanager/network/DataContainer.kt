@@ -12,4 +12,5 @@ import java.util.ArrayList
 class DataContainer<T> internal constructor() {
     var data = ArrayList<T>()
     var complete: Boolean = false
+    var newData = false
 }

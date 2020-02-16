@@ -12,9 +12,11 @@ import android.widget.TableLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.activities.MatchSummaryActivity
+import com.aquamorph.frcmanager.activities.MatchBreakdown2019Activity
+import com.aquamorph.frcmanager.activities.MatchBreakdown2020Activity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.Match
+import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -24,7 +26,7 @@ import java.util.Locale
  * Populates a RecyclerView with the schedule for a team.
  *
  * @author Christian Colglazier
- * @version 3/31/2018
+ * @version 2/15/2020
  */
 class ScheduleAdapter(
     private val context: Context,
@@ -142,19 +144,20 @@ class ScheduleAdapter(
 
         var redRP = 0
         var blueRP = 0
-
-        when (data[position].winningAlliance) {
-            "red" -> {
-                redRP = data[position].scoreBreakDown.red.rp - 2
-                blueRP = data[position].scoreBreakDown.blue.rp
-            }
-            "blue" -> {
-                redRP = data[position].scoreBreakDown.red.rp
-                blueRP = data[position].scoreBreakDown.blue.rp - 2
-            }
-            else -> {
-                redRP = data[position].scoreBreakDown.red.rp - 1
-                blueRP = data[position].scoreBreakDown.blue.rp - 1
+        if (data[position].scoreBreakDown != null) {
+            when (data[position].winningAlliance) {
+                "red" -> {
+                    redRP = data[position].scoreBreakDown.red.rp - 2
+                    blueRP = data[position].scoreBreakDown.blue.rp
+                }
+                "blue" -> {
+                    redRP = data[position].scoreBreakDown.red.rp
+                    blueRP = data[position].scoreBreakDown.blue.rp - 2
+                }
+                else -> {
+                    redRP = data[position].scoreBreakDown.red.rp - 1
+                    blueRP = data[position].scoreBreakDown.blue.rp - 1
+                }
             }
         }
 
@@ -240,7 +243,12 @@ class ScheduleAdapter(
                 context.startActivity(intent)
             }
             matchNumber.setOnClickListener {
-                val intent = Intent(context, MatchSummaryActivity::class.java)
+                val intent = when (DataLoader.year) {
+                    "2019" -> Intent(context, MatchBreakdown2019Activity::class.java)
+                    "2020" -> Intent(context, MatchBreakdown2020Activity::class.java)
+                    else -> Intent()
+                }
+
                 intent.putExtra("matchKey", matchKey)
                 intent.putExtra("compLevel", compLevel)
                 intent.putExtra("setNumber", setNumber)

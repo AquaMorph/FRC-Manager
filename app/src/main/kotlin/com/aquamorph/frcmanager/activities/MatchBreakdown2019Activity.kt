@@ -22,7 +22,7 @@ import retrofit2.Response
  * @author Christian Colglazier
  * @version 3/13/2019
  */
-class MatchSummaryActivity : AppCompatActivity() {
+class MatchBreakdown2019Activity : AppCompatActivity() {
 
     private var matchKey = ""
     private var compLevel = ""

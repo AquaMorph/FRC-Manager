@@ -51,6 +51,7 @@ class DataLoader {
         var eventKey = ""
         var teamNumber = ""
         var districtKey = ""
+        var year = ""
         val teamDC = DataContainer<Team>()
         val rankDC = DataContainer<Rank>()
         val awardDC = DataContainer<Award>()
@@ -119,6 +120,7 @@ class DataLoader {
             } else {
                 addTab(tabs, adapter)
             }
+            dataContainer.newData = true
             dataContainer.complete = true
         }
 

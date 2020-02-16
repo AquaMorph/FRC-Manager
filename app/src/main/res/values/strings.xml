@@ -25,6 +25,7 @@
     <string name="event_server_down">The feed for the event is down.</string>
     <string name="toolBarDefault">Rank #\$r (\$R) \$n</string>
     <string-array name="year_array">
+        <item>2020</item>
         <item>2019</item>
         <item>2018</item>
         <item>2017</item>
@@ -59,6 +60,11 @@
     </string-array>
     <string name="predictionsTitle">Predictions</string>
     <string name="predictionsSummary">Choose prediction match algorithm</string>
+    <string name="auto_total">Auto Total</string>
+    <string name="score_team_one">Team 1</string>
+    <string name="score_team_two">Team 2</string>
+    <string name="score_team_three">Team 3</string>
+    <string name="score_2020_line_extended">Line Extended</string>
     <string-array name="predictionsValues">
         <item>none</item>
         <item>tba</item>

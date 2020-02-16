@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.registerOnSharedPreferenceChangeListener(this@MainActivity)
         DataLoader.teamNumber = prefs.getString("teamNumber", "")!!
+        DataLoader.year = prefs.getString("year", "")!!
         eventName = prefs.getString("eventShortName", "")!!
         teamRank = prefs.getString("teamRank", "")!!
         teamRecord = prefs.getString("teamRecord", "")!!
@@ -136,6 +137,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
             "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")!!
             "districtKey" -> DataLoader.districtKey = sharedPreferences.getString("districtKey", "")!!
             "eventAddress" -> eventAddress = sharedPreferences.getString("eventAddress", "")!!
+            "year" -> DataLoader.year = sharedPreferences.getString("year", "")!!
         }
 
         if (supportActionBar != null) {
