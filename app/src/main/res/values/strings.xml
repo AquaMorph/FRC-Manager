@@ -64,7 +64,21 @@
     <string name="score_team_one">Team 1</string>
     <string name="score_team_two">Team 2</string>
     <string name="score_team_three">Team 3</string>
-    <string name="score_2020_line_extended">Line Extended</string>
+    <string name="score_2020_line_extended">Line Exited</string>
+    <string name="score_2020_power_cells">Power Cells</string>
+    <string name="score_teleop_total">Teleop Total</string>
+    <string name="score_2020_control_panel_points">Control Panel Points</string>
+    <string name="score_endgame_total">Endgame Total</string>
+    <string name="score_robot_1">Robot 1</string>
+    <string name="score_robot_2">Robot 2</string>
+    <string name="score_robot_3">Robot 3</string>
+    <string name="score_2020_shield_generator_switch_level">Shield Generator Switch Level</string>
+    <string name="score_total_score">Total Score</string>
+    <string name="score_2020_stage_activations">Stage Activations</string>
+    <string name="score_2020_shield_generator">Shield Generator</string>
+    <string name="score_fouls_tech_fouls">Fouls/Tech Fouls</string>
+    <string name="score_adjustments">Adjustments</string>
+    <string name="score_rank_points">Rank Points</string>
     <string-array name="predictionsValues">
         <item>none</item>
         <item>tba</item>
