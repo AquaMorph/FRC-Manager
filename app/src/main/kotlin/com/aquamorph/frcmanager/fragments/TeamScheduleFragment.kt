@@ -120,7 +120,6 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     }
 
     override fun dataUpdate() {
-        val teamEventMatchesOld = teamEventMatches
         teamEventMatches.clear()
         for (match in DataLoader.matchDC.data) {
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
@@ -128,7 +127,8 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         MatchSort.sortMatches(teamEventMatches, prefs.getString("matchSort", ""))
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
-        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, teamEventMatchesOld !== teamEventMatches)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
+                DataLoader.matchDC.newData)
         firstLoad = false
     }
 

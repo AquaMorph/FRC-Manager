@@ -25,6 +25,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import retrofit2.Response
 import java.util.Collections.sort
 import kotlin.collections.ArrayList
 
@@ -69,8 +70,8 @@ class DataLoader {
         private var disposable: Disposable? = null
 
         private fun isRankEmpty(dataContainer: DataContainer<*>): Boolean {
-            return dataContainer.data.get(0) is Rank &&
-                    (dataContainer.data.get(0) as Rank).rankings.isEmpty()
+            return dataContainer.data[0] is Rank &&
+                    (dataContainer.data[0] as Rank).rankings.isEmpty()
         }
 
         private fun getData(
@@ -84,15 +85,18 @@ class DataLoader {
         ) {
             dataContainer.complete = false
             val retrofit: ArrayList<Observable<out Any>> = arrayListOf(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventMatches(eventKey))
-                retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventTeams(eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventTeams(eventKey))
             retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventRankings(eventKey))
             retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAwards(eventKey))
             retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAlliances(eventKey))
             retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictRankings(districtKey))
             retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictTeams(districtKey))
-            disposable = retrofit[observer].subscribeOn(Schedulers.io())
+            disposable = retrofit[observer]
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ result -> updateData(dataContainer, isRank, isSortable, tabs, adapter, result as Any) },
+                    .subscribe({ result ->
+                        dataContainer.newData = (result as Response<*>).raw()!!.networkResponse() != null
+                        updateData(dataContainer, isRank, isSortable, tabs, adapter, result.body() as Any)},
                                 { error -> Logging.error(this, error.toString(), 0)
                                 removeTab(tabs, adapter)
                                 dataContainer.complete = true })
@@ -120,7 +124,6 @@ class DataLoader {
             } else {
                 addTab(tabs, adapter)
             }
-            dataContainer.newData = true
             dataContainer.complete = true
         }
 

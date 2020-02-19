@@ -12,6 +12,7 @@ import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
+import com.aquamorph.frcmanager.network.DataContainer
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 
@@ -39,15 +40,14 @@ class RankFragment : TabFragment(), RefreshFragment {
     }
 
     override fun dataUpdate() {
-        val ranksOld = ranks
-        val teamsOld = teams
         ranks.clear()
         ranks.addAll(DataLoader.rankDC.data)
         teams.clear()
         teams.addAll(DataLoader.teamDC.data)
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(ranks, recyclerView, emptyView)
-        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, ranksOld != ranks || teamsOld != teams)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
+                DataLoader.rankDC.newData || DataLoader.teamDC.newData)
         firstLoad = false
     }
 

@@ -46,15 +46,13 @@ open class TeamFragment : TabFragment(), RefreshFragment,
     }
 
     override fun dataUpdate() {
-        val teamsOld = teams
-        val ranksOld = ranks
         teams.clear()
         teams.addAll(DataLoader.teamDC.data)
         ranks.clear()
         ranks.addAll(DataLoader.rankDC.data)
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(teams, recyclerView, emptyView)
-        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, teamsOld != teams || ranksOld != ranks)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, DataLoader.teamDC.newData || DataLoader.rankDC.newData)
         firstLoad = false
     }
 

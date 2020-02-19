@@ -47,14 +47,14 @@ class EventScheduleFragment :
     }
 
     override fun dataUpdate() {
-        val matchesOld = matches
         matches.clear()
         matches.addAll(DataLoader.matchDC.data)
         prefs.edit().putString("nextMatch", "%s".format(nextMatch(matches))).apply()
         MatchSort.sortMatches(matches, prefs.getString("matchSort", ""))
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(matches, recyclerView, emptyView)
-        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, matchesOld != matches)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
+                DataLoader.matchDC.newData)
         firstLoad = false
     }
 

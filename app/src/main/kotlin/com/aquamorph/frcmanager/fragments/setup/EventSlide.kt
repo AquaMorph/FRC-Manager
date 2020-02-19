@@ -63,7 +63,7 @@ class EventSlide : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result -> if (result != null) {
                     eventList.clear()
-                    eventList.addAll(result)
+                    result.body()?.let { eventList.addAll(it) }
                     eventList.sort()
                     eventAdapter.notifyDataSetChanged()
                 } },

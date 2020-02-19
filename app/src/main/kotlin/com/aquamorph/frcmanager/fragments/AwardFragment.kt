@@ -40,12 +40,11 @@ class AwardFragment :
     }
 
     override fun dataUpdate() {
-        val awardsOld = awards
         awards.clear()
         awards.addAll(DataLoader.awardDC.data)
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
-        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, awardsOld != awards)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, DataLoader.awardDC.newData)
         firstLoad = false
     }
 

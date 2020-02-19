@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,12 +62,11 @@ class AllianceFragment : TabFragment(),
     }
 
     override fun dataUpdate() {
-        val oldAlliances = alliances
         alliances.clear()
         alliances.addAll(DataLoader.allianceDC.data)
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
-        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, oldAlliances != alliances)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, DataLoader.allianceDC.newData)
         firstLoad = false
     }
 
