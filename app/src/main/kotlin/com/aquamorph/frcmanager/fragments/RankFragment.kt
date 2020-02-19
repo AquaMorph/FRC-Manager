@@ -12,7 +12,6 @@ import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
-import com.aquamorph.frcmanager.network.DataContainer
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 

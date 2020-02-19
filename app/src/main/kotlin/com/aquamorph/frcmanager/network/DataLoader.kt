@@ -25,9 +25,9 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Response
 import java.util.Collections.sort
 import kotlin.collections.ArrayList
+import retrofit2.Response
 
 /**
  * Loads needed dataLoader.
@@ -96,7 +96,7 @@ class DataLoader {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ result ->
                         dataContainer.newData = (result as Response<*>).raw()!!.networkResponse() != null
-                        updateData(dataContainer, isRank, isSortable, tabs, adapter, result.body() as Any)},
+                        updateData(dataContainer, isRank, isSortable, tabs, adapter, result.body() as Any) },
                                 { error -> Logging.error(this, error.toString(), 0)
                                 removeTab(tabs, adapter)
                                 dataContainer.complete = true })
