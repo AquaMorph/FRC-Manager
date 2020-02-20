@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.network
 import android.app.Activity
 import android.view.View
 import com.aquamorph.frcmanager.R
+import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
 import com.aquamorph.frcmanager.fragments.AllianceFragment
 import com.aquamorph.frcmanager.fragments.AwardFragment
@@ -16,8 +17,10 @@ import com.aquamorph.frcmanager.models.Award
 import com.aquamorph.frcmanager.models.DistrictRank
 import com.aquamorph.frcmanager.models.Match
 import com.aquamorph.frcmanager.models.Rank
+import com.aquamorph.frcmanager.models.TBAPrediction
 import com.aquamorph.frcmanager.models.Tab
 import com.aquamorph.frcmanager.models.Team
+import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Constants.isDistrict
 import com.aquamorph.frcmanager.utils.Logging
 import com.google.android.material.snackbar.Snackbar
@@ -60,6 +63,7 @@ class DataLoader {
         val allianceDC = DataContainer<Alliance>()
         val districtRankDC = DataContainer<DistrictRank>()
         val districtTeamDC = DataContainer<Team>()
+        val tbaPredictionsDC = DataContainer<TBAPrediction.PredMatch>()
         private val teamTabs = ArrayList<Tab>()
         private val rankTabs = ArrayList<Tab>()
         private val awardTabs = ArrayList<Tab>()
@@ -99,6 +103,8 @@ class DataLoader {
                     .create(TbaApi::class.java).getDistrictRankings(districtKey))
             retrofit.add(RetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getDistrictTeams(districtKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity)
+                    .create(TbaApi::class.java).getEventPredictions(eventKey))
             disposable = retrofit[observer]
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -107,7 +113,8 @@ class DataLoader {
                                 .networkResponse() != null
                         updateData(dataContainer, isRank, isSortable,
                                 tabs, adapter, result.body() as Any) },
-                                { error -> Logging.error(this, error.toString(), 0)
+                                { error ->
+                                    Logging.error(this, error.toString(), 0)
                                 removeTab(tabs, adapter)
                                 dataContainer.complete = true })
         }
@@ -122,7 +129,12 @@ class DataLoader {
         ) {
             dataContainer.data.clear()
                 if (isRank) {
-                    (dataContainer.data as MutableList<Any?>).add(result)
+                    if (result is TBAPrediction) {
+                        (dataContainer.data as MutableList<Any?>)
+                                .addAll(Constants.tbaPredToArray(result))
+                    } else {
+                        (dataContainer.data as MutableList<Any?>).add(result)
+                    }
                 } else {
                     dataContainer.data.addAll(result as Collection<Nothing>)
                     if (isSortable) {
@@ -164,6 +176,7 @@ class DataLoader {
             allianceDC.data.clear()
             districtRankDC.data.clear()
             districtTeamDC.data.clear()
+            tbaPredictionsDC.data.clear()
         }
 
         fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
@@ -192,6 +205,10 @@ class DataLoader {
                     addTab(districtRankTabs, adapter)
                 } else {
                     removeTab(districtRankTabs, adapter)
+                }
+                if (MainActivity.predEnabled) {
+                    getData(tbaPredictionsDC, true, false,
+                            matchTabs, adapter, 7, activity)
                 }
                 // Check if FIRST or event feed is down
                 RetrofitInstance.getRetrofit(activity!!).create(TbaApi::class.java)

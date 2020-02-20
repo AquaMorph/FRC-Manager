@@ -6,7 +6,9 @@ import android.text.Html
 import android.text.Spanned
 import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
+import com.aquamorph.frcmanager.models.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
+import com.google.gson.JsonObject
 
 /**
  * A collection of constants needed to interact with the Blue Alliance.
@@ -184,6 +186,26 @@ object Constants {
                     .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
         return task
+    }
+
+    fun tbaPredtoObject(qual: JsonObject, predictions: ArrayList<TBAPrediction.PredMatch>) {
+        for (q in qual.keySet()) {
+            val matchData = qual.get(q).asJsonObject
+            predictions.add(TBAPrediction.PredMatch(q,
+                    matchData.get("prob").asDouble,
+                    matchData.get("winning_alliance").asString))
+        }
+    }
+
+    fun tbaPredToArray(matchPredictions: TBAPrediction):
+            ArrayList<TBAPrediction.PredMatch> {
+        val predictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
+        val qual = matchPredictions.matchPredictions.qual
+        val playoffs = matchPredictions.matchPredictions.playoff
+        predictions.clear()
+        tbaPredtoObject(qual, predictions)
+        tbaPredtoObject(playoffs, predictions)
+        return predictions
     }
 
     enum class Theme {

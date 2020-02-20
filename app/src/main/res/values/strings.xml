@@ -83,7 +83,7 @@
     <string name="rank_rookie_bonus">Rookie Bonus:</string>
     <string name="rankEventOne">Event 1:</string>
     <string name="rankEvent2">Event 2:</string>
-    <string name="rankDistricChamp">District Champ:</string>
+    <string name="rankDistrictChamp">District Champ:</string>
     <string-array name="predictionsValues">
         <item>none</item>
         <item>tba</item>

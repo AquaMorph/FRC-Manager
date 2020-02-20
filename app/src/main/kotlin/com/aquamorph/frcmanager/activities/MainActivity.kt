@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         eventAddress = prefs.getString("eventAddress", "")!!
         DataLoader.eventKey = prefs.getString("eventKey", "")!!
         DataLoader.districtKey = prefs.getString("districtKey", "")!!
+        predEnabled = prefs.getString("predictions", "none")!! != "none"
         if (DataLoader.teamNumber == "") openSetup()
         listener()
         theme(this)
@@ -143,6 +144,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
                     .getString("eventAddress", "")!!
             "year" -> DataLoader.year = sharedPreferences
                     .getString("year", "")!!
+            "predictions" -> predEnabled = sharedPreferences
+                    .getString("predictions", "none")!! != "none"
         }
 
         if (supportActionBar != null) {
@@ -192,6 +195,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     companion object {
 
         var appTheme = Constants.Theme.LIGHT
+        var predEnabled = false
 
         @SuppressLint("StaticFieldLeak")
         private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter

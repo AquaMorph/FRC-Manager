@@ -76,7 +76,7 @@ class DistrictRankAdapter(
                 }
             }
             if (i == 3 && data[position].eventPoints.size > 2) {
-                column1.text = context.getString(R.string.rankDistricChamp)
+                column1.text = context.getString(R.string.rankDistrictChamp)
                 column2.text = data[position].eventPoints[2].total.toString()
                 column3.text = ""
                 column4.text = ""

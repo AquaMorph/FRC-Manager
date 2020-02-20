@@ -1,19 +1,22 @@
 package com.aquamorph.frcmanager.models
 
-data class TBAPrediction(var matchPredictions: MatchPredictions) {
+import com.google.gson.JsonObject
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
+data class TBAPrediction(
+    @Expose
+    @SerializedName("match_predictions")
+    var matchPredictions: MatchPredictions
+) {
     data class MatchPredictions(
-        var playoff: ArrayList<Match>,
-        var qual: ArrayList<Match>
+        var playoff: JsonObject,
+        var qual: JsonObject
     )
 
-    data class Match(
-        var blue: Alliance,
+    data class PredMatch(
+        var matchKey: String,
         var prob: Double,
-        var red: Alliance,
         var winningAlliance: String
     )
-
-//    data class Alliance(
-//
-//    )
 }

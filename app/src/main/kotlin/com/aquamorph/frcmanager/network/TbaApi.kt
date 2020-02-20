@@ -9,6 +9,7 @@ import com.aquamorph.frcmanager.models.MatchScore2019
 import com.aquamorph.frcmanager.models.MatchScore2020
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Status
+import com.aquamorph.frcmanager.models.TBAPrediction
 import com.aquamorph.frcmanager.models.Team
 import io.reactivex.Observable
 import retrofit2.Call
@@ -128,4 +129,8 @@ interface TbaApi {
     @GET("match/{matchKey}")
     fun getMatch2020(@Path("matchKey") matchKey: String):
             Call<MatchScore2020>
+
+    @GET("event/{eventKey}/predictions")
+    fun getEventPredictions(@Path("eventKey") eventKey: String):
+            Observable<Response<TBAPrediction>>
 }

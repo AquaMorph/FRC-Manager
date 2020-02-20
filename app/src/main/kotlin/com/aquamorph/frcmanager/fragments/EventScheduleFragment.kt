@@ -13,6 +13,7 @@ import com.aquamorph.frcmanager.adapters.ScheduleAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Match
+import com.aquamorph.frcmanager.models.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.MatchSort
@@ -27,6 +28,7 @@ class EventScheduleFragment :
         TabFragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
     private var matches: ArrayList<Match> = ArrayList()
+    private var predictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +49,10 @@ class EventScheduleFragment :
     }
 
     override fun dataUpdate() {
+        if (MainActivity.predEnabled) {
+            predictions.clear()
+            predictions.addAll(DataLoader.tbaPredictionsDC.data)
+        }
         matches.clear()
         matches.addAll(DataLoader.matchDC.data)
         prefs.edit().putString("nextMatch", "%s".format(nextMatch(matches))).apply()
@@ -54,7 +60,7 @@ class EventScheduleFragment :
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(matches, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
-                DataLoader.matchDC.newData)
+                DataLoader.matchDC.newData || DataLoader.tbaPredictionsDC.newData)
         firstLoad = false
     }
 
@@ -100,6 +106,9 @@ class EventScheduleFragment :
 
         override fun doInBackground(vararg params: Void?): Void? {
             while (!DataLoader.matchDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
+            while (MainActivity.predEnabled && !DataLoader.tbaPredictionsDC.complete) {
                 SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
             }
             return null
