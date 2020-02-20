@@ -59,25 +59,25 @@ class DistrictRankAdapter(
             val rowHeader = TableRow(context)
 
             if (i == 1) {
-                column1.text = "Point Total: "
+                column1.text = context.getString(R.string.rankPointTotal)
                 column2.text = data[position].pointTotal.toString()
-                column3.text = "Rookie Bonus: "
+                column3.text = context.getString(R.string.rank_rookie_bonus)
                 column4.text = data[position].rookieBonus.toString()
             }
             if (i == 2 && data[position].eventPoints.isNotEmpty()) {
-                column1.text = "Event 1: "
-                column2.text = data[position].eventPoints[0]!!.total.toString()
+                column1.text = context.getString(R.string.rankEventOne)
+                column2.text = data[position].eventPoints[0].total.toString()
                 if (data[position].eventPoints.size >= 2) {
-                    column3.text = "Event 2: "
-                    column4.text = data[position].eventPoints[1]!!.total.toString()
+                    column3.text = context.getString(R.string.rankEvent2)
+                    column4.text = data[position].eventPoints[1].total.toString()
                 } else {
                     column3.text = ""
                     column4.text = ""
                 }
             }
             if (i == 3 && data[position].eventPoints.size > 2) {
-                column1.text = "District Champ: "
-                column2.text = data[position].eventPoints[2]!!.total.toString()
+                column1.text = context.getString(R.string.rankDistricChamp)
+                column2.text = data[position].eventPoints[2].total.toString()
                 column3.text = ""
                 column4.text = ""
             }
@@ -131,7 +131,9 @@ class DistrictRankAdapter(
         return ""
     }
 
-    inner class MyViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class MyViewHolder internal constructor(itemView: View) :
+            RecyclerView.ViewHolder(itemView),
+            View.OnClickListener {
 
         internal var teamNumber: TextView
         internal var rankNumber: TextView

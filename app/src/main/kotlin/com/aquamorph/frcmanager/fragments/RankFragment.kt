@@ -72,8 +72,12 @@ class RankFragment : TabFragment(), RefreshFragment {
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            while (!DataLoader.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            while (!DataLoader.teamDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
+            while (!DataLoader.rankDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
             return null
         }
 
@@ -82,7 +86,8 @@ class RankFragment : TabFragment(), RefreshFragment {
                 val editor = prefs.edit()
                 editor.putString("teamRank", "")
                 for (i in 0 until DataLoader.rankDC.data[0].rankings.size) {
-                    if (DataLoader.rankDC.data[0].rankings[i].teamKey == "frc" + DataLoader.teamNumber) {
+                    if (DataLoader.rankDC.data[0].rankings[i].teamKey == "frc" +
+                            DataLoader.teamNumber) {
                         editor.putString("teamRank",
                                 DataLoader.rankDC.data[0].rankings[i].rank.toString())
                         editor.putString("teamRecord",

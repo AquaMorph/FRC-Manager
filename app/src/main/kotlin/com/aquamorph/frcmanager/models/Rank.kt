@@ -30,7 +30,7 @@ data class Rank(
         var matchesPlayed: Int,
         @Expose
         @SerializedName("qual_average")
-        var qual_average: Double,
+        var qualAverage: Double,
         @Expose
         @SerializedName("rank")
         var rank: Int,

@@ -72,8 +72,12 @@ class DistrictRankFragment : TabFragment(), RefreshFragment {
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.districtRankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            while (!DataLoader.districtTeamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            while (!DataLoader.districtRankDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
+            while (!DataLoader.districtTeamDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
             return null
         }
 

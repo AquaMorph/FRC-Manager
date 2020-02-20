@@ -69,7 +69,9 @@ class TeamAdapter(
         return data.size
     }
 
-    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class MyViewHolder(itemView: View) :
+            RecyclerView.ViewHolder(itemView),
+            View.OnClickListener {
 
         internal var teamNumber: TextView
         internal var rankNumber: TextView

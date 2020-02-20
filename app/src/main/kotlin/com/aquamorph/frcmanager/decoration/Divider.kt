@@ -34,7 +34,12 @@ class Divider(context: Context, width: Float, indent: Int) : RecyclerView.ItemDe
                 context.resources.displayMetrics).toInt()
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
         val params = view.layoutParams as RecyclerView.LayoutParams
 
         // we retrieve the position in the list
@@ -42,7 +47,8 @@ class Divider(context: Context, width: Float, indent: Int) : RecyclerView.ItemDe
 
         // add space for the separator to the bottom of every view but the last one
         if (position < state.itemCount) {
-            outRect.set(0, 0, 0, mPaint.strokeWidth.toInt()) // left, top, right, bottom
+            // left, top, right, bottom
+            outRect.set(0, 0, 0, mPaint.strokeWidth.toInt())
         } else {
             outRect.setEmpty() // 0, 0, 0, 0
         }

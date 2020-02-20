@@ -79,6 +79,11 @@
     <string name="score_fouls_tech_fouls">Fouls/Tech Fouls</string>
     <string name="score_adjustments">Adjustments</string>
     <string name="score_rank_points">Rank Points</string>
+    <string name="rankPointTotal">Point Total:</string>
+    <string name="rank_rookie_bonus">Rookie Bonus:</string>
+    <string name="rankEventOne">Event 1:</string>
+    <string name="rankEvent2">Event 2:</string>
+    <string name="rankDistricChamp">District Champ:</string>
     <string-array name="predictionsValues">
         <item>none</item>
         <item>tba</item>

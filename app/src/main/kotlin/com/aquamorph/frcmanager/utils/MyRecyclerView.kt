@@ -12,7 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
  * @version 3/30/2018
  */
 
-class MyRecyclerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : RecyclerView(context, attrs, defStyle) {
+class MyRecyclerView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) :
+        RecyclerView(context, attrs, defStyle) {
     private var mScrollable: Boolean = false
 
     init {

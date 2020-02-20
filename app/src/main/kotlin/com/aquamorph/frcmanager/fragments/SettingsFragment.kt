@@ -13,7 +13,8 @@ import com.aquamorph.frcmanager.R
  * @author Christian Colglazier
  * @version 1/15/2020
  */
-class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
+class SettingsFragment : PreferenceFragmentCompat(),
+        SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreatePreferences(p0: Bundle?, p1: String?) {
         addPreferencesFromResource(R.xml.settings)
 

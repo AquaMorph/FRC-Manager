@@ -44,7 +44,8 @@ class AwardFragment :
         awards.addAll(DataLoader.awardDC.data)
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
-        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, DataLoader.awardDC.newData)
+        Animations.loadAnimation(context, recyclerView, adapter,
+                firstLoad, DataLoader.awardDC.newData)
         firstLoad = false
     }
 
@@ -78,7 +79,9 @@ class AwardFragment :
         }
 
         override fun doInBackground(vararg p0: Void?): Void? {
-            while (!DataLoader.awardDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            while (!DataLoader.awardDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
             return null
         }
 

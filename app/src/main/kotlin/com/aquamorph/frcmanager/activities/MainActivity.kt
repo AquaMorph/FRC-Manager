@@ -133,11 +133,16 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         toolbarText = sharedPreferences.getString("toolbarText", getString(R.string.toolBarDefault))!!
 
         when (key) {
-            "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")!!
-            "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")!!
-            "districtKey" -> DataLoader.districtKey = sharedPreferences.getString("districtKey", "")!!
-            "eventAddress" -> eventAddress = sharedPreferences.getString("eventAddress", "")!!
-            "year" -> DataLoader.year = sharedPreferences.getString("year", "")!!
+            "eventKey" -> DataLoader.eventKey = sharedPreferences
+                    .getString("eventKey", "")!!
+            "teamNumber" -> DataLoader.teamNumber = sharedPreferences
+                    .getString("teamNumber", "0000")!!
+            "districtKey" -> DataLoader.districtKey = sharedPreferences
+                    .getString("districtKey", "")!!
+            "eventAddress" -> eventAddress = sharedPreferences
+                    .getString("eventAddress", "")!!
+            "year" -> DataLoader.year = sharedPreferences
+                    .getString("year", "")!!
         }
 
         if (supportActionBar != null) {
@@ -197,7 +202,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
          * @param activity
          */
         fun theme(activity: Activity) {
-            val currentNightMode = activity.applicationContext.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            val currentNightMode = activity.applicationContext.resources.configuration.uiMode and
+                    Configuration.UI_MODE_NIGHT_MASK
             val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
             appTheme = when (prefs.getString("theme", "")) {
                 "amoled" -> Constants.Theme.BATTERY_SAVER

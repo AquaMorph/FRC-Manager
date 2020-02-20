@@ -17,13 +17,15 @@ import java.util.Date
 import java.util.Locale
 import kotlin.collections.ArrayList
 
-class EventAdapter(private val context: Context?, private var events: ArrayList<Event>) : RecyclerView.Adapter<EventAdapter.SingleViewHolder>() {
+class EventAdapter(private val context: Context?, private var events: ArrayList<Event>) :
+        RecyclerView.Adapter<EventAdapter.SingleViewHolder>() {
     // if checkedPosition = 0, 1st item is selected by default
     private var checkedPosition = 0
 
     @NonNull
     override fun onCreateViewHolder(@NonNull viewGroup: ViewGroup, i: Int): SingleViewHolder {
-        val view: View = LayoutInflater.from(context).inflate(R.layout.item_event, viewGroup, false)
+        val view: View = LayoutInflater.from(context)
+                .inflate(R.layout.item_event, viewGroup, false)
         return SingleViewHolder(view)
     }
 

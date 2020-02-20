@@ -139,7 +139,9 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.matchDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            while (!DataLoader.matchDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
             return null
         }
 

@@ -65,7 +65,8 @@ class AllianceFragment : TabFragment(),
         alliances.addAll(DataLoader.allianceDC.data)
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
-        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, DataLoader.allianceDC.newData)
+        Animations.loadAnimation(context, recyclerView, adapter,
+                firstLoad, DataLoader.allianceDC.newData)
         firstLoad = false
     }
 
@@ -76,7 +77,9 @@ class AllianceFragment : TabFragment(),
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.allianceDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            while (!DataLoader.allianceDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
             return null
         }
 

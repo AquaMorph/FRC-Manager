@@ -152,14 +152,15 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
         findViewById<TextView>(R.id.redAllianceThree).text = redRobot3
         findViewById<TextView>(R.id.blueAllianceThree).text = blueRobot3
 
-        // val teamScheduleFragment = TeamScheduleFragment.newInstance()
-        // teamScheduleFragment.setTeamNumber(teamNumber)
-        // supportFragmentManager.beginTransaction().replace(R.id.content_frame, teamScheduleFragment).commit()
         MainActivity.theme(this)
-        val call = RetrofitInstance.getRetrofit(this).create(TbaApi::class.java).getMatch2020(matchKey)
+        val call = RetrofitInstance.getRetrofit(this)
+                .create(TbaApi::class.java).getMatch2020(matchKey)
 
         call.enqueue(object : Callback<MatchScore2020> {
-            override fun onResponse(call: Call<MatchScore2020>, response: Response<MatchScore2020>) {
+            override fun onResponse(
+                call: Call<MatchScore2020>,
+                response: Response<MatchScore2020>
+            ) {
                 if (response.isSuccessful) {
                     refresh.isRefreshing = false
                     refresh.isEnabled = false
@@ -172,65 +173,100 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
 
                         if (match != null) {
                             // Auto
-                            findViewById<TextView>(R.id.redAutoTotal).text = match.red.autoPoints.toString()
-                            findViewById<TextView>(R.id.blueAutoTotal).text = match.blue.autoPoints.toString()
+                            findViewById<TextView>(R.id.redAutoTotal).text =
+                                    match.red.autoPoints.toString()
+                            findViewById<TextView>(R.id.blueAutoTotal).text =
+                                    match.blue.autoPoints.toString()
 
-                            findViewById<TextView>(R.id.redLineExtended).text = lineExtendedToString(match.red)
-                            findViewById<TextView>(R.id.blueLineExtended).text = lineExtendedToString(match.blue)
+                            findViewById<TextView>(R.id.redLineExtended).text =
+                                    lineExtendedToString(match.red)
+                            findViewById<TextView>(R.id.blueLineExtended).text =
+                                    lineExtendedToString(match.blue)
 
-                            findViewById<TextView>(R.id.redAutoPowerCells).text = autoPowerCellsToString(match.red)
-                            findViewById<TextView>(R.id.blueAutoPowerCells).text = autoPowerCellsToString(match.blue)
+                            findViewById<TextView>(R.id.redAutoPowerCells).text =
+                                    autoPowerCellsToString(match.red)
+                            findViewById<TextView>(R.id.blueAutoPowerCells).text =
+                                    autoPowerCellsToString(match.blue)
 
                             // Teleop
-                            findViewById<TextView>(R.id.redTeleopTotal).text = match.red.teleopPoints.toString()
-                            findViewById<TextView>(R.id.blueTeleopTotal).text = match.blue.teleopPoints.toString()
+                            findViewById<TextView>(R.id.redTeleopTotal).text =
+                                    match.red.teleopPoints.toString()
+                            findViewById<TextView>(R.id.blueTeleopTotal).text =
+                                    match.blue.teleopPoints.toString()
 
-                            findViewById<TextView>(R.id.redTeleopPowerCells).text = teleopPowerCellsToString(match.red)
-                            findViewById<TextView>(R.id.blueTeleopPowerCells).text = teleopPowerCellsToString(match.blue)
+                            findViewById<TextView>(R.id.redTeleopPowerCells).text =
+                                    teleopPowerCellsToString(match.red)
+                            findViewById<TextView>(R.id.blueTeleopPowerCells).text =
+                                    teleopPowerCellsToString(match.blue)
 
-                            findViewById<TextView>(R.id.redControlPanelPoints).text = match.red.controlPanelPoints.toString()
-                            findViewById<TextView>(R.id.blueControlPanelPoints).text = match.blue.controlPanelPoints.toString()
+                            findViewById<TextView>(R.id.redControlPanelPoints).text =
+                                    match.red.controlPanelPoints.toString()
+                            findViewById<TextView>(R.id.blueControlPanelPoints).text =
+                                    match.blue.controlPanelPoints.toString()
 
                             // Endgame
-                            findViewById<TextView>(R.id.redEndgameTotal).text = match.red.endgamePoints.toString()
-                            findViewById<TextView>(R.id.blueEndgameTotal).text = match.blue.endgamePoints.toString()
+                            findViewById<TextView>(R.id.redEndgameTotal).text =
+                                    match.red.endgamePoints.toString()
+                            findViewById<TextView>(R.id.blueEndgameTotal).text =
+                                    match.blue.endgamePoints.toString()
 
-                            findViewById<TextView>(R.id.redEndgameOne).text = endgameToString(match.red.endgameRobot1)
-                            findViewById<TextView>(R.id.blueEndgameOne).text = endgameToString(match.blue.endgameRobot1)
+                            findViewById<TextView>(R.id.redEndgameOne).text =
+                                    endgameToString(match.red.endgameRobot1)
+                            findViewById<TextView>(R.id.blueEndgameOne).text =
+                                    endgameToString(match.blue.endgameRobot1)
 
-                            findViewById<TextView>(R.id.redEndgameTwo).text = endgameToString(match.red.endgameRobot2)
-                            findViewById<TextView>(R.id.blueEndgameTwo).text = endgameToString(match.blue.endgameRobot2)
+                            findViewById<TextView>(R.id.redEndgameTwo).text =
+                                    endgameToString(match.red.endgameRobot2)
+                            findViewById<TextView>(R.id.blueEndgameTwo).text =
+                                    endgameToString(match.blue.endgameRobot2)
 
-                            findViewById<TextView>(R.id.redEndgameThree).text = endgameToString(match.red.endgameRobot3)
-                            findViewById<TextView>(R.id.blueEndgameThree).text = endgameToString(match.blue.endgameRobot3)
+                            findViewById<TextView>(R.id.redEndgameThree).text =
+                                    endgameToString(match.red.endgameRobot3)
+                            findViewById<TextView>(R.id.blueEndgameThree).text =
+                                    endgameToString(match.blue.endgameRobot3)
 
-                            findViewById<TextView>(R.id.redShieldLevel).text = switchLevelToString(match.red)
-                            findViewById<TextView>(R.id.blueShieldLevel).text = switchLevelToString(match.blue)
+                            findViewById<TextView>(R.id.redShieldLevel).text =
+                                    switchLevelToString(match.red)
+                            findViewById<TextView>(R.id.blueShieldLevel).text =
+                                    switchLevelToString(match.blue)
 
                             // Total
-                            findViewById<TextView>(R.id.redTotalScore).text = match.red.totalPoints.toString()
-                            findViewById<TextView>(R.id.blueTotalScore).text = match.blue.totalPoints.toString()
+                            findViewById<TextView>(R.id.redTotalScore).text =
+                                    match.red.totalPoints.toString()
+                            findViewById<TextView>(R.id.blueTotalScore).text =
+                                    match.blue.totalPoints.toString()
 
-                            findViewById<TextView>(R.id.redStageActivations).text = stageActivationsToString(match.red)
-                            findViewById<TextView>(R.id.blueStageActivations).text = stageActivationsToString(match.blue)
+                            findViewById<TextView>(R.id.redStageActivations).text =
+                                    stageActivationsToString(match.red)
+                            findViewById<TextView>(R.id.blueStageActivations).text =
+                                    stageActivationsToString(match.blue)
 
-                            findViewById<TextView>(R.id.redShieldGenerator).text = shieldGenToString(match.red)
-                            findViewById<TextView>(R.id.blueShieldGenerator).text = shieldGenToString(match.blue)
+                            findViewById<TextView>(R.id.redShieldGenerator).text =
+                                    shieldGenToString(match.red)
+                            findViewById<TextView>(R.id.blueShieldGenerator).text =
+                                    shieldGenToString(match.blue)
 
-                            findViewById<TextView>(R.id.redFouls).text = foulsToString(match.red)
-                            findViewById<TextView>(R.id.blueFouls).text = foulsToString(match.blue)
+                            findViewById<TextView>(R.id.redFouls).text =
+                                    foulsToString(match.red)
+                            findViewById<TextView>(R.id.blueFouls).text =
+                                    foulsToString(match.blue)
 
-                            findViewById<TextView>(R.id.redRankPoints).text = match.red.rp.toString()
-                            findViewById<TextView>(R.id.blueRankPoints).text = match.blue.rp.toString()
+                            findViewById<TextView>(R.id.redRankPoints).text =
+                                    match.red.rp.toString()
+                            findViewById<TextView>(R.id.blueRankPoints).text =
+                                    match.blue.rp.toString()
 
                             if (match.red.adjustPoints != 0 || match.blue.adjustPoints != 0) {
-                                findViewById<TextView>(R.id.redAdjustments).text = match.red.adjustPoints.toString()
-                                findViewById<TextView>(R.id.blueAdjustments).text = match.blue.adjustPoints.toString()
+                                findViewById<TextView>(R.id.redAdjustments).text =
+                                        match.red.adjustPoints.toString()
+                                findViewById<TextView>(R.id.blueAdjustments).text =
+                                        match.blue.adjustPoints.toString()
                             } else {
                                 findViewById<TableRow>(R.id.adjustments).visibility = View.GONE
                             }
                         } else {
-                            findViewById<TableLayout>(R.id.scoreBreakdown2020).visibility = View.GONE
+                            findViewById<TableLayout>(R.id.scoreBreakdown2020).visibility =
+                                    View.GONE
                         }
                         table.visibility = View.VISIBLE
                         Animations.loadMatchBreakdownAnimation(baseContext, table)

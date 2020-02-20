@@ -26,7 +26,8 @@ class TeamSummary : AppCompatActivity() {
 
         val extras = intent.extras
         if (extras != null) {
-            teamNumber = extras.getString("teamNumber")!!.replace("[^\\d.]".toRegex(), "")
+            teamNumber = extras.getString("teamNumber")!!
+                    .replace("[^\\d.]".toRegex(), "")
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -45,7 +46,8 @@ class TeamSummary : AppCompatActivity() {
         }
         val teamScheduleFragment = TeamScheduleFragment.newInstance()
         teamScheduleFragment.setTeamNumber(teamNumber)
-        supportFragmentManager.beginTransaction().replace(R.id.content_frame, teamScheduleFragment).commit()
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.content_frame, teamScheduleFragment).commit()
         MainActivity.theme(this)
     }
 

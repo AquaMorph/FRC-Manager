@@ -61,8 +61,8 @@ object Constants {
     }
 
     /**
-     * checkNoDataScreen() displays a no dataLoader screen if there is not any dataLoader to display. Else
-     * displays dataLoader.
+     * checkNoDataScreen() displays a no dataLoader screen if there is not any dataLoader to
+     * display. Else displays dataLoader.
      */
     fun checkNoDataScreen(data: ArrayList<*>, recyclerView: View, emptyView: View) {
         if (data.isEmpty()) {
@@ -117,7 +117,8 @@ object Constants {
      */
     fun getTeamRecord(number: String): String {
         if (DataLoader.rankDC.data != null && DataLoader.rankDC.data.isNotEmpty()) {
-            if (DataLoader.rankDC.data[0].rankings != null && DataLoader.rankDC.data[0].rankings.isNotEmpty()) {
+            if (DataLoader.rankDC.data[0].rankings != null &&
+                    DataLoader.rankDC.data[0].rankings.isNotEmpty()) {
                 for (i in DataLoader.rankDC.data[0].rankings.indices) {
                     if (number == DataLoader.rankDC.data[0].rankings[i]!!.teamKey) {
                         val record = DataLoader.rankDC.data[0].rankings[i]!!.record
@@ -138,8 +139,8 @@ object Constants {
     fun getTeamRank(number: String): String {
         if (DataLoader.rankDC.data.isNotEmpty()) {
             for (i in DataLoader.rankDC.data[0].rankings.indices) {
-                if (number == DataLoader.rankDC.data[0].rankings[i]!!.teamKey) {
-                    val rank = DataLoader.rankDC.data[0].rankings[i]!!.rank
+                if (number == DataLoader.rankDC.data[0].rankings[i].teamKey) {
+                    val rank = DataLoader.rankDC.data[0].rankings[i].rank
                     return "Rank #$rank"
                 }
             }
@@ -176,9 +177,11 @@ object Constants {
     /**
      * runRefresh()
      */
-    internal fun runRefresh(task: AsyncTask<Void?, Void?, Void?>?, loader: Any): AsyncTask<Void?, Void?, Void?> {
+    internal fun runRefresh(task: AsyncTask<Void?, Void?, Void?>?, loader: Any):
+            AsyncTask<Void?, Void?, Void?> {
         if (task == null || task.status != AsyncTask.Status.RUNNING) {
-            return (loader as AsyncTask<Void?, Void?, Void?>).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            return (loader as AsyncTask<Void?, Void?, Void?>)
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
         return task
     }

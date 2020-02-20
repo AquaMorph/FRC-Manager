@@ -84,19 +84,29 @@ class DataLoader {
             activity: Activity
         ) {
             dataContainer.complete = false
-            val retrofit: ArrayList<Observable<out Any>> = arrayListOf(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventMatches(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventTeams(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventRankings(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAwards(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getEventAlliances(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictRankings(districtKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java).getDistrictTeams(districtKey))
+            val retrofit: ArrayList<Observable<out Any>> =
+                    arrayListOf(RetrofitInstance.getRetrofit(activity)
+                            .create(TbaApi::class.java).getEventMatches(eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity)
+                    .create(TbaApi::class.java).getEventTeams(eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity)
+                    .create(TbaApi::class.java).getEventRankings(eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity)
+                    .create(TbaApi::class.java).getEventAwards(eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity)
+                    .create(TbaApi::class.java).getEventAlliances(eventKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity)
+                    .create(TbaApi::class.java).getDistrictRankings(districtKey))
+            retrofit.add(RetrofitInstance.getRetrofit(activity)
+                    .create(TbaApi::class.java).getDistrictTeams(districtKey))
             disposable = retrofit[observer]
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ result ->
-                        dataContainer.newData = (result as Response<*>).raw()!!.networkResponse() != null
-                        updateData(dataContainer, isRank, isSortable, tabs, adapter, result.body() as Any) },
+                        dataContainer.newData = (result as Response<*>).raw()!!
+                                .networkResponse() != null
+                        updateData(dataContainer, isRank, isSortable,
+                                tabs, adapter, result.body() as Any) },
                                 { error -> Logging.error(this, error.toString(), 0)
                                 removeTab(tabs, adapter)
                                 dataContainer.complete = true })
@@ -161,16 +171,24 @@ class DataLoader {
                 // Checks for internet connections
                 if (!NetworkCheck.hasNetwork(activity)) {
                     Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
-                            R.string.no_connection_message, Snackbar.LENGTH_LONG).show()
+                            R.string.no_connection_message,
+                            Snackbar.LENGTH_LONG).show()
                 }
-                getData(matchDC, false, true, matchTabs, adapter, 0, activity)
-                getData(teamDC, false, true, teamTabs, adapter, 1, activity)
-                getData(rankDC, true, false, rankTabs, adapter, 2, activity)
-                getData(awardDC, false, false, awardTabs, adapter, 3, activity)
-                getData(allianceDC, false, false, allianceTabs, adapter, 4, activity)
+                getData(matchDC, false, true,
+                        matchTabs, adapter, 0, activity)
+                getData(teamDC, false, true,
+                        teamTabs, adapter, 1, activity)
+                getData(rankDC, true, false,
+                        rankTabs, adapter, 2, activity)
+                getData(awardDC, false, false,
+                        awardTabs, adapter, 3, activity)
+                getData(allianceDC, false, false,
+                        allianceTabs, adapter, 4, activity)
                 if (isDistrict()) {
-                    getData(districtRankDC, false, false, districtRankTabs, adapter, 5, activity)
-                    getData(districtTeamDC, false, true, districtRankTabs, adapter, 6, activity)
+                    getData(districtRankDC, false, false,
+                            districtRankTabs, adapter, 5, activity)
+                    getData(districtTeamDC, false, true,
+                            districtRankTabs, adapter, 6, activity)
                     addTab(districtRankTabs, adapter)
                 } else {
                     removeTab(districtRankTabs, adapter)
@@ -182,10 +200,12 @@ class DataLoader {
                         .subscribe({ result -> if (result != null) {
                             if (result.isDatafeedDown) {
                                 Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
-                                        R.string.first_server_down, Snackbar.LENGTH_LONG).show()
+                                        R.string.first_server_down,
+                                        Snackbar.LENGTH_LONG).show()
                             } else if (result.downEvents.contains(eventKey)) {
                                 Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
-                                        R.string.event_server_down, Snackbar.LENGTH_LONG).show()
+                                        R.string.event_server_down,
+                                        Snackbar.LENGTH_LONG).show()
                             }
                         } },
                     { error -> Logging.error(this, error.toString(), 0) })
