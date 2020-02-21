@@ -113,7 +113,9 @@ class DataLoader {
                                             result.body() as Any) },
                                 { error ->
                                     Logging.error(this, error.toString(), 0)
-                                    removeTab(tabs, adapter)
+                                    if (observer != 7) {
+                                        removeTab(tabs, adapter)
+                                    }
                                     dataContainer.complete = true })
         }
 

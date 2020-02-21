@@ -170,7 +170,7 @@ class ScheduleAdapter(
         holder.redScore.text = "%s%4s".format(rpToString(redRP), holder.redScore.text)
         holder.blueScore.text = "%s%4s".format(rpToString(blueRP), holder.blueScore.text)
 
-        if (MainActivity.predEnabled) {
+        if (MainActivity.predEnabled && predictions.isNotEmpty()) {
             holder.predictionTable.visibility = View.VISIBLE
             val predMatch = getMatch(data[position].key, predictions)
             holder.predictionsText.text = "%2.0f%% %s".format(predMatch.prob * 100, predMatch.winningAlliance)
