@@ -134,7 +134,7 @@
                 android:id="@+id/matchTimeTable"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="1.8"
+                android:layout_weight="2.2"
                 android:orientation="horizontal"
                 android:visibility="visible">
                 <TableRow
@@ -176,7 +176,7 @@
                         android:gravity="center"
                         android:paddingRight="8dp"
                         android:text="50% Blue"
-                        android:textColor="?blueAllianceText"
+                        android:textColor="?textOnBackground"
                         android:textSize="@dimen/team_number_text"/>
 
                 </TableRow>
@@ -186,7 +186,7 @@
                 android:id="@+id/score_table"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="1.8"
+                android:layout_weight="2.2"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
@@ -204,7 +204,7 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:paddingRight="8dp"
+                        android:paddingRight="12dp"
                         android:text="@string/sample_team"
                         android:textColor="?redAllianceText"
                         android:textSize="@dimen/team_number_text"/>
@@ -225,7 +225,7 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:paddingRight="8dp"
+                        android:paddingRight="12dp"
                         android:text="@string/sample_team"
                         android:textColor="?blueAllianceText"
                         android:textSize="@dimen/team_number_text"/>

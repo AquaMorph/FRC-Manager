@@ -37,6 +37,13 @@
             android:key="toolbarText"
             android:selectAllOnFocus="true"
             android:singleLine="true"/>
+        <ListPreference
+            android:title="@string/predictionDisplayTitle"
+            android:summary="@string/predictionDisplaySummary"
+            android:defaultValue="words"
+            android:key="predictionDisplay"
+            android:entries="@array/predictionDisplay"
+            android:entryValues="@array/predictionDisplayValues"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="About">

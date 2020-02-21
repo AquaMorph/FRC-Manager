@@ -29,15 +29,14 @@ import java.util.Locale
  * Populates a RecyclerView with the schedule for a team.
  *
  * @author Christian Colglazier
- * @version 2/15/2020
+ * @version 2/21/2020
  */
 class ScheduleAdapter(
     private val context: Context,
     private val data: ArrayList<Match>,
     private val predictions: ArrayList<TBAPrediction.PredMatch>,
     private var team: String?
-) :
-        RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater = from(context)
 
@@ -171,15 +170,33 @@ class ScheduleAdapter(
         holder.blueScore.text = "%s%4s".format(rpToString(blueRP), holder.blueScore.text)
 
         if (MainActivity.predEnabled && predictions.isNotEmpty()) {
+//            holder.matchTimeTable.visibility = View.VISIBLE
+//            holder.scoreTable.visibility = View.GONE
             holder.predictionTable.visibility = View.VISIBLE
             val predMatch = getMatch(data[position].key, predictions)
-            holder.predictionsText.text = "%2.0f%% %s".format(predMatch.prob * 100, predMatch.winningAlliance)
+            holder.predictionsText.text = predictionToString(predMatch, MainActivity.predPrecentage)
         } else {
             holder.predictionTable.visibility = View.GONE
         }
     }
 
-    fun getMatch(matchKey: String, predictions: ArrayList<TBAPrediction.PredMatch>): TBAPrediction.PredMatch {
+    fun predictionToString(prediction: TBAPrediction.PredMatch, percentageEnabled: Boolean):
+            String {
+        return when {
+            percentageEnabled -> {
+                "%2.0f%% %s".format(prediction.prob * 100, prediction.winningAlliance)
+            }
+            else -> when {
+                prediction.prob <= 0.55 -> "Tossup"
+                prediction.prob <= 0.6 -> "Leaning %s".format(prediction.winningAlliance)
+                prediction.prob <= 0.65 -> "Likely %s".format(prediction.winningAlliance)
+                else -> "Heavily %s".format(prediction.winningAlliance)
+            }
+        }
+    }
+
+    fun getMatch(matchKey: String, predictions: ArrayList<TBAPrediction.PredMatch>):
+            TBAPrediction.PredMatch {
         for (p in predictions) {
             if (p.matchKey == matchKey) return p
         }

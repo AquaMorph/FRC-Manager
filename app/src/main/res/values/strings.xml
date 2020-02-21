@@ -60,6 +60,24 @@
     </string-array>
     <string name="predictionsTitle">Predictions</string>
     <string name="predictionsSummary">Choose prediction match algorithm</string>
+    <string-array name="predictionsValues">
+        <item>none</item>
+        <item>tba</item>
+    </string-array>
+    <string-array name="predictions">
+        <item>None</item>
+        <item>The Blue Alliance</item>
+    </string-array>
+    <string name="predictionDisplayTitle">Predictions Display</string>
+    <string name="predictionDisplaySummary">Choose how prediction information is displayed</string>
+    <string-array name="predictionDisplayValues">
+        <item>words</item>
+        <item>percentage</item>
+    </string-array>
+    <string-array name="predictionDisplay">
+        <item>Words</item>
+        <item>Raw Percentage</item>
+    </string-array>
     <string name="auto_total">Auto Total</string>
     <string name="score_team_one">Team 1</string>
     <string name="score_team_two">Team 2</string>
@@ -84,12 +102,4 @@
     <string name="rankEventOne">Event 1:</string>
     <string name="rankEvent2">Event 2:</string>
     <string name="rankDistrictChamp">District Champ:</string>
-    <string-array name="predictionsValues">
-        <item>none</item>
-        <item>tba</item>
-    </string-array>
-    <string-array name="predictions">
-        <item>None</item>
-        <item>The Blue Alliance</item>
-    </string-array>
 </resources>
