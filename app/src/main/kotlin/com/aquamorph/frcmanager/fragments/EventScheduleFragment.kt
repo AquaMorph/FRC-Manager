@@ -38,11 +38,11 @@ class EventScheduleFragment :
         val view = inflater.inflate(R.layout.fragment_fastscroll, container, false)
         if (MainActivity.appTheme == Constants.Theme.BATTERY_SAVER) {
             super.onCreateView(view, matches,
-                    ScheduleAdapter(context!!, matches, DataLoader.teamNumber),
+                    ScheduleAdapter(context!!, matches, predictions, DataLoader.teamNumber),
                     Divider(context!!, Constants.DIVIDER_WIDTH, 0))
         } else {
             super.onCreateView(view, matches,
-                    ScheduleAdapter(context!!, matches, DataLoader.teamNumber))
+                    ScheduleAdapter(context!!, matches, predictions, DataLoader.teamNumber))
         }
         prefs.registerOnSharedPreferenceChangeListener(this)
         return view

@@ -9,13 +9,16 @@ import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
+import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.activities.MatchBreakdown2019Activity
 import com.aquamorph.frcmanager.activities.MatchBreakdown2020Activity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.Match
+import com.aquamorph.frcmanager.models.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import java.text.SimpleDateFormat
@@ -31,6 +34,7 @@ import java.util.Locale
 class ScheduleAdapter(
     private val context: Context,
     private val data: ArrayList<Match>,
+    private val predictions: ArrayList<TBAPrediction.PredMatch>,
     private var team: String?
 ) :
         RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
@@ -122,12 +126,14 @@ class ScheduleAdapter(
         }
 
         if (data[position].alliances.red.score != -1) {
-            holder.matchTime.visibility = View.GONE
+            holder.matchTimeTable.visibility = View.GONE
+            holder.predictionTable.visibility = View.GONE
             holder.scoreTable.visibility = View.VISIBLE
             holder.redScore.text = data[position].alliances.red.score.toString()
             holder.blueScore.text = data[position].alliances.blue.score.toString()
         } else {
-            holder.matchTime.visibility = View.VISIBLE
+            holder.matchTimeTable.visibility = View.VISIBLE
+            holder.predictionTable.visibility = View.VISIBLE
             holder.scoreTable.visibility = View.GONE
             val time = Date()
             val df = SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
@@ -163,6 +169,21 @@ class ScheduleAdapter(
 
         holder.redScore.text = "%s%4s".format(rpToString(redRP), holder.redScore.text)
         holder.blueScore.text = "%s%4s".format(rpToString(blueRP), holder.blueScore.text)
+
+        if (MainActivity.predEnabled) {
+            holder.predictionTable.visibility = View.VISIBLE
+            val predMatch = getMatch(data[position].key, predictions)
+            holder.predictionsText.text = "%2.0f%% %s".format(predMatch.prob * 100, predMatch.winningAlliance)
+        } else {
+            holder.predictionTable.visibility = View.GONE
+        }
+    }
+
+    fun getMatch(matchKey: String, predictions: ArrayList<TBAPrediction.PredMatch>): TBAPrediction.PredMatch {
+        for (p in predictions) {
+            if (p.matchKey == matchKey) return p
+        }
+        return TBAPrediction.PredMatch("", 0.5, "Red")
     }
 
     fun rpToString(rp: Int): String {
@@ -203,9 +224,12 @@ class ScheduleAdapter(
         internal val blueTeam2: TextView = itemView.findViewById(R.id.blue_team_2)
         internal val blueTeam3: TextView = itemView.findViewById(R.id.blue_team_3)
         internal val matchTime: TextView = itemView.findViewById(R.id.match_time)
+        internal val matchTimeTable: TableLayout = itemView.findViewById(R.id.matchTimeTable)
         internal val redScore: TextView = itemView.findViewById(R.id.red_score)
         internal val blueScore: TextView = itemView.findViewById(R.id.blue_score)
         internal val scoreTable: TableLayout = itemView.findViewById(R.id.score_table)
+        internal val predictionTable: TableRow = itemView.findViewById(R.id.predictionTable)
+        internal val predictionsText: TextView = itemView.findViewById(R.id.prediction)
         var matchKey = ""
         var compLevel = ""
         var setNumber = 0

@@ -202,7 +202,6 @@ object Constants {
         val predictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
         val qual = matchPredictions.matchPredictions.qual
         val playoffs = matchPredictions.matchPredictions.playoff
-        predictions.clear()
         tbaPredtoObject(qual, predictions)
         tbaPredtoObject(playoffs, predictions)
         return predictions

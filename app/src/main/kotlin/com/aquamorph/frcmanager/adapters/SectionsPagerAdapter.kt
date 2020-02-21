@@ -44,6 +44,7 @@ class SectionsPagerAdapter(
         DataLoader.matchDC.complete = false
         DataLoader.districtRankDC.complete = false
         DataLoader.districtTeamDC.complete = false
+        DataLoader.tbaPredictionsDC.complete = false
         DataLoader.refresh(this, activity)
     }
 
@@ -78,12 +79,12 @@ class SectionsPagerAdapter(
         notifyDataSetChanged()
     }
 
-    private fun destroyFragmentView(`object`: Any) {
+    private fun destroyFragmentView(view: Any) {
         try {
-            val manager = (`object` as Fragment).fragmentManager
+            val manager = (view as Fragment).fragmentManager
             if (manager != null) {
                 val trans = manager.beginTransaction()
-                trans.remove(`object`)
+                trans.remove(view)
                 trans.commitAllowingStateLoss()
             }
         } catch (e: Exception) {

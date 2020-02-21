@@ -130,20 +130,57 @@
 
             </TableLayout>
 
-
-            <TextView
-                android:id="@+id/match_time"
+            <TableLayout
+                android:id="@+id/matchTimeTable"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1.8"
-                android:gravity="center"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"
-                android:text="08:59 PM"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="?textOnBackground"
-                android:textSize="18sp"
-                android:visibility="visible"/>
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <TableRow
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp">
+                    <TextView
+                        android:id="@+id/match_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.8"
+                        android:lines="1"
+                        android:gravity="center"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
+                        android:text="08:59 PM"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="?textOnBackground"
+                        android:textSize="18sp"
+                        android:visibility="visible"/>
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/predictionTable"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp">
+
+                    <TextView
+                        android:id="@+id/prediction"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:paddingRight="8dp"
+                        android:text="50% Blue"
+                        android:textColor="?blueAllianceText"
+                        android:textSize="@dimen/team_number_text"/>
+
+                </TableRow>
+            </TableLayout>
 
             <TableLayout
                 android:id="@+id/score_table"

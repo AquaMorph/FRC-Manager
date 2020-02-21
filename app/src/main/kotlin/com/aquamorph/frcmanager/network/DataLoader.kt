@@ -36,7 +36,7 @@ import retrofit2.Response
  * Loads needed dataLoader.
  *
  * @author Christian Colglazier
- * @version 8/19/2018
+ * @version 2/20/2020
  */
 
 class DataLoader {
@@ -80,8 +80,6 @@ class DataLoader {
 
         private fun getData(
             dataContainer: DataContainer<*>,
-            isRank: Boolean,
-            isSortable: Boolean,
             tabs: ArrayList<Tab>,
             adapter: SectionsPagerAdapter,
             observer: Int,
@@ -109,35 +107,31 @@ class DataLoader {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ result ->
-                        dataContainer.newData = (result as Response<*>).raw()!!
-                                .networkResponse() != null
-                        updateData(dataContainer, isRank, isSortable,
-                                tabs, adapter, result.body() as Any) },
+                                    dataContainer.newData = (result as Response<*>).raw()!!
+                                        .networkResponse() != null
+                                    updateData(dataContainer, tabs, adapter,
+                                            result.body() as Any) },
                                 { error ->
                                     Logging.error(this, error.toString(), 0)
-                                removeTab(tabs, adapter)
-                                dataContainer.complete = true })
+                                    removeTab(tabs, adapter)
+                                    dataContainer.complete = true })
         }
 
         private fun updateData(
             dataContainer: DataContainer<*>,
-            isRank: Boolean,
-            isSortable: Boolean,
             tabs: ArrayList<Tab>,
             adapter: SectionsPagerAdapter,
             result: Any
         ) {
             dataContainer.data.clear()
-                if (isRank) {
-                    if (result is TBAPrediction) {
+                if (result is Rank) {
+                    (dataContainer.data as MutableList<Any?>).add(result)
+                } else if (result is TBAPrediction) {
                         (dataContainer.data as MutableList<Any?>)
                                 .addAll(Constants.tbaPredToArray(result))
-                    } else {
-                        (dataContainer.data as MutableList<Any?>).add(result)
-                    }
                 } else {
                     dataContainer.data.addAll(result as Collection<Nothing>)
-                    if (isSortable) {
+                    if (result is Comparable<*>) {
                         sort(dataContainer.data as List<Nothing>)
                     }
                 }
@@ -187,28 +181,20 @@ class DataLoader {
                             R.string.no_connection_message,
                             Snackbar.LENGTH_LONG).show()
                 }
-                getData(matchDC, false, true,
-                        matchTabs, adapter, 0, activity)
-                getData(teamDC, false, true,
-                        teamTabs, adapter, 1, activity)
-                getData(rankDC, true, false,
-                        rankTabs, adapter, 2, activity)
-                getData(awardDC, false, false,
-                        awardTabs, adapter, 3, activity)
-                getData(allianceDC, false, false,
-                        allianceTabs, adapter, 4, activity)
+                getData(matchDC, matchTabs, adapter, 0, activity)
+                getData(teamDC, teamTabs, adapter, 1, activity)
+                getData(rankDC, rankTabs, adapter, 2, activity)
+                getData(awardDC, awardTabs, adapter, 3, activity)
+                getData(allianceDC, allianceTabs, adapter, 4, activity)
                 if (isDistrict()) {
-                    getData(districtRankDC, false, false,
-                            districtRankTabs, adapter, 5, activity)
-                    getData(districtTeamDC, false, true,
-                            districtRankTabs, adapter, 6, activity)
+                    getData(districtRankDC, districtRankTabs, adapter, 5, activity)
+                    getData(districtTeamDC, districtRankTabs, adapter, 6, activity)
                     addTab(districtRankTabs, adapter)
                 } else {
                     removeTab(districtRankTabs, adapter)
                 }
                 if (MainActivity.predEnabled) {
-                    getData(tbaPredictionsDC, true, false,
-                            matchTabs, adapter, 7, activity)
+                    getData(tbaPredictionsDC, matchTabs, adapter, 7, activity)
                 }
                 // Check if FIRST or event feed is down
                 RetrofitInstance.getRetrofit(activity!!).create(TbaApi::class.java)

@@ -15,6 +15,7 @@ import com.aquamorph.frcmanager.adapters.ScheduleAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Match
+import com.aquamorph.frcmanager.models.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
@@ -29,6 +30,7 @@ import com.aquamorph.frcmanager.utils.MatchSort
 class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, RefreshFragment {
 
     private var teamEventMatches = ArrayList<Match>()
+    private var predictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
     private var teamNumber: String = ""
     private var getTeamFromSettings: Boolean = true
 
@@ -52,11 +54,11 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         }
         if (MainActivity.appTheme == Constants.Theme.BATTERY_SAVER) {
             super.onCreateView(view, teamEventMatches,
-                    ScheduleAdapter(context!!, teamEventMatches, teamNumber),
+                    ScheduleAdapter(context!!, teamEventMatches, predictions, teamNumber),
                     Divider(context!!, Constants.DIVIDER_WIDTH, 0))
         } else {
             super.onCreateView(view, teamEventMatches,
-                    ScheduleAdapter(context!!, teamEventMatches, teamNumber))
+                    ScheduleAdapter(context!!, teamEventMatches, predictions, teamNumber))
         }
         if (!getTeamFromSettings) {
             mSwipeRefreshLayout.isEnabled = false
@@ -120,6 +122,10 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     }
 
     override fun dataUpdate() {
+        if (MainActivity.predEnabled) {
+            predictions.clear()
+            predictions.addAll(DataLoader.tbaPredictionsDC.data)
+        }
         teamEventMatches.clear()
         for (match in DataLoader.matchDC.data) {
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
@@ -140,6 +146,9 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
 
         override fun doInBackground(vararg params: Void?): Void? {
             while (!DataLoader.matchDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
+            while (MainActivity.predEnabled && !DataLoader.tbaPredictionsDC.complete) {
                 SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
             }
             return null
