@@ -11,4 +11,10 @@
     <attr name="cardBackground" format="reference|color"/>
     <attr name="dividerColor" format="color"/>
     <attr name="scroll_line" format="reference"/>
+    <attr name="redLeaning" format="reference|color"/>
+    <attr name="redLikely" format="reference|color"/>
+    <attr name="redHeavily" format="reference|color"/>
+    <attr name="blueLeaning" format="reference|color"/>
+    <attr name="blueLikely" format="reference|color"/>
+    <attr name="blueHeavily" format="reference|color"/>
 </resources>

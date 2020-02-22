@@ -2,7 +2,9 @@ package com.aquamorph.frcmanager.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Typeface
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from
@@ -170,10 +172,46 @@ class ScheduleAdapter(
         holder.blueScore.text = "%s%4s".format(rpToString(blueRP), holder.blueScore.text)
 
         if (MainActivity.predEnabled && predictions.isNotEmpty()) {
+
+//            val time = Date()
+//            val df = SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
+//            time.time = data[position].time * 1000
+//            holder.matchTime.text = df.format(time)
 //            holder.matchTimeTable.visibility = View.VISIBLE
 //            holder.scoreTable.visibility = View.GONE
+
             holder.predictionTable.visibility = View.VISIBLE
             val predMatch = getMatch(data[position].key, predictions)
+
+            val typedValue = TypedValue()
+            val theme: Resources.Theme = context.theme
+            when {
+                predMatch.prob <= 0.55 -> {
+                    theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
+                }
+                predMatch.winningAlliance == "red" -> {
+                    when {
+                        predMatch.prob <= 0.6 ->
+                            theme.resolveAttribute(R.attr.redLeaning, typedValue, true)
+                        predMatch.prob <= 0.65 ->
+                            theme.resolveAttribute(R.attr.redLikely, typedValue, true)
+                        else ->
+                            theme.resolveAttribute(R.attr.redHeavily, typedValue, true)
+                    }
+                }
+                else -> {
+                    when {
+                        predMatch.prob <= 0.6 ->
+                            theme.resolveAttribute(R.attr.blueLeaning, typedValue, true)
+                        predMatch.prob <= 0.65 ->
+                            theme.resolveAttribute(R.attr.blueLikely, typedValue, true)
+                        else ->
+                            theme.resolveAttribute(R.attr.blueHeavily, typedValue, true)
+                    }
+                }
+            }
+            holder.predictionsText.setTextColor(typedValue.data)
+
             holder.predictionsText.text = predictionToString(predMatch, MainActivity.predPrecentage)
         } else {
             holder.predictionTable.visibility = View.GONE

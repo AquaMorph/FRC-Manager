@@ -15,6 +15,12 @@
         <item name="bubbleText">@color/icons</item>
         <item name="scroll_line">@drawable/line_light</item>
         <item name="dividerColor">@color/divider_light</item>
+        <item name="redLeaning">#B71C1C</item>
+        <item name="redLikely">#C62828</item>
+        <item name="redHeavily">#D32F2F</item>
+        <item name="blueLeaning">#1A237E</item>
+        <item name="blueLikely">#0D47A1</item>
+        <item name="blueHeavily">#1565C0</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
@@ -36,6 +42,12 @@
         <item name="android:listDivider">@color/icons</item>
         <item name="scroll_line">@drawable/line_dark</item>
         <item name="dividerColor">@color/divider_dark</item>
+        <item name="redLeaning">#FFEBEE</item>
+        <item name="redLikely">#FFCDD2</item>
+        <item name="redHeavily">#EF9A9A</item>
+        <item name="blueLeaning">#E3F2FD</item>
+        <item name="blueLikely">#BBDEFB</item>
+        <item name="blueHeavily">#90CAF9</item>
     </style>
 
     <style name="OMOLEDTheme" parent="Theme.AppCompat.NoActionBar">
@@ -57,6 +69,12 @@
         <item name="android:listDivider">@color/icons</item>
         <item name="scroll_line">@drawable/line_omoled</item>
         <item name="dividerColor">@color/divider_dark</item>
+        <item name="redLeaning">#FFEBEE</item>
+        <item name="redLikely">#FFCDD2</item>
+        <item name="redHeavily">#EF9A9A</item>
+        <item name="blueLeaning">#E3F2FD</item>
+        <item name="blueLikely">#BBDEFB</item>
+        <item name="blueHeavily">#90CAF9</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
