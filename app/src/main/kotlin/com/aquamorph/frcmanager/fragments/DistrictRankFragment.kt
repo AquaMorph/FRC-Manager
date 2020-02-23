@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.DistrictRankAdapter
+import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.DistrictRank
 import com.aquamorph.frcmanager.models.Team
@@ -18,19 +19,22 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays the ranks of all the teams at an event.
  *
  * @author Christian Colglazier
- * @version 10/29/2018
+ * @version 1/23/2020
  */
 class DistrictRankFragment : TabFragment(), RefreshFragment {
 
-    private var ranks : ArrayList<DistrictRank> = ArrayList()
-    private var teams : ArrayList<Team> = ArrayList()
+    private var ranks: ArrayList<DistrictRank> = ArrayList()
+    private var teams: ArrayList<Team> = ArrayList()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         super.onCreateView(view, ranks,
                 DistrictRankAdapter(context!!, ranks, teams),
-                Divider(context!!, 2f, 72))
+                Divider(context!!, Constants.DIVIDER_WIDTH, 72))
         return view
     }
 
@@ -40,6 +44,10 @@ class DistrictRankFragment : TabFragment(), RefreshFragment {
         teams.clear()
         teams.addAll(DataLoader.districtTeamDC.data)
         adapter.notifyDataSetChanged()
+        Constants.checkNoDataScreen(DataLoader.districtRankDC.data, recyclerView, emptyView)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
+                DataLoader.districtRankDC.newData || DataLoader.districtTeamDC.newData)
+        firstLoad = false
     }
 
     override fun onResume() {
@@ -53,26 +61,29 @@ class DistrictRankFragment : TabFragment(), RefreshFragment {
      */
     override fun refresh() {
         if (DataLoader.districtKey != "" && context != null) {
-            LoadRanks().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            task = Constants.runRefresh(task, LoadRanks())
         }
     }
 
-    internal inner class LoadRanks: AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadRanks : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.districtRankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            while (!DataLoader.districtTeamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            while (!DataLoader.districtRankDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
+            while (!DataLoader.districtTeamDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
             return null
         }
 
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(DataLoader.districtRankDC.data, recyclerView, emptyView)
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }

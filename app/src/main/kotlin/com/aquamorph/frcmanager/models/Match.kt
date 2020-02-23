@@ -1,47 +1,88 @@
 package com.aquamorph.frcmanager.models
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 /**
  * Stores match information at an event.
  *
  * @author Christian Colglazier
- * @version 3/30/2018
+ * @version 1/31/2020
  */
-class Match : Comparable<Match> {
-    var key: String = ""
-    var comp_level: String = ""
-    var set_number: Int = 0
-    var match_number: Int =0
-    var alliances: Alliances = Alliances()
-    var winning_alliance: String = ""
-    var event_key: String = ""
-    var time: Long = 0L
-    var actual_time: Long = 0L
-    var predicted_time: Long = 0L
-    var post_result_time: Long = 0L
+data class Match(
+    @Expose
+    @SerializedName("key")
+    var key: String,
+    @Expose
+    @SerializedName("comp_level")
+    var compLevel: String,
+    @Expose
+    @SerializedName("set_number")
+    var setNumber: Int,
+    @Expose
+    @SerializedName("match_number")
+    var matchNumber: Int,
+    @Expose
+    @SerializedName("alliances")
+    var alliances: Alliances,
+    @Expose
+    @SerializedName("winning_alliance")
+    var winningAlliance: String,
+    @Expose
+    @SerializedName("event_key")
+    var eventKey: String,
+    @Expose
+    @SerializedName("time")
+    var time: Long,
+    @Expose
+    @SerializedName("actual_time")
+    var actualTime: Long,
+    @Expose
+    @SerializedName("predicted_time")
+    var predictedTime: Long,
+    @Expose
+    @SerializedName("post_result_time")
+    var postResultTime: Long,
+    @Expose
+    @SerializedName("score_breakdown")
+    var scoreBreakDown: MatchScore.ScoreBreakDown
+) : Comparable<Match> {
 
-    inner class Alliances {
-        var blue: MatchAlliance = MatchAlliance()
-        var red: MatchAlliance = MatchAlliance()
-    }
+    data class Alliances(
+        @Expose
+        @SerializedName("blue")
+        var blue: MatchAlliance,
+        @Expose
+        @SerializedName("red")
+        var red: MatchAlliance
+    )
 
-    inner class MatchAlliance {
-        var score: Int = 0
-        var team_keys: Array<String> = emptyArray()
-        var surrogate_team_keys: Array<String> = emptyArray()
-        var dq_team_keys: Array<String> = emptyArray()
-    }
+    data class MatchAlliance(
+        @Expose
+        @SerializedName("score")
+        var score: Int,
+        @Expose
+        @SerializedName("team_keys")
+        var teamKeys: ArrayList<String>,
+        @Expose
+        @SerializedName("surrogate_team_keys")
+        var surrogateTeamKeys: ArrayList<String>,
+        @Expose
+        @SerializedName("dq_team_keys")
+        var dqTeamKeys: ArrayList<String>
+    )
 
     override operator fun compareTo(other: Match): Int {
-        val compareMatchNumber = other.match_number
-        val compareLevel = other.comp_level
-        return if (getCompLevelValue(compareLevel) == getCompLevelValue(this.comp_level)) {
-            this.match_number - compareMatchNumber
+        val compareMatchNumber = other.matchNumber
+        val compareLevel = other.compLevel
+        return if (getCompLevelValue(compareLevel) == getCompLevelValue(this.compLevel)) {
+            this.matchNumber - compareMatchNumber
         } else {
-            getCompLevelValue(this.comp_level) - getCompLevelValue(compareLevel)
+            getCompLevelValue(this.compLevel) - getCompLevelValue(compareLevel)
         }
     }
 
-    private fun getCompLevelValue(comp_level: String?): Int {
+    fun getCompLevelValue(comp_level: String?): Int {
         return when (comp_level) {
             "qm" -> 1
             "ef" -> 2

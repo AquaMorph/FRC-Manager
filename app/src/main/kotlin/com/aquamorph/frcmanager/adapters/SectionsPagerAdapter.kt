@@ -1,16 +1,16 @@
 package com.aquamorph.frcmanager.adapters
 
 import android.app.Activity
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.PagerAdapter
-import android.support.v4.view.ViewPager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.aquamorph.frcmanager.fragments.RefreshFragment
 import com.aquamorph.frcmanager.models.Tab
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Logging
+import com.google.android.material.tabs.TabLayout
 
 /**
  * Populates a tab layout with fragments.
@@ -18,10 +18,12 @@ import com.aquamorph.frcmanager.utils.Logging
  * @author Christian Colglazier
  * @version 4/2/2018
  */
-class SectionsPagerAdapter(fragmentManager: FragmentManager,
-                           private val viewPager: ViewPager,
-                           private val tabLayout: TabLayout,
-                           var activity: Activity) : FragmentStatePagerAdapter(fragmentManager) {
+class SectionsPagerAdapter(
+    fragmentManager: FragmentManager,
+    private val viewPager: ViewPager,
+    private val tabLayout: TabLayout,
+    var activity: Activity
+) : FragmentStatePagerAdapter(fragmentManager) {
     var tabs = ArrayList<Tab>()
 
     /**
@@ -42,6 +44,7 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
         DataLoader.matchDC.complete = false
         DataLoader.districtRankDC.complete = false
         DataLoader.districtTeamDC.complete = false
+        DataLoader.tbaPredictionsDC.complete = false
         DataLoader.refresh(this, activity)
     }
 
@@ -59,10 +62,12 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
 
     fun addFrag(tab: Tab) {
         try {
-            tabs.add(tab)
-            tabs.sort()
-            notifyDataSetChanged()
-        } catch (e : Exception) {
+            if (!tabs.contains(tab)) {
+                tabs.add(tab)
+                tabs.sort()
+                notifyDataSetChanged()
+            }
+        } catch (e: Exception) {
             Logging.error(this, e.toString(), 0)
         }
     }
@@ -74,15 +79,15 @@ class SectionsPagerAdapter(fragmentManager: FragmentManager,
         notifyDataSetChanged()
     }
 
-    private fun destroyFragmentView(`object`: Any) {
+    private fun destroyFragmentView(view: Any) {
         try {
-            val manager = (`object` as Fragment).fragmentManager
+            val manager = (view as Fragment).fragmentManager
             if (manager != null) {
                 val trans = manager.beginTransaction()
-                trans.remove(`object`)
+                trans.remove(view)
                 trans.commitAllowingStateLoss()
             }
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Logging.error(this, e.toString(), 0)
         }
     }

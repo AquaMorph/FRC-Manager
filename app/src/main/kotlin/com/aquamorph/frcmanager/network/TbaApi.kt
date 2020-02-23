@@ -1,8 +1,19 @@
 package com.aquamorph.frcmanager.network
 
-import com.aquamorph.frcmanager.models.*
+import com.aquamorph.frcmanager.models.Alliance
+import com.aquamorph.frcmanager.models.Award
+import com.aquamorph.frcmanager.models.DistrictRank
+import com.aquamorph.frcmanager.models.Event
+import com.aquamorph.frcmanager.models.Match
+import com.aquamorph.frcmanager.models.MatchScore2019
+import com.aquamorph.frcmanager.models.MatchScore2020
+import com.aquamorph.frcmanager.models.Rank
+import com.aquamorph.frcmanager.models.Status
+import com.aquamorph.frcmanager.models.TBAPrediction
+import com.aquamorph.frcmanager.models.Team
 import io.reactivex.Observable
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -18,8 +29,8 @@ interface TbaApi {
      * getStatus() gets status information from of the Blue Alliance.
      */
     @GET("status")
-    fun getStatus()
-            : Observable<Status>
+    fun getStatus():
+            Observable<Status>
 
     /**
      * getTeamEvents() returns a list of events
@@ -27,8 +38,8 @@ interface TbaApi {
      * @param team team identification "frc####"
      */
     @GET("team/{team}/events/{year}")
-    fun getTeamEvents(@Path("team") team: String, @Path("year") event: String)
-            : Observable<ArrayList<Event>>
+    fun getTeamEvents(@Path("team") team: String, @Path("year") event: String):
+            Observable<Response<ArrayList<Event>>>
 
     /**
      * getEvent() returns info about an event.
@@ -36,8 +47,8 @@ interface TbaApi {
      * @param event event identification
      */
     @GET("event/{event}")
-    fun getEvent(@Path("event") event: String)
-            : Observable<Event>
+    fun getEvent(@Path("event") event: String):
+            Observable<Response<Event>>
 
     /**
      * getEventTeams() returns a list of teams at an event.
@@ -45,8 +56,8 @@ interface TbaApi {
      * @param event event identification
      */
     @GET("event/{event}/teams")
-    fun getEventTeams(@Path("event") event: String)
-            : Observable<ArrayList<Team>>
+    fun getEventTeams(@Path("event") event: String):
+            Observable<Response<ArrayList<Team>>>
 
     /**
      * getTeam() returns information about a team.
@@ -54,8 +65,8 @@ interface TbaApi {
      * @param team team identification "frc####"
      */
     @GET("team/{team}")
-    fun getTeam(@Path("team") team: String)
-            : Observable<Team>
+    fun getTeam(@Path("team") team: String):
+            Observable<Response<Team>>
 
     /**
      * getEventMatches returns a list of matches of an event
@@ -63,8 +74,8 @@ interface TbaApi {
      * @param event event identification
      */
     @GET("event/{event}/matches")
-    fun getEventMatches(@Path("event") event: String)
-            : Observable<ArrayList<Match>>
+    fun getEventMatches(@Path("event") event: String):
+            Observable<Response<ArrayList<Match>>>
 
     /**
      * getEventRankings() returns event rankings.
@@ -72,8 +83,8 @@ interface TbaApi {
      * @param event event identification
      */
     @GET("event/{event}/rankings")
-    fun getEventRankings(@Path("event") event: String)
-            : Observable<Rank>
+    fun getEventRankings(@Path("event") event: String):
+            Observable<Response<Rank>>
 
     /**
      * getEventAwards() returns list of event awards.
@@ -81,8 +92,8 @@ interface TbaApi {
      * @param event event identification
      */
     @GET("event/{event}/awards")
-    fun getEventAwards(@Path("event") event: String)
-            : Observable<ArrayList<Award>>
+    fun getEventAwards(@Path("event") event: String):
+            Observable<Response<ArrayList<Award>>>
 
     /**
      * getEventAlliances() returns list of event alliances.
@@ -90,8 +101,8 @@ interface TbaApi {
      * @param event event identification
      */
     @GET("event/{event}/alliances")
-    fun getEventAlliances(@Path("event") event: String)
-            : Observable<ArrayList<Alliance>>
+    fun getEventAlliances(@Path("event") event: String):
+            Observable<Response<ArrayList<Alliance>>>
 
     /**
      * getDistrictRankings() returns list of district rankings.
@@ -99,8 +110,8 @@ interface TbaApi {
      * @param districtKey district identification
      */
     @GET("district/{districtKey}/rankings")
-    fun getDistrictRankings(@Path("districtKey") districtKey: String)
-            : Observable<ArrayList<DistrictRank>>
+    fun getDistrictRankings(@Path("districtKey") districtKey: String):
+            Observable<Response<ArrayList<DistrictRank>>>
 
     /**
     * getDistrictTeams() returns list of teams in a district.
@@ -108,10 +119,18 @@ interface TbaApi {
     * @param districtKey district identification
     */
     @GET("district/{districtKey}/teams")
-    fun getDistrictTeams(@Path("districtKey") districtKey: String)
-            : Observable<ArrayList<Team>>
+    fun getDistrictTeams(@Path("districtKey") districtKey: String):
+            Observable<Response<ArrayList<Team>>>
 
     @GET("match/{matchKey}")
-    fun getMatch2019(@Path("matchKey") matchKey: String)
-            : Call<MatchScore2019>
+    fun getMatch2019(@Path("matchKey") matchKey: String):
+            Call<MatchScore2019>
+
+    @GET("match/{matchKey}")
+    fun getMatch2020(@Path("matchKey") matchKey: String):
+            Call<MatchScore2020>
+
+    @GET("event/{eventKey}/predictions")
+    fun getEventPredictions(@Path("eventKey") eventKey: String):
+            Observable<Response<TBAPrediction>>
 }

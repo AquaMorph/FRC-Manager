@@ -2,33 +2,43 @@ package com.aquamorph.frcmanager.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Typeface
-import android.support.v7.widget.RecyclerView
-import android.text.Html
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.activities.MatchSummaryActivity
+import com.aquamorph.frcmanager.activities.MainActivity
+import com.aquamorph.frcmanager.activities.MatchBreakdown2019Activity
+import com.aquamorph.frcmanager.activities.MatchBreakdown2020Activity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.Match
+import com.aquamorph.frcmanager.models.TBAPrediction
+import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * Populates a RecyclerView with the schedule for a team.
  *
  * @author Christian Colglazier
- * @version 3/31/2018
+ * @version 2/21/2020
  */
-class ScheduleAdapter(private val context: Context, private val data: ArrayList<Match>,
-                      private var team: String?) :
-        RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
+class ScheduleAdapter(
+    private val context: Context,
+    private val data: ArrayList<Match>,
+    private val predictions: ArrayList<TBAPrediction.PredMatch>,
+    private var team: String?
+) : RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater = from(context)
 
@@ -39,12 +49,12 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.matchKey = data[position].key
-        holder.compLevel = data[position].comp_level
-        holder.setNumber = data[position].set_number
-        holder.matchNumberKey = data[position].match_number
+        holder.compLevel = data[position].compLevel
+        holder.setNumber = data[position].setNumber
+        holder.matchNumberKey = data[position].matchNumber
 
-        holder.matchNumber.text = Constants.matchString(data[position].comp_level,
-                data[position].set_number, data[position].match_number)
+        holder.matchNumber.text = Constants.matchString(data[position].compLevel,
+                data[position].setNumber, data[position].matchNumber)
 
         holder.redTeam1.text = parseTeamNumber(true, 0, position)
         holder.redTeam2.text = parseTeamNumber(true, 1, position)
@@ -70,11 +80,11 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
                 holder.blueTeam3.text = Constants.fromHtml(Constants.underlineText(team!!))
         }
 
-        //Bolds winning score
+        // Bolds winning score
         when {
             data[position].alliances.red.score == data[position].alliances.blue.score &&
                     data[position].alliances.red.score != -1 &&
-                    data[position].alliances.blue.score != -1-> {
+                    data[position].alliances.blue.score != -1 -> {
                 holder.redTeam1.setTypeface(null, Typeface.BOLD)
                 holder.redTeam2.setTypeface(null, Typeface.BOLD)
                 holder.redTeam3.setTypeface(null, Typeface.BOLD)
@@ -117,12 +127,14 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
         }
 
         if (data[position].alliances.red.score != -1) {
-            holder.matchTime.visibility = View.GONE
+            holder.matchTimeTable.visibility = View.GONE
+            holder.predictionTable.visibility = View.GONE
             holder.scoreTable.visibility = View.VISIBLE
             holder.redScore.text = data[position].alliances.red.score.toString()
             holder.blueScore.text = data[position].alliances.blue.score.toString()
         } else {
-            holder.matchTime.visibility = View.VISIBLE
+            holder.matchTimeTable.visibility = View.VISIBLE
+            holder.predictionTable.visibility = View.VISIBLE
             holder.scoreTable.visibility = View.GONE
             val time = Date()
             val df = SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
@@ -136,6 +148,105 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
         holder.blueTeam1.gravity = Gravity.CENTER
         holder.blueTeam2.gravity = Gravity.CENTER
         holder.blueTeam3.gravity = Gravity.CENTER
+
+        var redRP = 0
+        var blueRP = 0
+        if (data[position].scoreBreakDown != null) {
+            when (data[position].winningAlliance) {
+                "red" -> {
+                    redRP = data[position].scoreBreakDown.red.rp - 2
+                    blueRP = data[position].scoreBreakDown.blue.rp
+                }
+                "blue" -> {
+                    redRP = data[position].scoreBreakDown.red.rp
+                    blueRP = data[position].scoreBreakDown.blue.rp - 2
+                }
+                else -> {
+                    redRP = data[position].scoreBreakDown.red.rp - 1
+                    blueRP = data[position].scoreBreakDown.blue.rp - 1
+                }
+            }
+        }
+
+        holder.redScore.text = "%s%4s".format(rpToString(redRP), holder.redScore.text)
+        holder.blueScore.text = "%s%4s".format(rpToString(blueRP), holder.blueScore.text)
+
+        if (MainActivity.predEnabled && predictions.isNotEmpty()) {
+
+//            val time = Date()
+//            val df = SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
+//            time.time = data[position].time * 1000
+//            holder.matchTime.text = df.format(time)
+//            holder.matchTimeTable.visibility = View.VISIBLE
+//            holder.scoreTable.visibility = View.GONE
+
+            holder.predictionTable.visibility = View.VISIBLE
+            val predMatch = getMatch(data[position].key, predictions)
+
+            val typedValue = TypedValue()
+            val theme: Resources.Theme = context.theme
+            when {
+                predMatch.prob <= 0.55 -> {
+                    theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
+                }
+                predMatch.winningAlliance == "red" -> {
+                    when {
+                        predMatch.prob <= 0.6 ->
+                            theme.resolveAttribute(R.attr.redLeaning, typedValue, true)
+                        predMatch.prob <= 0.65 ->
+                            theme.resolveAttribute(R.attr.redLikely, typedValue, true)
+                        else ->
+                            theme.resolveAttribute(R.attr.redHeavily, typedValue, true)
+                    }
+                }
+                else -> {
+                    when {
+                        predMatch.prob <= 0.6 ->
+                            theme.resolveAttribute(R.attr.blueLeaning, typedValue, true)
+                        predMatch.prob <= 0.65 ->
+                            theme.resolveAttribute(R.attr.blueLikely, typedValue, true)
+                        else ->
+                            theme.resolveAttribute(R.attr.blueHeavily, typedValue, true)
+                    }
+                }
+            }
+            holder.predictionsText.setTextColor(typedValue.data)
+
+            holder.predictionsText.text = predictionToString(predMatch, MainActivity.predPrecentage)
+        } else {
+            holder.predictionTable.visibility = View.GONE
+        }
+    }
+
+    fun predictionToString(prediction: TBAPrediction.PredMatch, percentageEnabled: Boolean):
+            String {
+        return when {
+            percentageEnabled -> {
+                "%2.0f%% %s".format(prediction.prob * 100, prediction.winningAlliance)
+            }
+            else -> when {
+                prediction.prob <= 0.55 -> "Tossup"
+                prediction.prob <= 0.6 -> "Leaning %s".format(prediction.winningAlliance)
+                prediction.prob <= 0.65 -> "Likely %s".format(prediction.winningAlliance)
+                else -> "Heavily %s".format(prediction.winningAlliance)
+            }
+        }
+    }
+
+    fun getMatch(matchKey: String, predictions: ArrayList<TBAPrediction.PredMatch>):
+            TBAPrediction.PredMatch {
+        for (p in predictions) {
+            if (p.matchKey == matchKey) return p
+        }
+        return TBAPrediction.PredMatch("", 0.5, "Red")
+    }
+
+    fun rpToString(rp: Int): String {
+        return when (rp) {
+            1 -> "⬤"
+            2 -> "⬤⬤"
+            else -> ""
+        }
     }
 
     override fun getItemCount(): Int {
@@ -145,16 +256,16 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
     /**
      * parseTeamNumber returns a formatted team number.
      *
-     * @param red      is the robot red or blue
-     * @param robot    position of the team
+     * @param red is the robot red or blue
+     * @param robot position of the team
      * @param position dataLoader position
      * @return team number
      */
     private fun parseTeamNumber(red: Boolean, robot: Int, position: Int): String {
         return if (red) {
-            Constants.formatTeamNumber(data[position].alliances.red.team_keys[robot])
+            Constants.formatTeamNumber(data[position].alliances.red.teamKeys[robot])
         } else {
-            Constants.formatTeamNumber(data[position].alliances.blue.team_keys[robot])
+            Constants.formatTeamNumber(data[position].alliances.blue.teamKeys[robot])
         }
     }
 
@@ -168,9 +279,12 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
         internal val blueTeam2: TextView = itemView.findViewById(R.id.blue_team_2)
         internal val blueTeam3: TextView = itemView.findViewById(R.id.blue_team_3)
         internal val matchTime: TextView = itemView.findViewById(R.id.match_time)
+        internal val matchTimeTable: TableLayout = itemView.findViewById(R.id.matchTimeTable)
         internal val redScore: TextView = itemView.findViewById(R.id.red_score)
         internal val blueScore: TextView = itemView.findViewById(R.id.blue_score)
         internal val scoreTable: TableLayout = itemView.findViewById(R.id.score_table)
+        internal val predictionTable: TableRow = itemView.findViewById(R.id.predictionTable)
+        internal val predictionsText: TextView = itemView.findViewById(R.id.prediction)
         var matchKey = ""
         var compLevel = ""
         var setNumber = 0
@@ -208,7 +322,12 @@ class ScheduleAdapter(private val context: Context, private val data: ArrayList<
                 context.startActivity(intent)
             }
             matchNumber.setOnClickListener {
-                val intent = Intent(context, MatchSummaryActivity::class.java)
+                val intent = when (DataLoader.year) {
+                    "2019" -> Intent(context, MatchBreakdown2019Activity::class.java)
+                    "2020" -> Intent(context, MatchBreakdown2020Activity::class.java)
+                    else -> Intent()
+                }
+
                 intent.putExtra("matchKey", matchKey)
                 intent.putExtra("compLevel", compLevel)
                 intent.putExtra("setNumber", setNumber)

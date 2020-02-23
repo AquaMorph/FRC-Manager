@@ -1,15 +1,26 @@
 package com.aquamorph.frcmanager.models
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 /**
  * Stores information about status of the Blue Alliance.
  *
  * @author Christian Colglazier
- * @version 3/30/2018
+ * @version 1/31/2020
  */
 
-class Status {
-    var current_season: Int? = null
-    var down_events: Array<String>? = emptyArray()
-    var is_datafeed_down: Boolean = false
-    var max_season: Int? = 0
-}
+data class Status(
+    @Expose
+    @SerializedName("current_season")
+    var currentSeason: Int,
+    @Expose
+    @SerializedName("down_events")
+    var downEvents: ArrayList<String>,
+    @Expose
+    @SerializedName("is_datafeed_down")
+    var isDatafeedDown: Boolean,
+    @Expose
+    @SerializedName("max_season")
+    var maxSeason: Int
+)

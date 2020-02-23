@@ -13,6 +13,37 @@
             android:key="theme"
             android:summary="Choose between different color schemes"
             android:title="App Theme"/>
+        <ListPreference
+            android:defaultValue="seriesGrouping"
+            android:entries="@array/matchSort"
+            android:entryValues="@array/matchSortValues"
+            android:key="matchSort"
+            android:title="Match Sorting"
+            android:summary="Choose match order sorting"/>
+        <ListPreference
+            android:defaultValue="none"
+            android:entries="@array/predictions"
+            android:entryValues="@array/predictionsValues"
+            android:key="predictions"
+            android:title="@string/predictionsTitle"
+            android:summary="@string/predictionsSummary"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Advanced Features">
+        <EditTextPreference
+            android:title="Custom Toolbar Text"
+            android:summary="Set custom toolbar using the shortcode options below. Variables will be replaces with the value.\n\n$r = rank\n$R = record\n$n = next match number"
+            android:defaultValue="@string/toolBarDefault"
+            android:key="toolbarText"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"/>
+        <ListPreference
+            android:title="@string/predictionDisplayTitle"
+            android:summary="@string/predictionDisplaySummary"
+            android:defaultValue="words"
+            android:key="predictionDisplay"
+            android:entries="@array/predictionDisplay"
+            android:entryValues="@array/predictionDisplayValues"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="About">

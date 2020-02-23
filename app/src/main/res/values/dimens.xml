@@ -10,4 +10,8 @@
     <dimen name="match_score_text">20sp</dimen>
     <dimen name="match_help_text_h1">25sp</dimen>
     <dimen name="match_help_text_h2">21sp</dimen>
+    <dimen name="match_2020_h1">22sp</dimen>
+    <dimen name="match_2020_h2">18sp</dimen>
+    <dimen name="match_2020_text_weight">1.6</dimen>
+    <dimen name="match_2020_score_weight">1</dimen>
 </resources>

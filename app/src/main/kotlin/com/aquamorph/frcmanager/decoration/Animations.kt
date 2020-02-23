@@ -1,11 +1,10 @@
 package com.aquamorph.frcmanager.decoration
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.utils.Logging
 
 /**
@@ -17,8 +16,13 @@ import com.aquamorph.frcmanager.utils.Logging
 
 object Animations {
 
-    fun loadAnimation(context: Context?, view: View?, adapter: RecyclerView.Adapter<*>?,
-                      firstLoad: Boolean?, isNewData: Boolean?) {
+    fun loadAnimation(
+        context: Context?,
+        view: View?,
+        adapter: RecyclerView.Adapter<*>?,
+        firstLoad: Boolean,
+        isNewData: Boolean
+    ) {
         if (context != null && view != null && adapter != null) {
             val slideOut = AnimationUtils.loadAnimation(context, android.R.anim.slide_out_right)
             val slideIn = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left)
@@ -33,13 +37,21 @@ object Animations {
 
                 override fun onAnimationRepeat(animation: Animation) {}
             })
-            if (isNewData!!) {
-                if (firstLoad!!) {
-                    view.startAnimation(slideIn)
-                } else {
-                    view.startAnimation(slideOut)
-                }
+            if (firstLoad) {
+                view.startAnimation(slideIn)
+            } else if (isNewData) {
+                view.startAnimation(slideOut)
             }
+        }
+    }
+
+    fun loadMatchBreakdownAnimation(
+        context: Context?,
+        view: View?
+    ) {
+        if (context != null && view != null) {
+            val slideIn = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left)
+            view.startAnimation(slideIn)
         }
     }
 }

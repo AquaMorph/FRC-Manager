@@ -1,22 +1,21 @@
 package com.aquamorph.frcmanager.adapters
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.models.Award
 import com.aquamorph.frcmanager.utils.Constants
-import java.util.*
 
 /**
  * Populates the recyclerview with award data
  *
  * @author Christian Colglazier
- * @version 4/2/2018
+ * @version 2/1/2020
  */
 class AwardAdapter(context: Context, private val data: ArrayList<Award>) :
         RecyclerView.Adapter<AwardAdapter.MyViewHolder>() {
@@ -34,18 +33,14 @@ class AwardAdapter(context: Context, private val data: ArrayList<Award>) :
         var awardee = ""
 
         var i = 0
-        while (i in 0..(data[position].recipient_list.size-1)) {
-            if (data[position].recipient_list[i].team_key != null) {
-                if (i > 0) team += "\n"
-                team += Constants.formatTeamNumber(data[position].recipient_list[i].team_key)
-            }
-            if (data[position].recipient_list[i].awardee != null) {
-                if (i > 0) awardee += "\n"
-                awardee += data[position].recipient_list[i].awardee
-            }
+        while (i in data[position].recipientList.indices) {
+            if (i > 0) team += "\n"
+            team += Constants.formatTeamNumber(data[position].recipientList[i].teamKey)
+            if (i > 0) awardee += "\n"
+            awardee += data[position].recipientList[i].awardee
             i++
         }
-        if (awardee == "") {
+        if (awardee == "" || awardee.contains("null")) {
             holder.details.visibility = View.GONE
         } else {
             holder.details.text = awardee

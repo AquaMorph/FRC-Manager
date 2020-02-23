@@ -1,7 +1,7 @@
 package com.aquamorph.frcmanager.utils
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 /**
  * Handles storing and receiving keys.
@@ -66,15 +66,25 @@ object AppConfig {
     }
 
     /**
-     * setDistictKey() set the shared variable of the district key.
+     * setDistrictKey() set the shared variable of the district key.
      *
      * @param key district key
      * @param context app context
      */
-    fun setDistictKey(key: String, context: Context) {
+    fun setDistrictKey(key: String, context: Context) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = prefs.edit()
         editor.putString("districtKey", key)
+        editor.apply()
+    }
+
+    /**
+     * setEventAddress() set the shared variable of the event address.
+     */
+    fun setEventAddress(address: String, context: Context) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = prefs.edit()
+        editor.putString("eventAddress", address)
         editor.apply()
     }
 }

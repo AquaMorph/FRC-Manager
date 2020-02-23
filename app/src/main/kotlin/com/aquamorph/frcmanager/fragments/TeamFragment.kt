@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.TeamAdapter
+import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
@@ -19,7 +20,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of teams at an event.
  *
  * @author Christian Colglazier
- * @version 4/14/2018
+ * @version 1/23/2020
  */
 open class TeamFragment : TabFragment(), RefreshFragment,
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -27,11 +28,14 @@ open class TeamFragment : TabFragment(), RefreshFragment,
     private var teams: ArrayList<Team> = ArrayList()
     private var ranks: ArrayList<Rank> = ArrayList()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         super.onCreateView(view, teams, TeamAdapter(context!!, teams, ranks),
-                Divider(context!!, 2f, 72))
+                Divider(context!!, Constants.DIVIDER_WIDTH, 72))
         return view
     }
 
@@ -47,6 +51,10 @@ open class TeamFragment : TabFragment(), RefreshFragment,
         ranks.clear()
         ranks.addAll(DataLoader.rankDC.data)
         adapter.notifyDataSetChanged()
+        Constants.checkNoDataScreen(teams, recyclerView, emptyView)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
+                DataLoader.teamDC.newData || DataLoader.rankDC.newData)
+        firstLoad = false
     }
 
     /**
@@ -54,7 +62,7 @@ open class TeamFragment : TabFragment(), RefreshFragment,
      */
     override fun refresh() {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "") {
-            LoadEventTeams().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            task = Constants.runRefresh(task, LoadEventTeams())
         }
     }
 
@@ -79,7 +87,6 @@ open class TeamFragment : TabFragment(), RefreshFragment,
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(teams, recyclerView, emptyView)
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }

@@ -1,10 +1,9 @@
 package com.aquamorph.frcmanager.activities
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment
 import com.aquamorph.frcmanager.utils.Constants.getTeamName
@@ -27,7 +26,8 @@ class TeamSummary : AppCompatActivity() {
 
         val extras = intent.extras
         if (extras != null) {
-            teamNumber = extras.getString("teamNumber")!!.replace("[^\\d.]".toRegex(), "")
+            teamNumber = extras.getString("teamNumber")!!
+                    .replace("[^\\d.]".toRegex(), "")
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -46,7 +46,8 @@ class TeamSummary : AppCompatActivity() {
         }
         val teamScheduleFragment = TeamScheduleFragment.newInstance()
         teamScheduleFragment.setTeamNumber(teamNumber)
-        supportFragmentManager.beginTransaction().replace(R.id.content_frame, teamScheduleFragment).commit()
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.content_frame, teamScheduleFragment).commit()
         MainActivity.theme(this)
     }
 

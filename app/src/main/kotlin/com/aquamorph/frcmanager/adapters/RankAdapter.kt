@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
-import android.support.v4.widget.TextViewCompat
-import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from
@@ -14,12 +12,13 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.core.widget.TextViewCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.Rank
 import com.aquamorph.frcmanager.models.Team
 import com.aquamorph.frcmanager.utils.Constants
-import java.util.*
 
 /**
  * Populates a RecyclerView with the ranks and team names and number for an event.
@@ -27,8 +26,11 @@ import java.util.*
  * @author Christian Colglazier
  * @version 12/30/2017
  */
-class RankAdapter(private val context: Context, private val data: ArrayList<Rank>,
-                  private val teams: ArrayList<Team>) :
+class RankAdapter(
+    private val context: Context,
+    private val data: ArrayList<Rank>,
+    private val teams: ArrayList<Team>
+) :
         RecyclerView.Adapter<RankAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater = from(context)
@@ -39,9 +41,9 @@ class RankAdapter(private val context: Context, private val data: ArrayList<Rank
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.teamNumber.text = String.format("%s. %s", position + 1,
-                getTeamName(data[0].rankings[position]!!.team_key))
+                getTeamName(data[0].rankings[position].teamKey))
         holder.teamNumber.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-        holder.rankNumber.text = Constants.formatTeamNumber(data[0].rankings[position]!!.team_key)
+        holder.rankNumber.text = Constants.formatTeamNumber(data[0].rankings[position].teamKey)
         holder.details.visibility = View.GONE
         holder.table.removeAllViews()
 
@@ -50,13 +52,13 @@ class RankAdapter(private val context: Context, private val data: ArrayList<Rank
         theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
 
         val ranks = ArrayList<RankInfo>()
-        for (i in 0 until data[0].sort_order_info.size) {
-            ranks.add(RankInfo(String.format("%s: ", data[0].sort_order_info[i]!!.name),
-                    String.format("%." + data[0].sort_order_info[i]!!.precision +
-                            "f", data[0].rankings[position]!!.sort_orders!![i])))
+        for (i in 0 until data[0].sortOrderInfo.size) {
+            ranks.add(RankInfo(String.format("%s: ", data[0].sortOrderInfo[i].name),
+                    String.format("%." + data[0].sortOrderInfo[i].precision +
+                            "f", data[0].rankings[position].sortOrders[i])))
         }
         ranks.add(RankInfo("Record: ",
-                Rank.recordToString(data[0].rankings[position]!!.record)))
+                Rank.recordToString(data[0].rankings[position].record)))
 
         var i = 0
         while (i < ranks.size) {
@@ -122,7 +124,9 @@ class RankAdapter(private val context: Context, private val data: ArrayList<Rank
         return ""
     }
 
-    inner class MyViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class MyViewHolder internal constructor(itemView: View) :
+            RecyclerView.ViewHolder(itemView),
+            View.OnClickListener {
 
         internal var teamNumber: TextView
         internal var rankNumber: TextView

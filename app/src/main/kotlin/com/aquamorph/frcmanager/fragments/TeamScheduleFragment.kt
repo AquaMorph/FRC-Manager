@@ -10,24 +10,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
+import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
 import com.aquamorph.frcmanager.decoration.Animations
+import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Match
+import com.aquamorph.frcmanager.models.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
-import java.util.*
-import java.util.Collections.sort
+import com.aquamorph.frcmanager.utils.MatchSort
 
 /**
  * Displays a list of matches at an event for a given team.
  *
  * @author Christian Colglazier
- * @version 4/14/2018
+ * @version 1/23/2020
  */
 class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, RefreshFragment {
 
     private var teamEventMatches = ArrayList<Match>()
+    private var predictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
     private var teamNumber: String = ""
     private var getTeamFromSettings: Boolean = true
 
@@ -36,8 +39,11 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         getTeamFromSettings = false
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
 
         if (savedInstanceState != null) {
@@ -46,13 +52,20 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
             }
             Logging.info(this, "savedInstanceState teamNumber: $teamNumber", 2)
         }
-        super.onCreateView(view, teamEventMatches,
-                ScheduleAdapter(context!!, teamEventMatches, teamNumber))
+        if (MainActivity.appTheme == Constants.Theme.BATTERY_SAVER) {
+            super.onCreateView(view, teamEventMatches,
+                    ScheduleAdapter(context!!, teamEventMatches, predictions, teamNumber),
+                    Divider(context!!, Constants.DIVIDER_WIDTH, 0))
+        } else {
+            super.onCreateView(view, teamEventMatches,
+                    ScheduleAdapter(context!!, teamEventMatches, predictions, teamNumber))
+        }
         if (!getTeamFromSettings) {
             mSwipeRefreshLayout.isEnabled = false
         }
         listener()
         Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
+        prefs.registerOnSharedPreferenceChangeListener(this)
         return view
     }
 
@@ -62,7 +75,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         Logging.info(this, "onSaveInstanceState", 3)
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
+    override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         listener()
         Logging.info(this, "Configuration Changed", 3)
@@ -80,7 +93,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
      */
     override fun refresh() {
         if (teamNumber != "" && DataLoader.eventKey != "") {
-            LoadTeamSchedule().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            task = Constants.runRefresh(task, LoadTeamSchedule())
         } else {
             Logging.error(this, "Team or event key not set", 0)
         }
@@ -92,6 +105,8 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
                 teamNumber = DataLoader.teamNumber
             }
             listener()
+        } else if (key == "matchSort") {
+            refresh()
         }
     }
 
@@ -107,29 +122,41 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     }
 
     override fun dataUpdate() {
+        if (MainActivity.predEnabled) {
+            predictions.clear()
+            predictions.addAll(DataLoader.tbaPredictionsDC.data)
+        }
         teamEventMatches.clear()
         for (match in DataLoader.matchDC.data) {
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
         }
-        sort(teamEventMatches)
+        MatchSort.sortMatches(teamEventMatches, prefs.getString("matchSort", ""))
         adapter.notifyDataSetChanged()
+        Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
+                DataLoader.matchDC.newData)
+        firstLoad = false
     }
 
-    internal inner class LoadTeamSchedule() : AsyncTask<Void?, Void?, Void?>() {
+    internal inner class LoadTeamSchedule : AsyncTask<Void?, Void?, Void?>() {
 
         override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.matchDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            while (!DataLoader.matchDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
+            while (MainActivity.predEnabled && !DataLoader.tbaPredictionsDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
             return null
         }
 
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }
@@ -148,8 +175,8 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     }
 
     private fun isTeamInMatch(match: Match, team: String): Boolean {
-        return if (Arrays.asList(*match.alliances.red.team_keys).contains(team))
+        return if (match.alliances.red.teamKeys.contains(team))
             true
-        else Arrays.asList(*match.alliances.blue.team_keys).contains(team)
+        else match.alliances.blue.teamKeys.contains(team)
     }
 }

@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
-import android.support.v4.widget.TextViewCompat
-import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.LayoutInflater.from
@@ -14,12 +12,13 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.core.widget.TextViewCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.DistrictRank
 import com.aquamorph.frcmanager.models.Team
 import com.aquamorph.frcmanager.utils.Constants
-import java.util.*
 
 /**
  * Populates a RecyclerView with the ranks and team names and number for a district.
@@ -27,8 +26,11 @@ import java.util.*
  * @author Christian Colglazier
  * @version 11/3/2018
  */
-class DistrictRankAdapter(private val context: Context, private val data: ArrayList<DistrictRank>,
-                          private val teams: ArrayList<Team>) :
+class DistrictRankAdapter(
+    private val context: Context,
+    private val data: ArrayList<DistrictRank>,
+    private val teams: ArrayList<Team>
+) :
         RecyclerView.Adapter<DistrictRankAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater = from(context)
@@ -39,9 +41,9 @@ class DistrictRankAdapter(private val context: Context, private val data: ArrayL
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.teamNumber.text = String.format("%s. %s", position + 1,
-                getTeamName(data[position].team_key))
+                getTeamName(data[position].teamKey))
         holder.teamNumber.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-        holder.rankNumber.text = Constants.formatTeamNumber(data[position].team_key)
+        holder.rankNumber.text = Constants.formatTeamNumber(data[position].teamKey)
         holder.details.visibility = View.GONE
         holder.table.removeAllViews()
 
@@ -57,25 +59,25 @@ class DistrictRankAdapter(private val context: Context, private val data: ArrayL
             val rowHeader = TableRow(context)
 
             if (i == 1) {
-                column1.text = "Point Total: "
-                column2.text = data[position].point_total.toString()
-                column3.text = "Rookie Bonus: "
-                column4.text = data[position].rookie_bonus.toString()
+                column1.text = context.getString(R.string.rankPointTotal)
+                column2.text = data[position].pointTotal.toString()
+                column3.text = context.getString(R.string.rank_rookie_bonus)
+                column4.text = data[position].rookieBonus.toString()
             }
-            if (i == 2 && data[position].event_points.isNotEmpty()) {
-                column1.text = "Event 1: "
-                column2.text = data[position].event_points[0]!!.total.toString()
-                if (data[position].event_points.size >= 2) {
-                    column3.text = "Event 2: "
-                    column4.text = data[position].event_points[1]!!.total.toString()
+            if (i == 2 && data[position].eventPoints.isNotEmpty()) {
+                column1.text = context.getString(R.string.rankEventOne)
+                column2.text = data[position].eventPoints[0].total.toString()
+                if (data[position].eventPoints.size >= 2) {
+                    column3.text = context.getString(R.string.rankEvent2)
+                    column4.text = data[position].eventPoints[1].total.toString()
                 } else {
                     column3.text = ""
                     column4.text = ""
                 }
             }
-            if (i == 3 && data[position].event_points.size > 2) {
-                column1.text = "District Champ: "
-                column2.text = data[position].event_points[2]!!.total.toString()
+            if (i == 3 && data[position].eventPoints.size > 2) {
+                column1.text = context.getString(R.string.rankDistrictChamp)
+                column2.text = data[position].eventPoints[2].total.toString()
                 column3.text = ""
                 column4.text = ""
             }
@@ -101,10 +103,10 @@ class DistrictRankAdapter(private val context: Context, private val data: ArrayL
             rowHeader.addView(column2)
             rowHeader.addView(column3)
             rowHeader.addView(column4)
-            if ((i == 1 || data[position].event_points.size >= 3) ||
-                    (i == 2 && data[position].event_points.size != 1 &&
-                            data[position].event_points.isNotEmpty()) ||
-                    (i == 3 && data[position].event_points.size > 2)) {
+            if ((i == 1 || data[position].eventPoints.size >= 3) ||
+                    (i == 2 && data[position].eventPoints.size != 1 &&
+                            data[position].eventPoints.isNotEmpty()) ||
+                    (i == 3 && data[position].eventPoints.size > 2)) {
                 holder.table.addView(rowHeader)
             }
         }
@@ -129,7 +131,9 @@ class DistrictRankAdapter(private val context: Context, private val data: ArrayL
         return ""
     }
 
-    inner class MyViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class MyViewHolder internal constructor(itemView: View) :
+            RecyclerView.ViewHolder(itemView),
+            View.OnClickListener {
 
         internal var teamNumber: TextView
         internal var rankNumber: TextView

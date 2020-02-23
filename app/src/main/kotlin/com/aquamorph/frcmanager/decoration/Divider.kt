@@ -4,9 +4,9 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 
 /**
@@ -34,7 +34,12 @@ class Divider(context: Context, width: Float, indent: Int) : RecyclerView.ItemDe
                 context.resources.displayMetrics).toInt()
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
         val params = view.layoutParams as RecyclerView.LayoutParams
 
         // we retrieve the position in the list
@@ -42,7 +47,8 @@ class Divider(context: Context, width: Float, indent: Int) : RecyclerView.ItemDe
 
         // add space for the separator to the bottom of every view but the last one
         if (position < state.itemCount) {
-            outRect.set(0, 0, 0, mPaint.strokeWidth.toInt()) // left, top, right, bottom
+            // left, top, right, bottom
+            outRect.set(0, 0, 0, mPaint.strokeWidth.toInt())
         } else {
             outRect.setEmpty() // 0, 0, 0, 0
         }
@@ -52,7 +58,6 @@ class Divider(context: Context, width: Float, indent: Int) : RecyclerView.ItemDe
         // a line will draw half its size to top and bottom,
         // hence the offset to place it correctly
         val offset = (mPaint.strokeWidth / 2).toInt()
-
 
         // this will iterate over every visible view
         for (i in 0 until parent.childCount) {

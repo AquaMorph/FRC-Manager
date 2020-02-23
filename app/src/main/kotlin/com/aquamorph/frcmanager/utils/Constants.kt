@@ -1,12 +1,14 @@
 package com.aquamorph.frcmanager.utils
 
+import android.os.AsyncTask
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
+import com.aquamorph.frcmanager.models.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
-import java.util.*
+import com.google.gson.JsonObject
 
 /**
  * A collection of constants needed to interact with the Blue Alliance.
@@ -22,6 +24,7 @@ object Constants {
     const val THREAD_WAIT_TIME = 100
     const val MAX_NUMBER_OF_TABS = 7
     const val CACHE_SIZE = (10 * 1024 * 1024).toLong()
+    const val DIVIDER_WIDTH = 4f
 
     /**
      * getApiHeader() returns the header needed to get access to the Blue Alliance.
@@ -50,19 +53,18 @@ object Constants {
      * @return returns formatted team number
      */
     fun underlineText(text: String): String {
-        var text = text
-        text = text.replace(" ", "")
-        val spaces = 4 - text.length
+        val tmp = text.replace(" ", "")
+        val spaces = 4 - tmp.length
         val spacesText = StringBuilder()
         for (i in 0 until spaces) {
             spacesText.append("&nbsp;")
         }
-        return String.format("<pre>%s<u>%s</u></pre>", spacesText.toString(), text)
+        return String.format("<pre>%s<u>%s</u></pre>", spacesText.toString(), tmp)
     }
 
     /**
-     * checkNoDataScreen() displays a no dataLoader screen if there is not any dataLoader to display. Else
-     * displays dataLoader.
+     * checkNoDataScreen() displays a no dataLoader screen if there is not any dataLoader to
+     * display. Else displays dataLoader.
      */
     fun checkNoDataScreen(data: ArrayList<*>, recyclerView: View, emptyView: View) {
         if (data.isEmpty()) {
@@ -117,9 +119,10 @@ object Constants {
      */
     fun getTeamRecord(number: String): String {
         if (DataLoader.rankDC.data != null && DataLoader.rankDC.data.isNotEmpty()) {
-            if (DataLoader.rankDC.data[0].rankings != null && DataLoader.rankDC.data[0].rankings.isNotEmpty()) {
+            if (DataLoader.rankDC.data[0].rankings != null &&
+                    DataLoader.rankDC.data[0].rankings.isNotEmpty()) {
                 for (i in DataLoader.rankDC.data[0].rankings.indices) {
-                    if (number == DataLoader.rankDC.data[0].rankings[i]!!.team_key) {
+                    if (number == DataLoader.rankDC.data[0].rankings[i]!!.teamKey) {
                         val record = DataLoader.rankDC.data[0].rankings[i]!!.record
                         return "(" + record.wins + "-" + record.losses + "-" + record.ties + ")"
                     }
@@ -138,8 +141,8 @@ object Constants {
     fun getTeamRank(number: String): String {
         if (DataLoader.rankDC.data.isNotEmpty()) {
             for (i in DataLoader.rankDC.data[0].rankings.indices) {
-                if (number == DataLoader.rankDC.data[0].rankings[i]!!.team_key) {
-                    val rank = DataLoader.rankDC.data[0].rankings[i]!!.rank
+                if (number == DataLoader.rankDC.data[0].rankings[i].teamKey) {
+                    val rank = DataLoader.rankDC.data[0].rankings[i].rank
                     return "Rank #$rank"
                 }
             }
@@ -171,5 +174,40 @@ object Constants {
         } else {
             String.format("%S-%s-%s", compLevel, setNumber, matchNumber)
         }
+    }
+
+    /**
+     * runRefresh()
+     */
+    internal fun runRefresh(task: AsyncTask<Void?, Void?, Void?>?, loader: Any):
+            AsyncTask<Void?, Void?, Void?> {
+        if (task == null || task.status != AsyncTask.Status.RUNNING) {
+            return (loader as AsyncTask<Void?, Void?, Void?>)
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        }
+        return task
+    }
+
+    fun tbaPredtoObject(qual: JsonObject, predictions: ArrayList<TBAPrediction.PredMatch>) {
+        for (q in qual.keySet()) {
+            val matchData = qual.get(q).asJsonObject
+            predictions.add(TBAPrediction.PredMatch(q,
+                    matchData.get("prob").asDouble,
+                    matchData.get("winning_alliance").asString))
+        }
+    }
+
+    fun tbaPredToArray(matchPredictions: TBAPrediction):
+            ArrayList<TBAPrediction.PredMatch> {
+        val predictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
+        val qual = matchPredictions.matchPredictions.qual
+        val playoffs = matchPredictions.matchPredictions.playoff
+        tbaPredtoObject(qual, predictions)
+        tbaPredtoObject(playoffs, predictions)
+        return predictions
+    }
+
+    enum class Theme {
+        LIGHT, DARK, BATTERY_SAVER
     }
 }

@@ -1,10 +1,9 @@
 package com.aquamorph.frcmanager.activities
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.fragments.SettingsFragment
 
@@ -13,7 +12,7 @@ import com.aquamorph.frcmanager.fragments.SettingsFragment
  * general information about the app.
  *
  * @author Christian Colglazier
- * @version 3/31/2018
+ * @version 1/15/2020
  */
 class Settings : AppCompatActivity() {
 
@@ -29,14 +28,11 @@ class Settings : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         val fragment = supportFragmentManager.findFragmentById(R.id.content_frame)
-        if (fragment == null) {
-            supportFragmentManager.beginTransaction().replace(R.id.content_frame,
-                    SettingsFragment()).commit()
-        } else {
+        if (fragment != null) {
             supportFragmentManager.beginTransaction().remove(fragment).commit()
-            supportFragmentManager.beginTransaction().replace(R.id.content_frame,
-                    SettingsFragment()).commit()
         }
+        supportFragmentManager.beginTransaction().replace(R.id.content_frame,
+                SettingsFragment()).commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

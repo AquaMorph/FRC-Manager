@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.AwardAdapter
+import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.Award
 import com.aquamorph.frcmanager.network.DataLoader
@@ -18,19 +19,22 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of awards at a event
  *
  * @author Christian Colglazier
- * @version 4/14/2018
+ * @version 1/23/2020
  */
 class AwardFragment :
         TabFragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
     private var awards: ArrayList<Award> = ArrayList()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         super.onCreateView(view, awards,
                 AwardAdapter(context!!, awards),
-                Divider(context!!, 2f, 0))
+                Divider(context!!, Constants.DIVIDER_WIDTH, 0))
         prefs.registerOnSharedPreferenceChangeListener(this)
         return view
     }
@@ -39,6 +43,10 @@ class AwardFragment :
         awards.clear()
         awards.addAll(DataLoader.awardDC.data)
         adapter.notifyDataSetChanged()
+        Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
+        Animations.loadAnimation(context, recyclerView, adapter,
+                firstLoad, DataLoader.awardDC.newData)
+        firstLoad = false
     }
 
     override fun onResume() {
@@ -54,7 +62,7 @@ class AwardFragment :
      */
     override fun refresh() {
         if (DataLoader.eventKey != "") {
-            LoadAwards().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            task = Constants.runRefresh(task, LoadAwards())
         }
     }
 
@@ -71,14 +79,15 @@ class AwardFragment :
         }
 
         override fun doInBackground(vararg p0: Void?): Void? {
-            while (!DataLoader.awardDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            while (!DataLoader.awardDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
             return null
         }
 
         override fun onPostExecute(result: Void?) {
             if (context != null) {
                 dataUpdate()
-                Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
                 mSwipeRefreshLayout.isRefreshing = false
             }
         }

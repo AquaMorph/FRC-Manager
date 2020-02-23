@@ -6,32 +6,34 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.support.design.widget.TabLayout
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.preference.PreferenceManager
+import androidx.viewpager.widget.ViewPager
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
+import com.google.android.material.tabs.TabLayout
 
 /**
  * Default activity of the app.
  *
  * @author Christian Colglazier
- * @version 4/2/2018
+ * @version 1/16/2020
  */
 class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     private lateinit var eventName: String
     private lateinit var teamRank: String
     private lateinit var teamRecord: String
     private lateinit var nextMatch: String
+    private lateinit var eventAddress: String
+    private lateinit var toolbarText: String
     lateinit var dataLoader: DataLoader
     private lateinit var mViewPager: ViewPager
     private lateinit var tabLayout: TabLayout
@@ -62,7 +64,9 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         get() = if (teamRank == "") {
             ""
         } else {
-            String.format("Rank #%s (%s) %s", teamRank, teamRecord, nextMatch)
+            toolbarText.replace("\$r", teamRank)
+                    .replace("\$R", teamRecord)
+                    .replace("\$n", nextMatch)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,12 +74,17 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.registerOnSharedPreferenceChangeListener(this@MainActivity)
         DataLoader.teamNumber = prefs.getString("teamNumber", "")!!
+        DataLoader.year = prefs.getString("year", "")!!
         eventName = prefs.getString("eventShortName", "")!!
         teamRank = prefs.getString("teamRank", "")!!
         teamRecord = prefs.getString("teamRecord", "")!!
         nextMatch = prefs.getString("nextMatch", "")!!
+        toolbarText = prefs.getString("toolbarText", getString(R.string.toolBarDefault))!!
+        eventAddress = prefs.getString("eventAddress", "")!!
         DataLoader.eventKey = prefs.getString("eventKey", "")!!
         DataLoader.districtKey = prefs.getString("districtKey", "")!!
+        predEnabled = prefs.getString("predictions", "none")!! != "none"
+        predPrecentage = prefs.getString("predictionDisplay", "words") != "words"
         if (DataLoader.teamNumber == "") openSetup()
         listener()
         theme(this)
@@ -98,6 +107,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         when (item.itemId) {
             R.id.action_settings -> openSettings()
             R.id.refresh_all -> refresh()
+            R.id.actionDirections -> showMap(eventAddress)
             else -> refresh()
         }
         return super.onOptionsItemSelected(item)
@@ -122,11 +132,23 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         teamRank = sharedPreferences.getString("teamRank", "")!!
         teamRecord = sharedPreferences.getString("teamRecord", "")!!
         nextMatch = sharedPreferences.getString("nextMatch", "")!!
+        toolbarText = sharedPreferences.getString("toolbarText", getString(R.string.toolBarDefault))!!
 
         when (key) {
-            "eventKey" -> DataLoader.eventKey = sharedPreferences.getString("eventKey", "")!!
-            "teamNumber" -> DataLoader.teamNumber = sharedPreferences.getString("teamNumber", "0000")!!
-            "districtKey" -> DataLoader.districtKey = sharedPreferences.getString("districtKey", "")!!
+            "eventKey" -> DataLoader.eventKey = sharedPreferences
+                    .getString("eventKey", "")!!
+            "teamNumber" -> DataLoader.teamNumber = sharedPreferences
+                    .getString("teamNumber", "0000")!!
+            "districtKey" -> DataLoader.districtKey = sharedPreferences
+                    .getString("districtKey", "")!!
+            "eventAddress" -> eventAddress = sharedPreferences
+                    .getString("eventAddress", "")!!
+            "year" -> DataLoader.year = sharedPreferences
+                    .getString("year", "")!!
+            "predictions" -> predEnabled = sharedPreferences
+                    .getString("predictions", "none")!! != "none"
+            "predictionDisplay" -> predPrecentage = sharedPreferences
+                    .getString("predictionDisplay", "words") != "words"
         }
 
         if (supportActionBar != null) {
@@ -159,12 +181,25 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         mViewPager.adapter = mSectionsPagerAdapter
         try {
             refresh()
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Logging.error(this, e.toString(), 0)
         }
     }
 
+    /**
+     * showMap() starts map application
+     */
+    private fun showMap(location: String) {
+        val intent = Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?daddr=%s".format(location)))
+        startActivity(intent)
+    }
+
     companion object {
+
+        var appTheme = Constants.Theme.LIGHT
+        var predEnabled = false
+        var predPrecentage = false
 
         @SuppressLint("StaticFieldLeak")
         private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
@@ -175,11 +210,22 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
          * @param activity
          */
         fun theme(activity: Activity) {
+            val currentNightMode = activity.applicationContext.resources.configuration.uiMode and
+                    Configuration.UI_MODE_NIGHT_MASK
             val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
-            when (prefs.getString("theme", "")) {
-                "amoled" -> activity.setTheme(R.style.OMOLEDTheme)
-                "dark" -> activity.setTheme(R.style.DarkTheme)
-                else -> activity.setTheme(R.style.LightTheme)
+            appTheme = when (prefs.getString("theme", "")) {
+                "amoled" -> Constants.Theme.BATTERY_SAVER
+                "dark" -> Constants.Theme.DARK
+                "system" -> when (currentNightMode) {
+                    Configuration.UI_MODE_NIGHT_YES -> Constants.Theme.DARK
+                    else -> Constants.Theme.LIGHT
+                }
+                else -> Constants.Theme.LIGHT
+            }
+            when (appTheme) {
+                Constants.Theme.LIGHT -> activity.setTheme(R.style.LightTheme)
+                Constants.Theme.DARK -> activity.setTheme(R.style.DarkTheme)
+                Constants.Theme.BATTERY_SAVER -> activity.setTheme(R.style.OMOLEDTheme)
             }
         }
 
