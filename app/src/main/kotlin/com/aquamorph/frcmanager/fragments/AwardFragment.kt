@@ -42,11 +42,24 @@ class AwardFragment :
     override fun dataUpdate() {
         awards.clear()
         awards.addAll(DataLoader.awardDC.data)
+        filterAwards()
         adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter,
                 firstLoad, DataLoader.awardDC.newData)
         firstLoad = false
+    }
+
+    fun filterAwards() {
+        var i = 0
+        while (i < awards.size) {
+            if (awards[i].recipientList.size == 1 && awards[i].recipientList[0].awardee == null
+                    && awards[i].recipientList[0].teamKey == null) {
+                awards.remove(awards[i])
+            } else {
+                i++
+            }
+        }
     }
 
     override fun onResume() {
