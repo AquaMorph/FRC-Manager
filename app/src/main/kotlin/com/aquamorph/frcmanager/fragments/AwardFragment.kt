@@ -19,7 +19,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of awards at a event
  *
  * @author Christian Colglazier
- * @version 1/23/2020
+ * @version 2/26/2020
  */
 class AwardFragment :
         TabFragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
@@ -50,11 +50,15 @@ class AwardFragment :
         firstLoad = false
     }
 
-    fun filterAwards() {
+    /**
+     * filterAwards() removes awards that were not given out.
+     */
+    private fun filterAwards() {
         var i = 0
         while (i < awards.size) {
-            if (awards[i].recipientList.size == 1 && awards[i].recipientList[0].awardee == null
-                    && awards[i].recipientList[0].teamKey == null) {
+            if (awards[i].recipientList.size == 1 &&
+                    awards[i].recipientList[0].awardee == null &&
+                    awards[i].recipientList[0].teamKey == null) {
                 awards.remove(awards[i])
             } else {
                 i++
