@@ -48,6 +48,7 @@ open class TeamFragment : TabFragment(), RefreshFragment,
     override fun dataUpdate() {
         teams.clear()
         teams.addAll(DataLoader.teamDC.data)
+        teams.sort()
         ranks.clear()
         ranks.addAll(DataLoader.rankDC.data)
         adapter.notifyDataSetChanged()
