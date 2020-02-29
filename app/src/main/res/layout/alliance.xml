@@ -51,7 +51,7 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?textOnBackground"
                     android:textSize="@dimen/team_number_text"
                     android:typeface="monospace"/>
@@ -62,7 +62,7 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?textOnBackground"
                     android:textSize="@dimen/team_number_text"
                     android:typeface="monospace"/>
@@ -73,7 +73,7 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?textOnBackground"
                     android:textSize="@dimen/team_number_text"
                     android:typeface="monospace"/>
@@ -84,7 +84,7 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?textOnBackground"
                     android:textSize="@dimen/team_number_text"
                     android:typeface="monospace"/>

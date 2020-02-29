@@ -22,7 +22,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             val theme = preferenceScreen.findPreference<ListPreference>("theme")
             theme!!.entries = resources.getStringArray(R.array.theme).copyOfRange(0, 3)
-            theme.entryValues = resources.getStringArray(R.array.theme_values).copyOfRange(0, 3)
+            theme.entryValues = resources.getStringArray(R.array.themeValues).copyOfRange(0, 3)
         }
     }
 

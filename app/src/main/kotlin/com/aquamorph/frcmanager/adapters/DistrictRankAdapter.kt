@@ -61,11 +61,11 @@ class DistrictRankAdapter(
             if (i == 1) {
                 column1.text = context.getString(R.string.rankPointTotal)
                 column2.text = data[position].pointTotal.toString()
-                column3.text = context.getString(R.string.rank_rookie_bonus)
+                column3.text = context.getString(R.string.rankRookieBonus)
                 column4.text = data[position].rookieBonus.toString()
             }
             if (i == 2 && data[position].eventPoints.isNotEmpty()) {
-                column1.text = context.getString(R.string.rankEventOne)
+                column1.text = context.getString(R.string.rankEvent1)
                 column2.text = data[position].eventPoints[0].total.toString()
                 if (data[position].eventPoints.size >= 2) {
                     column3.text = context.getString(R.string.rankEvent2)

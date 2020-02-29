@@ -180,7 +180,7 @@ class DataLoader {
                 // Checks for internet connections
                 if (!NetworkCheck.hasNetwork(activity)) {
                     Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
-                            R.string.no_connection_message,
+                            R.string.noConnectionMessage,
                             Snackbar.LENGTH_LONG).show()
                 }
                 getData(matchDC, matchTabs, adapter, 0, activity)
@@ -205,11 +205,11 @@ class DataLoader {
                         .subscribe({ result -> if (result != null) {
                             if (result.isDatafeedDown) {
                                 Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
-                                        R.string.first_server_down,
+                                        R.string.firstServerDown,
                                         Snackbar.LENGTH_LONG).show()
                             } else if (result.downEvents.contains(eventKey)) {
                                 Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
-                                        R.string.event_server_down,
+                                        R.string.eventServerDown,
                                         Snackbar.LENGTH_LONG).show()
                             }
                         } },

@@ -45,7 +45,7 @@
                         android:textColor="?textOnBackground"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/score_team_one"
+                        android:text="@string/scoreTeam1"
                         android:background="?cardBackground"
                         android:paddingLeft="@dimen/activity_vertical_margin"/>
                     <TextView
@@ -83,7 +83,7 @@
                         android:textColor="?textOnBackground"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/score_team_two"
+                        android:text="@string/scoreTeam2"
                         android:background="?cardBackground"
                         android:paddingLeft="@dimen/activity_vertical_margin"/>
                     <TextView
@@ -121,7 +121,7 @@
                         android:textColor="?textOnBackground"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/score_team_three"
+                        android:text="@string/scoreTeam3"
                         android:background="?cardBackground"
                         android:paddingLeft="@dimen/activity_vertical_margin"/>
                     <TextView
@@ -162,7 +162,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/auto_total"
+                            android:text="@string/scoreAutoTotal"
                             android:background="?cardBackground"
                             android:paddingLeft="@dimen/activity_vertical_margin"/>
                         <TextView
@@ -199,7 +199,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_2020_line_extended"
+                            android:text="@string/score2020LineExtended"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -236,7 +236,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_2020_power_cells"
+                            android:text="@string/score2020PowerCells"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -274,7 +274,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_teleop_total"
+                            android:text="@string/scoreTeleopTotal"
                             android:background="?cardBackground"
                             android:paddingLeft="@dimen/activity_vertical_margin"/>
                         <TextView
@@ -311,7 +311,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_2020_power_cells"
+                            android:text="@string/score2020PowerCells"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -349,7 +349,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_2020_control_panel_points"
+                            android:text="@string/score2020ControlPanel"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -387,7 +387,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_endgame_total"
+                            android:text="@string/scoreEndgameTotal"
                             android:background="?cardBackground"
                             android:paddingLeft="@dimen/activity_vertical_margin"/>
                         <TextView
@@ -424,7 +424,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_robot_1"
+                            android:text="@string/scoreRobot1"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -461,7 +461,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_robot_2"
+                            android:text="@string/scoreRobot2"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -498,7 +498,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_robot_3"
+                            android:text="@string/scoreRobot3"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -535,7 +535,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_2020_shield_generator_switch_level"
+                            android:text="@string/score2020SwitchLevel"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -572,7 +572,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_total_score"
+                            android:text="@string/scoreTotalScore"
                             android:background="?cardBackground"
                             android:paddingLeft="@dimen/activity_vertical_margin"/>
                         <TextView
@@ -609,7 +609,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_2020_stage_activations"
+                            android:text="@string/score2020StageActivations"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -646,7 +646,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_2020_shield_generator"
+                            android:text="@string/score2020ShieldGenerator"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -683,7 +683,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_fouls_tech_fouls"
+                            android:text="@string/scoreFoulsTechFouls"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -721,7 +721,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_adjustments"
+                            android:text="@string/scoreAdjustments"
                             android:background="?cardBackground"
                             android:paddingLeft="32dp"/>
                         <TextView
@@ -760,7 +760,7 @@
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/score_rank_points"
+                            android:text="@string/scoreRankPoints"
                             android:background="?cardBackground"
                             android:paddingLeft="@dimen/activity_vertical_margin"/>
                         <TextView

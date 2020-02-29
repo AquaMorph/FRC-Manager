@@ -67,11 +67,11 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }
         val team1 = findViewById<View>(R.id.team1)
-        team1.findViewById<TextView>(R.id.text).text = "Team 1"
+        team1.findViewById<TextView>(R.id.text).text = getString(R.string.scoreTeam1)
         val team2 = findViewById<View>(R.id.team2)
-        team2.findViewById<TextView>(R.id.text).text = "Team 2"
+        team2.findViewById<TextView>(R.id.text).text = getString(R.string.scoreTeam2)
         val team3 = findViewById<View>(R.id.team3)
-        team3.findViewById<TextView>(R.id.text).text = "Team 3"
+        team3.findViewById<TextView>(R.id.text).text = getString(R.string.scoreTeam3)
 
         team1.findViewById<TextView>(R.id.redText).text = redRobot1
         team1.findViewById<TextView>(R.id.blueText).text = blueRobot1
@@ -81,11 +81,11 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
         team3.findViewById<TextView>(R.id.blueText).text = blueRobot3
 
         val totalScore = findViewById<View>(R.id.totalScore)
-        totalScore.findViewById<TextView>(R.id.text).text = "Total Score"
+        totalScore.findViewById<TextView>(R.id.text).text = getString(R.string.scoreTeleopTotal)
         val fouls = findViewById<View>(R.id.fouls)
-        fouls.findViewById<TextView>(R.id.text).text = "Fouls"
+        fouls.findViewById<TextView>(R.id.text).text = getString(R.string.scoutFouls)
         val adjustments = findViewById<View>(R.id.adjustments)
-        adjustments.findViewById<TextView>(R.id.text).text = "Adjustments"
+        adjustments.findViewById<TextView>(R.id.text).text = getString(R.string.scoreAdjustments)
 
         val rankPoints = findViewById<View>(R.id.rankPoints)
         rankPoints.findViewById<TextView>(R.id.text).text = "Rank Points"
@@ -100,7 +100,7 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
         habLineRobot3.findViewById<TextView>(R.id.text).text = "HabLine Robot 3"
 
         val teleTotal = findViewById<View>(R.id.teleTotal)
-        teleTotal.findViewById<TextView>(R.id.text).text = "Teleop Total"
+        teleTotal.findViewById<TextView>(R.id.text).text = getString(R.string.scoreTeleopTotal)
 
         val hatchTotal = findViewById<View>(R.id.hatchTotal)
         hatchTotal.findViewById<TextView>(R.id.text).text = "Hatch Panel Points"
@@ -111,11 +111,11 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
         val habTotal = findViewById<View>(R.id.habTotal)
         habTotal.findViewById<TextView>(R.id.text).text = "Hab Climb Points"
         val habRobot1 = findViewById<View>(R.id.habRobot1)
-        habRobot1.findViewById<TextView>(R.id.text).text = "Robot 1 Hab Climb"
+        habRobot1.findViewById<TextView>(R.id.text).text = getString(R.string.score2020Hab1)
         val habRobot2 = findViewById<View>(R.id.habRobot2)
-        habRobot2.findViewById<TextView>(R.id.text).text = "Robot 2 Hab Climb"
+        habRobot2.findViewById<TextView>(R.id.text).text = getString(R.string.score2020Hab2)
         val habRobot3 = findViewById<View>(R.id.habRobot3)
-        habRobot3.findViewById<TextView>(R.id.text).text = "Robot 3 Hab Climb"
+        habRobot3.findViewById<TextView>(R.id.text).text = getString(R.string.score2020Hab3)
 
         MainActivity.theme(this)
         val call = RetrofitInstance.getRetrofit(this)
@@ -229,7 +229,10 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
         })
     }
 
-    fun setToString(): String {
+    /**
+     * setToString() adds set number to match string for playoff matches.
+     */
+    private fun setToString(): String {
         return if (compLevel != "qm") {
             " $setNumber"
         } else {
@@ -237,6 +240,9 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
         }
     }
 
+    /**
+     * habScore() converts robot positioning data to autonomous score.
+     */
     fun habScore(preMatchLevelRobot: String, habLineRobot: String): String {
         return if (habLineRobot == "CrossedHabLineInSandstorm") {
             if (preMatchLevelRobot == "HabLevel1") {
