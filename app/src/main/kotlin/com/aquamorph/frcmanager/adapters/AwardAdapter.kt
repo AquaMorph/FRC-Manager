@@ -15,7 +15,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Populates the recyclerview with award data
  *
  * @author Christian Colglazier
- * @version 2/1/2020
+ * @version 2/28/2020
  */
 class AwardAdapter(context: Context, private val data: ArrayList<Award>) :
         RecyclerView.Adapter<AwardAdapter.MyViewHolder>() {
@@ -34,10 +34,16 @@ class AwardAdapter(context: Context, private val data: ArrayList<Award>) :
 
         var i = 0
         while (i in data[position].recipientList.indices) {
-            if (i > 0) team += "\n"
-            team += Constants.formatTeamNumber(data[position].recipientList[i].teamKey)
-            if (i > 0) awardee += "\n"
-            awardee += data[position].recipientList[i].awardee
+            if (i > 0) {
+                team += "\n"
+                awardee += "\n"
+            }
+            if (data[position].recipientList[i].teamKey != null) {
+                team += Constants.formatTeamNumber(data[position].recipientList[i].teamKey!!)
+            }
+            if (data[position].recipientList[i].awardee != null) {
+                awardee += data[position].recipientList[i].awardee
+            }
             i++
         }
         if (awardee == "" || awardee.contains("null")) {

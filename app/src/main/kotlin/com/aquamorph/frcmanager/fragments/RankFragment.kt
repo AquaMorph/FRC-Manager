@@ -43,7 +43,6 @@ class RankFragment : TabFragment(), RefreshFragment {
         ranks.addAll(DataLoader.rankDC.data)
         teams.clear()
         teams.addAll(DataLoader.teamDC.data)
-        adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(ranks, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                 DataLoader.rankDC.newData || DataLoader.teamDC.newData)

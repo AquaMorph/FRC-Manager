@@ -43,7 +43,6 @@ class AwardFragment :
         awards.clear()
         awards.addAll(DataLoader.awardDC.data)
         filterAwards()
-        adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(DataLoader.awardDC.data, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter,
                 firstLoad, DataLoader.awardDC.newData)

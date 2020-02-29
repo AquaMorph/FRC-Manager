@@ -131,7 +131,6 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
         }
         MatchSort.sortMatches(teamEventMatches, prefs.getString("matchSort", ""))
-        adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                 DataLoader.matchDC.newData)

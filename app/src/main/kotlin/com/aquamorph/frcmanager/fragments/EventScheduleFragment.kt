@@ -57,7 +57,6 @@ class EventScheduleFragment :
         matches.addAll(DataLoader.matchDC.data)
         prefs.edit().putString("nextMatch", "%s".format(nextMatch(matches))).apply()
         MatchSort.sortMatches(matches, prefs.getString("matchSort", ""))
-        adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(matches, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
                 DataLoader.matchDC.newData || DataLoader.tbaPredictionsDC.newData)

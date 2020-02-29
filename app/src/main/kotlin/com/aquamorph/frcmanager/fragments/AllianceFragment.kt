@@ -63,7 +63,6 @@ class AllianceFragment : TabFragment(),
     override fun dataUpdate() {
         alliances.clear()
         alliances.addAll(DataLoader.allianceDC.data)
-        adapter.notifyDataSetChanged()
         Constants.checkNoDataScreen(DataLoader.allianceDC.data, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter,
                 firstLoad, DataLoader.allianceDC.newData)
