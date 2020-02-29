@@ -20,7 +20,7 @@ import retrofit2.Response
  * Activity with a summary of the scoring of a match.
  *
  * @author Christian Colglazier
- * @version 3/13/2019
+ * @version 2/29/2020
  */
 class MatchBreakdown2019Activity : AppCompatActivity() {
 
@@ -81,41 +81,56 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
         team3.findViewById<TextView>(R.id.blueText).text = blueRobot3
 
         val totalScore = findViewById<View>(R.id.totalScore)
-        totalScore.findViewById<TextView>(R.id.text).text = getString(R.string.scoreTeleopTotal)
+        totalScore.findViewById<TextView>(R.id.text).text =
+                getString(R.string.scoreTeleopTotal)
         val fouls = findViewById<View>(R.id.fouls)
-        fouls.findViewById<TextView>(R.id.text).text = getString(R.string.scoutFouls)
+        fouls.findViewById<TextView>(R.id.text).text =
+                getString(R.string.scoutFouls)
         val adjustments = findViewById<View>(R.id.adjustments)
-        adjustments.findViewById<TextView>(R.id.text).text = getString(R.string.scoreAdjustments)
+        adjustments.findViewById<TextView>(R.id.text).text =
+                getString(R.string.scoreAdjustments)
 
         val rankPoints = findViewById<View>(R.id.rankPoints)
-        rankPoints.findViewById<TextView>(R.id.text).text = "Rank Points"
+        rankPoints.findViewById<TextView>(R.id.text).text =
+                getString(R.string.rankPointTotal)
 
         val sandstormTotal = findViewById<View>(R.id.sandstormTotal)
-        sandstormTotal.findViewById<TextView>(R.id.text).text = "Sandstorm Total"
+        sandstormTotal.findViewById<TextView>(R.id.text).text =
+                getString(R.string.score2019SandstormTotal)
         val habLineRobot1 = findViewById<View>(R.id.habLineRobot1)
-        habLineRobot1.findViewById<TextView>(R.id.text).text = "HabLine Robot 1"
+        habLineRobot1.findViewById<TextView>(R.id.text).text =
+                getString(R.string.score2019Habline1)
         val habLineRobot2 = findViewById<View>(R.id.habLineRobot2)
-        habLineRobot2.findViewById<TextView>(R.id.text).text = "HabLine Robot 2"
+        habLineRobot2.findViewById<TextView>(R.id.text).text =
+                getString(R.string.score2019Habline2)
         val habLineRobot3 = findViewById<View>(R.id.habLineRobot3)
-        habLineRobot3.findViewById<TextView>(R.id.text).text = "HabLine Robot 3"
+        habLineRobot3.findViewById<TextView>(R.id.text).text =
+                getString(R.string.score2019Habline3)
 
-        val teleTotal = findViewById<View>(R.id.teleTotal)
-        teleTotal.findViewById<TextView>(R.id.text).text = getString(R.string.scoreTeleopTotal)
+        val teleopTotal = findViewById<View>(R.id.teleTotal)
+        teleopTotal.findViewById<TextView>(R.id.text).text =
+                getString(R.string.scoreTeleopTotal)
 
         val hatchTotal = findViewById<View>(R.id.hatchTotal)
-        hatchTotal.findViewById<TextView>(R.id.text).text = "Hatch Panel Points"
+        hatchTotal.findViewById<TextView>(R.id.text).text =
+                getString(R.string.score2019HatchPanel)
 
         val cargoTotal = findViewById<View>(R.id.cargoTotal)
-        cargoTotal.findViewById<TextView>(R.id.text).text = "Cargo Points"
+        cargoTotal.findViewById<TextView>(R.id.text).text =
+                getString(R.string.score2019CargoPoints)
 
         val habTotal = findViewById<View>(R.id.habTotal)
-        habTotal.findViewById<TextView>(R.id.text).text = "Hab Climb Points"
+        habTotal.findViewById<TextView>(R.id.text).text =
+                getString(R.string.score2019HabClimb)
         val habRobot1 = findViewById<View>(R.id.habRobot1)
-        habRobot1.findViewById<TextView>(R.id.text).text = getString(R.string.score2020Hab1)
+        habRobot1.findViewById<TextView>(R.id.text).text =
+                getString(R.string.score2019Hab1)
         val habRobot2 = findViewById<View>(R.id.habRobot2)
-        habRobot2.findViewById<TextView>(R.id.text).text = getString(R.string.score2020Hab2)
+        habRobot2.findViewById<TextView>(R.id.text).text =
+                getString(R.string.score2019Hab2)
         val habRobot3 = findViewById<View>(R.id.habRobot3)
-        habRobot3.findViewById<TextView>(R.id.text).text = getString(R.string.score2020Hab3)
+        habRobot3.findViewById<TextView>(R.id.text).text =
+                getString(R.string.score2019Hab3)
 
         MainActivity.theme(this)
         val call = RetrofitInstance.getRetrofit(this)
@@ -173,9 +188,9 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
                         habLineRobot3.findViewById<TextView>(R.id.blueText).text =
                                 habScore(match.blue.preMatchLevelRobot3, match.blue.habLineRobot3)
 
-                        teleTotal.findViewById<TextView>(R.id.redText).text =
+                        teleopTotal.findViewById<TextView>(R.id.redText).text =
                                 match.red.teleopPoints.toString()
-                        teleTotal.findViewById<TextView>(R.id.blueText).text =
+                        teleopTotal.findViewById<TextView>(R.id.blueText).text =
                                 match.blue.teleopPoints.toString()
 
                         hatchTotal.findViewById<TextView>(R.id.redText).text =
@@ -211,7 +226,7 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
                         habLineRobot1.visibility = View.GONE
                         habLineRobot2.visibility = View.GONE
                         habLineRobot3.visibility = View.GONE
-                        teleTotal.visibility = View.GONE
+                        teleopTotal.visibility = View.GONE
                         hatchTotal.visibility = View.GONE
                         cargoTotal.visibility = View.GONE
                         habTotal.visibility = View.GONE
@@ -255,6 +270,9 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
         }
     }
 
+    /**
+     * habClimb() converts the climb position of a robot to a score.
+     */
     fun habClimb(endgameRobot: String): String {
         return when (endgameRobot) {
             "HabLevel3" -> "12"

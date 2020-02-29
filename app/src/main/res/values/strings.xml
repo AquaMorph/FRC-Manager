@@ -102,8 +102,15 @@
     <string name="rankEvent1">Event 1:</string>
     <string name="rankEvent2">Event 2:</string>
     <string name="rankDistrictChamp">District Champ:</string>
-    <string name="score2020Hab1">Robot 1 Hab Climb</string>
-    <string name="score2020Hab2">Robot 2 Hab Climb</string>
-    <string name="score2020Hab3">Robot 3 Hab Climb</string>
+    <string name="score2019Hab1">Robot 1 Hab Climb</string>
+    <string name="score2019Hab2">Robot 2 Hab Climb</string>
+    <string name="score2019Hab3">Robot 3 Hab Climb</string>
     <string name="scoutFouls">Fouls</string>
+    <string name="score2019SandstormTotal">Sandstorm Total</string>
+    <string name="score2019Habline1">HabLine Robot 1</string>
+    <string name="score2019Habline2">HabLine Robot 2</string>
+    <string name="score2019Habline3">HabLine Robot 3</string>
+    <string name="score2019HatchPanel">Hatch Panel Points</string>
+    <string name="score2019CargoPoints">Cargo Points</string>
+    <string name="score2019HabClimb">Hab Climb Points</string>
 </resources>
