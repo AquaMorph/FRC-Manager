@@ -35,10 +35,10 @@ class TeamAdapter(
 
     private fun getTeamRank(teamNumber: String, ranks: ArrayList<Rank>?): String {
         if (ranks != null && ranks.size > 0) {
-            if (ranks[0].rankings != null && ranks[0].rankings.isNotEmpty()) {
-                for (i in 0 until ranks[0].rankings.size) {
-                    if (ranks[0].rankings[i].teamKey == teamNumber)
-                        return " Ranked #" + ranks[0].rankings[i].rank
+            if (ranks[0].rankings != null && ranks[0].rankings!!.isNotEmpty()) {
+                for (i in 0 until ranks[0].rankings!!.size) {
+                    if (ranks[0].rankings!![i].teamKey == teamNumber)
+                        return " Ranked #" + ranks[0].rankings!![i].rank
                 }
             }
         }

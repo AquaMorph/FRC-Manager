@@ -47,6 +47,11 @@ class TeamNumberSlide : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    override fun onNothingSelected(parent: AdapterView<*>) {}
+
+    /**
+     * getTeamNumber() gets the team number from the user.
+     */
     fun getTeamNumber(): String {
         return teamNumber.text.toString()
     }
@@ -54,6 +59,4 @@ class TeamNumberSlide : Fragment(), AdapterView.OnItemSelectedListener {
     fun setTeamNumber() {
         AppConfig.setTeamNumber(getTeamNumber(), context!!)
     }
-
-    override fun onNothingSelected(parent: AdapterView<*>) {}
 }

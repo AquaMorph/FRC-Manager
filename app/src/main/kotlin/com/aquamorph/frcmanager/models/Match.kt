@@ -45,7 +45,7 @@ data class Match(
     var postResultTime: Long,
     @Expose
     @SerializedName("score_breakdown")
-    var scoreBreakDown: MatchScore.ScoreBreakDown
+    var scoreBreakDown: MatchScore.ScoreBreakDown?
 ) : Comparable<Match> {
 
     data class Alliances(

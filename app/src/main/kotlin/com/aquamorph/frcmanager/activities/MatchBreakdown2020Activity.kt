@@ -39,6 +39,9 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
     private var blueRobot2 = ""
     private var blueRobot3 = ""
 
+    /**
+     * lineExtendedToString() converts robot autonomous position to yes or no unicode.
+     */
     fun lineExtendedToString(alliance: MatchScore2020.BreakDown2020): String {
         var robot = ""
         robot += if (alliance.initLineRobot1 == "Exited") {
@@ -59,6 +62,9 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
         return "(%s) %d".format(robot, alliance.autoInitLinePoints)
     }
 
+    /**
+     * autoPowerCellsToString() converts auto power cell scoring to a string.
+     */
     fun autoPowerCellsToString(alliance: MatchScore2020.BreakDown2020): String {
         return "(▭%d⬡%d○%d) %d".format(alliance.autoCellsBottom,
                 alliance.autoCellsOuter,
@@ -66,6 +72,9 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
                 alliance.autoCellPoints)
     }
 
+    /**
+     * teleopPowerCellsToString() converts teleop power cell scoring to a string.
+     */
     fun teleopPowerCellsToString(alliance: MatchScore2020.BreakDown2020): String {
         return "(▭%d⬡%d○%d) %d".format(alliance.teleopCellsBottom,
                 alliance.teleopCellsOuter,
@@ -77,6 +86,10 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
         return "(%d/%d) %d".format(alliance.foulCount, alliance.techFoulCount, alliance.foulPoints)
     }
 
+    /**
+     * stageActivationsToString() converts alliance state activation to the highest stage
+     * activated.
+     */
     fun stageActivationsToString(alliance: MatchScore2020.BreakDown2020): String {
         return when {
             alliance.stage3Activated -> "3"
@@ -86,6 +99,9 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
         }
     }
 
+    /**
+     * shieldGenToString() converts alliance shield to yes or no unicode string.
+     */
     fun shieldGenToString(alliance: MatchScore2020.BreakDown2020): String {
         return when {
             alliance.shieldOperationalRankingPoint -> "✓"
@@ -93,11 +109,17 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
         }
     }
 
+    /**
+     * switchLevelToString() converts alliance switch information to yes or no unicode string.
+     */
     fun switchLevelToString(alliance: MatchScore2020.BreakDown2020): String {
         return if (alliance.endgameRungIsLevel == "IsLevel") "✓"
         else "✖"
     }
 
+    /**
+     * endgameToString() converts and game data to string with score.
+     */
     fun endgameToString(end: String): String {
         return when (end) {
             "Park" -> "(Park) 5"
@@ -283,7 +305,10 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
         })
     }
 
-    fun setToString(): String {
+    /**
+     * setToString() adds set number to match string for playoff matches.
+     */
+    private fun setToString(): String {
         return if (compLevel != "qm") {
             " $setNumber"
         } else {

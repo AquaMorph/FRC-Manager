@@ -73,11 +73,17 @@ class DataLoader {
 
         private var disposable: Disposable? = null
 
+        /**
+         * isRankEmpty() returns if there is ranking data.
+         */
         private fun isRankEmpty(dataContainer: DataContainer<*>): Boolean {
             return dataContainer.data[0] is Rank &&
-                    (dataContainer.data[0] as Rank).rankings.isEmpty()
+                    (dataContainer.data[0] as Rank).rankings!!.isEmpty()
         }
 
+        /**
+         * getData() starts retrofit data request.
+         */
         private fun getData(
             dataContainer: DataContainer<*>,
             tabs: ArrayList<Tab>,
@@ -119,6 +125,9 @@ class DataLoader {
                                     dataContainer.complete = true })
         }
 
+        /**
+         * updateData() adds data to the container.
+         */
         private fun updateData(
             dataContainer: DataContainer<*>,
             tabs: ArrayList<Tab>,
@@ -130,7 +139,7 @@ class DataLoader {
                     (dataContainer.data as MutableList<Any?>).add(result)
                 } else if (result is TBAPrediction) {
                         (dataContainer.data as MutableList<Any?>)
-                                .addAll(Constants.tbaPredToArray(result))
+                                .addAll(Constants.tbaPredictionToArray(result))
                 } else {
                     dataContainer.data.addAll(result as Collection<Nothing>)
                     if (result is Comparable<*>) {
@@ -145,24 +154,30 @@ class DataLoader {
             dataContainer.complete = true
         }
 
+        /**
+         * removeTab() removes tab from app.
+         */
         private fun removeTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
             for (tab in tabs) {
                 if (adapter.isTab(tab.name)!!) {
-                    adapter.removeFrag(adapter.tabPosition(tab.name))
-                }
-            }
-        }
-
-        private fun addTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
-            for (tab in tabs) {
-                if ((!adapter.isTab(tab.name)!!)) {
-                    adapter.addFrag(tab)
+                    adapter.removeFragment(adapter.tabPosition(tab.name))
                 }
             }
         }
 
         /**
-         * clearData()
+         * addTab() adds tab to app.
+         */
+        private fun addTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
+            for (tab in tabs) {
+                if ((!adapter.isTab(tab.name)!!)) {
+                    adapter.addFragment(tab)
+                }
+            }
+        }
+
+        /**
+         * clearData() removes all app data.
          */
         fun clearData() {
             teamDC.data.clear()
@@ -175,6 +190,9 @@ class DataLoader {
             tbaPredictionsDC.data.clear()
         }
 
+        /**
+         * refresh() updates all event data.
+         */
         fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
                 // Checks for internet connections

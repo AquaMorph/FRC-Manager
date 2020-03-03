@@ -13,7 +13,7 @@ import java.util.Locale
 data class Rank(
     @Expose
     @SerializedName("rankings")
-    var rankings: ArrayList<Rankings>,
+    var rankings: ArrayList<Rankings>?,
     @Expose
     @SerializedName("extra_stats_info")
     var extraStatsInfo: ArrayList<ExtraStatsInfo>,

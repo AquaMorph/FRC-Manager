@@ -67,12 +67,15 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
         }
     }
 
+    /**
+     * setEvent() sets event data in shared data store.
+     */
     fun setEvent(event: Event) {
         AppConfig.setEventKey(event.key, context!!)
         Logging.info(this, "Key:" + event.key, 0)
         Logging.info(this, "Short Name:" + event.shortName, 0)
         if (event.district != null) {
-            AppConfig.setDistrictKey(event.district.key, context)
+            AppConfig.setDistrictKey(event.district!!.key, context)
         } else {
             AppConfig.setDistrictKey("", context)
         }
@@ -80,10 +83,16 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
         AppConfig.setEventAddress(event.address, context)
     }
 
+    /**
+     * stringtoDate() converts a date to a standard formatted string.
+     */
     private fun stringToDate(text: String): Date {
         return SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(text)
     }
 
+    /**
+     * eventDataToString() convert start and end date to a single string.
+     */
     private fun eventDateToString(start: Date, end: Date): String {
         return if (start.month == end.month) {
             if (start.day == end.day) {

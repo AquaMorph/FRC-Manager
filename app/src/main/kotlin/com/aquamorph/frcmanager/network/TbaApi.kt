@@ -122,14 +122,29 @@ interface TbaApi {
     fun getDistrictTeams(@Path("districtKey") districtKey: String):
             Observable<Response<ArrayList<Team>>>
 
+    /**
+     * getMatch2019() returns match breakdown for 2019 matches.
+     *
+     * @param matchKey district identification
+     */
     @GET("match/{matchKey}")
     fun getMatch2019(@Path("matchKey") matchKey: String):
             Call<MatchScore2019>
 
+    /**
+     * getMatch2020() returns match breakdown for 2020 matches.
+     *
+     * @param matchKey district identification
+     */
     @GET("match/{matchKey}")
     fun getMatch2020(@Path("matchKey") matchKey: String):
             Call<MatchScore2020>
 
+    /**
+     * getEventPredictions() returns event predictions.
+     *
+     * @param eventKey event identification
+     */
     @GET("event/{eventKey}/predictions")
     fun getEventPredictions(@Path("eventKey") eventKey: String):
             Observable<Response<TBAPrediction>>

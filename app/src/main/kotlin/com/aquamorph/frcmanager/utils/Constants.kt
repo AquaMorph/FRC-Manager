@@ -14,7 +14,7 @@ import com.google.gson.JsonObject
  * A collection of constants needed to interact with the Blue Alliance.
  *
  * @author Christian Colglazier
- * @version 10/27/2018
+ * @version 3/3/2020
  */
 object Constants {
 
@@ -120,10 +120,10 @@ object Constants {
     fun getTeamRecord(number: String): String {
         if (DataLoader.rankDC.data != null && DataLoader.rankDC.data.isNotEmpty()) {
             if (DataLoader.rankDC.data[0].rankings != null &&
-                    DataLoader.rankDC.data[0].rankings.isNotEmpty()) {
-                for (i in DataLoader.rankDC.data[0].rankings.indices) {
-                    if (number == DataLoader.rankDC.data[0].rankings[i]!!.teamKey) {
-                        val record = DataLoader.rankDC.data[0].rankings[i]!!.record
+                    DataLoader.rankDC.data[0].rankings!!.isNotEmpty()) {
+                for (i in DataLoader.rankDC.data[0].rankings!!.indices) {
+                    if (number == DataLoader.rankDC.data[0].rankings!![i].teamKey) {
+                        val record = DataLoader.rankDC.data[0].rankings!![i].record
                         return "(" + record.wins + "-" + record.losses + "-" + record.ties + ")"
                     }
                 }
@@ -140,9 +140,9 @@ object Constants {
      */
     fun getTeamRank(number: String): String {
         if (DataLoader.rankDC.data.isNotEmpty()) {
-            for (i in DataLoader.rankDC.data[0].rankings.indices) {
-                if (number == DataLoader.rankDC.data[0].rankings[i].teamKey) {
-                    val rank = DataLoader.rankDC.data[0].rankings[i].rank
+            for (i in DataLoader.rankDC.data[0].rankings!!.indices) {
+                if (number == DataLoader.rankDC.data[0].rankings!![i].teamKey) {
+                    val rank = DataLoader.rankDC.data[0].rankings!![i].rank
                     return "Rank #$rank"
                 }
             }
@@ -152,11 +152,19 @@ object Constants {
 
     /**
      * isDistrict() returns if the event is a district.
+     *
+     * @return district state
      */
     fun isDistrict(): Boolean {
         return DataLoader.districtKey != ""
     }
 
+    /**
+     * matchTypeToString() converts match type to english.
+     *
+     * @param compLevel match type
+     * @return competition level in English
+     */
     fun matchTypeToString(compLevel: String): String {
         return when (compLevel) {
             "qm" -> "Qualification"
@@ -168,6 +176,14 @@ object Constants {
         }
     }
 
+    /**
+     * matchString() converts match information to a formatted string.
+     *
+     * @param compLevel match competition level
+     * @param setNumber match set number
+     * @param matchNumber match number
+     * return formatted match shortcode
+     */
     fun matchString(compLevel: String, setNumber: Int, matchNumber: Int): String {
         return if (compLevel == "qm") {
             String.format("%S-%s", compLevel, matchNumber)
@@ -177,7 +193,11 @@ object Constants {
     }
 
     /**
-     * runRefresh()
+     * runRefresh() starts a refresh thread.
+     *
+     * @param task thread
+     * @param loader method to be run
+     * @return competed task
      */
     internal fun runRefresh(task: AsyncTask<Void?, Void?, Void?>?, loader: Any):
             AsyncTask<Void?, Void?, Void?> {
@@ -188,7 +208,16 @@ object Constants {
         return task
     }
 
-    fun tbaPredtoObject(qual: JsonObject, predictions: ArrayList<TBAPrediction.PredMatch>) {
+    /**
+     * tbaPredictionToObject() converts json object to prediction and adds prediction to an array.
+     *
+     * @param qual json object
+     * @param predictions array of match predictions
+     */
+    private fun tbaPredictionToObject(
+        qual: JsonObject,
+        predictions: ArrayList<TBAPrediction.PredMatch>
+    ) {
         for (q in qual.keySet()) {
             val matchData = qual.get(q).asJsonObject
             predictions.add(TBAPrediction.PredMatch(q,
@@ -197,16 +226,25 @@ object Constants {
         }
     }
 
-    fun tbaPredToArray(matchPredictions: TBAPrediction):
+    /**
+     * tbaPredictionToArray() converts TBA API return to array of match predictions.
+     *
+     * @param matchPredictions match prediction json blob
+     * @return list of match predictions
+     */
+    fun tbaPredictionToArray(matchPredictions: TBAPrediction):
             ArrayList<TBAPrediction.PredMatch> {
         val predictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
         val qual = matchPredictions.matchPredictions.qual
         val playoffs = matchPredictions.matchPredictions.playoff
-        tbaPredtoObject(qual, predictions)
-        tbaPredtoObject(playoffs, predictions)
+        tbaPredictionToObject(qual, predictions)
+        tbaPredictionToObject(playoffs, predictions)
         return predictions
     }
 
+    /**
+     * Theme manages app theme states.
+     */
     enum class Theme {
         LIGHT, DARK, BATTERY_SAVER
     }
