@@ -79,8 +79,12 @@ open class TeamFragment : TabFragment(), RefreshFragment,
         }
 
         override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.teamDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            while (!DataLoader.rankDC.complete) SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            while (!DataLoader.teamDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
+            while (!DataLoader.rankDC.complete) {
+                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+            }
             return null
         }
 

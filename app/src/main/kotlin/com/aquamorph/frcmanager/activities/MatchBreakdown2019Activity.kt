@@ -246,6 +246,8 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
 
     /**
      * setToString() adds set number to match string for playoff matches.
+     *
+     * @return set string
      */
     private fun setToString(): String {
         return if (compLevel != "qm") {
@@ -257,6 +259,10 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
 
     /**
      * habScore() converts robot positioning data to autonomous score.
+     *
+     * @param preMatchLevelRobot robot starting level
+     * @param habLineRobot robot hab line position
+     * @return autonomous score
      */
     fun habScore(preMatchLevelRobot: String, habLineRobot: String): String {
         return if (habLineRobot == "CrossedHabLineInSandstorm") {
@@ -272,6 +278,9 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
 
     /**
      * habClimb() converts the climb position of a robot to a score.
+     *
+     * @param endgameRobot robot end game position
+     * @return hab climb score
      */
     fun habClimb(endgameRobot: String): String {
         return when (endgameRobot) {

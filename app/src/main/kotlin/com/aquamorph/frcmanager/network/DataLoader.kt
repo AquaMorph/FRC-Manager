@@ -75,6 +75,9 @@ class DataLoader {
 
         /**
          * isRankEmpty() returns if there is ranking data.
+         *
+         * @param dataContainer rank data container
+         * @return rank data state
          */
         private fun isRankEmpty(dataContainer: DataContainer<*>): Boolean {
             return dataContainer.data[0] is Rank &&
@@ -83,6 +86,12 @@ class DataLoader {
 
         /**
          * getData() starts retrofit data request.
+         *
+         * @param dataContainer data container
+         * @param tabs list of tabs
+         * @param adapter tab adapter
+         * @param observer count of observer
+         * @param activity main activity
          */
         private fun getData(
             dataContainer: DataContainer<*>,
@@ -127,6 +136,11 @@ class DataLoader {
 
         /**
          * updateData() adds data to the container.
+         *
+         * @param dataContainer data container
+         * @param tabs list of tabs
+         * @param adapter tab adapter
+         * @param result data
          */
         private fun updateData(
             dataContainer: DataContainer<*>,
@@ -156,6 +170,9 @@ class DataLoader {
 
         /**
          * removeTab() removes tab from app.
+         *
+         * @param tabs list of tabs
+         * @param adapter tab adapter
          */
         private fun removeTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
             for (tab in tabs) {
@@ -167,6 +184,9 @@ class DataLoader {
 
         /**
          * addTab() adds tab to app.
+         *
+         * @param tabs list of tabs
+         * @param adapter tab adapter
          */
         private fun addTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
             for (tab in tabs) {
@@ -192,6 +212,9 @@ class DataLoader {
 
         /**
          * refresh() updates all event data.
+         *
+         * @param adapter tab adapter
+         * @param activity main activity
          */
         fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {

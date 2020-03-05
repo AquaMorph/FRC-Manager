@@ -69,6 +69,8 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
 
     /**
      * setEvent() sets event data in shared data store.
+     *
+     * @param event event to be tracked
      */
     fun setEvent(event: Event) {
         AppConfig.setEventKey(event.key, context!!)
@@ -85,6 +87,9 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
 
     /**
      * stringtoDate() converts a date to a standard formatted string.
+     *
+     * @param text year month date formatted string
+     * @return date
      */
     private fun stringToDate(text: String): Date {
         return SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(text)
@@ -92,6 +97,8 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
 
     /**
      * eventDataToString() convert start and end date to a single string.
+     * @param start event start date
+     * @param end event end date
      */
     private fun eventDateToString(start: Date, end: Date): String {
         return if (start.month == end.month) {

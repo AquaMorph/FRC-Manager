@@ -16,6 +16,15 @@ import com.aquamorph.frcmanager.utils.Logging
 
 object Animations {
 
+    /**
+     * loadAnimation() manages animation for tab views.
+     *
+     * @param context app activity
+     * @param view data view
+     * @param adapter recyclerview adapter
+     * @param firstLoad first time data has been seen
+     * @param isNewData date has been updated
+     */
     fun loadAnimation(
         context: Context?,
         view: View?,
@@ -45,6 +54,12 @@ object Animations {
         }
     }
 
+    /**
+     * loadMatchBreakdownAnimation() manages new activity animation.
+     *
+     * @param context activity context
+     * @param view data view
+     */
     fun loadMatchBreakdownAnimation(
         context: Context?,
         view: View?

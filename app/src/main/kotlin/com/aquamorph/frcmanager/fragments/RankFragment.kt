@@ -56,7 +56,7 @@ class RankFragment : TabFragment(), RefreshFragment {
     }
 
     /**
-     * refrest() loads dataLoader needed for this fragment.
+     * refresh() loads dataLoader needed for this fragment.
      */
     override fun refresh() {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "" && context != null) {

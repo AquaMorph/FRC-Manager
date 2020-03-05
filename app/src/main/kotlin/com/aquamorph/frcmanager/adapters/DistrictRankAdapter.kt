@@ -119,7 +119,7 @@ class DistrictRankAdapter(
     /**
      * getTeamName() returns the name of a team.
      *
-     * @param number of the team
+     * @param number team key
      * @return name of the team
      */
     private fun getTeamName(number: String): String {

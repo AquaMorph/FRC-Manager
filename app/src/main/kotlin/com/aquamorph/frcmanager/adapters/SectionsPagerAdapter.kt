@@ -69,6 +69,8 @@ class SectionsPagerAdapter(
 
     /**
      * addFragment() adds a fragment tab to the adapter.
+     *
+     * @param tab tab data holder
      */
     fun addFragment(tab: Tab) {
         try {
@@ -84,6 +86,8 @@ class SectionsPagerAdapter(
 
     /**
      * removeFragment() removes a fragment tab from the adapter
+     *
+     * @param position fragment tab position
      */
     fun removeFragment(position: Int) {
         destroyFragmentView(viewPager)
@@ -94,6 +98,8 @@ class SectionsPagerAdapter(
 
     /**
      * destroyFragmentView() kills a fragment.
+     *
+     * @param view fragment view
      */
     private fun destroyFragmentView(view: Any) {
         try {
@@ -110,6 +116,8 @@ class SectionsPagerAdapter(
 
     /**
      * removeTab() removes the tab at the given position.
+     *
+     * @param position position of tab to be removed
      */
     private fun removeTab(position: Int) {
         if (tabLayout.childCount > 0) {
@@ -119,6 +127,9 @@ class SectionsPagerAdapter(
 
     /**
      * isTab() returns true if a tab name is in the list of tabs.
+     *
+     * @param name tab name
+     * @return if tab exists
      */
     fun isTab(name: String): Boolean? {
         for (tab in tabs) {
@@ -132,6 +143,9 @@ class SectionsPagerAdapter(
     /**
      * tabPosition() returns the tab position matching the given string and returns -1 is none is
      * found.
+     *
+     * @param name name of tab
+     * @return tab position
      */
     fun tabPosition(name: String): Int {
         for (i in tabs.indices) {

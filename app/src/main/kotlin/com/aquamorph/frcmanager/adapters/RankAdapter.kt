@@ -41,9 +41,9 @@ class RankAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.teamNumber.text = String.format("%s. %s", position + 1,
-                getTeamName(data[0].rankings[position].teamKey))
+                getTeamName(data[0].rankings!![position].teamKey))
         holder.teamNumber.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-        holder.rankNumber.text = Constants.formatTeamNumber(data[0].rankings[position].teamKey)
+        holder.rankNumber.text = Constants.formatTeamNumber(data[0].rankings!![position].teamKey)
         holder.details.visibility = View.GONE
         holder.table.removeAllViews()
 
@@ -55,10 +55,10 @@ class RankAdapter(
         for (i in 0 until data[0].sortOrderInfo.size) {
             ranks.add(RankInfo(String.format("%s: ", data[0].sortOrderInfo[i].name),
                     String.format("%." + data[0].sortOrderInfo[i].precision +
-                            "f", data[0].rankings[position].sortOrders[i])))
+                            "f", data[0].rankings!![position].sortOrders[i])))
         }
         ranks.add(RankInfo("Record: ",
-                Rank.recordToString(data[0].rankings[position].record)))
+                Rank.recordToString(data[0].rankings!![position].record)))
 
         var i = 0
         while (i < ranks.size) {
@@ -106,7 +106,7 @@ class RankAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (data.size == 0) 0 else data[0].rankings.size
+        return if (data.size == 0) 0 else data[0].rankings!!.size
     }
 
     /**

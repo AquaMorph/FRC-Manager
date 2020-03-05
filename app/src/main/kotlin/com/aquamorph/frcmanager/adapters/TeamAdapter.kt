@@ -33,6 +33,13 @@ class TeamAdapter(
 
     private val inflater: LayoutInflater = from(context)
 
+    /**
+     * getTeamRank() returns team rank as a readable text.
+     *
+     * @param teamNumber team key
+     * @param ranks list of team rankings
+     * @return team tank text
+     */
     private fun getTeamRank(teamNumber: String, ranks: ArrayList<Rank>?): String {
         if (ranks != null && ranks.size > 0) {
             if (ranks[0].rankings != null && ranks[0].rankings!!.isNotEmpty()) {

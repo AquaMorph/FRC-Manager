@@ -215,6 +215,10 @@ class ScheduleAdapter(
     /**
      * predictionToString() converts a match prediction to string with either percentage or text
      * description.
+     *
+     * @param prediction match prediction
+     * @param percentageEnabled raw percentage enabled
+     * @return prediction text
      */
     private fun predictionToString(prediction: TBAPrediction.PredMatch, percentageEnabled: Boolean):
             String {
@@ -233,6 +237,10 @@ class ScheduleAdapter(
 
     /**
      * getMatch() returns a match prediction given a match key.
+     *
+     * @param matchKey match key
+     * @param predictions list of match predictions
+     * @return match prediction
      */
     private fun getMatch(matchKey: String, predictions: ArrayList<TBAPrediction.PredMatch>):
             TBAPrediction.PredMatch {
@@ -244,6 +252,9 @@ class ScheduleAdapter(
 
     /**
      * rpToString() converts additional rank points to indicator string.
+     *
+     * @param rp additional rank points
+     * @return rank point unicode
      */
     private fun rpToString(rp: Int): String {
         return when (rp) {

@@ -65,6 +65,10 @@ object Constants {
     /**
      * checkNoDataScreen() displays a no dataLoader screen if there is not any dataLoader to
      * display. Else displays dataLoader.
+     *
+     * @param data data to be shown
+     * @param recyclerView data view
+     * @param emptyView view for no data
      */
     fun checkNoDataScreen(data: ArrayList<*>, recyclerView: View, emptyView: View) {
         if (data.isEmpty()) {
@@ -78,6 +82,8 @@ object Constants {
 
     /**
      * fromHtml() converts HTML code to a string.
+     *
+     * @param html html code
      */
     @SuppressWarnings("deprecation")
     fun fromHtml(html: String): Spanned? {

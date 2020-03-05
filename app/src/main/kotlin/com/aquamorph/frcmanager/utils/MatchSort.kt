@@ -14,6 +14,9 @@ object MatchSort {
 
     /**
      * sortMatches() sorts matches by desired sorting method.
+     *
+     * @param matches list of matches
+     * @param matchSort matching sorting method
      */
     fun sortMatches(matches: ArrayList<Match>, matchSort: String?) {
         when (matchSort) {
@@ -38,6 +41,12 @@ object MatchSort {
         }
     }
 
+    /**
+     *  matchNext() returns the number of the next upcoming match.
+     *
+     *  @param matches list of matches
+     *  @return next match position in list
+     */
     private fun matchNext(matches: ArrayList<Match>): Int {
         var count = 0
         matches.forEach { match ->

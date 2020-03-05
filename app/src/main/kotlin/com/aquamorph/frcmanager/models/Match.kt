@@ -82,8 +82,14 @@ data class Match(
         }
     }
 
-    fun getCompLevelValue(comp_level: String?): Int {
-        return when (comp_level) {
+    /**
+     * getCompLevelValue() converts a competition level to a number so it can be sorted.
+     *
+     * @param compLevel match level
+     * @return match level sorting order
+     */
+    private fun getCompLevelValue(compLevel: String?): Int {
+        return when (compLevel) {
             "qm" -> 1
             "ef" -> 2
             "qf" -> 3

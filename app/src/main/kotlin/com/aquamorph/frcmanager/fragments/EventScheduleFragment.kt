@@ -86,6 +86,8 @@ class EventScheduleFragment :
 
     /**
      * nextMatch() returns the next match to be played in the event.
+     *
+     * @return match currently being played
      */
     private fun nextMatch(matches: ArrayList<Match>): String {
         matches.sort()

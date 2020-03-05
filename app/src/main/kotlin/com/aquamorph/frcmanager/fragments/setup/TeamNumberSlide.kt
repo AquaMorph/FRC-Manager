@@ -51,11 +51,16 @@ class TeamNumberSlide : Fragment(), AdapterView.OnItemSelectedListener {
 
     /**
      * getTeamNumber() gets the team number from the user.
+     *
+     * @return team number
      */
     fun getTeamNumber(): String {
         return teamNumber.text.toString()
     }
 
+    /**
+     * setTeamNumber() sets the team to track.
+     */
     fun setTeamNumber() {
         AppConfig.setTeamNumber(getTeamNumber(), context!!)
     }

@@ -79,6 +79,13 @@ data class Rank(
     )
 
     companion object {
+
+        /**
+         * recordToString() converts a teams win loss record to a readable format.
+         *
+         * @param record team win loss record
+         * @return readable format
+         */
         fun recordToString(record: WLTRecord): String {
             return String.format(Locale.ENGLISH, "%d-%d-%d",
                     record.wins, record.losses, record.ties)
