@@ -16,7 +16,8 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".activities.SplashActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -26,7 +27,6 @@
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="keyboardHidden"
-            android:label="@string/appName"
             android:screenOrientation="portrait"
             android:theme="@style/LightTheme"/>
         <activity
@@ -41,7 +41,8 @@
             android:name=".activities.Setup"
             android:label="@string/appName"
             android:screenOrientation="portrait"
-            android:theme="@style/Setup">
+            android:theme="@style/Setup"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.aquamorph.frcmanager.activities.Setup"/>
                 <category android:name="android.intent.category.DEFAULT"/>

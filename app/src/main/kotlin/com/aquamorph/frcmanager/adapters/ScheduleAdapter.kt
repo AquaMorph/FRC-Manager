@@ -353,7 +353,9 @@ class ScheduleAdapter(
                 intent.putExtra("blueRobot1", blueTeam1.text.toString())
                 intent.putExtra("blueRobot2", blueTeam2.text.toString())
                 intent.putExtra("blueRobot3", blueTeam3.text.toString())
-                context.startActivity(intent)
+                if (DataLoader.year == "2019" || DataLoader.year == "2020") {
+                    context.startActivity(intent)
+                }
             }
         }
     }

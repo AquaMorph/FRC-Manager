@@ -1,8 +1,7 @@
 package com.aquamorph.frcmanager.utils
 
 import com.aquamorph.frcmanager.models.Match
-import java.util.Collections
-import kotlin.collections.ArrayList
+import java.util.*
 
 /**
  * Custom match sorting
