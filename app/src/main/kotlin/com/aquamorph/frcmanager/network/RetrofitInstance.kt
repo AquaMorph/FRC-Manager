@@ -12,6 +12,12 @@ class RetrofitInstance {
     companion object {
         private lateinit var retrofit: Retrofit
 
+        /**
+         * returns a retrofit instance for the Blue Alliance.
+         *
+         * @param context app context
+         * @return retrofit instance
+         */
         fun getRetrofit(context: Context): Retrofit {
             val myCache = Cache(context.cacheDir, Constants.CACHE_SIZE)
 

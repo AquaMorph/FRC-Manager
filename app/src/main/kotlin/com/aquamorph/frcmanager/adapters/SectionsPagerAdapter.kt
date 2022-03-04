@@ -36,6 +36,9 @@ class SectionsPagerAdapter(
         }
     }
 
+    /**
+     * refreshData() updates all event data.
+     */
     private fun refreshData() {
         DataLoader.teamDC.complete = false
         DataLoader.rankDC.complete = false
@@ -60,7 +63,16 @@ class SectionsPagerAdapter(
         return tabs.size
     }
 
-    fun addFrag(tab: Tab) {
+    override fun getItemPosition(`object`: Any): Int {
+        return PagerAdapter.POSITION_NONE
+    }
+
+    /**
+     * addFragment() adds a fragment tab to the adapter.
+     *
+     * @param tab tab data holder
+     */
+    fun addFragment(tab: Tab) {
         try {
             if (!tabs.contains(tab)) {
                 tabs.add(tab)
@@ -72,13 +84,23 @@ class SectionsPagerAdapter(
         }
     }
 
-    fun removeFrag(position: Int) {
+    /**
+     * removeFragment() removes a fragment tab from the adapter
+     *
+     * @param position fragment tab position
+     */
+    fun removeFragment(position: Int) {
         destroyFragmentView(viewPager)
         removeTab(position)
         tabs.removeAt(position)
         notifyDataSetChanged()
     }
 
+    /**
+     * destroyFragmentView() kills a fragment.
+     *
+     * @param view fragment view
+     */
     private fun destroyFragmentView(view: Any) {
         try {
             val manager = (view as Fragment).fragmentManager
@@ -92,16 +114,23 @@ class SectionsPagerAdapter(
         }
     }
 
+    /**
+     * removeTab() removes the tab at the given position.
+     *
+     * @param position position of tab to be removed
+     */
     private fun removeTab(position: Int) {
         if (tabLayout.childCount > 0) {
             tabLayout.removeTabAt(position)
         }
     }
 
-    override fun getItemPosition(`object`: Any): Int {
-        return PagerAdapter.POSITION_NONE
-    }
-
+    /**
+     * isTab() returns true if a tab name is in the list of tabs.
+     *
+     * @param name tab name
+     * @return if tab exists
+     */
     fun isTab(name: String): Boolean? {
         for (tab in tabs) {
             if (name == tab.name) {
@@ -111,6 +140,13 @@ class SectionsPagerAdapter(
         return false
     }
 
+    /**
+     * tabPosition() returns the tab position matching the given string and returns -1 is none is
+     * found.
+     *
+     * @param name name of tab
+     * @return tab position
+     */
     fun tabPosition(name: String): Int {
         for (i in tabs.indices) {
             if (name == tabs[i].name) {

@@ -26,7 +26,7 @@ data class Event(
     var eventType: Int,
     @Expose
     @SerializedName("district")
-    var district: DistrictList,
+    var district: DistrictList?,
     @Expose
     @SerializedName("city")
     var city: String,

@@ -13,7 +13,7 @@ import java.util.Locale
 data class Rank(
     @Expose
     @SerializedName("rankings")
-    var rankings: ArrayList<Rankings>,
+    var rankings: ArrayList<Rankings>?,
     @Expose
     @SerializedName("extra_stats_info")
     var extraStatsInfo: ArrayList<ExtraStatsInfo>,
@@ -79,6 +79,13 @@ data class Rank(
     )
 
     companion object {
+
+        /**
+         * recordToString() converts a teams win loss record to a readable format.
+         *
+         * @param record team win loss record
+         * @return readable format
+         */
         fun recordToString(record: WLTRecord): String {
             return String.format(Locale.ENGLISH, "%d-%d-%d",
                     record.wins, record.losses, record.ties)

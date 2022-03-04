@@ -30,28 +30,28 @@
                     android:id="@+id/redTeam1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?redAllianceText"/>
 
                 <TextView
                     android:id="@+id/redTeam2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?redAllianceText"/>
 
                 <TextView
                     android:id="@+id/redTeam3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?redAllianceText"/>
 
                 <TextView
                     android:id="@+id/redTeam4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?redAllianceText"/>
             </LinearLayout>
 
@@ -96,28 +96,28 @@
                     android:id="@+id/blueTeam1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?blueAllianceText"/>
 
                 <TextView
                     android:id="@+id/blueTeam2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?blueAllianceText"/>
 
                 <TextView
                     android:id="@+id/blueTeam3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?blueAllianceText"/>
 
                 <TextView
                     android:id="@+id/blueTeam4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sample_team"
+                    android:text="@string/sampleTeam"
                     android:textColor="?blueAllianceText"/>
             </LinearLayout>
         </LinearLayout>

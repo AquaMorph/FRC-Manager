@@ -4,27 +4,28 @@
     ]>
 
 <resources>
-    <string name="app_name">FRC Manager</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_directions">Get Directions</string>
-    <string name="sample_team">0000</string>
-    <string name="event_slide">S</string>
-    <string name="welcome_slide_text">Welcome to FRC Manager</string>
-    <string name="app_description">An FRC score tracking app based around your team</string>
-    <string name="icon_description">FRC Manager App Icon</string>
-    <string name="team_number_prompt">Please enter your team number</string>
-    <string name="event_prompt">Please select your event</string>
-    <string name="year_prompt">Please select the desired year</string>
-    <string name="general_title">General</string>
-    <string name="refresh_icon">Refresh</string>
+    <string name="appName">FRC Manager</string>
+    <string name="actionSettings">Settings</string>
+    <string name="actionDirections">Get Directions</string>
+    <string name="sampleTeam">0000</string>
+    <string name="eventSlide">S</string>
+    <string name="welcomeSlideText">Welcome to FRC Manager</string>
+    <string name="appDescription">An FRC score tracking app based around your team</string>
+    <string name="iconDescription">FRC Manager App Icon</string>
+    <string name="teamNumberPrompt">Please enter your team number</string>
+    <string name="eventPrompt">Please select your event</string>
+    <string name="yearPrompt">Please select the desired year</string>
+    <string name="generalTitle">General</string>
+    <string name="refreshIcon">Refresh</string>
     <string name="version">&appversion;</string>
-    <string name="version_text">Version &appversion;</string>
-    <string name="no_data">No Data</string>
-    <string name="no_connection_message">No Connection. Loading from last refresh.</string>
-    <string name="first_server_down">The FIRST server is currently offline.</string>
-    <string name="event_server_down">The feed for the event is down.</string>
+    <string name="versionText">Version &appversion;</string>
+    <string name="noData">No Data</string>
+    <string name="noConnectionMessage">No Connection. Loading from last refresh.</string>
+    <string name="firstServerDown">The FIRST server is currently offline.</string>
+    <string name="eventServerDown">The feed for the event is down.</string>
     <string name="toolBarDefault">Rank #\$r (\$R) \$n</string>
-    <string-array name="year_array">
+    <string-array name="yearArray">
+        <item>2022</item>
         <item>2020</item>
         <item>2019</item>
         <item>2018</item>
@@ -32,7 +33,7 @@
         <item>2016</item>
         <item>2015</item>
     </string-array>
-    <string-array name="theme_values">
+    <string-array name="themeValues">
         <item>light</item>
         <item>dark</item>
         <item>amoled</item>
@@ -78,28 +79,40 @@
         <item>Words</item>
         <item>Raw Percentage</item>
     </string-array>
-    <string name="auto_total">Auto Total</string>
-    <string name="score_team_one">Team 1</string>
-    <string name="score_team_two">Team 2</string>
-    <string name="score_team_three">Team 3</string>
-    <string name="score_2020_line_extended">Line Exited</string>
-    <string name="score_2020_power_cells">Power Cells</string>
-    <string name="score_teleop_total">Teleop Total</string>
-    <string name="score_2020_control_panel_points">Control Panel Points</string>
-    <string name="score_endgame_total">Endgame Total</string>
-    <string name="score_robot_1">Robot 1</string>
-    <string name="score_robot_2">Robot 2</string>
-    <string name="score_robot_3">Robot 3</string>
-    <string name="score_2020_shield_generator_switch_level">Shield Generator Switch Level</string>
-    <string name="score_total_score">Total Score</string>
-    <string name="score_2020_stage_activations">Stage Activations</string>
-    <string name="score_2020_shield_generator">Shield Generator</string>
-    <string name="score_fouls_tech_fouls">Fouls/Tech Fouls</string>
-    <string name="score_adjustments">Adjustments</string>
-    <string name="score_rank_points">Rank Points</string>
+    <string name="scoreAutoTotal">Auto Total</string>
+    <string name="scoreTeam1">Team 1</string>
+    <string name="scoreTeam2">Team 2</string>
+    <string name="scoreTeam3">Team 3</string>
+    <string name="score2020LineExtended">Line Exited</string>
+    <string name="score2020PowerCells">Power Cells</string>
+    <string name="scoreTeleopTotal">Teleop Total</string>
+    <string name="score2020ControlPanel">Control Panel Points</string>
+    <string name="scoreEndgameTotal">Endgame Total</string>
+    <string name="scoreRobot1">Robot 1</string>
+    <string name="scoreRobot2">Robot 2</string>
+    <string name="scoreRobot3">Robot 3</string>
+    <string name="score2020SwitchLevel">Shield Generator Switch Level</string>
+    <string name="scoreTotalScore">Total Score</string>
+    <string name="score2020StageActivations">Stage Activations</string>
+    <string name="score2020ShieldGenerator">Shield Generator</string>
+    <string name="scoreFoulsTechFouls">Fouls/Tech Fouls</string>
+    <string name="scoreAdjustments">Adjustments</string>
+    <string name="scoreRankPoints">Rank Points</string>
     <string name="rankPointTotal">Point Total:</string>
-    <string name="rank_rookie_bonus">Rookie Bonus:</string>
-    <string name="rankEventOne">Event 1:</string>
+    <string name="rankRookieBonus">Rookie Bonus:</string>
+    <string name="rankEvent1">Event 1:</string>
     <string name="rankEvent2">Event 2:</string>
     <string name="rankDistrictChamp">District Champ:</string>
+    <string name="score2019Hab1">Robot 1 Hab Climb</string>
+    <string name="score2019Hab2">Robot 2 Hab Climb</string>
+    <string name="score2019Hab3">Robot 3 Hab Climb</string>
+    <string name="scoutFouls">Fouls</string>
+    <string name="score2019SandstormTotal">Sandstorm Total</string>
+    <string name="score2019Habline1">HabLine Robot 1</string>
+    <string name="score2019Habline2">HabLine Robot 2</string>
+    <string name="score2019Habline3">HabLine Robot 3</string>
+    <string name="score2019HatchPanel">Hatch Panel Points</string>
+    <string name="score2019CargoPoints">Cargo Points</string>
+    <string name="score2019HabClimb">Hab Climb Points</string>
+    <string name="rankPointFormat">%s%4s</string>
 </resources>

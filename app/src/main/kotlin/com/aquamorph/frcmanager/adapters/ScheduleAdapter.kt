@@ -154,32 +154,26 @@ class ScheduleAdapter(
         if (data[position].scoreBreakDown != null) {
             when (data[position].winningAlliance) {
                 "red" -> {
-                    redRP = data[position].scoreBreakDown.red.rp - 2
-                    blueRP = data[position].scoreBreakDown.blue.rp
+                    redRP = data[position].scoreBreakDown!!.red.rp - 2
+                    blueRP = data[position].scoreBreakDown!!.blue.rp
                 }
                 "blue" -> {
-                    redRP = data[position].scoreBreakDown.red.rp
-                    blueRP = data[position].scoreBreakDown.blue.rp - 2
+                    redRP = data[position].scoreBreakDown!!.red.rp
+                    blueRP = data[position].scoreBreakDown!!.blue.rp - 2
                 }
                 else -> {
-                    redRP = data[position].scoreBreakDown.red.rp - 1
-                    blueRP = data[position].scoreBreakDown.blue.rp - 1
+                    redRP = data[position].scoreBreakDown!!.red.rp - 1
+                    blueRP = data[position].scoreBreakDown!!.blue.rp - 1
                 }
             }
         }
 
-        holder.redScore.text = "%s%4s".format(rpToString(redRP), holder.redScore.text)
-        holder.blueScore.text = "%s%4s".format(rpToString(blueRP), holder.blueScore.text)
+        holder.redScore.text = context.getString(R.string.rankPointFormat)
+                .format(rpToString(redRP), holder.redScore.text)
+        holder.blueScore.text = context.getString(R.string.rankPointFormat)
+                .format(rpToString(blueRP), holder.blueScore.text)
 
         if (MainActivity.predEnabled && predictions.isNotEmpty()) {
-
-//            val time = Date()
-//            val df = SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
-//            time.time = data[position].time * 1000
-//            holder.matchTime.text = df.format(time)
-//            holder.matchTimeTable.visibility = View.VISIBLE
-//            holder.scoreTable.visibility = View.GONE
-
             holder.predictionTable.visibility = View.VISIBLE
             val predMatch = getMatch(data[position].key, predictions)
 
@@ -218,7 +212,15 @@ class ScheduleAdapter(
         }
     }
 
-    fun predictionToString(prediction: TBAPrediction.PredMatch, percentageEnabled: Boolean):
+    /**
+     * predictionToString() converts a match prediction to string with either percentage or text
+     * description.
+     *
+     * @param prediction match prediction
+     * @param percentageEnabled raw percentage enabled
+     * @return prediction text
+     */
+    private fun predictionToString(prediction: TBAPrediction.PredMatch, percentageEnabled: Boolean):
             String {
         return when {
             percentageEnabled -> {
@@ -233,7 +235,14 @@ class ScheduleAdapter(
         }
     }
 
-    fun getMatch(matchKey: String, predictions: ArrayList<TBAPrediction.PredMatch>):
+    /**
+     * getMatch() returns a match prediction given a match key.
+     *
+     * @param matchKey match key
+     * @param predictions list of match predictions
+     * @return match prediction
+     */
+    private fun getMatch(matchKey: String, predictions: ArrayList<TBAPrediction.PredMatch>):
             TBAPrediction.PredMatch {
         for (p in predictions) {
             if (p.matchKey == matchKey) return p
@@ -241,7 +250,13 @@ class ScheduleAdapter(
         return TBAPrediction.PredMatch("", 0.5, "Red")
     }
 
-    fun rpToString(rp: Int): String {
+    /**
+     * rpToString() converts additional rank points to indicator string.
+     *
+     * @param rp additional rank points
+     * @return rank point unicode
+     */
+    private fun rpToString(rp: Int): String {
         return when (rp) {
             1 -> "⬤"
             2 -> "⬤⬤"
@@ -338,7 +353,9 @@ class ScheduleAdapter(
                 intent.putExtra("blueRobot1", blueTeam1.text.toString())
                 intent.putExtra("blueRobot2", blueTeam2.text.toString())
                 intent.putExtra("blueRobot3", blueTeam3.text.toString())
-                context.startActivity(intent)
+                if (DataLoader.year == "2019" || DataLoader.year == "2020") {
+                    context.startActivity(intent)
+                }
             }
         }
     }

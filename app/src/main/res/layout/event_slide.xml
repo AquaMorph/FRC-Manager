@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:fontFamily="sans-serif-thin"
         android:gravity="center"
-        android:text="@string/event_prompt"
+        android:text="@string/eventPrompt"
         android:textColor="@color/icons"
         android:textSize="28sp"/>
 

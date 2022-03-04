@@ -47,13 +47,21 @@ class TeamNumberSlide : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    override fun onNothingSelected(parent: AdapterView<*>) {}
+
+    /**
+     * getTeamNumber() gets the team number from the user.
+     *
+     * @return team number
+     */
     fun getTeamNumber(): String {
         return teamNumber.text.toString()
     }
 
+    /**
+     * setTeamNumber() sets the team to track.
+     */
     fun setTeamNumber() {
         AppConfig.setTeamNumber(getTeamNumber(), context!!)
     }
-
-    override fun onNothingSelected(parent: AdapterView<*>) {}
 }

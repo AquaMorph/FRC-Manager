@@ -73,11 +73,26 @@ class DataLoader {
 
         private var disposable: Disposable? = null
 
+        /**
+         * isRankEmpty() returns if there is ranking data.
+         *
+         * @param dataContainer rank data container
+         * @return rank data state
+         */
         private fun isRankEmpty(dataContainer: DataContainer<*>): Boolean {
             return dataContainer.data[0] is Rank &&
-                    (dataContainer.data[0] as Rank).rankings.isEmpty()
+                    (dataContainer.data[0] as Rank).rankings!!.isEmpty()
         }
 
+        /**
+         * getData() starts retrofit data request.
+         *
+         * @param dataContainer data container
+         * @param tabs list of tabs
+         * @param adapter tab adapter
+         * @param observer count of observer
+         * @param activity main activity
+         */
         private fun getData(
             dataContainer: DataContainer<*>,
             tabs: ArrayList<Tab>,
@@ -119,6 +134,14 @@ class DataLoader {
                                     dataContainer.complete = true })
         }
 
+        /**
+         * updateData() adds data to the container.
+         *
+         * @param dataContainer data container
+         * @param tabs list of tabs
+         * @param adapter tab adapter
+         * @param result data
+         */
         private fun updateData(
             dataContainer: DataContainer<*>,
             tabs: ArrayList<Tab>,
@@ -130,7 +153,7 @@ class DataLoader {
                     (dataContainer.data as MutableList<Any?>).add(result)
                 } else if (result is TBAPrediction) {
                         (dataContainer.data as MutableList<Any?>)
-                                .addAll(Constants.tbaPredToArray(result))
+                                .addAll(Constants.tbaPredictionToArray(result))
                 } else {
                     dataContainer.data.addAll(result as Collection<Nothing>)
                     if (result is Comparable<*>) {
@@ -145,24 +168,36 @@ class DataLoader {
             dataContainer.complete = true
         }
 
+        /**
+         * removeTab() removes tab from app.
+         *
+         * @param tabs list of tabs
+         * @param adapter tab adapter
+         */
         private fun removeTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
             for (tab in tabs) {
                 if (adapter.isTab(tab.name)!!) {
-                    adapter.removeFrag(adapter.tabPosition(tab.name))
-                }
-            }
-        }
-
-        private fun addTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
-            for (tab in tabs) {
-                if ((!adapter.isTab(tab.name)!!)) {
-                    adapter.addFrag(tab)
+                    adapter.removeFragment(adapter.tabPosition(tab.name))
                 }
             }
         }
 
         /**
-         * clearData()
+         * addTab() adds tab to app.
+         *
+         * @param tabs list of tabs
+         * @param adapter tab adapter
+         */
+        private fun addTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
+            for (tab in tabs) {
+                if ((!adapter.isTab(tab.name)!!)) {
+                    adapter.addFragment(tab)
+                }
+            }
+        }
+
+        /**
+         * clearData() removes all app data.
          */
         fun clearData() {
             teamDC.data.clear()
@@ -175,12 +210,18 @@ class DataLoader {
             tbaPredictionsDC.data.clear()
         }
 
+        /**
+         * refresh() updates all event data.
+         *
+         * @param adapter tab adapter
+         * @param activity main activity
+         */
         fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
                 // Checks for internet connections
                 if (!NetworkCheck.hasNetwork(activity)) {
                     Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
-                            R.string.no_connection_message,
+                            R.string.noConnectionMessage,
                             Snackbar.LENGTH_LONG).show()
                 }
                 getData(matchDC, matchTabs, adapter, 0, activity)
@@ -205,11 +246,11 @@ class DataLoader {
                         .subscribe({ result -> if (result != null) {
                             if (result.isDatafeedDown) {
                                 Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
-                                        R.string.first_server_down,
+                                        R.string.firstServerDown,
                                         Snackbar.LENGTH_LONG).show()
                             } else if (result.downEvents.contains(eventKey)) {
                                 Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
-                                        R.string.event_server_down,
+                                        R.string.eventServerDown,
                                         Snackbar.LENGTH_LONG).show()
                             }
                         } },

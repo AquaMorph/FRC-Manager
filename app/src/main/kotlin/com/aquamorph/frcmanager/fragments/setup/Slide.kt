@@ -17,8 +17,8 @@ class Slide : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null && arguments!!.containsKey(ARG_LAYOUT_RES_ID)) {
-            layoutResId = arguments!!.getInt(ARG_LAYOUT_RES_ID)
+        if (arguments != null && requireArguments().containsKey(ARG_LAYOUT_RES_ID)) {
+            layoutResId = requireArguments().getInt(ARG_LAYOUT_RES_ID)
         }
     }
 
@@ -34,12 +34,17 @@ class Slide : Fragment() {
 
         private const val ARG_LAYOUT_RES_ID = "layoutResId"
 
+        /**
+         * newInstance() creates a new slide.
+         *
+         * @return slide
+         */
         fun newInstance(layoutResId: Int): Slide {
-            val sampleSlide = Slide()
+            val slide = Slide()
             val args = Bundle()
             args.putInt(ARG_LAYOUT_RES_ID, layoutResId)
-            sampleSlide.arguments = args
-            return sampleSlide
+            slide.arguments = args
+            return slide
         }
     }
 }

@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="@string/sample_team"
+                android:text="@string/sampleTeam"
                 android:textColor="?textOnBackground"
                 android:textSize="@dimen/team_number_text"/>
 

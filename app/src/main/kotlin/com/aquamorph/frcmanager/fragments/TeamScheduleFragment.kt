@@ -34,6 +34,11 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     private var teamNumber: String = ""
     private var getTeamFromSettings: Boolean = true
 
+    /**
+     * setTeamNumber() set team schedule to display.
+     *
+     * @param teamNumber team key
+     */
     fun setTeamNumber(teamNumber: String) {
         this.teamNumber = teamNumber
         getTeamFromSettings = false
@@ -89,7 +94,6 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
 
     /**
      * refresh() loads dataLoader needed for this fragment.
-     * @param force
      */
     override fun refresh() {
         if (teamNumber != "" && DataLoader.eventKey != "") {
@@ -173,6 +177,13 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         }
     }
 
+    /**
+     * isTeamInMatch() checks if a team is in a match.
+     *
+     * @param match event match
+     * @param team team key
+     * @return robot in match state
+     */
     private fun isTeamInMatch(match: Match, team: String): Boolean {
         return if (match.alliances.red.teamKeys.contains(team))
             true

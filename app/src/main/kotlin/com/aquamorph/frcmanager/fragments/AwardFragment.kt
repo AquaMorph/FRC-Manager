@@ -72,9 +72,7 @@ class AwardFragment :
     }
 
     /**
-     * refresh() loads dataLoader needed for this fragment
-     *
-     * @param force force reload dataLoader
+     * refresh() loads dataLoader needed for this fragment.
      */
     override fun refresh() {
         if (DataLoader.eventKey != "") {

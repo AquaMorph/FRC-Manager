@@ -35,7 +35,7 @@ class EventSlide : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
     }
 
     override fun onCreateView(
@@ -57,7 +57,7 @@ class EventSlide : Fragment() {
      */
     @SuppressLint("CheckResult")
     fun load() {
-        RetrofitInstance.getRetrofit(context!!).create(TbaApi::class.java)
+        RetrofitInstance.getRetrofit(requireContext()).create(TbaApi::class.java)
                 .getTeamEvents("frc${prefs.getString("teamNumber", "")}",
                         prefs.getString("year", "")!!).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

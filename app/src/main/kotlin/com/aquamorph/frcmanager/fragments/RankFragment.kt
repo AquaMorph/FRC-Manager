@@ -56,7 +56,7 @@ class RankFragment : TabFragment(), RefreshFragment {
     }
 
     /**
-     * refrest() loads dataLoader needed for this fragment.
+     * refresh() loads dataLoader needed for this fragment.
      */
     override fun refresh() {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "" && context != null) {
@@ -86,13 +86,13 @@ class RankFragment : TabFragment(), RefreshFragment {
                     DataLoader.rankDC.data[0].rankings != null) {
                 val editor = prefs.edit()
                 editor.putString("teamRank", "")
-                for (i in 0 until DataLoader.rankDC.data[0].rankings.size) {
-                    if (DataLoader.rankDC.data[0].rankings[i].teamKey == "frc" +
+                for (i in 0 until DataLoader.rankDC.data[0].rankings!!.size) {
+                    if (DataLoader.rankDC.data[0].rankings!![i].teamKey == "frc" +
                             DataLoader.teamNumber) {
                         editor.putString("teamRank",
-                                DataLoader.rankDC.data[0].rankings[i].rank.toString())
+                                DataLoader.rankDC.data[0].rankings!![i].rank.toString())
                         editor.putString("teamRecord",
-                                Rank.recordToString(DataLoader.rankDC.data[0].rankings[i].record))
+                                Rank.recordToString(DataLoader.rankDC.data[0].rankings!![i].record))
                         editor.apply()
                     }
                 }

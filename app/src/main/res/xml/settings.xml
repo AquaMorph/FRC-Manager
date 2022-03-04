@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/general_title">
+    <PreferenceCategory android:title="@string/generalTitle">
         <PreferenceScreen
             android:summary="Relaunches the setup screen"
             android:title="Reset Team and Event">
@@ -9,7 +9,7 @@
         <ListPreference
             android:defaultValue="light"
             android:entries="@array/theme"
-            android:entryValues="@array/theme_values"
+            android:entryValues="@array/themeValues"
             android:key="theme"
             android:summary="Choose between different color schemes"
             android:title="App Theme"/>
@@ -50,7 +50,7 @@
         <PreferenceScreen
             android:key="settings_version"
             android:summary="Created by Christian Colglazier"
-            android:title="@string/version_text"/>
+            android:title="@string/versionText"/>
         <Preference
             android:summary="Feel free to create new GitHub issues to request features or improvements."
             android:title="Request New Features">
