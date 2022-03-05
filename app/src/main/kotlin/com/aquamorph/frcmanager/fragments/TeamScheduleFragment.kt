@@ -59,11 +59,11 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         }
         if (MainActivity.appTheme == Constants.Theme.BATTERY_SAVER) {
             super.onCreateView(view, teamEventMatches,
-                    ScheduleAdapter(context!!, teamEventMatches, predictions, teamNumber),
-                    Divider(context!!, Constants.DIVIDER_WIDTH, 0))
+                    ScheduleAdapter(requireContext(), teamEventMatches, predictions, teamNumber),
+                    Divider(requireContext(), Constants.DIVIDER_WIDTH, 0))
         } else {
             super.onCreateView(view, teamEventMatches,
-                    ScheduleAdapter(context!!, teamEventMatches, predictions, teamNumber))
+                    ScheduleAdapter(requireContext(), teamEventMatches, predictions, teamNumber))
         }
         if (!getTeamFromSettings) {
             mSwipeRefreshLayout.isEnabled = false

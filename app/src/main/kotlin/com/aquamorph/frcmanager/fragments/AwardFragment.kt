@@ -33,8 +33,8 @@ class AwardFragment :
     ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         super.onCreateView(view, awards,
-                AwardAdapter(context!!, awards),
-                Divider(context!!, Constants.DIVIDER_WIDTH, 0))
+                AwardAdapter(requireContext(), awards),
+                Divider(requireContext(), Constants.DIVIDER_WIDTH, 0))
         prefs.registerOnSharedPreferenceChangeListener(this)
         return view
     }

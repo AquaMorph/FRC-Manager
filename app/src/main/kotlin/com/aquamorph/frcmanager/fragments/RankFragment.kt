@@ -33,8 +33,8 @@ class RankFragment : TabFragment(), RefreshFragment {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         super.onCreateView(view, ranks,
-                RankAdapter(context!!, ranks, teams),
-                Divider(context!!, Constants.DIVIDER_WIDTH, 72))
+                RankAdapter(requireContext(), ranks, teams),
+                Divider(requireContext(), Constants.DIVIDER_WIDTH, 72))
         return view
     }
 

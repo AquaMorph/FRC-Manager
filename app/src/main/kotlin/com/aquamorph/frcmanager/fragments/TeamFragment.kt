@@ -34,8 +34,8 @@ open class TeamFragment : TabFragment(), RefreshFragment,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
-        super.onCreateView(view, teams, TeamAdapter(context!!, teams, ranks),
-                Divider(context!!, Constants.DIVIDER_WIDTH, 72))
+        super.onCreateView(view, teams, TeamAdapter(requireContext(), teams, ranks),
+                Divider(requireContext(), Constants.DIVIDER_WIDTH, 72))
         return view
     }
 

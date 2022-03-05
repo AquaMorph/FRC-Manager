@@ -28,7 +28,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if ("theme" == key) {
-            activity!!.recreate()
+            requireActivity().recreate()
         }
     }
 
