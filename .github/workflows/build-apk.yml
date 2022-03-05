@@ -12,5 +12,9 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '11'
+    - run: 'echo 'TBA_KEY=\"${TBA_KEY}\"' > secrets.properties'
+      shell: bash
+      env:
+        TBA_KEY: ${{secrets.TBA_KEY}}
     - name: Build with Gradle
       run: ./gradlew clean assemble build
