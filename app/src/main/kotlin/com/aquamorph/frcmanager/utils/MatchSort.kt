@@ -1,7 +1,7 @@
 package com.aquamorph.frcmanager.utils
 
 import com.aquamorph.frcmanager.models.Match
-import java.util.*
+import java.util.Collections
 
 /**
  * Custom match sorting
