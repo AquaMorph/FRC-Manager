@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlinLibVersion = '1.7.20'
+        kotlinLibVersion = '1.8.0'
     }
     repositories {
         mavenCentral()

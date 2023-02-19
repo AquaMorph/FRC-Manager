@@ -25,6 +25,7 @@
     <string name="eventServerDown">The feed for the event is down.</string>
     <string name="toolBarDefault">Rank #\$r (\$R) \$n</string>
     <string-array name="yearArray">
+        <item>2023</item>
         <item>2022</item>
         <item>2020</item>
         <item>2019</item>

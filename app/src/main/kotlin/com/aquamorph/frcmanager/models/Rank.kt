@@ -77,7 +77,6 @@ data class Rank(
         @SerializedName("precision")
         var precision: Int
     )
-
     companion object {
 
         /**
