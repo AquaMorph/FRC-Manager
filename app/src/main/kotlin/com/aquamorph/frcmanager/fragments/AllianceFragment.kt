@@ -34,8 +34,8 @@ class AllianceFragment : TabFragment(),
     ): View? {
         val view = inflater.inflate(R.layout.fragment_team_schedule, container, false)
         super.onCreateView(view, alliances,
-                AllianceAdapter(context!!, alliances),
-                Divider(context!!, Constants.DIVIDER_WIDTH, 72))
+                AllianceAdapter(requireContext(), alliances),
+                Divider(requireContext(), Constants.DIVIDER_WIDTH, 72))
         prefs.registerOnSharedPreferenceChangeListener(this)
         return view
     }

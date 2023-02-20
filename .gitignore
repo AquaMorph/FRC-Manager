@@ -1,4 +1,5 @@
 marketing/
+*.hprof
 
 # built application files
 *.apk
