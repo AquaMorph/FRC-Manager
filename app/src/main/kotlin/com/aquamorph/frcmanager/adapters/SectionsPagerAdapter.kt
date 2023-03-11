@@ -74,7 +74,7 @@ class SectionsPagerAdapter(
      */
     fun addFragment(tab: Tab) {
         try {
-            if (!tabs.contains(tab)) {
+            if (!tabs.contains(tab) and !tab.fragment.isAdded) {
                 tabs.add(tab)
                 tabs.sort()
                 notifyDataSetChanged()
