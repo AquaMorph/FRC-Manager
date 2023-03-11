@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         DataLoader.eventKey = prefs.getString("eventKey", "")!!
         DataLoader.districtKey = prefs.getString("districtKey", "")!!
         predEnabled = prefs.getString("predictions", "none")!! != "none"
-        predPrecentage = prefs.getString("predictionDisplay", "words") != "words"
+        predPercentage = prefs.getString("predictionDisplay", "words") != "words"
         if (DataLoader.teamNumber == "") openSetup()
         listener()
         theme(this)
@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
                     .getString("year", "")!!
             "predictions" -> predEnabled = sharedPreferences
                     .getString("predictions", "none")!! != "none"
-            "predictionDisplay" -> predPrecentage = sharedPreferences
+            "predictionDisplay" -> predPercentage = sharedPreferences
                     .getString("predictionDisplay", "words") != "words"
         }
 
@@ -199,7 +199,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
 
         var appTheme = Constants.Theme.LIGHT
         var predEnabled = false
-        var predPrecentage = false
+        var predPercentage = false
 
         @SuppressLint("StaticFieldLeak")
         private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
