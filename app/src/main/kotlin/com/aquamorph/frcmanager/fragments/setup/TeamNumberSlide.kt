@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.aquamorph.frcmanager.BuildConfig
 import com.aquamorph.frcmanager.R
@@ -40,8 +41,8 @@ class TeamNumberSlide : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         try {
-            (yearSpinner.selectedView as TextView).setTextColor(resources.getColor(R.color.icons))
-            AppConfig.setYear(parent.getItemAtPosition(position).toString(), context!!)
+            (yearSpinner.selectedView as TextView).setTextColor(ContextCompat.getColor(requireContext(), R.color.icons))
+            AppConfig.setYear(parent.getItemAtPosition(position).toString(), requireContext())
         } catch (e: Exception) {
             Logging.error(this, e.message!!, 0)
         }
@@ -62,6 +63,6 @@ class TeamNumberSlide : Fragment(), AdapterView.OnItemSelectedListener {
      * setTeamNumber() sets the team to track.
      */
     fun setTeamNumber() {
-        AppConfig.setTeamNumber(getTeamNumber(), context!!)
+        AppConfig.setTeamNumber(getTeamNumber(), requireContext())
     }
 }

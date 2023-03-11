@@ -206,7 +206,7 @@ class ScheduleAdapter(
             }
             holder.predictionsText.setTextColor(typedValue.data)
 
-            holder.predictionsText.text = predictionToString(predMatch, MainActivity.predPrecentage)
+            holder.predictionsText.text = predictionToString(predMatch, MainActivity.predPercentage)
         } else {
             holder.predictionTable.visibility = View.GONE
         }
