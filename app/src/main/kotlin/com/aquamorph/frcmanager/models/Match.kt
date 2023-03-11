@@ -76,7 +76,11 @@ data class Match(
         val compareMatchNumber = other.matchNumber
         val compareLevel = other.compLevel
         return if (getCompLevelValue(compareLevel) == getCompLevelValue(this.compLevel)) {
-            this.matchNumber - compareMatchNumber
+            if (this.matchNumber == compareMatchNumber) {
+                this.setNumber - other.setNumber
+            } else {
+                this.matchNumber - compareMatchNumber
+            }
         } else {
             getCompLevelValue(this.compLevel) - getCompLevelValue(compareLevel)
         }
