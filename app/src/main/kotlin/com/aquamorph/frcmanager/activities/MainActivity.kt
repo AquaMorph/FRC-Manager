@@ -202,7 +202,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         var predPrecentage = false
 
         @SuppressLint("StaticFieldLeak")
-        private lateinit var mSectionsPagerAdapter: SectionsPagerAdapter
+        private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
 
         /**
          * theme() sets the app theme based on user selection from settings.
@@ -230,7 +230,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         }
 
         fun refresh() {
-            mSectionsPagerAdapter.refreshAll()
+            mSectionsPagerAdapter?.refreshAll()
         }
     }
 }
