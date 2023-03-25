@@ -16,18 +16,19 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.utils.Constants
+import com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 abstract class TabFragment : Fragment() {
     internal lateinit var prefs: SharedPreferences
-    protected lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    protected lateinit var mSwipeRefreshLayout: ThemeSwipeRefreshLayout
     protected lateinit var recyclerView: RecyclerView
     protected lateinit var emptyView: TextView
     protected lateinit var adapter: Adapter<*>
     protected var firstLoad = true
-    protected val executor = Executors.newSingleThreadExecutor()
+    protected val executor: ExecutorService = Executors.newSingleThreadExecutor()
     protected val handler = Handler(Looper.getMainLooper())
-    protected var task: AsyncTask<Void?, Void?, Void?>? = null
 
     abstract fun dataUpdate()
 

@@ -2,6 +2,7 @@ package com.aquamorph.frcmanager.fragments
 
 import android.content.SharedPreferences
 import android.os.*
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,9 +28,6 @@ class EventScheduleFragment :
 
     private var matches: ArrayList<Match> = ArrayList()
     private var predictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
-
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
