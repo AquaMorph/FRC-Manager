@@ -25,7 +25,7 @@ import com.aquamorph.frcmanager.utils.MatchSort
  * Displays a list of matches at an event for a given team.
  *
  * @author Christian Colglazier
- * @version 1/23/2020
+ * @version 3/25/2023
  */
 class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, RefreshFragment {
 
@@ -97,7 +97,21 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
      */
     override fun refresh() {
         if (teamNumber != "" && DataLoader.eventKey != "") {
-            task = Constants.runRefresh(task, LoadTeamSchedule())
+            mSwipeRefreshLayout.isRefreshing = true
+            executor.execute {
+                while (!DataLoader.matchDC.complete) {
+                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+                }
+                while (MainActivity.predEnabled && !DataLoader.tbaPredictionsDC.complete) {
+                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+                }
+                handler.post {
+                    if (context != null) {
+                        dataUpdate()
+                        mSwipeRefreshLayout.isRefreshing = false
+                    }
+                }
+            }
         } else {
             Logging.error(this, "Team or event key not set", 0)
         }
@@ -141,29 +155,6 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         firstLoad = false
     }
 
-    internal inner class LoadTeamSchedule : AsyncTask<Void?, Void?, Void?>() {
-
-        override fun onPreExecute() {
-            mSwipeRefreshLayout.isRefreshing = true
-        }
-
-        override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.matchDC.complete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            while (MainActivity.predEnabled && !DataLoader.tbaPredictionsDC.complete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: Void?) {
-            if (context != null) {
-                dataUpdate()
-                mSwipeRefreshLayout.isRefreshing = false
-            }
-        }
-    }
 
     companion object {
 

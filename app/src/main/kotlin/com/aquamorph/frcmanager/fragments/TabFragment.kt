@@ -3,6 +3,8 @@ package com.aquamorph.frcmanager.fragments
 import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -14,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.utils.Constants
+import java.util.concurrent.Executors
 
 abstract class TabFragment : Fragment() {
     internal lateinit var prefs: SharedPreferences
@@ -22,6 +25,8 @@ abstract class TabFragment : Fragment() {
     protected lateinit var emptyView: TextView
     protected lateinit var adapter: Adapter<*>
     protected var firstLoad = true
+    protected val executor = Executors.newSingleThreadExecutor()
+    protected val handler = Handler(Looper.getMainLooper())
     protected var task: AsyncTask<Void?, Void?, Void?>? = null
 
     abstract fun dataUpdate()

@@ -1,9 +1,7 @@
 package com.aquamorph.frcmanager.fragments
 
 import android.content.SharedPreferences
-import android.os.AsyncTask
-import android.os.Bundle
-import android.os.SystemClock
+import android.os.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,13 +20,16 @@ import com.aquamorph.frcmanager.utils.MatchSort
  * Displays a list of matches at an event.
  *
  * @author Christian Colglazier
- * @version 1/23/2020
+ * @version 3/25/2023
  */
 class EventScheduleFragment :
         TabFragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
 
     private var matches: ArrayList<Match> = ArrayList()
     private var predictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
+
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +46,7 @@ class EventScheduleFragment :
                     ScheduleAdapter(requireContext(), matches, predictions, DataLoader.teamNumber))
         }
         prefs.registerOnSharedPreferenceChangeListener(this)
+
         return view
     }
 
@@ -74,7 +76,21 @@ class EventScheduleFragment :
      */
     override fun refresh() {
         if (DataLoader.eventKey != "") {
-            task = Constants.runRefresh(task, LoadEventSchedule())
+            mSwipeRefreshLayout.isRefreshing = true
+            executor.execute {
+                while (!DataLoader.matchDC.complete) {
+                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+                }
+                while (MainActivity.predEnabled && !DataLoader.tbaPredictionsDC.complete) {
+                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+                }
+                handler.post {
+                    if (context != null) {
+                        dataUpdate()
+                        mSwipeRefreshLayout.isRefreshing = false
+                    }
+                }
+            }
         }
     }
 
@@ -97,30 +113,6 @@ class EventScheduleFragment :
             }
         }
         return ""
-    }
-
-    internal inner class LoadEventSchedule : AsyncTask<Void?, Void?, Void?>() {
-
-        override fun onPreExecute() {
-            mSwipeRefreshLayout.isRefreshing = true
-        }
-
-        override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.matchDC.complete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            while (MainActivity.predEnabled && !DataLoader.tbaPredictionsDC.complete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: Void?) {
-            if (context != null) {
-                dataUpdate()
-                mSwipeRefreshLayout.isRefreshing = false
-            }
-        }
     }
 
     companion object {

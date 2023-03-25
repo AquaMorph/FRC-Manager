@@ -199,22 +199,6 @@ object Constants {
     }
 
     /**
-     * runRefresh() starts a refresh thread.
-     *
-     * @param task thread
-     * @param loader method to be run
-     * @return competed task
-     */
-    internal fun runRefresh(task: AsyncTask<Void?, Void?, Void?>?, loader: Any):
-            AsyncTask<Void?, Void?, Void?> {
-        if (task == null || task.status != AsyncTask.Status.RUNNING) {
-            return (loader as AsyncTask<Void?, Void?, Void?>)
-                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        }
-        return task
-    }
-
-    /**
      * tbaPredictionToObject() converts json object to prediction and adds prediction to an array.
      *
      * @param qual json object

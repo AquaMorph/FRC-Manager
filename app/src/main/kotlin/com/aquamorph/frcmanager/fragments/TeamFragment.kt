@@ -20,7 +20,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of teams at an event.
  *
  * @author Christian Colglazier
- * @version 1/23/2020
+ * @version 3/25/2023
  */
 open class TeamFragment : TabFragment(), RefreshFragment,
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -62,37 +62,27 @@ open class TeamFragment : TabFragment(), RefreshFragment,
      */
     override fun refresh() {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "") {
-            task = Constants.runRefresh(task, LoadEventTeams())
+            mSwipeRefreshLayout.isRefreshing = true
+            executor.execute {
+                while (!DataLoader.teamDC.complete) {
+                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+                }
+                while (!DataLoader.rankDC.complete) {
+                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+                }
+                handler.post {
+                    if (context != null) {
+                        dataUpdate()
+                        mSwipeRefreshLayout.isRefreshing = false
+                    }
+                }
+            }
         }
     }
 
     override fun onSharedPreferenceChanged(sp: SharedPreferences?, key: String?) {
         if (key.equals("eventKey") || key.equals("teamNumber")) {
             refresh()
-        }
-    }
-
-    internal inner class LoadEventTeams : AsyncTask<Void?, Void?, Void?>() {
-
-        override fun onPreExecute() {
-            mSwipeRefreshLayout.isRefreshing = true
-        }
-
-        override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.teamDC.complete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            while (!DataLoader.rankDC.complete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: Void?) {
-            if (context != null) {
-                dataUpdate()
-                mSwipeRefreshLayout.isRefreshing = false
-            }
         }
     }
 
