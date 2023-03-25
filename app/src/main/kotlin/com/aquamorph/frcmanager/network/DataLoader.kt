@@ -190,7 +190,7 @@ class DataLoader {
          */
         private fun addTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
             for (tab in tabs) {
-                if ((!adapter.isTab(tab.name)!!)) {
+                if ((!adapter.isTab(tab.name))) {
                     adapter.addFragment(tab)
                 }
             }

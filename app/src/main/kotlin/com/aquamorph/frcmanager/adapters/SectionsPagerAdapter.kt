@@ -131,7 +131,7 @@ class SectionsPagerAdapter(
      * @param name tab name
      * @return if tab exists
      */
-    fun isTab(name: String): Boolean? {
+    fun isTab(name: String): Boolean {
         for (tab in tabs) {
             if (name == tab.name) {
                 return true

@@ -19,7 +19,6 @@ import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Logging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.util.Collections.sort
 
 /**
  * Loads events a team is signed up for and allows for the selection of that event.
