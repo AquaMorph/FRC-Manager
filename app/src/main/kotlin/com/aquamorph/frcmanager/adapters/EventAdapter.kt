@@ -81,8 +81,12 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
         } else {
             AppConfig.setDistrictKey("", context)
         }
-        AppConfig.setEventShortName(event.shortName, context)
-        AppConfig.setEventAddress(event.address, context)
+        if (event.address != null) {
+            AppConfig.setEventShortName(event.shortName, context)
+        }
+        if (event.address != null) {
+            AppConfig.setEventAddress(event.address, context)
+        }
     }
 
     /**
@@ -91,7 +95,7 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
      * @param text year month date formatted string
      * @return date
      */
-    private fun stringToDate(text: String): Date {
+    private fun stringToDate(text: String): Date? {
         return SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(text)
     }
 
