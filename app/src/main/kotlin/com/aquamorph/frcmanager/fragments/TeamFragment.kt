@@ -1,7 +1,6 @@
 package com.aquamorph.frcmanager.fragments
 
 import android.content.SharedPreferences
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater

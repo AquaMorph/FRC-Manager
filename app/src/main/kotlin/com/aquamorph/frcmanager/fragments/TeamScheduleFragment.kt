@@ -3,7 +3,6 @@ package com.aquamorph.frcmanager.fragments
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -154,7 +153,6 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
                 DataLoader.matchDC.newData)
         firstLoad = false
     }
-
 
     companion object {
 

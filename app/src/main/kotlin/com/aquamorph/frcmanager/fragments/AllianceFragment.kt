@@ -1,7 +1,6 @@
 package com.aquamorph.frcmanager.fragments
 
 import android.content.SharedPreferences
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -19,7 +18,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of alliance for eliminations.
  *
  * @author Christian Colglazier
- * @version 1/23/2020
+ * @version 3/25/2023
  */
 class AllianceFragment : TabFragment(),
         SharedPreferences.OnSharedPreferenceChangeListener,

@@ -8,11 +8,11 @@ import com.aquamorph.frcmanager.R
 
 class ThemeSwipeRefreshLayout : SwipeRefreshLayout {
 
-    constructor(context: Context): super(context) {
+    constructor(context: Context) : super(context) {
         setColors()
     }
 
-    constructor(context: Context, attrs: AttributeSet): super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         setColors()
     }
 

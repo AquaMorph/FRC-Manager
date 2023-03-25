@@ -1,13 +1,11 @@
 package com.aquamorph.frcmanager.fragments
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.RankAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider

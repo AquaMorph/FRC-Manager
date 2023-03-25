@@ -1,6 +1,5 @@
 package com.aquamorph.frcmanager.utils
 
-import android.os.AsyncTask
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
