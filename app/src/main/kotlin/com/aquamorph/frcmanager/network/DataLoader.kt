@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.network
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
 import com.aquamorph.frcmanager.R
@@ -176,7 +177,7 @@ class DataLoader {
          */
         private fun removeTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
             for (tab in tabs) {
-                if (adapter.isTab(tab.name)!!) {
+                if (adapter.isTab(tab.name)) {
                     adapter.removeFragment(adapter.tabPosition(tab.name))
                 }
             }
@@ -216,11 +217,12 @@ class DataLoader {
          * @param adapter tab adapter
          * @param activity main activity
          */
+        @SuppressLint("CheckResult")
         fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
                 // Checks for internet connections
                 if (!NetworkCheck.hasNetwork(activity)) {
-                    Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                    Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
                             R.string.noConnectionMessage,
                             Snackbar.LENGTH_LONG).show()
                 }
@@ -240,16 +242,16 @@ class DataLoader {
                     getData(tbaPredictionsDC, matchTabs, adapter, 7, activity)
                 }
                 // Check if FIRST or event feed is down
-                RetrofitInstance.getRetrofit(activity!!).create(TbaApi::class.java)
+                RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java)
                         .getStatus().subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ result -> if (result != null) {
                             if (result.isDatafeedDown) {
-                                Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                                Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
                                         R.string.firstServerDown,
                                         Snackbar.LENGTH_LONG).show()
                             } else if (result.downEvents.contains(eventKey)) {
-                                Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                                Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
                                         R.string.eventServerDown,
                                         Snackbar.LENGTH_LONG).show()
                             }

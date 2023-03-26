@@ -173,7 +173,7 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
                 blueRobot1 = extras.getString("blueRobot1")!!
                 blueRobot2 = extras.getString("blueRobot2")!!
                 blueRobot3 = extras.getString("blueRobot3")!!
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
 
@@ -313,7 +313,7 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
                         }
                         table.visibility = View.VISIBLE
                         Animations.loadMatchBreakdownAnimation(baseContext, table)
-                    } catch (e: UninitializedPropertyAccessException) {
+                    } catch (_: UninitializedPropertyAccessException) {
                     }
                 }
             }

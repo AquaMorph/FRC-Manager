@@ -53,7 +53,7 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
                 blueRobot1 = extras.getString("blueRobot1")!!
                 blueRobot2 = extras.getString("blueRobot2")!!
                 blueRobot3 = extras.getString("blueRobot3")!!
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
 

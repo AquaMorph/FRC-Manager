@@ -51,7 +51,7 @@ class SectionsPagerAdapter(
         DataLoader.refresh(this, activity)
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return tabs[position].name
     }
 
