@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
@@ -219,9 +220,18 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
                 else -> Constants.Theme.LIGHT
             }
             when (appTheme) {
-                Constants.Theme.LIGHT -> activity.setTheme(R.style.LightTheme)
-                Constants.Theme.DARK -> activity.setTheme(R.style.DarkTheme)
-                Constants.Theme.BATTERY_SAVER -> activity.setTheme(R.style.OMOLEDTheme)
+                Constants.Theme.LIGHT -> {
+                    activity.setTheme(R.style.LightTheme)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+                Constants.Theme.DARK -> {
+                    activity.setTheme(R.style.DarkTheme)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+                Constants.Theme.BATTERY_SAVER -> {
+                    activity.setTheme(R.style.OMOLEDTheme)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
             }
         }
 
