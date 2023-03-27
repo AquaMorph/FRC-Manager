@@ -2,7 +2,6 @@ package com.aquamorph.frcmanager.network
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.view.View
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
