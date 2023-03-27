@@ -31,7 +31,7 @@ import java.util.Locale
  * Populates a RecyclerView with the schedule for a team.
  *
  * @author Christian Colglazier
- * @version 2/21/2020
+ * @version 2/27/2023
  */
 class ScheduleAdapter(
     private val context: Context,
@@ -177,7 +177,8 @@ class ScheduleAdapter(
         if (MainActivity.predMode == "tba" && tbaPredictions.isNotEmpty()) {
             holder.predictionTable.visibility = View.VISIBLE
             val predMatch = getMatch(data[position].key, tbaPredictions)
-            holder.predictionsText.setTextColor(getPredictionColor(predMatch.prob, predMatch.winningAlliance))
+            holder.predictionsText.setTextColor(getPredictionColor(predMatch.prob,
+                predMatch.winningAlliance))
             holder.predictionsText.text = predictionToString(predMatch, MainActivity.predPercentage)
         } else if (MainActivity.predMode == "statbotics" && statbosticsPredictions.isNotEmpty()) {
             val predMatch = getMatch(data[position].key, statbosticsPredictions)
@@ -194,6 +195,13 @@ class ScheduleAdapter(
         }
     }
 
+    /**
+     * getPredictionColor() gets the color the prediction text should be based on predicted winner
+     * and their probability of winning.
+     * @param probability win probability
+     * @param winningAlliance the predicted winning alliance
+     * @return text color
+     */
     private fun getPredictionColor(probability: Double, winningAlliance: String): Int {
         val typedValue = TypedValue()
         val theme: Resources.Theme = context.theme
@@ -235,30 +243,44 @@ class ScheduleAdapter(
      */
     private fun predictionToString(prediction: TBAPrediction.PredMatch, percentageEnabled: Boolean):
             String {
-        return when {
-            percentageEnabled -> {
-                "%2.0f%% %s".format(prediction.prob * 100, prediction.winningAlliance)
-            }
-            else -> when {
-                prediction.prob <= 0.55 -> "Tossup"
-                prediction.prob <= 0.6 -> "Leaning %s".format(prediction.winningAlliance)
-                prediction.prob <= 0.65 -> "Likely %s".format(prediction.winningAlliance)
-                else -> "Heavily %s".format(prediction.winningAlliance)
-            }
-        }
+        return predictionToString(prediction.prob, prediction.winningAlliance, percentageEnabled)
     }
 
-    private fun predictionToString(prediction: com.aquamorph.frcmanager.models.statbotics.Match, percentageEnabled: Boolean):
+    /**
+     * predictionToString() converts a match prediction to string with either percentage or text
+     * description.
+     *
+     * @param prediction match prediction
+     * @param percentageEnabled raw percentage enabled
+     * @return prediction text
+     */
+    private fun predictionToString(
+        prediction: com.aquamorph.frcmanager.models.statbotics.Match,
+        percentageEnabled: Boolean
+    ): String {
+        return predictionToString(prediction.epaWinProb, prediction.epaWinner, percentageEnabled)
+    }
+
+    /**
+     * predictionToString() converts a prediction to string with either percentage or text
+     * description.
+     *
+     * @param probability match win probability
+     * @param winner predicted winning alliance name
+     * @param percentageEnabled raw percentage enabled
+     * @return prediction text
+     */
+    private fun predictionToString(probability: Double, winner: String, percentageEnabled: Boolean):
             String {
         return when {
             percentageEnabled -> {
-                "%2.0f%% %s".format(prediction.epaWinProb * 100, prediction.epaWinner)
+                "%2.0f%% %s".format(probability * 100, winner)
             }
             else -> when {
-                prediction.epaWinProb <= 0.55 -> "Tossup"
-                prediction.epaWinProb <= 0.6 -> "Leaning %s".format(prediction.epaWinner)
-                prediction.epaWinProb <= 0.65 -> "Likely %s".format(prediction.epaWinner)
-                else -> "Heavily %s".format(prediction.epaWinner)
+                probability <= 0.55 -> "Tossup"
+                probability <= 0.6 -> "Leaning %s".format(winner)
+                probability <= 0.65 -> "Likely %s".format(winner)
+                else -> "Heavily %s".format(winner)
             }
         }
     }
@@ -278,7 +300,17 @@ class ScheduleAdapter(
         return TBAPrediction.PredMatch("", 0.5, "Red")
     }
 
-    private fun getMatch(matchKey: String, predictions: ArrayList<com.aquamorph.frcmanager.models.statbotics.Match>): com.aquamorph.frcmanager.models.statbotics.Match? {
+    /**
+     * getMatch() returns a match prediction given a match key.
+     *
+     * @param matchKey match key
+     * @param predictions list of match predictions
+     * @return match prediction
+     */
+    private fun getMatch(
+        matchKey: String,
+        predictions: ArrayList<com.aquamorph.frcmanager.models.statbotics.Match>
+    ): com.aquamorph.frcmanager.models.statbotics.Match? {
         for (p in predictions) {
             if (p.key == matchKey) return p
         }

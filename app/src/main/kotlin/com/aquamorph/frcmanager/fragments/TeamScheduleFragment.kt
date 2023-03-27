@@ -66,7 +66,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         } else {
             super.onCreateView(view, teamEventMatches,
                     ScheduleAdapter(requireContext(), teamEventMatches, tbaPredictions,
-                        statboticsPredictions,teamNumber))
+                        statboticsPredictions, teamNumber))
         }
         if (!getTeamFromSettings) {
             mSwipeRefreshLayout.isEnabled = false
