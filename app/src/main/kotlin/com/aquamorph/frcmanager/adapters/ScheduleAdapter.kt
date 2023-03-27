@@ -183,7 +183,7 @@ class ScheduleAdapter(
         } else if (MainActivity.predMode == "statbotics" && statbosticsPredictions.isNotEmpty()) {
             val predMatch = getMatch(data[position].key, statbosticsPredictions)
             if (predMatch != null) {
-                holder.predictionsText.setTextColor(getPredictionColor(predMatch.epaWinProb,
+                holder.predictionsText.setTextColor(getPredictionColor(predMatch.winnerProb(),
                     predMatch.epaWinner))
                 holder.predictionsText.text =
                     predictionToString(predMatch, MainActivity.predPercentage)
@@ -258,7 +258,7 @@ class ScheduleAdapter(
         prediction: com.aquamorph.frcmanager.models.statbotics.Match,
         percentageEnabled: Boolean
     ): String {
-        return predictionToString(prediction.epaWinProb, prediction.epaWinner, percentageEnabled)
+        return predictionToString(prediction.winnerProb(), prediction.epaWinner, percentageEnabled)
     }
 
     /**

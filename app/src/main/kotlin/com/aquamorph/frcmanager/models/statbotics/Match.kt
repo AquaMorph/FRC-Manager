@@ -49,4 +49,12 @@ data class Match(
     @Expose
     @SerializedName("epa_win_prob")
     var epaWinProb: Double
-)
+) {
+    fun winnerProb(): Double {
+        return if (epaWinProb > 0.5) {
+            epaWinProb
+        } else {
+            1 - epaWinProb
+        }
+    }
+}
