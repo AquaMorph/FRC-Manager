@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         eventAddress = prefs.getString("eventAddress", "")!!
         DataLoader.eventKey = prefs.getString("eventKey", "")!!
         DataLoader.districtKey = prefs.getString("districtKey", "")!!
-        predEnabled = prefs.getString("predictions", "none")!! != "none"
+        predMode = prefs.getString("predictions", "none")!!
         predPercentage = prefs.getString("predictionDisplay", "words") != "words"
         if (DataLoader.teamNumber == "") openSetup()
         listener()
@@ -146,8 +146,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
                     .getString("eventAddress", "")!!
             "year" -> DataLoader.year = sharedPreferences
                     .getString("year", "")!!
-            "predictions" -> predEnabled = sharedPreferences
-                    .getString("predictions", "none")!! != "none"
+            "predictions" -> predMode = sharedPreferences
+                    .getString("predictions", "none")!!
             "predictionDisplay" -> predPercentage = sharedPreferences
                     .getString("predictionDisplay", "words") != "words"
         }
@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     companion object {
 
         var appTheme = Constants.Theme.LIGHT
-        var predEnabled = false
+        var predMode = "none"
         var predPercentage = false
 
         @SuppressLint("StaticFieldLeak")

@@ -17,8 +17,9 @@ import com.google.gson.JsonObject
  */
 object Constants {
 
-    const val URL = "https://www.thebluealliance.com/api/v3/"
+    const val TBA_API_URL = "https://www.thebluealliance.com/api/v3/"
     const val TBA_HEADER = "X-TBA-Auth-Key"
+    const val STATBOTICS_API_URL = "https://api.statbotics.io/v2/"
     const val TRACING_LEVEL = 3
     const val THREAD_WAIT_TIME = 100
     const val MAX_NUMBER_OF_TABS = 7

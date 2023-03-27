@@ -12,7 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.models.MatchScore2020
-import com.aquamorph.frcmanager.network.RetrofitInstance
+import com.aquamorph.frcmanager.network.TBARetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants
 import java.lang.Exception
@@ -196,7 +196,7 @@ class MatchBreakdown2020Activity : AppCompatActivity() {
         findViewById<TextView>(R.id.blueAllianceThree).text = blueRobot3
 
         MainActivity.theme(this)
-        val call = RetrofitInstance.getRetrofit(this)
+        val call = TBARetrofitInstance.getRetrofit(this)
                 .create(TbaApi::class.java).getMatch2020(matchKey)
 
         call.enqueue(object : Callback<MatchScore2020> {

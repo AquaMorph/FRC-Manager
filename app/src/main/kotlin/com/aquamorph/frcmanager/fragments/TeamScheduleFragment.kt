@@ -29,7 +29,9 @@ import com.aquamorph.frcmanager.utils.MatchSort
 class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, RefreshFragment {
 
     private var teamEventMatches = ArrayList<Match>()
-    private var predictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
+    private var tbaPredictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
+    private var statboticsPredictions:
+            ArrayList<com.aquamorph.frcmanager.models.statbotics.Match> = ArrayList()
     private var teamNumber: String = ""
     private var getTeamFromSettings: Boolean = true
 
@@ -58,11 +60,13 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         }
         if (MainActivity.appTheme == Constants.Theme.BATTERY_SAVER) {
             super.onCreateView(view, teamEventMatches,
-                    ScheduleAdapter(requireContext(), teamEventMatches, predictions, teamNumber),
+                    ScheduleAdapter(requireContext(), teamEventMatches, tbaPredictions,
+                        statboticsPredictions, teamNumber),
                     Divider(requireContext(), Constants.DIVIDER_WIDTH, 0))
         } else {
             super.onCreateView(view, teamEventMatches,
-                    ScheduleAdapter(requireContext(), teamEventMatches, predictions, teamNumber))
+                    ScheduleAdapter(requireContext(), teamEventMatches, tbaPredictions,
+                        statboticsPredictions,teamNumber))
         }
         if (!getTeamFromSettings) {
             mSwipeRefreshLayout.isEnabled = false
@@ -101,7 +105,10 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
                 while (!DataLoader.matchDC.complete) {
                     SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
                 }
-                while (MainActivity.predEnabled && !DataLoader.tbaPredictionsDC.complete) {
+                while (MainActivity.predMode == "tba" && !DataLoader.tbaPredictionsDC.complete) {
+                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+                }
+                while (MainActivity.predMode == "statbotics" && !DataLoader.statboticsMatches.complete) {
                     SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
                 }
                 handler.post {
@@ -139,14 +146,16 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     }
 
     override fun dataUpdate() {
-        if (MainActivity.predEnabled) {
-            predictions.clear()
-            predictions.addAll(DataLoader.tbaPredictionsDC.data)
+        if (MainActivity.predMode == "tba") {
+            tbaPredictions.clear()
+            tbaPredictions.addAll(DataLoader.tbaPredictionsDC.data)
         }
         teamEventMatches.clear()
         for (match in DataLoader.matchDC.data) {
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
         }
+        statboticsPredictions.clear()
+        statboticsPredictions.addAll(DataLoader.statboticsMatches.data)
         MatchSort.sortMatches(teamEventMatches, prefs.getString("matchSort", ""))
         Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
         Animations.loadAnimation(context, recyclerView, adapter, firstLoad,

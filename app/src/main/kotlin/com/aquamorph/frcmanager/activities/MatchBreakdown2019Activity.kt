@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.models.MatchScore2019
-import com.aquamorph.frcmanager.network.RetrofitInstance
+import com.aquamorph.frcmanager.network.TBARetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants
 import java.lang.Exception
@@ -133,7 +133,7 @@ class MatchBreakdown2019Activity : AppCompatActivity() {
                 getString(R.string.score2019Hab3)
 
         MainActivity.theme(this)
-        val call = RetrofitInstance.getRetrofit(this)
+        val call = TBARetrofitInstance.getRetrofit(this)
                 .create(TbaApi::class.java).getMatch2019(matchKey)
 
         call.enqueue(object : Callback<MatchScore2019> {

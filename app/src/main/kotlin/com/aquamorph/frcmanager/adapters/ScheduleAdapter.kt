@@ -36,7 +36,8 @@ import java.util.Locale
 class ScheduleAdapter(
     private val context: Context,
     private val data: ArrayList<Match>,
-    private val predictions: ArrayList<TBAPrediction.PredMatch>,
+    private val tbaPredictions: ArrayList<TBAPrediction.PredMatch>,
+    private val statbosticsPredictions: ArrayList<com.aquamorph.frcmanager.models.statbotics.Match>,
     private var team: String?
 ) : RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
 
@@ -173,43 +174,55 @@ class ScheduleAdapter(
         holder.blueScore.text = context.getString(R.string.rankPointFormat)
                 .format(rpToString(blueRP), holder.blueScore.text)
 
-        if (MainActivity.predEnabled && predictions.isNotEmpty()) {
+        if (MainActivity.predMode == "tba" && tbaPredictions.isNotEmpty()) {
             holder.predictionTable.visibility = View.VISIBLE
-            val predMatch = getMatch(data[position].key, predictions)
-
-            val typedValue = TypedValue()
-            val theme: Resources.Theme = context.theme
-            when {
-                predMatch.prob <= 0.55 -> {
-                    theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
-                }
-                predMatch.winningAlliance == "red" -> {
-                    when {
-                        predMatch.prob <= 0.6 ->
-                            theme.resolveAttribute(R.attr.redLeaning, typedValue, true)
-                        predMatch.prob <= 0.65 ->
-                            theme.resolveAttribute(R.attr.redLikely, typedValue, true)
-                        else ->
-                            theme.resolveAttribute(R.attr.redHeavily, typedValue, true)
-                    }
-                }
-                else -> {
-                    when {
-                        predMatch.prob <= 0.6 ->
-                            theme.resolveAttribute(R.attr.blueLeaning, typedValue, true)
-                        predMatch.prob <= 0.65 ->
-                            theme.resolveAttribute(R.attr.blueLikely, typedValue, true)
-                        else ->
-                            theme.resolveAttribute(R.attr.blueHeavily, typedValue, true)
-                    }
-                }
-            }
-            holder.predictionsText.setTextColor(typedValue.data)
-
+            val predMatch = getMatch(data[position].key, tbaPredictions)
+            holder.predictionsText.setTextColor(getPredictionColor(predMatch.prob, predMatch.winningAlliance))
             holder.predictionsText.text = predictionToString(predMatch, MainActivity.predPercentage)
+        } else if (MainActivity.predMode == "statbotics" && statbosticsPredictions.isNotEmpty()) {
+            val predMatch = getMatch(data[position].key, statbosticsPredictions)
+            if (predMatch != null) {
+                holder.predictionsText.setTextColor(getPredictionColor(predMatch.epaWinProb,
+                    predMatch.epaWinner))
+                holder.predictionsText.text =
+                    predictionToString(predMatch, MainActivity.predPercentage)
+            } else {
+                holder.predictionTable.visibility = View.GONE
+            }
         } else {
             holder.predictionTable.visibility = View.GONE
         }
+    }
+
+    private fun getPredictionColor(probability: Double, winningAlliance: String): Int {
+        val typedValue = TypedValue()
+        val theme: Resources.Theme = context.theme
+        when {
+            probability <= 0.55 -> {
+                theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
+            }
+            winningAlliance == "red" -> {
+                when {
+                    probability <= 0.6 ->
+                        theme.resolveAttribute(R.attr.redLeaning, typedValue, true)
+                    probability <= 0.65 ->
+                        theme.resolveAttribute(R.attr.redLikely, typedValue, true)
+                    else ->
+                        theme.resolveAttribute(R.attr.redHeavily, typedValue, true)
+                }
+            }
+            else -> {
+                when {
+                    probability <= 0.6 ->
+                        theme.resolveAttribute(R.attr.blueLeaning, typedValue, true)
+                    probability <= 0.65 ->
+                        theme.resolveAttribute(R.attr.blueLikely, typedValue, true)
+                    else ->
+                        theme.resolveAttribute(R.attr.blueHeavily, typedValue, true)
+                }
+            }
+        }
+        return typedValue.data
     }
 
     /**
@@ -235,6 +248,21 @@ class ScheduleAdapter(
         }
     }
 
+    private fun predictionToString(prediction: com.aquamorph.frcmanager.models.statbotics.Match, percentageEnabled: Boolean):
+            String {
+        return when {
+            percentageEnabled -> {
+                "%2.0f%% %s".format(prediction.epaWinProb * 100, prediction.epaWinner)
+            }
+            else -> when {
+                prediction.epaWinProb <= 0.55 -> "Tossup"
+                prediction.epaWinProb <= 0.6 -> "Leaning %s".format(prediction.epaWinner)
+                prediction.epaWinProb <= 0.65 -> "Likely %s".format(prediction.epaWinner)
+                else -> "Heavily %s".format(prediction.epaWinner)
+            }
+        }
+    }
+
     /**
      * getMatch() returns a match prediction given a match key.
      *
@@ -248,6 +276,13 @@ class ScheduleAdapter(
             if (p.matchKey == matchKey) return p
         }
         return TBAPrediction.PredMatch("", 0.5, "Red")
+    }
+
+    private fun getMatch(matchKey: String, predictions: ArrayList<com.aquamorph.frcmanager.models.statbotics.Match>): com.aquamorph.frcmanager.models.statbotics.Match? {
+        for (p in predictions) {
+            if (p.key == matchKey) return p
+        }
+        return null
     }
 
     /**

@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitInstance {
+class TBARetrofitInstance {
     companion object {
         private lateinit var retrofit: Retrofit
 
@@ -30,7 +30,7 @@ class RetrofitInstance {
             retrofit = Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(Constants.URL)
+                    .baseUrl(Constants.TBA_API_URL)
                     .client(client)
                     .build()
             return retrofit

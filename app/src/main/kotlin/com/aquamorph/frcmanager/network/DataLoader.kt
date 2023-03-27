@@ -64,6 +64,7 @@ class DataLoader {
         val districtRankDC = DataContainer<DistrictRank>()
         val districtTeamDC = DataContainer<Team>()
         val tbaPredictionsDC = DataContainer<TBAPrediction.PredMatch>()
+        val statboticsMatches = DataContainer<com.aquamorph.frcmanager.models.statbotics.Match>()
         private val teamTabs = ArrayList<Tab>()
         private val rankTabs = ArrayList<Tab>()
         private val awardTabs = ArrayList<Tab>()
@@ -102,21 +103,21 @@ class DataLoader {
         ) {
             dataContainer.complete = false
             val retrofit: ArrayList<Observable<out Any>> =
-                    arrayListOf(RetrofitInstance.getRetrofit(activity)
+                    arrayListOf(TBARetrofitInstance.getRetrofit(activity)
                             .create(TbaApi::class.java).getEventMatches(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getEventTeams(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getEventRankings(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getEventAwards(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getEventAlliances(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getDistrictRankings(districtKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getDistrictTeams(districtKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getEventPredictions(eventKey))
             disposable = retrofit[observer]
                     .subscribeOn(Schedulers.io())
@@ -208,6 +209,7 @@ class DataLoader {
             districtRankDC.data.clear()
             districtTeamDC.data.clear()
             tbaPredictionsDC.data.clear()
+            statboticsMatches.data.clear()
         }
 
         /**
@@ -237,11 +239,21 @@ class DataLoader {
                 } else {
                     removeTab(districtRankTabs, adapter)
                 }
-                if (MainActivity.predEnabled) {
+                if (MainActivity.predMode.equals("tba")) {
                     getData(tbaPredictionsDC, matchTabs, adapter, 7, activity)
+                } else if (MainActivity.predMode.equals("statbotics")) {
+                    StatboticsRetrofitInstance.getRetrofit(activity).create(StatboticsAPI::class.java)
+                        .getEventMatches(eventKey).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ result -> if (result != null) {
+                            statboticsMatches.data.clear()
+                            statboticsMatches.data.addAll(result.body()!!)
+                            statboticsMatches.complete = true
+                        } },
+                            { error -> Logging.error(this, error.toString(), 0) })
                 }
                 // Check if FIRST or event feed is down
-                RetrofitInstance.getRetrofit(activity).create(TbaApi::class.java)
+                TBARetrofitInstance.getRetrofit(activity).create(TbaApi::class.java)
                         .getStatus().subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ result -> if (result != null) {

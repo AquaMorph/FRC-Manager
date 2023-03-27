@@ -94,7 +94,7 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
      * @return date
      */
     private fun stringToDate(text: String): Date {
-        return SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(text)
+        return SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(text)!!
     }
 
     /**
