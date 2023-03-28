@@ -1,4 +1,4 @@
-package com.aquamorph.frcmanager.models
+package com.aquamorph.frcmanager.models.tba
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

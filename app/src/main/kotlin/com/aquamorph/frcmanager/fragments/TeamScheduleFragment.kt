@@ -13,8 +13,8 @@ import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.ScheduleAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
-import com.aquamorph.frcmanager.models.Match
-import com.aquamorph.frcmanager.models.TBAPrediction
+import com.aquamorph.frcmanager.models.tba.Match
+import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging

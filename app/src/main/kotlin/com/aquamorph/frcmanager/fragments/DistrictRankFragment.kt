@@ -9,8 +9,8 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.DistrictRankAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
-import com.aquamorph.frcmanager.models.DistrictRank
-import com.aquamorph.frcmanager.models.Team
+import com.aquamorph.frcmanager.models.tba.DistrictRank
+import com.aquamorph.frcmanager.models.tba.Team
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 

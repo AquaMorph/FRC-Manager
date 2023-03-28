@@ -11,7 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.decoration.Animations
-import com.aquamorph.frcmanager.models.MatchScore2020
+import com.aquamorph.frcmanager.models.tba.MatchScore2020
 import com.aquamorph.frcmanager.network.TBARetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants

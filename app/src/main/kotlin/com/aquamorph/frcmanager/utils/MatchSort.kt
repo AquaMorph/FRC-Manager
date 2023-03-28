@@ -1,6 +1,6 @@
 package com.aquamorph.frcmanager.utils
 
-import com.aquamorph.frcmanager.models.Match
+import com.aquamorph.frcmanager.models.tba.Match
 import java.util.Collections
 
 /**

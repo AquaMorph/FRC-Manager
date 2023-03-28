@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.models.MatchScore2019
+import com.aquamorph.frcmanager.models.tba.MatchScore2019
 import com.aquamorph.frcmanager.network.TBARetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants

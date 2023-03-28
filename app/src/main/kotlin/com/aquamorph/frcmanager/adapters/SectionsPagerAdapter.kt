@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.aquamorph.frcmanager.fragments.RefreshFragment
-import com.aquamorph.frcmanager.models.Tab
+import com.aquamorph.frcmanager.models.tba.Tab
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Logging
 import com.google.android.material.tabs.TabLayout

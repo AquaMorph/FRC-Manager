@@ -5,7 +5,7 @@ import android.text.Html
 import android.text.Spanned
 import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
-import com.aquamorph.frcmanager.models.TBAPrediction
+import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
 import com.google.gson.JsonObject
 
@@ -210,7 +210,8 @@ object Constants {
     ) {
         for (q in qual.keySet()) {
             val matchData = qual.get(q).asJsonObject
-            predictions.add(TBAPrediction.PredMatch(q,
+            predictions.add(
+                TBAPrediction.PredMatch(q,
                     matchData.get("prob").asDouble,
                     matchData.get("winning_alliance").asString))
         }

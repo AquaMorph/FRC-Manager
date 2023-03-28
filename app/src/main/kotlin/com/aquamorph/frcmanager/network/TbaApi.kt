@@ -1,16 +1,16 @@
 package com.aquamorph.frcmanager.network
 
-import com.aquamorph.frcmanager.models.Alliance
-import com.aquamorph.frcmanager.models.Award
-import com.aquamorph.frcmanager.models.DistrictRank
-import com.aquamorph.frcmanager.models.Event
-import com.aquamorph.frcmanager.models.Match
-import com.aquamorph.frcmanager.models.MatchScore2019
-import com.aquamorph.frcmanager.models.MatchScore2020
-import com.aquamorph.frcmanager.models.Rank
-import com.aquamorph.frcmanager.models.Status
-import com.aquamorph.frcmanager.models.TBAPrediction
-import com.aquamorph.frcmanager.models.Team
+import com.aquamorph.frcmanager.models.tba.Alliance
+import com.aquamorph.frcmanager.models.tba.Award
+import com.aquamorph.frcmanager.models.tba.DistrictRank
+import com.aquamorph.frcmanager.models.tba.Event
+import com.aquamorph.frcmanager.models.tba.Match
+import com.aquamorph.frcmanager.models.tba.MatchScore2019
+import com.aquamorph.frcmanager.models.tba.MatchScore2020
+import com.aquamorph.frcmanager.models.tba.Rank
+import com.aquamorph.frcmanager.models.tba.Status
+import com.aquamorph.frcmanager.models.tba.TBAPrediction
+import com.aquamorph.frcmanager.models.tba.Team
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.Response

@@ -19,8 +19,8 @@ import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.activities.MatchBreakdown2019Activity
 import com.aquamorph.frcmanager.activities.MatchBreakdown2020Activity
 import com.aquamorph.frcmanager.activities.TeamSummary
-import com.aquamorph.frcmanager.models.Match
-import com.aquamorph.frcmanager.models.TBAPrediction
+import com.aquamorph.frcmanager.models.tba.Match
+import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import java.text.SimpleDateFormat

@@ -10,7 +10,7 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.AllianceAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
-import com.aquamorph.frcmanager.models.Alliance
+import com.aquamorph.frcmanager.models.tba.Alliance
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 

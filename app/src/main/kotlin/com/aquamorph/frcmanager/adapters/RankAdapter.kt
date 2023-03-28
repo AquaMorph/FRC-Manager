@@ -16,8 +16,8 @@ import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
-import com.aquamorph.frcmanager.models.Rank
-import com.aquamorph.frcmanager.models.Team
+import com.aquamorph.frcmanager.models.tba.Rank
+import com.aquamorph.frcmanager.models.tba.Team
 import com.aquamorph.frcmanager.utils.Constants
 
 /**
