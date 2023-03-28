@@ -31,7 +31,7 @@ import java.util.Locale
  * Populates a RecyclerView with the schedule for a team.
  *
  * @author Christian Colglazier
- * @version 2/27/2023
+ * @version 3/27/2023
  */
 class ScheduleAdapter(
     private val context: Context,
@@ -174,13 +174,16 @@ class ScheduleAdapter(
         holder.blueScore.text = context.getString(R.string.rankPointFormat)
                 .format(rpToString(blueRP), holder.blueScore.text)
 
+        // The Blue Alliance predictions
         if (MainActivity.predMode == "tba" && tbaPredictions.isNotEmpty()) {
             holder.predictionTable.visibility = View.VISIBLE
             val predMatch = getMatch(data[position].key, tbaPredictions)
             holder.predictionsText.setTextColor(getPredictionColor(predMatch.prob,
                 predMatch.winningAlliance))
             holder.predictionsText.text = predictionToString(predMatch, MainActivity.predPercentage)
-        } else if (MainActivity.predMode == "statbotics" && statbosticsPredictions.isNotEmpty()) {
+        }
+        // Statbotics predictions
+        else if (MainActivity.predMode == "statbotics" && statbosticsPredictions.isNotEmpty()) {
             val predMatch = getMatch(data[position].key, statbosticsPredictions)
             if (predMatch != null) {
                 holder.predictionsText.setTextColor(getPredictionColor(predMatch.winnerProb(),
