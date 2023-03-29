@@ -33,9 +33,7 @@
         <activity
             android:name=".activities.TeamSummary"/>
         <activity
-            android:name=".activities.MatchBreakdown2019Activity"/>
-        <activity
-            android:name=".activities.MatchBreakdown2020Activity"/>
+            android:name=".activities.MatchBreakdownActivity"/>
         <activity
             android:name=".activities.Setup"
             android:label="@string/appName"

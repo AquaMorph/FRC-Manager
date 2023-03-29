@@ -5,14 +5,12 @@ import com.aquamorph.frcmanager.models.tba.Award
 import com.aquamorph.frcmanager.models.tba.DistrictRank
 import com.aquamorph.frcmanager.models.tba.Event
 import com.aquamorph.frcmanager.models.tba.Match
-import com.aquamorph.frcmanager.models.tba.MatchScore2019
-import com.aquamorph.frcmanager.models.tba.MatchScore2020
+import com.aquamorph.frcmanager.models.tba.MatchScore
 import com.aquamorph.frcmanager.models.tba.Rank
 import com.aquamorph.frcmanager.models.tba.Status
 import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.aquamorph.frcmanager.models.tba.Team
 import io.reactivex.Observable
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -123,22 +121,13 @@ interface TbaApi {
             Observable<Response<ArrayList<Team>>>
 
     /**
-     * getMatch2019() returns match breakdown for 2019 matches.
-     *
-     * @param matchKey district identification
-     */
-    @GET("match/{matchKey}")
-    fun getMatch2019(@Path("matchKey") matchKey: String):
-            Call<MatchScore2019>
-
-    /**
      * getMatch2020() returns match breakdown for 2020 matches.
      *
      * @param matchKey district identification
      */
     @GET("match/{matchKey}")
-    fun getMatch2020(@Path("matchKey") matchKey: String):
-            Call<MatchScore2020>
+    fun getMatch(@Path("matchKey") matchKey: String):
+            Observable<MatchScore>
 
     /**
      * getEventPredictions() returns event predictions.
