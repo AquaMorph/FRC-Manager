@@ -13,13 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.EventAdapter
-import com.aquamorph.frcmanager.models.Event
-import com.aquamorph.frcmanager.network.RetrofitInstance
+import com.aquamorph.frcmanager.models.tba.Event
+import com.aquamorph.frcmanager.network.TBARetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Logging
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.util.Collections.sort
 
 /**
  * Loads events a team is signed up for and allows for the selection of that event.
@@ -57,7 +56,7 @@ class EventSlide : Fragment() {
      */
     @SuppressLint("CheckResult")
     fun load() {
-        RetrofitInstance.getRetrofit(requireContext()).create(TbaApi::class.java)
+        TBARetrofitInstance.getRetrofit(requireContext()).create(TbaApi::class.java)
                 .getTeamEvents("frc${prefs.getString("teamNumber", "")}",
                         prefs.getString("year", "")!!).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

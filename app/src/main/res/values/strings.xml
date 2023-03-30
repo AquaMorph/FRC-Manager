@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE resources [
-    <!ENTITY appversion "1-6-1">
+    <!ENTITY appversion "1-7-0">
     ]>
 
 <resources>
@@ -64,10 +64,12 @@
     <string name="predictionsSummary">Choose prediction match algorithm</string>
     <string-array name="predictionsValues">
         <item>none</item>
+        <item>statbotics</item>
         <item>tba</item>
     </string-array>
     <string-array name="predictions">
         <item>None</item>
+        <item>Statbotics</item>
         <item>The Blue Alliance</item>
     </string-array>
     <string name="predictionDisplayTitle">Predictions Display</string>

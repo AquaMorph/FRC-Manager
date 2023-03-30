@@ -15,8 +15,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
-import com.aquamorph.frcmanager.models.Rank
-import com.aquamorph.frcmanager.models.Team
+import com.aquamorph.frcmanager.models.tba.Rank
+import com.aquamorph.frcmanager.models.tba.Team
 
 /**
  * Populates a RecyclerView with teams at an event.

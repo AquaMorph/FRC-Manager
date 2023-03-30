@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.models.Award
+import com.aquamorph.frcmanager.models.tba.Award
 import com.aquamorph.frcmanager.utils.Constants
 
 /**

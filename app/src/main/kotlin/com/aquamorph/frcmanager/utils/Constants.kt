@@ -1,12 +1,11 @@
 package com.aquamorph.frcmanager.utils
 
-import android.os.AsyncTask
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
 import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
-import com.aquamorph.frcmanager.models.TBAPrediction
+import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
 import com.google.gson.JsonObject
 
@@ -18,8 +17,9 @@ import com.google.gson.JsonObject
  */
 object Constants {
 
-    const val URL = "https://www.thebluealliance.com/api/v3/"
+    const val TBA_API_URL = "https://www.thebluealliance.com/api/v3/"
     const val TBA_HEADER = "X-TBA-Auth-Key"
+    const val STATBOTICS_API_URL = "https://api.statbotics.io/v2/"
     const val TRACING_LEVEL = 3
     const val THREAD_WAIT_TIME = 100
     const val MAX_NUMBER_OF_TABS = 7
@@ -199,22 +199,6 @@ object Constants {
     }
 
     /**
-     * runRefresh() starts a refresh thread.
-     *
-     * @param task thread
-     * @param loader method to be run
-     * @return competed task
-     */
-    internal fun runRefresh(task: AsyncTask<Void?, Void?, Void?>?, loader: Any):
-            AsyncTask<Void?, Void?, Void?> {
-        if (task == null || task.status != AsyncTask.Status.RUNNING) {
-            return (loader as AsyncTask<Void?, Void?, Void?>)
-                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        }
-        return task
-    }
-
-    /**
      * tbaPredictionToObject() converts json object to prediction and adds prediction to an array.
      *
      * @param qual json object
@@ -226,7 +210,8 @@ object Constants {
     ) {
         for (q in qual.keySet()) {
             val matchData = qual.get(q).asJsonObject
-            predictions.add(TBAPrediction.PredMatch(q,
+            predictions.add(
+                TBAPrediction.PredMatch(q,
                     matchData.get("prob").asDouble,
                     matchData.get("winning_alliance").asString))
         }

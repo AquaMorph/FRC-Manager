@@ -59,11 +59,18 @@
                 android:data="https://github.com/AquaMorph/FRC-Manager/issues/"/>
         </Preference>
         <Preference
-            android:summary="www.thebluealliance.com"
+            android:summary="thebluealliance.com"
             android:title="Data from the Blue Alliance">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://www.thebluealliance.com"/>
+        </Preference>
+        <Preference
+            android:summary="statbotics.io"
+            android:title="Predictions from Statbotics">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://www.statbotics.io"/>
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

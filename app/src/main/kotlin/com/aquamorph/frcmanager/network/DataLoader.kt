@@ -1,7 +1,7 @@
 package com.aquamorph.frcmanager.network
 
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.view.View
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
@@ -12,14 +12,14 @@ import com.aquamorph.frcmanager.fragments.EventScheduleFragment
 import com.aquamorph.frcmanager.fragments.RankFragment
 import com.aquamorph.frcmanager.fragments.TeamFragment
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment
-import com.aquamorph.frcmanager.models.Alliance
-import com.aquamorph.frcmanager.models.Award
-import com.aquamorph.frcmanager.models.DistrictRank
-import com.aquamorph.frcmanager.models.Match
-import com.aquamorph.frcmanager.models.Rank
-import com.aquamorph.frcmanager.models.TBAPrediction
-import com.aquamorph.frcmanager.models.Tab
-import com.aquamorph.frcmanager.models.Team
+import com.aquamorph.frcmanager.models.tba.Alliance
+import com.aquamorph.frcmanager.models.tba.Award
+import com.aquamorph.frcmanager.models.tba.DistrictRank
+import com.aquamorph.frcmanager.models.tba.Match
+import com.aquamorph.frcmanager.models.tba.Rank
+import com.aquamorph.frcmanager.models.tba.TBAPrediction
+import com.aquamorph.frcmanager.models.tba.Tab
+import com.aquamorph.frcmanager.models.tba.Team
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Constants.isDistrict
 import com.aquamorph.frcmanager.utils.Logging
@@ -64,6 +64,7 @@ class DataLoader {
         val districtRankDC = DataContainer<DistrictRank>()
         val districtTeamDC = DataContainer<Team>()
         val tbaPredictionsDC = DataContainer<TBAPrediction.PredMatch>()
+        val statboticsMatches = DataContainer<com.aquamorph.frcmanager.models.statbotics.Match>()
         private val teamTabs = ArrayList<Tab>()
         private val rankTabs = ArrayList<Tab>()
         private val awardTabs = ArrayList<Tab>()
@@ -102,21 +103,21 @@ class DataLoader {
         ) {
             dataContainer.complete = false
             val retrofit: ArrayList<Observable<out Any>> =
-                    arrayListOf(RetrofitInstance.getRetrofit(activity)
+                    arrayListOf(TBARetrofitInstance.getRetrofit(activity)
                             .create(TbaApi::class.java).getEventMatches(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getEventTeams(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getEventRankings(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getEventAwards(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getEventAlliances(eventKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getDistrictRankings(districtKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getDistrictTeams(districtKey))
-            retrofit.add(RetrofitInstance.getRetrofit(activity)
+            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getEventPredictions(eventKey))
             disposable = retrofit[observer]
                     .subscribeOn(Schedulers.io())
@@ -176,7 +177,7 @@ class DataLoader {
          */
         private fun removeTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
             for (tab in tabs) {
-                if (adapter.isTab(tab.name)!!) {
+                if (adapter.isTab(tab.name)) {
                     adapter.removeFragment(adapter.tabPosition(tab.name))
                 }
             }
@@ -190,7 +191,7 @@ class DataLoader {
          */
         private fun addTab(tabs: ArrayList<Tab>, adapter: SectionsPagerAdapter) {
             for (tab in tabs) {
-                if ((!adapter.isTab(tab.name)!!)) {
+                if ((!adapter.isTab(tab.name))) {
                     adapter.addFragment(tab)
                 }
             }
@@ -208,6 +209,7 @@ class DataLoader {
             districtRankDC.data.clear()
             districtTeamDC.data.clear()
             tbaPredictionsDC.data.clear()
+            statboticsMatches.data.clear()
         }
 
         /**
@@ -216,11 +218,12 @@ class DataLoader {
          * @param adapter tab adapter
          * @param activity main activity
          */
+        @SuppressLint("CheckResult")
         fun refresh(adapter: SectionsPagerAdapter, activity: Activity) {
             if (eventKey != "") {
                 // Checks for internet connections
                 if (!NetworkCheck.hasNetwork(activity)) {
-                    Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                    Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
                             R.string.noConnectionMessage,
                             Snackbar.LENGTH_LONG).show()
                 }
@@ -236,20 +239,30 @@ class DataLoader {
                 } else {
                     removeTab(districtRankTabs, adapter)
                 }
-                if (MainActivity.predEnabled) {
+                if (MainActivity.predMode.equals("tba")) {
                     getData(tbaPredictionsDC, matchTabs, adapter, 7, activity)
+                } else if (MainActivity.predMode.equals("statbotics")) {
+                    StatboticsRetrofitInstance.getRetrofit(activity).create(StatboticsAPI::class.java)
+                        .getEventMatches(eventKey).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ result -> if (result != null) {
+                            statboticsMatches.data.clear()
+                            statboticsMatches.data.addAll(result.body()!!)
+                            statboticsMatches.complete = true
+                        } },
+                            { error -> Logging.error(this, error.toString(), 0) })
                 }
                 // Check if FIRST or event feed is down
-                RetrofitInstance.getRetrofit(activity!!).create(TbaApi::class.java)
+                TBARetrofitInstance.getRetrofit(activity).create(TbaApi::class.java)
                         .getStatus().subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ result -> if (result != null) {
                             if (result.isDatafeedDown) {
-                                Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                                Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
                                         R.string.firstServerDown,
                                         Snackbar.LENGTH_LONG).show()
                             } else if (result.downEvents.contains(eventKey)) {
-                                Snackbar.make(activity.findViewById<View>(R.id.myCoordinatorLayout),
+                                Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
                                         R.string.eventServerDown,
                                         Snackbar.LENGTH_LONG).show()
                             }

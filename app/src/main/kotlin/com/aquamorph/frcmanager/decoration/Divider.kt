@@ -43,7 +43,7 @@ class Divider(context: Context, width: Float, indent: Int) : RecyclerView.ItemDe
         val params = view.layoutParams as RecyclerView.LayoutParams
 
         // we retrieve the position in the list
-        val position = params.viewAdapterPosition
+        val position = params.bindingAdapterPosition
 
         // add space for the separator to the bottom of every view but the last one
         if (position < state.itemCount) {
@@ -65,7 +65,7 @@ class Divider(context: Context, width: Float, indent: Int) : RecyclerView.ItemDe
             val params = view.layoutParams as RecyclerView.LayoutParams
 
             // get the position
-            val position = params.viewAdapterPosition
+            val position = params.bindingAdapterPosition
 
             // and finally draw the separator
             if (position < state.itemCount) {

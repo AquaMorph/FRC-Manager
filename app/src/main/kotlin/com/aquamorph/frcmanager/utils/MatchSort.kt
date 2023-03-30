@@ -1,6 +1,6 @@
 package com.aquamorph.frcmanager.utils
 
-import com.aquamorph.frcmanager.models.Match
+import com.aquamorph.frcmanager.models.tba.Match
 import java.util.Collections
 
 /**
@@ -32,7 +32,7 @@ object MatchSort {
             "upcomingLast" -> {
                 matches.sortWith(compareBy(Match::time))
                 val c = matchNext(matches)
-                if (c != matches.size) {
+                if (c != matches.size && c != 0) {
                     Collections.rotate(matches, matches.size - c + 1)
                 }
             }

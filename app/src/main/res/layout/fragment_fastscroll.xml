@@ -6,7 +6,7 @@
     android:background="?backgroundColor"
     android:orientation="vertical">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout>
 
     <TextView
         android:id="@+id/empty_view"

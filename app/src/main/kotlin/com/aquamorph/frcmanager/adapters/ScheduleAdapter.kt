@@ -16,11 +16,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
-import com.aquamorph.frcmanager.activities.MatchBreakdown2019Activity
-import com.aquamorph.frcmanager.activities.MatchBreakdown2020Activity
+import com.aquamorph.frcmanager.activities.MatchBreakdownActivity
 import com.aquamorph.frcmanager.activities.TeamSummary
-import com.aquamorph.frcmanager.models.Match
-import com.aquamorph.frcmanager.models.TBAPrediction
+import com.aquamorph.frcmanager.models.tba.Match
+import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import java.text.SimpleDateFormat
@@ -31,12 +30,13 @@ import java.util.Locale
  * Populates a RecyclerView with the schedule for a team.
  *
  * @author Christian Colglazier
- * @version 2/21/2020
+ * @version 3/27/2023
  */
 class ScheduleAdapter(
     private val context: Context,
     private val data: ArrayList<Match>,
-    private val predictions: ArrayList<TBAPrediction.PredMatch>,
+    private val tbaPredictions: ArrayList<TBAPrediction.PredMatch>,
+    private val statbosticsPredictions: ArrayList<com.aquamorph.frcmanager.models.statbotics.Match>,
     private var team: String?
 ) : RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
 
@@ -154,16 +154,16 @@ class ScheduleAdapter(
         if (data[position].scoreBreakDown != null) {
             when (data[position].winningAlliance) {
                 "red" -> {
-                    redRP = data[position].scoreBreakDown!!.red.rp - 2
-                    blueRP = data[position].scoreBreakDown!!.blue.rp
+                    redRP = data[position].scoreBreakDown!!.red!!.rp - 2
+                    blueRP = data[position].scoreBreakDown!!.blue!!.rp
                 }
                 "blue" -> {
-                    redRP = data[position].scoreBreakDown!!.red.rp
-                    blueRP = data[position].scoreBreakDown!!.blue.rp - 2
+                    redRP = data[position].scoreBreakDown!!.red!!.rp
+                    blueRP = data[position].scoreBreakDown!!.blue!!.rp - 2
                 }
                 else -> {
-                    redRP = data[position].scoreBreakDown!!.red.rp - 1
-                    blueRP = data[position].scoreBreakDown!!.blue.rp - 1
+                    redRP = data[position].scoreBreakDown!!.red!!.rp - 1
+                    blueRP = data[position].scoreBreakDown!!.blue!!.rp - 1
                 }
             }
         }
@@ -173,43 +173,66 @@ class ScheduleAdapter(
         holder.blueScore.text = context.getString(R.string.rankPointFormat)
                 .format(rpToString(blueRP), holder.blueScore.text)
 
-        if (MainActivity.predEnabled && predictions.isNotEmpty()) {
+        // The Blue Alliance predictions
+        if (MainActivity.predMode == "tba" && tbaPredictions.isNotEmpty()) {
             holder.predictionTable.visibility = View.VISIBLE
-            val predMatch = getMatch(data[position].key, predictions)
-
-            val typedValue = TypedValue()
-            val theme: Resources.Theme = context.theme
-            when {
-                predMatch.prob <= 0.55 -> {
-                    theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
-                }
-                predMatch.winningAlliance == "red" -> {
-                    when {
-                        predMatch.prob <= 0.6 ->
-                            theme.resolveAttribute(R.attr.redLeaning, typedValue, true)
-                        predMatch.prob <= 0.65 ->
-                            theme.resolveAttribute(R.attr.redLikely, typedValue, true)
-                        else ->
-                            theme.resolveAttribute(R.attr.redHeavily, typedValue, true)
-                    }
-                }
-                else -> {
-                    when {
-                        predMatch.prob <= 0.6 ->
-                            theme.resolveAttribute(R.attr.blueLeaning, typedValue, true)
-                        predMatch.prob <= 0.65 ->
-                            theme.resolveAttribute(R.attr.blueLikely, typedValue, true)
-                        else ->
-                            theme.resolveAttribute(R.attr.blueHeavily, typedValue, true)
-                    }
-                }
-            }
-            holder.predictionsText.setTextColor(typedValue.data)
-
+            val predMatch = getMatch(data[position].key, tbaPredictions)
+            holder.predictionsText.setTextColor(getPredictionColor(predMatch.prob,
+                predMatch.winningAlliance))
             holder.predictionsText.text = predictionToString(predMatch, MainActivity.predPercentage)
+        }
+        // Statbotics predictions
+        else if (MainActivity.predMode == "statbotics" && statbosticsPredictions.isNotEmpty()) {
+            val predMatch = getMatch(data[position].key, statbosticsPredictions)
+            if (predMatch != null) {
+                holder.predictionsText.setTextColor(getPredictionColor(predMatch.winnerProb(),
+                    predMatch.epaWinner))
+                holder.predictionsText.text =
+                    predictionToString(predMatch, MainActivity.predPercentage)
+            } else {
+                holder.predictionTable.visibility = View.GONE
+            }
         } else {
             holder.predictionTable.visibility = View.GONE
         }
+    }
+
+    /**
+     * getPredictionColor() gets the color the prediction text should be based on predicted winner
+     * and their probability of winning.
+     * @param probability win probability
+     * @param winningAlliance the predicted winning alliance
+     * @return text color
+     */
+    private fun getPredictionColor(probability: Double, winningAlliance: String): Int {
+        val typedValue = TypedValue()
+        val theme: Resources.Theme = context.theme
+        when {
+            probability <= 0.55 -> {
+                theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
+            }
+            winningAlliance == "red" -> {
+                when {
+                    probability <= 0.6 ->
+                        theme.resolveAttribute(R.attr.redLeaning, typedValue, true)
+                    probability <= 0.65 ->
+                        theme.resolveAttribute(R.attr.redLikely, typedValue, true)
+                    else ->
+                        theme.resolveAttribute(R.attr.redHeavily, typedValue, true)
+                }
+            }
+            else -> {
+                when {
+                    probability <= 0.6 ->
+                        theme.resolveAttribute(R.attr.blueLeaning, typedValue, true)
+                    probability <= 0.65 ->
+                        theme.resolveAttribute(R.attr.blueLikely, typedValue, true)
+                    else ->
+                        theme.resolveAttribute(R.attr.blueHeavily, typedValue, true)
+                }
+            }
+        }
+        return typedValue.data
     }
 
     /**
@@ -222,15 +245,44 @@ class ScheduleAdapter(
      */
     private fun predictionToString(prediction: TBAPrediction.PredMatch, percentageEnabled: Boolean):
             String {
+        return predictionToString(prediction.prob, prediction.winningAlliance, percentageEnabled)
+    }
+
+    /**
+     * predictionToString() converts a match prediction to string with either percentage or text
+     * description.
+     *
+     * @param prediction match prediction
+     * @param percentageEnabled raw percentage enabled
+     * @return prediction text
+     */
+    private fun predictionToString(
+        prediction: com.aquamorph.frcmanager.models.statbotics.Match,
+        percentageEnabled: Boolean
+    ): String {
+        return predictionToString(prediction.winnerProb(), prediction.epaWinner, percentageEnabled)
+    }
+
+    /**
+     * predictionToString() converts a prediction to string with either percentage or text
+     * description.
+     *
+     * @param probability match win probability
+     * @param winner predicted winning alliance name
+     * @param percentageEnabled raw percentage enabled
+     * @return prediction text
+     */
+    private fun predictionToString(probability: Double, winner: String, percentageEnabled: Boolean):
+            String {
         return when {
             percentageEnabled -> {
-                "%2.0f%% %s".format(prediction.prob * 100, prediction.winningAlliance)
+                "%2.0f%% %s".format(probability * 100, winner)
             }
             else -> when {
-                prediction.prob <= 0.55 -> "Tossup"
-                prediction.prob <= 0.6 -> "Leaning %s".format(prediction.winningAlliance)
-                prediction.prob <= 0.65 -> "Likely %s".format(prediction.winningAlliance)
-                else -> "Heavily %s".format(prediction.winningAlliance)
+                probability <= 0.55 -> "Tossup"
+                probability <= 0.6 -> "Leaning %s".format(winner)
+                probability <= 0.65 -> "Likely %s".format(winner)
+                else -> "Heavily %s".format(winner)
             }
         }
     }
@@ -248,6 +300,23 @@ class ScheduleAdapter(
             if (p.matchKey == matchKey) return p
         }
         return TBAPrediction.PredMatch("", 0.5, "Red")
+    }
+
+    /**
+     * getMatch() returns a match prediction given a match key.
+     *
+     * @param matchKey match key
+     * @param predictions list of match predictions
+     * @return match prediction
+     */
+    private fun getMatch(
+        matchKey: String,
+        predictions: ArrayList<com.aquamorph.frcmanager.models.statbotics.Match>
+    ): com.aquamorph.frcmanager.models.statbotics.Match? {
+        for (p in predictions) {
+            if (p.key == matchKey) return p
+        }
+        return null
     }
 
     /**
@@ -338,8 +407,7 @@ class ScheduleAdapter(
             }
             matchNumber.setOnClickListener {
                 val intent = when (DataLoader.year) {
-                    "2019" -> Intent(context, MatchBreakdown2019Activity::class.java)
-                    "2020" -> Intent(context, MatchBreakdown2020Activity::class.java)
+                    "2023" -> Intent(context, MatchBreakdownActivity::class.java)
                     else -> Intent()
                 }
 
@@ -353,7 +421,9 @@ class ScheduleAdapter(
                 intent.putExtra("blueRobot1", blueTeam1.text.toString())
                 intent.putExtra("blueRobot2", blueTeam2.text.toString())
                 intent.putExtra("blueRobot3", blueTeam3.text.toString())
-                if (DataLoader.year == "2019" || DataLoader.year == "2020") {
+                if (DataLoader.year == "2019" ||
+                    DataLoader.year == "2020" ||
+                    DataLoader.year == "2023") {
                     context.startActivity(intent)
                 }
             }

@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.models.Event
+import com.aquamorph.frcmanager.models.tba.Event
 import com.aquamorph.frcmanager.utils.AppConfig
 import com.aquamorph.frcmanager.utils.Logging
 import java.text.SimpleDateFormat
@@ -22,14 +21,13 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
     // if checkedPosition = 0, 1st item is selected by default
     private var checkedPosition = 0
 
-    @NonNull
-    override fun onCreateViewHolder(@NonNull viewGroup: ViewGroup, i: Int): SingleViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): SingleViewHolder {
         val view: View = LayoutInflater.from(context)
                 .inflate(R.layout.item_event, viewGroup, false)
         return SingleViewHolder(view)
     }
 
-    override fun onBindViewHolder(@NonNull singleViewHolder: SingleViewHolder, position: Int) {
+    override fun onBindViewHolder(singleViewHolder: SingleViewHolder, position: Int) {
         singleViewHolder.bind(events[position])
     }
 
@@ -37,7 +35,7 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
         return events.size
     }
 
-    inner class SingleViewHolder(@NonNull itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class SingleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val eventNameView: TextView = itemView.findViewById(R.id.eventName)
         private val eventDateView: TextView = itemView.findViewById(R.id.eventDate)
         private val checkView: ImageView = itemView.findViewById(R.id.check)
@@ -45,7 +43,7 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
             if (checkedPosition == -1) {
                 checkView.visibility = View.GONE
             } else {
-                if (checkedPosition == adapterPosition) {
+                if (checkedPosition == absoluteAdapterPosition) {
                     checkView.visibility = View.VISIBLE
                     setEvent(event)
                 } else {
@@ -58,9 +56,9 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
                     stringToDate(event.endDate))
             itemView.setOnClickListener {
                 checkView.visibility = View.VISIBLE
-                if (checkedPosition != adapterPosition) {
+                if (checkedPosition != absoluteAdapterPosition) {
                     notifyItemChanged(checkedPosition)
-                    checkedPosition = adapterPosition
+                    checkedPosition = absoluteAdapterPosition
                 }
                 setEvent(event)
             }
@@ -81,8 +79,12 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
         } else {
             AppConfig.setDistrictKey("", context)
         }
-        AppConfig.setEventShortName(event.shortName, context)
-        AppConfig.setEventAddress(event.address, context)
+        if (event.address != null) {
+            AppConfig.setEventShortName(event.shortName, context)
+        }
+        if (event.address != null) {
+            AppConfig.setEventAddress(event.address, context)
+        }
     }
 
     /**
@@ -92,7 +94,7 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
      * @return date
      */
     private fun stringToDate(text: String): Date {
-        return SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(text)
+        return SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(text)!!
     }
 
     /**

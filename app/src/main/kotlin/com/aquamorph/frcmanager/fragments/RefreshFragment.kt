@@ -8,5 +8,6 @@ package com.aquamorph.frcmanager.fragments
  */
 
 interface RefreshFragment {
+
     fun refresh()
 }

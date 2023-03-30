@@ -1,6 +1,5 @@
 package com.aquamorph.frcmanager.fragments
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -10,8 +9,8 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.RankAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
-import com.aquamorph.frcmanager.models.Rank
-import com.aquamorph.frcmanager.models.Team
+import com.aquamorph.frcmanager.models.tba.Rank
+import com.aquamorph.frcmanager.models.tba.Team
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 
@@ -19,7 +18,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays the ranks of all the teams at an event.
  *
  * @author Christian Colglazier
- * @version 2/23/2020
+ * @version 3/25/2023
  */
 class RankFragment : TabFragment(), RefreshFragment {
 
@@ -60,46 +59,36 @@ class RankFragment : TabFragment(), RefreshFragment {
      */
     override fun refresh() {
         if (DataLoader.eventKey != "" && DataLoader.teamNumber != "" && context != null) {
-            task = Constants.runRefresh(task, LoadRanks())
-        }
-    }
-
-    internal inner class LoadRanks : AsyncTask<Void?, Void?, Void?>() {
-
-        override fun onPreExecute() {
             mSwipeRefreshLayout.isRefreshing = true
-        }
-
-        override fun doInBackground(vararg params: Void?): Void? {
-            while (!DataLoader.teamDC.complete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            while (!DataLoader.rankDC.complete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: Void?) {
-            if (DataLoader.rankDC.data != null &&
-                    DataLoader.rankDC.data.isNotEmpty() &&
-                    DataLoader.rankDC.data[0].rankings != null) {
-                val editor = prefs.edit()
-                editor.putString("teamRank", "")
-                for (i in 0 until DataLoader.rankDC.data[0].rankings!!.size) {
-                    if (DataLoader.rankDC.data[0].rankings!![i].teamKey == "frc" +
-                            DataLoader.teamNumber) {
-                        editor.putString("teamRank",
-                                DataLoader.rankDC.data[0].rankings!![i].rank.toString())
-                        editor.putString("teamRecord",
-                                Rank.recordToString(DataLoader.rankDC.data[0].rankings!![i].record))
-                        editor.apply()
+            executor.execute {
+                while (!DataLoader.teamDC.complete) {
+                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+                }
+                while (!DataLoader.rankDC.complete) {
+                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+                }
+                handler.post {
+                    if (DataLoader.rankDC.data != null &&
+                        DataLoader.rankDC.data.isNotEmpty() &&
+                        DataLoader.rankDC.data[0].rankings != null) {
+                        val editor = prefs.edit()
+                        editor.putString("teamRank", "")
+                        for (i in 0 until DataLoader.rankDC.data[0].rankings!!.size) {
+                            if (DataLoader.rankDC.data[0].rankings!![i].teamKey == "frc" +
+                                DataLoader.teamNumber) {
+                                editor.putString("teamRank",
+                                    DataLoader.rankDC.data[0].rankings!![i].rank.toString())
+                                editor.putString("teamRecord",
+                                    Rank.recordToString(DataLoader.rankDC.data[0].rankings!![i].record))
+                                editor.apply()
+                            }
+                        }
+                    }
+                    if (context != null) {
+                        dataUpdate()
+                        mSwipeRefreshLayout.isRefreshing = false
                     }
                 }
-            }
-            if (context != null) {
-                dataUpdate()
-                mSwipeRefreshLayout.isRefreshing = false
             }
         }
     }

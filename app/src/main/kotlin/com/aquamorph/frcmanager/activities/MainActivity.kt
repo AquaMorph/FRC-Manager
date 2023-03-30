@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.preference.PreferenceManager
 import androidx.viewpager.widget.ViewPager
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         eventAddress = prefs.getString("eventAddress", "")!!
         DataLoader.eventKey = prefs.getString("eventKey", "")!!
         DataLoader.districtKey = prefs.getString("districtKey", "")!!
-        predEnabled = prefs.getString("predictions", "none")!! != "none"
+        predMode = prefs.getString("predictions", "none")!!
         predPercentage = prefs.getString("predictionDisplay", "words") != "words"
         if (DataLoader.teamNumber == "") openSetup()
         listener()
@@ -145,8 +146,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
                     .getString("eventAddress", "")!!
             "year" -> DataLoader.year = sharedPreferences
                     .getString("year", "")!!
-            "predictions" -> predEnabled = sharedPreferences
-                    .getString("predictions", "none")!! != "none"
+            "predictions" -> predMode = sharedPreferences
+                    .getString("predictions", "none")!!
             "predictionDisplay" -> predPercentage = sharedPreferences
                     .getString("predictionDisplay", "words") != "words"
         }
@@ -194,7 +195,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     companion object {
 
         var appTheme = Constants.Theme.LIGHT
-        var predEnabled = false
+        var predMode = "none"
         var predPercentage = false
 
         @SuppressLint("StaticFieldLeak")
@@ -219,9 +220,18 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
                 else -> Constants.Theme.LIGHT
             }
             when (appTheme) {
-                Constants.Theme.LIGHT -> activity.setTheme(R.style.LightTheme)
-                Constants.Theme.DARK -> activity.setTheme(R.style.DarkTheme)
-                Constants.Theme.BATTERY_SAVER -> activity.setTheme(R.style.OMOLEDTheme)
+                Constants.Theme.LIGHT -> {
+                    activity.setTheme(R.style.LightTheme)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+                Constants.Theme.DARK -> {
+                    activity.setTheme(R.style.DarkTheme)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
+                Constants.Theme.BATTERY_SAVER -> {
+                    activity.setTheme(R.style.OMOLEDTheme)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                }
             }
         }
 

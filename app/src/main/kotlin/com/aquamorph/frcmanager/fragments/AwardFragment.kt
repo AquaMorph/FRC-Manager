@@ -1,7 +1,6 @@
 package com.aquamorph.frcmanager.fragments
 
 import android.content.SharedPreferences
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.LayoutInflater
@@ -11,7 +10,7 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.AwardAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
-import com.aquamorph.frcmanager.models.Award
+import com.aquamorph.frcmanager.models.tba.Award
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 
@@ -19,7 +18,7 @@ import com.aquamorph.frcmanager.utils.Constants
  * Displays a list of awards at a event
  *
  * @author Christian Colglazier
- * @version 2/26/2020
+ * @version 3/25/2023
  */
 class AwardFragment :
         TabFragment(), SharedPreferences.OnSharedPreferenceChangeListener, RefreshFragment {
@@ -76,34 +75,24 @@ class AwardFragment :
      */
     override fun refresh() {
         if (DataLoader.eventKey != "") {
-            task = Constants.runRefresh(task, LoadAwards())
+            mSwipeRefreshLayout.isRefreshing = true
+            executor.execute {
+                while (!DataLoader.awardDC.complete) {
+                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
+                }
+                handler.post {
+                    if (context != null) {
+                        dataUpdate()
+                        mSwipeRefreshLayout.isRefreshing = false
+                    }
+                }
+            }
         }
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         if (key == "eventKey") {
             refresh()
-        }
-    }
-
-    internal inner class LoadAwards : AsyncTask<Void?, Void?, Void?>() {
-
-        override fun onPreExecute() {
-            mSwipeRefreshLayout.isRefreshing = true
-        }
-
-        override fun doInBackground(vararg p0: Void?): Void? {
-            while (!DataLoader.awardDC.complete) {
-                SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-            }
-            return null
-        }
-
-        override fun onPostExecute(result: Void?) {
-            if (context != null) {
-                dataUpdate()
-                mSwipeRefreshLayout.isRefreshing = false
-            }
         }
     }
 
