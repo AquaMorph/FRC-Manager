@@ -26,7 +26,7 @@ import java.lang.Exception
  * @author Christian Colglazier
  * @version 3/28/2023
  */
-class MatchBreakdownActivity : AppCompatActivity() {
+class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
 
     private var matchKey = ""
     private var compLevel = ""
@@ -39,17 +39,14 @@ class MatchBreakdownActivity : AppCompatActivity() {
     private var blueRobot2 = ""
     private var blueRobot3 = ""
 
-    @SuppressLint("CheckResult")
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MainActivity.theme(this)
         setContentView(R.layout.match_breakdown)
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+        refresh.setOnRefreshListener(this)
         refresh.isRefreshing = true
-
-        val table = findViewById<TableLayout>(R.id.scoreMatchTeams)
-        table.visibility = View.GONE
 
         val extras = intent.extras
         if (extras != null) {
@@ -85,6 +82,19 @@ class MatchBreakdownActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.blueAllianceTwo).text = blueRobot2
         findViewById<TextView>(R.id.redAllianceThree).text = redRobot3
         findViewById<TextView>(R.id.blueAllianceThree).text = blueRobot3
+
+        refresh()
+    }
+
+    @SuppressLint("CheckResult")
+    fun refresh() {
+        val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+        refresh.isRefreshing = true
+
+        val table = findViewById<TableLayout>(R.id.scoreMatchTeams)
+        val scoreBreakdown = findViewById<TableLayout>(R.id.scoreBreakdown)
+        scoreBreakdown.visibility = View.GONE
+
 
         TBARetrofitInstance.getRetrofit(this).create(TbaApi::class.java)
             .getMatch(matchKey).subscribeOn(Schedulers.io())
@@ -144,13 +154,17 @@ class MatchBreakdownActivity : AppCompatActivity() {
                     findViewById<TextView>(R.id.blueEndgameTotal).text = blue.endGameParkPoints.toString()
                 }
 
-                table.visibility = View.VISIBLE
+                scoreBreakdown.visibility = View.VISIBLE
                 refresh.isRefreshing = false
                 refresh.isEnabled = false
-            } }, {
+            } else {
+                refresh.isRefreshing = false
+                refresh.isEnabled = true
+            }
+            }, {
                     error -> Logging.error(this, error.toString(), 0)
-                    refresh.isRefreshing = false
-                    refresh.isEnabled = false
+                refresh.isRefreshing = false
+                refresh.isEnabled = false
             })
     }
 
@@ -172,5 +186,9 @@ class MatchBreakdownActivity : AppCompatActivity() {
             android.R.id.home -> this.finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onRefresh() {
+        refresh()
     }
 }
