@@ -95,7 +95,6 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
         val scoreBreakdown = findViewById<TableLayout>(R.id.scoreBreakdown)
         scoreBreakdown.visibility = View.GONE
 
-
         TBARetrofitInstance.getRetrofit(this).create(TbaApi::class.java)
             .getMatch(matchKey).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -112,8 +111,10 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
                 findViewById<TextView>(R.id.blueTeleopTotal).text = blue.teleopPoints.toString()
 
                 // End Game
-                findViewById<TextView>(R.id.redEndgameTotal).text = red.endGameParkPoints.toString()
-                findViewById<TextView>(R.id.blueEndgameTotal).text = blue.endGameParkPoints.toString()
+                findViewById<TextView>(R.id.redEndgameTotal).text =
+                    red.endGameParkPoints.toString()
+                findViewById<TextView>(R.id.blueEndgameTotal).text =
+                    blue.endGameParkPoints.toString()
 
                 // Total Score
                 findViewById<TextView>(R.id.redTotalScore).text = red.totalPoints.toString()
@@ -133,25 +134,31 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
 
                 if (DataLoader.year == "2023") {
                     findViewById<TextView>(R.id.autoTotal).text = "Auto Mobility"
-                    findViewById<TextView>(R.id.redAutoTotal).text = red.autoMobilityPoints.toString()
-                    findViewById<TextView>(R.id.blueAutoTotal).text = blue.autoMobilityPoints.toString()
+                    findViewById<TextView>(R.id.redAutoTotal).text =
+                        red.autoMobilityPoints.toString()
+                    findViewById<TextView>(R.id.blueAutoTotal).text =
+                        blue.autoMobilityPoints.toString()
 
                     findViewById<TextView>(R.id.teleopTotal).text = "Grid"
                     findViewById<TextView>(R.id.redTeleopTotal).text =
-                        (red.linkPoints+red.teleopGamePiecePoints+red.autoGamePiecePoints)
+                        (red.linkPoints + red.teleopGamePiecePoints + red.autoGamePiecePoints)
                             .toString()
                     findViewById<TextView>(R.id.blueTeleopTotal).text =
-                        (blue.linkPoints+blue.teleopGamePiecePoints+blue.autoGamePiecePoints)
+                        (blue.linkPoints + blue.teleopGamePiecePoints + blue.autoGamePiecePoints)
                             .toString()
 
                     findViewById<TableRow>(R.id.teleopExtraTable1).visibility = View.VISIBLE
                     findViewById<TextView>(R.id.teleopExtra1).text = "Charge Station"
-                    findViewById<TextView>(R.id.redTeleopExtra1).text = red.totalChargeStationPoints.toString()
-                    findViewById<TextView>(R.id.blueTeleopExtra1).text = blue.totalChargeStationPoints.toString()
+                    findViewById<TextView>(R.id.redTeleopExtra1).text =
+                        red.totalChargeStationPoints.toString()
+                    findViewById<TextView>(R.id.blueTeleopExtra1).text =
+                        blue.totalChargeStationPoints.toString()
 
                     findViewById<TextView>(R.id.endgameTotal).text = "Endgame Park"
-                    findViewById<TextView>(R.id.redEndgameTotal).text = red.endGameParkPoints.toString()
-                    findViewById<TextView>(R.id.blueEndgameTotal).text = blue.endGameParkPoints.toString()
+                    findViewById<TextView>(R.id.redEndgameTotal).text =
+                        red.endGameParkPoints.toString()
+                    findViewById<TextView>(R.id.blueEndgameTotal).text =
+                        blue.endGameParkPoints.toString()
                 }
 
                 scoreBreakdown.visibility = View.VISIBLE
