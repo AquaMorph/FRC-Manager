@@ -127,6 +127,9 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
                 } else {
                     findViewById<TableRow>(R.id.adjustments).visibility = View.GONE
                 }
+                if (compLevel != "qm") {
+                    findViewById<TableRow>(R.id.rankPoints).visibility = View.GONE
+                }
 
                 // Rank Points
                 findViewById<TextView>(R.id.redRankPoints).text = red.rp.toString()
