@@ -194,7 +194,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -204,7 +204,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redLineExtended"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -214,7 +214,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueLineExtended"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -231,7 +231,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -241,7 +241,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redAutoPowerCells"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -251,7 +251,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueAutoPowerCells"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -306,7 +306,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -316,7 +316,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redTeleopPowerCells"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -327,7 +327,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueTeleopPowerCells"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -344,7 +344,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -354,7 +354,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redControlPanelPoints"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -364,7 +364,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueControlPanelPoints"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -419,7 +419,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -429,7 +429,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redEndgameOne"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -439,7 +439,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueEndgameOne"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -456,7 +456,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -466,7 +466,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redEndgameTwo"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -476,7 +476,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueEndgameTwo"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -493,7 +493,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -503,7 +503,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redEndgameThree"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -513,7 +513,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueEndgameThree"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -530,7 +530,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -540,7 +540,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redShieldLevel"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -550,7 +550,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueShieldLevel"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -604,7 +604,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -614,7 +614,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redStageActivations"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -624,7 +624,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueStageActivations"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -641,7 +641,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -651,7 +651,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redShieldGenerator"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -661,7 +661,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueShieldGenerator"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -678,7 +678,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -688,7 +688,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redFouls"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -698,7 +698,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueFouls"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -716,7 +716,7 @@
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
@@ -726,7 +726,7 @@
                             android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redAdjustments"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -736,7 +736,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueAdjustments"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"

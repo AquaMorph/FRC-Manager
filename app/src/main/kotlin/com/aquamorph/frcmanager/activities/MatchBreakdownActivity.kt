@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.aquamorph.frcmanager.R
+import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.network.TBARetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants
@@ -119,6 +120,29 @@ class MatchBreakdownActivity : AppCompatActivity() {
                 // Rank Points
                 findViewById<TextView>(R.id.redRankPoints).text = red.rp.toString()
                 findViewById<TextView>(R.id.blueRankPoints).text = blue.rp.toString()
+
+                if (DataLoader.year == "2023") {
+                    findViewById<TextView>(R.id.autoTotal).text = "Auto Mobility"
+                    findViewById<TextView>(R.id.redAutoTotal).text = red.autoMobilityPoints.toString()
+                    findViewById<TextView>(R.id.blueAutoTotal).text = blue.autoMobilityPoints.toString()
+
+                    findViewById<TextView>(R.id.teleopTotal).text = "Grid"
+                    findViewById<TextView>(R.id.redTeleopTotal).text =
+                        (red.linkPoints+red.teleopGamePiecePoints+red.autoGamePiecePoints)
+                            .toString()
+                    findViewById<TextView>(R.id.blueTeleopTotal).text =
+                        (blue.linkPoints+blue.teleopGamePiecePoints+blue.autoGamePiecePoints)
+                            .toString()
+
+                    findViewById<TableRow>(R.id.teleopExtraTable1).visibility = View.VISIBLE
+                    findViewById<TextView>(R.id.teleopExtra1).text = "Charge Station"
+                    findViewById<TextView>(R.id.redTeleopExtra1).text = red.totalChargeStationPoints.toString()
+                    findViewById<TextView>(R.id.blueTeleopExtra1).text = blue.totalChargeStationPoints.toString()
+
+                    findViewById<TextView>(R.id.endgameTotal).text = "Endgame Park"
+                    findViewById<TextView>(R.id.redEndgameTotal).text = red.endGameParkPoints.toString()
+                    findViewById<TextView>(R.id.blueEndgameTotal).text = blue.endGameParkPoints.toString()
+                }
 
                 table.visibility = View.VISIBLE
                 refresh.isRefreshing = false

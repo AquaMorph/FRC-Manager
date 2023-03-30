@@ -155,6 +155,7 @@
                         android:layout_marginBottom="2dp"
                         android:layout_height="wrap_content">
                         <TextView
+                            android:id="@+id/autoTotal"
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
                             android:textSize="@dimen/match_2020_h1"
@@ -194,6 +195,7 @@
                         android:layout_height="wrap_content">
 
                         <TextView
+                            android:id="@+id/teleopTotal"
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
                             android:textSize="@dimen/match_2020_h1"
@@ -225,14 +227,54 @@
                             android:textColor="?blueAllianceText"
                             android:paddingRight="4dp" />
                     </TableRow>
-
                     <TableRow
+                        android:id="@+id/teleopExtraTable1"
+                        android:visibility="gone"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_marginBottom="2dp"
                         android:layout_height="wrap_content">
 
                         <TextView
+                            android:id="@+id/teleopExtra1"
+                            android:layout_weight="@dimen/match_2020_text_weight"
+                            android:gravity="start|center_vertical"
+                            android:textSize="@dimen/match_2020_h1"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="?textOnBackground"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/scoreTeleopTotal"
+                            android:background="?cardBackground"
+                            android:paddingLeft="@dimen/activity_vertical_margin"/>
+                        <TextView
+                            android:layout_weight="1"
+                            android:textSize="@dimen/match_score_text"
+                            android:id="@+id/redTeleopExtra1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:gravity="end|center_vertical"
+                            android:background="?redAllianceBackground"
+                            android:textColor="?redAllianceText"
+                            android:paddingRight="4dp" />
+                        <TextView
+                            android:layout_weight="1"
+                            android:textSize="@dimen/match_score_text"
+                            android:id="@+id/blueTeleopExtra1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:gravity="end|center_vertical"
+                            android:background="?blueAllianceBackground"
+                            android:textColor="?blueAllianceText"
+                            android:paddingRight="4dp" />
+                    </TableRow>
+                    <TableRow
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="2dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/endgameTotal"
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
                             android:textSize="@dimen/match_2020_h1"
@@ -257,6 +299,83 @@
                             android:layout_weight="1"
                             android:textSize="@dimen/match_score_text"
                             android:id="@+id/blueEndgameTotal"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:gravity="end|center_vertical"
+                            android:background="?blueAllianceBackground"
+                            android:textColor="?blueAllianceText"
+                            android:paddingRight="4dp" />
+                    </TableRow>
+
+
+                    <TableRow
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="2dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_weight="@dimen/match_2020_text_weight"
+                            android:gravity="start|center_vertical"
+                            android:textSize="@dimen/match_breakdown_h2"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="?textOnBackground"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/scoreFoulsTechFouls"
+                            android:background="?cardBackground"
+                            android:paddingLeft="32dp"/>
+                        <TextView
+                            android:layout_weight="@dimen/match_2020_score_weight"
+                            android:textSize="@dimen/match_breakdown_h2"
+                            android:id="@+id/redFouls"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:gravity="end|center_vertical"
+                            android:background="?redAllianceBackground"
+                            android:textColor="?redAllianceText"
+                            android:paddingRight="4dp" />
+                        <TextView
+                            android:layout_weight="@dimen/match_2020_score_weight"
+                            android:textSize="@dimen/match_breakdown_h2"
+                            android:id="@+id/blueFouls"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:gravity="end|center_vertical"
+                            android:background="?blueAllianceBackground"
+                            android:textColor="?blueAllianceText"
+                            android:paddingRight="4dp" />
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/adjustments"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="2dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_weight="@dimen/match_2020_text_weight"
+                            android:gravity="start|center_vertical"
+                            android:textSize="@dimen/match_breakdown_h2"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="?textOnBackground"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/scoreAdjustments"
+                            android:background="?cardBackground"
+                            android:paddingLeft="32dp"/>
+                        <TextView
+                            android:layout_weight="@dimen/match_2020_score_weight"
+                            android:textSize="@dimen/match_breakdown_h2"
+                            android:id="@+id/redAdjustments"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:gravity="end|center_vertical"
+                            android:background="?redAllianceBackground"
+                            android:textColor="?redAllianceText"
+                            android:paddingRight="4dp" />
+                        <TextView
+                            android:layout_weight="@dimen/match_2020_score_weight"
+                            android:textSize="@dimen/match_breakdown_h2"
+                            android:id="@+id/blueAdjustments"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:gravity="end|center_vertical"
@@ -301,103 +420,26 @@
                             android:textColor="?blueAllianceText"
                             android:paddingRight="4dp" />
                     </TableRow>
-
-                    <TableRow
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_weight="@dimen/match_2020_text_weight"
-                            android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="?textOnBackground"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/scoreFoulsTechFouls"
-                            android:background="?cardBackground"
-                            android:paddingLeft="32dp"/>
-                        <TextView
-                            android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
-                            android:id="@+id/redFouls"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:gravity="end|center_vertical"
-                            android:background="?redAllianceBackground"
-                            android:textColor="?redAllianceText"
-                            android:paddingRight="4dp" />
-                        <TextView
-                            android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
-                            android:id="@+id/blueFouls"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:gravity="end|center_vertical"
-                            android:background="?blueAllianceBackground"
-                            android:textColor="?blueAllianceText"
-                            android:paddingRight="4dp" />
-                    </TableRow>
-                    <TableRow
-                        android:id="@+id/adjustments"
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="2dp"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_weight="@dimen/match_2020_text_weight"
-                            android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h2"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="?textOnBackground"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/scoreAdjustments"
-                            android:background="?cardBackground"
-                            android:paddingLeft="32dp"/>
-                        <TextView
-                            android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
-                            android:id="@+id/redAdjustments"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:gravity="end|center_vertical"
-                            android:background="?redAllianceBackground"
-                            android:textColor="?redAllianceText"
-                            android:paddingRight="4dp" />
-                        <TextView
-                            android:layout_weight="@dimen/match_2020_score_weight"
-                            android:textSize="@dimen/match_2020_h2"
-                            android:id="@+id/blueAdjustments"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:gravity="end|center_vertical"
-                            android:background="?blueAllianceBackground"
-                            android:textColor="?blueAllianceText"
-                            android:paddingRight="4dp" />
-                    </TableRow>
                     <TableRow
                         android:id="@+id/rankPoints"
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_marginBottom="2dp"
                         android:layout_height="wrap_content">
-
                         <TextView
                             android:layout_weight="@dimen/match_2020_text_weight"
                             android:gravity="start|center_vertical"
-                            android:textSize="@dimen/match_2020_h1"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textSize="@dimen/match_breakdown_h2"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="?textOnBackground"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:text="@string/scoreRankPoints"
                             android:background="?cardBackground"
-                            android:paddingLeft="@dimen/activity_vertical_margin"/>
+                            android:paddingLeft="32dp"/>
                         <TextView
                             android:layout_weight="1"
-                            android:textSize="@dimen/match_score_text"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/redRankPoints"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -407,7 +449,7 @@
                             android:paddingRight="4dp" />
                         <TextView
                             android:layout_weight="1"
-                            android:textSize="@dimen/match_score_text"
+                            android:textSize="@dimen/match_breakdown_h2"
                             android:id="@+id/blueRankPoints"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
