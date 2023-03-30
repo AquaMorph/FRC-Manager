@@ -57,7 +57,7 @@
                         android:gravity="end|center_vertical"
                         android:background="?redAllianceBackground"
                         android:textColor="?redAllianceText"
-                        android:paddingRight="4dp" />
+                        android:paddingRight="@dimen/activity_vertical_margin" />
                     <TextView
                         android:layout_weight="1"
                         android:textSize="@dimen/match_score_text"
@@ -67,7 +67,7 @@
                         android:gravity="end|center_vertical"
                         android:background="?blueAllianceBackground"
                         android:textColor="?blueAllianceText"
-                        android:paddingRight="4dp" />
+                        android:paddingRight="@dimen/activity_vertical_margin" />
                 </TableRow>
                 <TableRow
                     android:orientation="horizontal"
@@ -95,7 +95,7 @@
                         android:gravity="end|center_vertical"
                         android:background="?redAllianceBackground"
                         android:textColor="?redAllianceText"
-                        android:paddingRight="4dp" />
+                        android:paddingRight="@dimen/activity_vertical_margin" />
                     <TextView
                         android:layout_weight="1"
                         android:textSize="@dimen/match_score_text"
@@ -105,7 +105,7 @@
                         android:gravity="end|center_vertical"
                         android:background="?blueAllianceBackground"
                         android:textColor="?blueAllianceText"
-                        android:paddingRight="4dp" />
+                        android:paddingRight="@dimen/activity_vertical_margin" />
                 </TableRow>
                 <TableRow
                     android:orientation="horizontal"
@@ -133,7 +133,7 @@
                         android:gravity="end|center_vertical"
                         android:background="?redAllianceBackground"
                         android:textColor="?redAllianceText"
-                        android:paddingRight="4dp" />
+                        android:paddingRight="@dimen/activity_vertical_margin" />
                     <TextView
                         android:layout_weight="1"
                         android:textSize="@dimen/match_score_text"
@@ -143,10 +143,10 @@
                         android:gravity="end|center_vertical"
                         android:background="?blueAllianceBackground"
                         android:textColor="?blueAllianceText"
-                        android:paddingRight="4dp" />
+                        android:paddingRight="@dimen/activity_vertical_margin" />
                 </TableRow>
                 <TableLayout
-                    android:id="@+id/scoreBreakdown2020"
+                    android:id="@+id/scoreBreakdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TableRow
@@ -175,7 +175,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?redAllianceBackground"
                             android:textColor="?redAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
                             android:textSize="@dimen/match_score_text"
@@ -185,7 +185,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?blueAllianceBackground"
                             android:textColor="?blueAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                     </TableRow>
 
                     <TableRow
@@ -215,7 +215,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?redAllianceBackground"
                             android:textColor="?redAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                         <TextView
                             android:layout_weight="1"
                             android:textSize="@dimen/match_score_text"
@@ -225,7 +225,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?blueAllianceBackground"
                             android:textColor="?blueAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/teleopExtraTable1"
@@ -256,7 +256,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?redAllianceBackground"
                             android:textColor="?redAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                         <TextView
                             android:layout_weight="1"
                             android:textSize="@dimen/match_score_text"
@@ -266,7 +266,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?blueAllianceBackground"
                             android:textColor="?blueAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                     </TableRow>
                     <TableRow
                         android:orientation="horizontal"
@@ -294,7 +294,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?redAllianceBackground"
                             android:textColor="?redAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                         <TextView
                             android:layout_weight="1"
                             android:textSize="@dimen/match_score_text"
@@ -304,7 +304,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?blueAllianceBackground"
                             android:textColor="?blueAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                     </TableRow>
 
 
@@ -333,7 +333,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?redAllianceBackground"
                             android:textColor="?redAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
                             android:textSize="@dimen/match_breakdown_h2"
@@ -343,7 +343,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?blueAllianceBackground"
                             android:textColor="?blueAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/adjustments"
@@ -371,7 +371,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?redAllianceBackground"
                             android:textColor="?redAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                         <TextView
                             android:layout_weight="@dimen/match_2020_score_weight"
                             android:textSize="@dimen/match_breakdown_h2"
@@ -381,7 +381,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?blueAllianceBackground"
                             android:textColor="?blueAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                     </TableRow>
                     <TableRow
                         android:orientation="horizontal"
@@ -408,7 +408,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?redAllianceBackground"
                             android:textColor="?redAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                         <TextView
                             android:layout_weight="1"
                             android:textSize="@dimen/match_score_text"
@@ -418,7 +418,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?blueAllianceBackground"
                             android:textColor="?blueAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/rankPoints"
@@ -446,7 +446,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?redAllianceBackground"
                             android:textColor="?redAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                         <TextView
                             android:layout_weight="1"
                             android:textSize="@dimen/match_breakdown_h2"
@@ -456,7 +456,7 @@
                             android:gravity="end|center_vertical"
                             android:background="?blueAllianceBackground"
                             android:textColor="?blueAllianceText"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="@dimen/activity_vertical_margin" />
                     </TableRow>
                 </TableLayout>
             </TableLayout>
