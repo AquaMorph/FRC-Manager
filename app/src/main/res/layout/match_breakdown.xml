@@ -20,7 +20,7 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     </com.google.android.material.appbar.AppBarLayout>
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -461,5 +461,5 @@
                 </TableLayout>
             </TableLayout>
         </ScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout>
 </LinearLayout>
