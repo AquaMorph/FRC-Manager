@@ -27,6 +27,6 @@ allprojects {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
