@@ -154,16 +154,16 @@ class ScheduleAdapter(
         if (data[position].scoreBreakDown != null) {
             when (data[position].winningAlliance) {
                 "red" -> {
-                    redRP = data[position].scoreBreakDown!!.red!!.rp - 2
-                    blueRP = data[position].scoreBreakDown!!.blue!!.rp
+                    redRP = data[position].scoreBreakDown!!.red.rp - 2
+                    blueRP = data[position].scoreBreakDown!!.blue.rp
                 }
                 "blue" -> {
-                    redRP = data[position].scoreBreakDown!!.red!!.rp
-                    blueRP = data[position].scoreBreakDown!!.blue!!.rp - 2
+                    redRP = data[position].scoreBreakDown!!.red.rp
+                    blueRP = data[position].scoreBreakDown!!.blue.rp - 2
                 }
                 else -> {
-                    redRP = data[position].scoreBreakDown!!.red!!.rp - 1
-                    blueRP = data[position].scoreBreakDown!!.blue!!.rp - 1
+                    redRP = data[position].scoreBreakDown!!.red.rp - 1
+                    blueRP = data[position].scoreBreakDown!!.blue.rp - 1
                 }
             }
         }
@@ -408,7 +408,7 @@ class ScheduleAdapter(
             matchNumber.setOnClickListener {
                 val intent = when (DataLoader.year) {
                     "2023" -> Intent(context, MatchBreakdownActivity::class.java)
-                    else -> Intent()
+                    else -> Intent(context, MatchBreakdownActivity::class.java)
                 }
 
                 intent.putExtra("matchKey", matchKey)

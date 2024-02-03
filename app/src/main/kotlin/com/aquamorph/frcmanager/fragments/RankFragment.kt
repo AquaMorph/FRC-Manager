@@ -68,8 +68,7 @@ class RankFragment : TabFragment(), RefreshFragment {
                     SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
                 }
                 handler.post {
-                    if (DataLoader.rankDC.data != null &&
-                        DataLoader.rankDC.data.isNotEmpty() &&
+                    if (DataLoader.rankDC.data.isNotEmpty() &&
                         DataLoader.rankDC.data[0].rankings != null) {
                         val editor = prefs.edit()
                         editor.putString("teamRank", "")
