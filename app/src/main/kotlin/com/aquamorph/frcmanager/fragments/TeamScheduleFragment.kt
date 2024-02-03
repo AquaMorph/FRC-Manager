@@ -123,7 +123,7 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         }
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         if (key == "teamNumber" || key == "eventKey") {
             if (getTeamFromSettings) {
                 teamNumber = DataLoader.teamNumber

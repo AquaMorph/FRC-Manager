@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE resources [
-    <!ENTITY appversion "1-7-0">
+    <!ENTITY appversion "2024-0-0">
     ]>
 
 <resources>
@@ -25,6 +25,7 @@
     <string name="eventServerDown">The feed for the event is down.</string>
     <string name="toolBarDefault">Rank #\$r (\$R) \$n</string>
     <string-array name="yearArray">
+        <item>2024</item>
         <item>2023</item>
         <item>2022</item>
         <item>2020</item>
