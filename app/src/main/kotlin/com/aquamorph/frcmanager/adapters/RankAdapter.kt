@@ -52,16 +52,18 @@ class RankAdapter(
         theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
 
         val ranks = ArrayList<RankInfo>()
-        for (i in 0 until data[0].sortOrderInfo.size) {
-            ranks.add(
-                RankInfo(
-                    String.format("%s: ", data[0].sortOrderInfo[i].name),
-                    String.format(
-                        "%." + data[0].sortOrderInfo[i].precision +
-                                "f", data[0].rankings!![position].sortOrders[i]
+        if (data[0].sortOrderInfo != null) {
+            for (i in 0 until data[0].sortOrderInfo.size) {
+                ranks.add(
+                    RankInfo(
+                        String.format("%s: ", data[0].sortOrderInfo[i].name),
+                        String.format(
+                            "%." + data[0].sortOrderInfo[i].precision +
+                                    "f", data[0].rankings!![position].sortOrders[i]
+                        )
                     )
                 )
-            )
+            }
         }
         ranks.add(RankInfo("Record: ",
                 Rank.recordToString(data[0].rankings!![position].record)))

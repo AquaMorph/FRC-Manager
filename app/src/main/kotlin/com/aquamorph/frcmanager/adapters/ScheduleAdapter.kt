@@ -406,10 +406,7 @@ class ScheduleAdapter(
                 context.startActivity(intent)
             }
             matchNumber.setOnClickListener {
-                val intent = when (DataLoader.year) {
-                    "2023" -> Intent(context, MatchBreakdownActivity::class.java)
-                    else -> Intent(context, MatchBreakdownActivity::class.java)
-                }
+                val intent = Intent(context, MatchBreakdownActivity::class.java)
 
                 intent.putExtra("matchKey", matchKey)
                 intent.putExtra("compLevel", compLevel)
@@ -421,11 +418,7 @@ class ScheduleAdapter(
                 intent.putExtra("blueRobot1", blueTeam1.text.toString())
                 intent.putExtra("blueRobot2", blueTeam2.text.toString())
                 intent.putExtra("blueRobot3", blueTeam3.text.toString())
-                if (DataLoader.year == "2019" ||
-                    DataLoader.year == "2020" ||
-                    DataLoader.year == "2023") {
-                    context.startActivity(intent)
-                }
+                context.startActivity(intent)
             }
         }
     }
