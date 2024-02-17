@@ -20,7 +20,6 @@ import com.aquamorph.frcmanager.activities.MatchBreakdownActivity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.tba.Match
 import com.aquamorph.frcmanager.models.tba.TBAPrediction
-import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -154,16 +153,16 @@ class ScheduleAdapter(
         if (data[position].scoreBreakDown != null) {
             when (data[position].winningAlliance) {
                 "red" -> {
-                    redRP = data[position].scoreBreakDown!!.red!!.rp - 2
-                    blueRP = data[position].scoreBreakDown!!.blue!!.rp
+                    redRP = data[position].scoreBreakDown!!.red.rp - 2
+                    blueRP = data[position].scoreBreakDown!!.blue.rp
                 }
                 "blue" -> {
-                    redRP = data[position].scoreBreakDown!!.red!!.rp
-                    blueRP = data[position].scoreBreakDown!!.blue!!.rp - 2
+                    redRP = data[position].scoreBreakDown!!.red.rp
+                    blueRP = data[position].scoreBreakDown!!.blue.rp - 2
                 }
                 else -> {
-                    redRP = data[position].scoreBreakDown!!.red!!.rp - 1
-                    blueRP = data[position].scoreBreakDown!!.blue!!.rp - 1
+                    redRP = data[position].scoreBreakDown!!.red.rp - 1
+                    blueRP = data[position].scoreBreakDown!!.blue.rp - 1
                 }
             }
         }
@@ -406,11 +405,7 @@ class ScheduleAdapter(
                 context.startActivity(intent)
             }
             matchNumber.setOnClickListener {
-                val intent = when (DataLoader.year) {
-                    "2023" -> Intent(context, MatchBreakdownActivity::class.java)
-                    else -> Intent()
-                }
-
+                val intent = Intent(context, MatchBreakdownActivity::class.java)
                 intent.putExtra("matchKey", matchKey)
                 intent.putExtra("compLevel", compLevel)
                 intent.putExtra("setNumber", setNumber)
@@ -421,11 +416,7 @@ class ScheduleAdapter(
                 intent.putExtra("blueRobot1", blueTeam1.text.toString())
                 intent.putExtra("blueRobot2", blueTeam2.text.toString())
                 intent.putExtra("blueRobot3", blueTeam3.text.toString())
-                if (DataLoader.year == "2019" ||
-                    DataLoader.year == "2020" ||
-                    DataLoader.year == "2023") {
-                    context.startActivity(intent)
-                }
+                context.startActivity(intent)
             }
         }
     }

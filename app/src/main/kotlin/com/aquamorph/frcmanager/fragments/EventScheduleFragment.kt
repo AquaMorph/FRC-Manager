@@ -102,7 +102,7 @@ class EventScheduleFragment :
         }
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == "teamNumber" || key == "eventKey" || key == "matchSort") {
             refresh()
         }

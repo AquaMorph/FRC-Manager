@@ -1,6 +1,6 @@
 ﻿# FRC Manager
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
-[![API](https://img.shields.io/badge/API-15%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=15)
+[![API](https://img.shields.io/badge/API-19%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=19)
 [![Build APK](https://github.com/AquaMorph/FRC-Manager/actions/workflows/build-apk.yml/badge.svg)](https://github.com/AquaMorph/FRC-Manager/actions/workflows/build-apk.yml)
 [![GitHub issues](https://img.shields.io/github/issues/AquaMorph/FRC-Manager.svg)](https://github.com/AquaMorph/FRC-Manager/issues)
 

@@ -128,8 +128,8 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         startActivity(Intent(this, Settings::class.java))
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        eventName = sharedPreferences.getString("eventShortName", "North Carolina")!!
+override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        eventName = sharedPreferences!!.getString("eventShortName", "North Carolina")!!
         teamRank = sharedPreferences.getString("teamRank", "")!!
         teamRecord = sharedPreferences.getString("teamRecord", "")!!
         nextMatch = sharedPreferences.getString("nextMatch", "")!!
