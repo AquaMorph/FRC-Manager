@@ -407,7 +407,6 @@ class ScheduleAdapter(
             }
             matchNumber.setOnClickListener {
                 val intent = Intent(context, MatchBreakdownActivity::class.java)
-
                 intent.putExtra("matchKey", matchKey)
                 intent.putExtra("compLevel", compLevel)
                 intent.putExtra("setNumber", setNumber)
