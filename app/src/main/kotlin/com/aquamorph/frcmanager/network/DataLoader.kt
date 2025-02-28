@@ -158,7 +158,7 @@ class DataLoader {
                 } else {
                     dataContainer.data.addAll(result as Collection<Nothing>)
                     if (result is Comparable<*>) {
-                        sort(dataContainer.data as List<Nothing>)
+                        sort(dataContainer.data as MutableList<Comparable<Any>>)
                     }
                 }
             if (dataContainer.data.isEmpty() || isRankEmpty(dataContainer)) {

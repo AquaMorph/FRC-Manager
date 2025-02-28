@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlinLibVersion = '1.9.21'
+        kotlinLibVersion = '2.0.21'
     }
     repositories {
         mavenCentral()
@@ -11,7 +11,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2'
+        classpath 'com.android.tools.build:gradle:8.8.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinLibVersion}"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:9.1.1"
     }
