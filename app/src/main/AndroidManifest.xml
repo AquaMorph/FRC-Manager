@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
-        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
         android:supportsRtl="true"
@@ -26,7 +25,6 @@
         <activity
             android:name=".activities.MainActivity"
             android:configChanges="keyboardHidden"
-            android:screenOrientation="portrait"
             android:theme="@style/LightTheme"/>
         <activity
             android:name=".activities.Settings"/>
@@ -36,8 +34,6 @@
             android:name=".activities.MatchBreakdownActivity"/>
         <activity
             android:name=".activities.Setup"
-            android:label="@string/appName"
-            android:screenOrientation="portrait"
             android:theme="@style/Setup"
             android:exported="true">
             <intent-filter>

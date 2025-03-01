@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.activities
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -25,6 +26,9 @@ class Setup : AppIntro() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         teamNumberSlide = TeamNumberSlide()
         eventSlide = EventSlide()
 
