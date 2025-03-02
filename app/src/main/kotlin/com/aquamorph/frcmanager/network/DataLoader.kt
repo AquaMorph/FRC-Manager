@@ -223,7 +223,7 @@ class DataLoader {
             if (eventKey != "") {
                 // Checks for internet connections
                 if (!NetworkCheck.hasNetwork(activity)) {
-                    Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
+                    Snackbar.make(activity.findViewById(R.id.main_content),
                             R.string.noConnectionMessage,
                             Snackbar.LENGTH_LONG).show()
                 }
@@ -258,11 +258,11 @@ class DataLoader {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ result -> if (result != null) {
                             if (result.isDatafeedDown) {
-                                Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
+                                Snackbar.make(activity.findViewById(R.id.main_content),
                                         R.string.firstServerDown,
                                         Snackbar.LENGTH_LONG).show()
                             } else if (result.downEvents.contains(eventKey)) {
-                                Snackbar.make(activity.findViewById(R.id.myCoordinatorLayout),
+                                Snackbar.make(activity.findViewById(R.id.main_content),
                                         R.string.eventServerDown,
                                         Snackbar.LENGTH_LONG).show()
                             }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+                <item name="colorPrimary">@color/primary</item>
+                <item name="colorPrimaryDark">@color/primary_dark</item>
+                <item name="colorAccent">@color/accent</item>
+                <item name="backgroundColor">@color/background_light</item>
+                <item name="cardBackground">@color/background_light</item>
+                <item name="redAllianceBackground">@color/red_alliance_light</item>
+                <item name="blueAllianceBackground">@color/blue_alliance_light</item>
+                <item name="redAllianceText">@color/primary_text</item>
+                <item name="blueAllianceText">@color/primary_text</item>
+                <item name="text">@color/primary_text</item>
+                <item name="textOnBackground">@color/primary_text</item>
+                <item name="bubbleText">@color/icons</item>
+                <item name="scroll_line">@drawable/line_light</item>
+                <item name="dividerColor">@color/divider_light</item>
+                <item name="redLeaning">#B71C1C</item>
+                <item name="redLikely">#C62828</item>
+                <item name="redHeavily">#D32F2F</item>
+                <item name="blueLeaning">#1A237E</item>
+                <item name="blueLikely">#0D47A1</item>
+                <item name="blueHeavily">#1565C0</item>
+                <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+        </style>
+
+        <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
+                <item name="colorPrimary">@color/primary</item>
+                <item name="colorPrimaryDark">@color/primary_dark</item>
+                <item name="colorAccent">@color/accent</item>
+                <item name="backgroundColor">@color/background_dark</item>
+                <item name="cardBackground">#616161</item>
+                <item name="redAllianceBackground">#806161</item>
+                <item name="blueAllianceBackground">#616180</item>
+                <item name="redAllianceText">#F5F5F5</item>
+                <item name="blueAllianceText">#F5F5F5</item>
+                <item name="text">@color/primary_text</item>
+                <item name="textOnBackground">#F5F5F5</item>
+                <item name="bubbleText">#F5F5F5</item>
+                <item name="android:textColorPrimary">@color/icons</item>
+                <item name="android:textColorSecondary">#BDBDBD</item>
+                <item name="android:textColorTertiary">#BDBDBD</item>
+                <item name="android:listDivider">@color/icons</item>
+                <item name="scroll_line">@drawable/line_dark</item>
+                <item name="dividerColor">@color/divider_dark</item>
+                <item name="redLeaning">#FFEBEE</item>
+                <item name="redLikely">#FFCDD2</item>
+                <item name="redHeavily">#EF9A9A</item>
+                <item name="blueLeaning">#E3F2FD</item>
+                <item name="blueLikely">#BBDEFB</item>
+                <item name="blueHeavily">#90CAF9</item>
+                <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+        </style>
+
+        <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+                <item name="colorPrimary">@color/primary</item>
+                <item name="colorPrimaryDark">@color/primary_dark</item>
+                <item name="colorAccent">@color/accent</item>
+                <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+        </style>
+
+</resources>
