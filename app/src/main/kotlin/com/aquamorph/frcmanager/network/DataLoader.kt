@@ -123,8 +123,8 @@ class DataLoader {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ result ->
-                                    dataContainer.newData = (result as Response<*>).raw()!!
-                                        .networkResponse() != null
+                                    dataContainer.newData = (result as Response<*>).raw()
+                                        .networkResponse != null
                                     updateData(dataContainer, tabs, adapter,
                                             result.body() as Any) },
                                 { error ->

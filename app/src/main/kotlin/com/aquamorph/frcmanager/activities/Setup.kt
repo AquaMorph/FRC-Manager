@@ -37,7 +37,6 @@ class Setup : AppIntro() {
 
         setBarColor(ContextCompat.getColor(this, R.color.primary))
         setSeparatorColor(ContextCompat.getColor(this, R.color.primary_dark))
-        setOffScreenPageLimit(4)
 
         // Hide Skip/Done button.
         showSkipButton(false)
