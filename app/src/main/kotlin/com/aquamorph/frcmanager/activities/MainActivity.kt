@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val pager = findViewById<ViewPager2>(R.id.container)
         val tabs = findViewById<TabLayout>(R.id.tabs)
         val sections = SectionsPagerAdapter(this)
-        sections.updateTabs(model.state.value)
+        sections.updateTabs(model.state.value.selection)
         pager.adapter = sections
         tabMediator = TabLayoutMediator(tabs, pager) { tab, position ->
             tab.text = sections.getPageTitle(position)
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 model.state.collect { state ->
-                    sections.updateTabs(state)
+                    sections.updateTabs(state.selection)
                     updateToolbar(state)
                     showFeedNotice(state.feedNotice)
                 }

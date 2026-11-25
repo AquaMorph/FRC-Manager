@@ -3,7 +3,6 @@ package com.aquamorph.frcmanager.utils
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
-import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
 import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.google.gson.JsonObject
@@ -57,24 +56,6 @@ object Constants {
             spacesText.append("&nbsp;")
         }
         return String.format("<pre>%s<u>%s</u></pre>", spacesText.toString(), tmp)
-    }
-
-    /**
-     * checkNoDataScreen() displays a no dataLoader screen if there is not any dataLoader to
-     * display. Else displays dataLoader.
-     *
-     * @param data data to be shown
-     * @param recyclerView data view
-     * @param emptyView view for no data
-     */
-    fun checkNoDataScreen(data: List<*>, recyclerView: View, emptyView: View) {
-        if (data.isEmpty()) {
-            recyclerView.visibility = View.GONE
-            emptyView.visibility = View.VISIBLE
-        } else {
-            recyclerView.visibility = View.VISIBLE
-            emptyView.visibility = View.GONE
-        }
     }
 
     /**

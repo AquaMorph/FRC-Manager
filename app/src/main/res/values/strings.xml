@@ -20,6 +20,7 @@
     <string name="version">&appversion;</string>
     <string name="versionText">Version &appversion;</string>
     <string name="noData">No Data</string>
+    <string name="eventDataLoadError">Could not load data.</string>
     <string name="noConnectionMessage">No Connection. Loading from last refresh.</string>
     <string name="firstServerDown">The FIRST server is currently offline.</string>
     <string name="eventServerDown">The feed for the event is down.</string>

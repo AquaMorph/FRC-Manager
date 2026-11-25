@@ -27,7 +27,7 @@ class AwardFragment : TabFragment() {
             items.addAll(section.items.filterNot { award ->
                 award.recipientList.singleOrNull()?.let { it.awardee == null && it.teamKey == null } == true
             })
-            showList(items, section.loading)
+            showList(items, section)
         }
     }
 }

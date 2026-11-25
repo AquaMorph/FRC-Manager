@@ -29,7 +29,7 @@ class RankFragment : TabFragment() {
             items.addAll(section.items)
             relatedItems.clear()
             relatedItems.addAll(related.items)
-            showList(items, section.loading || related.loading)
+            showList(items, section, related)
         }
     }
 }

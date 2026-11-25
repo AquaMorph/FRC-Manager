@@ -31,7 +31,7 @@ abstract class ScheduleFragment(private val layout: Int) : TabFragment() {
             })
             MatchSort.sortMatches(matches, sort)
             adapter.highlightedTeam = team
-            showList(matches, section.loading)
+            showList(matches, section)
         }
         observeEvent({ it.predictions to it.display.predictionPercentage }) { (predictions, percentage) ->
             adapter.updatePredictions(predictions, percentage)

@@ -32,8 +32,15 @@ internal fun SharedPreferences.eventDisplay() = EventDisplay(
     getString("predictionDisplay", "words") != "words"
 )
 
-internal data class EventList<T>(val items: List<T> = emptyList(), val loading: Boolean = false) {
-    fun finish(items: List<T>?) = EventList(items ?: this.items)
+internal enum class EventLoad { READY, LOADING, FAILED }
+
+internal data class EventList<T>(val items: List<T> = emptyList(), val load: EventLoad = EventLoad.READY) {
+    val loading get() = load == EventLoad.LOADING
+
+    fun begin() = copy(load = EventLoad.LOADING)
+    fun finish(items: List<T>) = EventList(items)
+    fun fail() = copy(load = EventLoad.FAILED)
+    fun failIfLoading() = if (loading) fail() else this
 }
 
 internal enum class FeedNotice { FIRST_DOWN, EVENT_DOWN }
@@ -52,13 +59,13 @@ internal data class EventState(
     val feedNotice: FeedNotice? = null
 ) {
     fun endRefresh() = copy(
-        matches = matches.finish(null),
-        teams = teams.finish(null),
-        rankings = rankings.finish(null),
-        alliances = alliances.finish(null),
-        awards = awards.finish(null),
-        districtRankings = districtRankings.finish(null),
-        districtTeams = districtTeams.finish(null)
+        matches = matches.failIfLoading(),
+        teams = teams.failIfLoading(),
+        rankings = rankings.failIfLoading(),
+        alliances = alliances.failIfLoading(),
+        awards = awards.failIfLoading(),
+        districtRankings = districtRankings.failIfLoading(),
+        districtTeams = districtTeams.failIfLoading()
     )
 
     fun beginRefresh(selection: EventSelection): EventState {
@@ -67,21 +74,22 @@ internal data class EventState(
         val keepDistrict = current.selection.districtKey == selection.districtKey && selection.districtKey.isNotEmpty()
         return current.copy(
             selection = selection,
-            matches = current.matches.copy(loading = true),
-            teams = current.teams.copy(loading = true),
-            rankings = current.rankings.copy(loading = true),
-            alliances = current.alliances.copy(loading = true),
-            awards = current.awards.copy(loading = true),
-            districtRankings = EventList(
-                if (keepDistrict) current.districtRankings.items else emptyList(),
-                selection.districtKey.isNotEmpty()
-            ),
-            districtTeams = EventList(
-                if (keepDistrict) current.districtTeams.items else emptyList(),
-                selection.districtKey.isNotEmpty()
-            ),
+            matches = current.matches.begin(),
+            teams = current.teams.begin(),
+            rankings = current.rankings.begin(),
+            alliances = current.alliances.begin(),
+            awards = current.awards.begin(),
+            districtRankings = districtSection(current.districtRankings, selection, keepDistrict),
+            districtTeams = districtSection(current.districtTeams, selection, keepDistrict),
             predictions = SchedulePredictions(),
             feedNotice = null
         )
     }
+
+    private fun <T> districtSection(section: EventList<T>, selection: EventSelection, keepDistrict: Boolean): EventList<T> =
+        when {
+            selection.districtKey.isEmpty() -> EventList()
+            keepDistrict -> section.begin()
+            else -> EventList(load = EventLoad.LOADING)
+        }
 }

@@ -10,35 +10,31 @@ import com.aquamorph.frcmanager.fragments.EventScheduleFragment
 import com.aquamorph.frcmanager.fragments.RankFragment
 import com.aquamorph.frcmanager.fragments.TeamFragment
 import com.aquamorph.frcmanager.fragments.TeamScheduleFragment
-import com.aquamorph.frcmanager.network.EventState
+import com.aquamorph.frcmanager.network.EventSelection
+
+internal enum class EventTab(val title: String, val create: () -> Fragment) {
+    TEAM_SCHEDULE("Team Schedule", { TeamScheduleFragment() }),
+    EVENT_SCHEDULE("Event Schedule", { EventScheduleFragment() }),
+    RANKINGS("Rankings", { RankFragment() }),
+    TEAMS("Teams", { TeamFragment() }),
+    ALLIANCES("Alliances", { AllianceFragment() }),
+    AWARDS("Awards", { AwardFragment() }),
+    DISTRICT_RANKINGS("District Rankings", { DistrictRankFragment() });
+
+    companion object {
+        fun forSelection(selection: EventSelection): List<EventTab> = when {
+            selection.eventKey.isEmpty() -> emptyList()
+            selection.districtKey.isEmpty() -> entries.filterNot { it == DISTRICT_RANKINGS }
+            else -> entries
+        }
+    }
+}
 
 internal class SectionsPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
-    private enum class Tab(val title: String, val create: () -> Fragment) {
-        TEAM_SCHEDULE("Team Schedule", { TeamScheduleFragment() }),
-        EVENT_SCHEDULE("Event Schedule", { EventScheduleFragment() }),
-        RANKINGS("Rankings", { RankFragment() }),
-        TEAMS("Teams", { TeamFragment() }),
-        ALLIANCES("Alliances", { AllianceFragment() }),
-        AWARDS("Awards", { AwardFragment() }),
-        DISTRICT_RANKINGS("District Rankings", { DistrictRankFragment() })
-    }
+    private var tabs = emptyList<EventTab>()
 
-    private var tabs = emptyList<Tab>()
-
-    fun updateTabs(state: EventState) {
-        val visible = buildList {
-            if (state.matches.items.isNotEmpty()) {
-                add(Tab.TEAM_SCHEDULE)
-                add(Tab.EVENT_SCHEDULE)
-            }
-            if (state.rankings.items.isNotEmpty()) add(Tab.RANKINGS)
-            if (state.teams.items.isNotEmpty()) add(Tab.TEAMS)
-            if (state.alliances.items.isNotEmpty()) add(Tab.ALLIANCES)
-            if (state.awards.items.isNotEmpty()) add(Tab.AWARDS)
-            if (state.selection.eventKey.isNotEmpty() && state.selection.districtKey.isNotEmpty()) {
-                add(Tab.DISTRICT_RANKINGS)
-            }
-        }
+    fun updateTabs(selection: EventSelection) {
+        val visible = EventTab.forSelection(selection)
         if (tabs == visible) return
         tabs = visible
         notifyDataSetChanged()

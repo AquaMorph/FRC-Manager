@@ -25,7 +25,7 @@ class AllianceFragment : TabFragment() {
         observeEvent({ it.alliances }) { section ->
             items.clear()
             items.addAll(section.items)
-            showList(items, section.loading)
+            showList(items, section)
         }
     }
 }

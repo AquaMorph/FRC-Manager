@@ -29,7 +29,7 @@ class TeamFragment : TabFragment() {
             items.addAll(section.items.sorted())
             relatedItems.clear()
             relatedItems.addAll(related.items)
-            showList(items, section.loading || related.loading)
+            showList(items, section, related)
         }
     }
 }

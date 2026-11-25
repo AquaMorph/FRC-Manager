@@ -25,16 +25,17 @@ internal class EventRepository(
         val event = selection.eventKey
         val district = selection.districtKey
         val requests = mutableListOf(
-            section(tba.getEventMatches(event)) { state, matches -> state.copy(matches = state.matches.finish(matches)) },
-            section(tba.getEventTeams(event)) { state, teams -> state.copy(teams = state.teams.finish(teams)) },
-            section(tba.getEventRankings(event)) { state, rank ->
-                val rankings = rank?.let { if (it.rankings.isNullOrEmpty()) emptyList() else listOf(it) }
-                state.copy(rankings = state.rankings.finish(rankings))
+            listSection(tba.getEventMatches(event)) { state, update -> state.copy(matches = update(state.matches)) },
+            listSection(tba.getEventTeams(event)) { state, update -> state.copy(teams = update(state.teams)) },
+            section(tba.getEventRankings(event), { rank ->
+                if (rank == null || rank.rankings.isNullOrEmpty()) emptyList() else listOf(rank)
+            }) { state, update ->
+                state.copy(rankings = update(state.rankings))
             },
-            section(tba.getEventAlliances(event)) { state, alliances ->
-                state.copy(alliances = state.alliances.finish(alliances))
+            listSection(tba.getEventAlliances(event)) { state, update ->
+                state.copy(alliances = update(state.alliances))
             },
-            section(tba.getEventAwards(event)) { state, awards -> state.copy(awards = state.awards.finish(awards)) },
+            listSection(tba.getEventAwards(event)) { state, update -> state.copy(awards = update(state.awards)) },
             tba.getStatus().map<EventUpdate> { status ->
                 val notice = when {
                     status.isDatafeedDown -> FeedNotice.FIRST_DOWN
@@ -46,11 +47,11 @@ internal class EventRepository(
         )
 
         if (district.isNotEmpty()) {
-            requests += section(tba.getDistrictRankings(district)) { state, ranks ->
-                state.copy(districtRankings = state.districtRankings.finish(ranks))
+            requests += listSection(tba.getDistrictRankings(district)) { state, update ->
+                state.copy(districtRankings = update(state.districtRankings))
             }
-            requests += section(tba.getDistrictTeams(district)) { state, teams ->
-                state.copy(districtTeams = state.districtTeams.finish(teams))
+            requests += listSection(tba.getDistrictTeams(district)) { state, update ->
+                state.copy(districtTeams = update(state.districtTeams))
             }
         }
 
@@ -70,17 +71,24 @@ internal class EventRepository(
         return Observable.merge(requests)
     }
 
-    private fun <T : Any> section(
+    private fun <T> listSection(
+        request: Observable<Response<ArrayList<T>>>,
+        update: (EventState, (EventList<T>) -> EventList<T>) -> EventState
+    ): Observable<EventUpdate> = section(request, { it.orEmpty() }, update)
+
+    private fun <T : Any, Item> section(
         request: Observable<Response<T>>,
-        update: (EventState, T?) -> EventState
+        items: (T?) -> List<Item>,
+        update: (EventState, (EventList<Item>) -> EventList<Item>) -> EventState
     ): Observable<EventUpdate> {
+        val failed: EventUpdate = { state -> update(state, EventList<Item>::fail) }
         return request.map<EventUpdate> { response ->
             if (!response.isSuccessful) throw HttpException(response)
-            val body = response.body()
-            return@map { state -> update(state, body) }
+            val result = items(response.body())
+            return@map { state -> update(state) { section -> section.finish(result) } }
         }.doOnError(::logError)
-            .onErrorReturnItem { state -> update(state, null) }
-            .defaultIfEmpty { state -> update(state, null) }
+            .onErrorReturnItem(failed)
+            .defaultIfEmpty(failed)
             .subscribeOn(io)
     }
 

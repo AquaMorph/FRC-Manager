@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.decoration.Animations
+import com.aquamorph.frcmanager.network.EventList
+import com.aquamorph.frcmanager.network.EventLoad
 import com.aquamorph.frcmanager.network.EventState
 import com.aquamorph.frcmanager.network.EventViewModel
-import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -55,11 +56,11 @@ abstract class TabFragment : Fragment() {
         }
     }
 
-    protected fun showList(items: List<*>, loading: Boolean) {
+    internal fun showList(items: List<*>, section: EventList<*>, related: EventList<*>? = null) {
         val list = checkNotNull(views)
-        list.swipe.isRefreshing = loading
-        Constants.checkNoDataScreen(items, list.recycler, list.empty)
-        if (loading && items.isEmpty()) list.empty.visibility = View.GONE
+        list.swipe.isRefreshing = section.loading || (items.isNotEmpty() && related?.loading == true)
+        list.empty.setText(if (section.load == EventLoad.FAILED) R.string.eventDataLoadError else R.string.noData)
+        list.empty.visibility = if (items.isEmpty() && !section.loading) View.VISIBLE else View.GONE
         list.adapter.notifyDataSetChanged()
         if (firstLoad && items.isNotEmpty()) {
             Animations.loadAnimation(context, list.recycler, list.adapter, firstLoad = true, isNewData = false)
