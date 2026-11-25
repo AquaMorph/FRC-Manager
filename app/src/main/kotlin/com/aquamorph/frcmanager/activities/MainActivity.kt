@@ -1,10 +1,8 @@
 package com.aquamorph.frcmanager.activities
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.net.Uri
@@ -14,91 +12,84 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.PreferenceManager
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.SectionsPagerAdapter
-import com.aquamorph.frcmanager.network.DataLoader
+import com.aquamorph.frcmanager.models.tba.Rank
+import com.aquamorph.frcmanager.network.EventState
+import com.aquamorph.frcmanager.network.EventViewModel
+import com.aquamorph.frcmanager.network.FeedNotice
+import com.aquamorph.frcmanager.network.NetworkCheck
+import com.aquamorph.frcmanager.network.eventDisplay
+import com.aquamorph.frcmanager.network.eventSelection
 import com.aquamorph.frcmanager.utils.Constants
-import com.aquamorph.frcmanager.utils.Logging
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.launch
 
-/**
- * Default activity of the app.
- *
- * @author Christian Colglazier
- * @version 1/16/2020
- */
-class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
-    private lateinit var eventName: String
-    private lateinit var teamRank: String
-    private lateinit var teamRecord: String
-    private lateinit var nextMatch: String
-    private lateinit var eventAddress: String
-    private lateinit var toolbarText: String
-    lateinit var dataLoader: DataLoader
-    private lateinit var mViewPager: ViewPager
-    private lateinit var tabLayout: TabLayout
-
-    /**
-     * getTeamNumber() returns the string tag for Blue Alliance requests of the current
-     * team number.
-     *
-     * @return team number string
-     */
-    val teamNumber: String
-        get() = "frc" + DataLoader.teamNumber
-
-    /**
-     * getAppTitle() returns the text for the app.
-     * @return title for the app
-     */
-    private val appTitle: String
-        get() = String.format("%s - %s", DataLoader.teamNumber, eventName)
-
-    /**
-     * getAppSubTitle() returns the subtitle string for the toolbar with the event name,
-     * team number and current rank if available.
-     *
-     * @return subtitle string
-     */
-    private val appSubTitle: String
-        get() = if (teamRank == "") {
-            ""
-        } else {
-            toolbarText.replace("\$r", teamRank)
-                    .replace("\$R", teamRecord)
-                    .replace("\$n", nextMatch)
-        }
+class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+    private lateinit var prefs: SharedPreferences
+    private lateinit var model: EventViewModel
+    private lateinit var tabMediator: TabLayoutMediator
+    private var appliedTheme: String? = null
+    private var shownFeedNotice: FeedNotice? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        setContentView(R.layout.activity_main)
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        prefs.registerOnSharedPreferenceChangeListener(this@MainActivity)
-        DataLoader.teamNumber = prefs.getString("teamNumber", "")!!
-        DataLoader.year = prefs.getString("year", "")!!
-        eventName = prefs.getString("eventShortName", "")!!
-        teamRank = prefs.getString("teamRank", "")!!
-        teamRecord = prefs.getString("teamRecord", "")!!
-        nextMatch = prefs.getString("nextMatch", "")!!
-        toolbarText = prefs.getString("toolbarText", getString(R.string.toolBarDefault))!!
-        eventAddress = prefs.getString("eventAddress", "")!!
-        DataLoader.eventKey = prefs.getString("eventKey", "")!!
-        DataLoader.districtKey = prefs.getString("districtKey", "")!!
-        predMode = prefs.getString("predictions", "none")!!
-        predPercentage = prefs.getString("predictionDisplay", "words") != "words"
-        if (DataLoader.teamNumber == "") openSetup()
-        listener()
+        prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        appliedTheme = prefs.getString("theme", "")
         theme(this)
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
+
+        model = ViewModelProvider(this, EventViewModel.factory(applicationContext))[EventViewModel::class.java]
+        syncPreferences()
+        val pager = findViewById<ViewPager2>(R.id.container)
+        val tabs = findViewById<TabLayout>(R.id.tabs)
+        val sections = SectionsPagerAdapter(this)
+        sections.updateTabs(model.state.value)
+        pager.adapter = sections
+        tabMediator = TabLayoutMediator(tabs, pager) { tab, position ->
+            tab.text = sections.getPageTitle(position)
+        }
+        tabMediator.attach()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                model.state.collect { state ->
+                    sections.updateTabs(state)
+                    updateToolbar(state)
+                    showFeedNotice(state.feedNotice)
+                }
+            }
+        }
+
+        if (savedInstanceState == null && prefs.eventDisplay().teamNumber.isEmpty()) {
+            startActivity(Intent(this, Setup::class.java))
+        }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        setContentView(R.layout.activity_main)
-        Logging.info(this, "onConfigurationChanged", 2)
-        listener()
+    override fun onResume() {
+        super.onResume()
+        prefs.registerOnSharedPreferenceChangeListener(this)
+        syncPreferences()
+    }
+
+    override fun onPause() {
+        prefs.unregisterOnSharedPreferenceChangeListener(this)
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        tabMediator.detach()
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -108,116 +99,90 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_settings -> openSettings()
+            R.id.action_settings -> startActivity(Intent(this, Settings::class.java))
             R.id.refresh_all -> refresh()
-            R.id.actionDirections -> showMap(eventAddress)
-            else -> refresh()
+            R.id.actionDirections -> showMap(prefs.getString("eventAddress", "").orEmpty())
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
-    /**
-     * openSetup() launches the set up activity.
-     */
-    private fun openSetup() {
-        startActivity(Intent(this, Setup::class.java))
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        syncPreferences()
     }
 
-    /**
-     * openSettings() launches the settings activity.
-     */
-    private fun openSettings() {
-        startActivity(Intent(this, Settings::class.java))
+    private fun syncPreferences() {
+        val selectedTheme = prefs.getString("theme", "")
+        if (appliedTheme != selectedTheme) {
+            appliedTheme = selectedTheme
+            recreate()
+            return
+        }
+        val selection = prefs.eventSelection()
+        if (selection != model.state.value.selection) checkConnection(selection.eventKey)
+        model.configure(selection, prefs.eventDisplay())
+        updateToolbar(model.state.value)
     }
 
-override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        eventName = sharedPreferences!!.getString("eventShortName", "North Carolina")!!
-        teamRank = sharedPreferences.getString("teamRank", "")!!
-        teamRecord = sharedPreferences.getString("teamRecord", "")!!
-        nextMatch = sharedPreferences.getString("nextMatch", "")!!
-        toolbarText = sharedPreferences.getString("toolbarText", getString(R.string.toolBarDefault))!!
+    internal fun refresh() {
+        val selection = prefs.eventSelection()
+        checkConnection(selection.eventKey)
+        shownFeedNotice = null
+        model.refresh(selection)
+    }
 
-        when (key) {
-            "eventKey" -> DataLoader.eventKey = sharedPreferences
-                    .getString("eventKey", "")!!
-            "teamNumber" -> DataLoader.teamNumber = sharedPreferences
-                    .getString("teamNumber", "0000")!!
-            "districtKey" -> DataLoader.districtKey = sharedPreferences
-                    .getString("districtKey", "")!!
-            "eventAddress" -> eventAddress = sharedPreferences
-                    .getString("eventAddress", "")!!
-            "year" -> DataLoader.year = sharedPreferences
-                    .getString("year", "")!!
-            "predictions" -> predMode = sharedPreferences
-                    .getString("predictions", "none")!!
-            "predictionDisplay" -> predPercentage = sharedPreferences
-                    .getString("predictionDisplay", "words") != "words"
-        }
-
-        if (supportActionBar != null) {
-            supportActionBar!!.title = appTitle
-            supportActionBar!!.subtitle = appSubTitle
-        }
-        if (key == "theme") {
-            this.recreate()
+    private fun checkConnection(eventKey: String) {
+        if (eventKey.isNotEmpty() && !NetworkCheck.hasNetwork(this)) {
+            Snackbar.make(findViewById(R.id.main_content), R.string.noConnectionMessage, Snackbar.LENGTH_LONG).show()
         }
     }
 
-    /**
-     * listener() connects layout to view.
-     */
-    private fun listener() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar!!.title = appTitle
-        supportActionBar!!.subtitle = appSubTitle
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container)
-        tabLayout = findViewById(R.id.tabs)
-        tabLayout.setupWithViewPager(mViewPager)
-        tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
-        mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager,
-                mViewPager, tabLayout, this)
-        dataLoader = DataLoader()
-        mViewPager.offscreenPageLimit = Constants.MAX_NUMBER_OF_TABS
-        mViewPager.adapter = mSectionsPagerAdapter
-        refresh()
+    private fun updateToolbar(state: EventState) {
+        val teamNumber = state.display.teamNumber
+        val eventName = prefs.getString("eventShortName", "").orEmpty()
+        supportActionBar?.title = "$teamNumber - $eventName"
+        val rank = state.rankings.items.firstOrNull()?.rankings?.firstOrNull { it.teamKey == "frc$teamNumber" }
+        supportActionBar?.subtitle = if (rank == null) "" else {
+            val nextMatch = state.matches.items.filter { it.postResultTime <= 0 }.minOrNull()
+            val nextText = nextMatch?.let { "Playing %S-%s".format(it.compLevel, it.matchNumber) }.orEmpty()
+            prefs.getString("toolbarText", getString(R.string.toolBarDefault)).orEmpty()
+                .replace("\$r", rank.rank.toString())
+                .replace("\$R", Rank.recordToString(rank.record))
+                .replace("\$n", nextText)
+        }
     }
 
-    /**
-     * showMap() starts map application
-     */
+    private fun showFeedNotice(notice: FeedNotice?) {
+        if (notice == shownFeedNotice) return
+        shownFeedNotice = notice
+        val message = when (notice) {
+            FeedNotice.FIRST_DOWN -> R.string.firstServerDown
+            FeedNotice.EVENT_DOWN -> R.string.eventServerDown
+            null -> return
+        }
+        Snackbar.make(findViewById(R.id.main_content), message, Snackbar.LENGTH_LONG).show()
+    }
+
     private fun showMap(location: String) {
-        val intent = Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://maps.google.com/maps?daddr=%s".format(location)))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr=%s".format(location)))
         startActivity(intent)
     }
 
     companion object {
-
         var appTheme = Constants.Theme.LIGHT
-        var predMode = "none"
-        var predPercentage = false
+            private set
 
-        @SuppressLint("StaticFieldLeak")
-        private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
-
-        /**
-         * theme() sets the app theme based on user selection from settings.
-         *
-         * @param activity
-         */
         fun theme(activity: Activity) {
             val currentNightMode = activity.applicationContext.resources.configuration.uiMode and
-                    Configuration.UI_MODE_NIGHT_MASK
+                Configuration.UI_MODE_NIGHT_MASK
             val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
             appTheme = when (prefs.getString("theme", "")) {
                 "amoled" -> Constants.Theme.BATTERY_SAVER
                 "dark" -> Constants.Theme.DARK
-                "system" -> when (currentNightMode) {
-                    Configuration.UI_MODE_NIGHT_YES -> Constants.Theme.DARK
-                    else -> Constants.Theme.LIGHT
+                "system" -> if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+                    Constants.Theme.DARK
+                } else {
+                    Constants.Theme.LIGHT
                 }
                 else -> Constants.Theme.LIGHT
             }
@@ -234,14 +199,6 @@ override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, ke
                     activity.setTheme(R.style.OMOLEDTheme)
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 }
-            }
-        }
-
-        fun refresh() {
-            try {
-                mSectionsPagerAdapter?.refreshAll()
-            } catch (e: Exception) {
-                Logging.error(this, e.toString(), 0)
             }
         }
     }

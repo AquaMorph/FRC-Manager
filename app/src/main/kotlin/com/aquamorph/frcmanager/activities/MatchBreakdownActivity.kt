@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.network.TBARetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants
@@ -135,7 +134,7 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
                 findViewById<TextView>(R.id.redRankPoints).text = red.rp.toString()
                 findViewById<TextView>(R.id.blueRankPoints).text = blue.rp.toString()
 
-                if (DataLoader.year == "2023") {
+                if (matchKey.startsWith("2023")) {
                     findViewById<TextView>(R.id.autoTotal).text = "Auto Mobility"
                     findViewById<TextView>(R.id.redAutoTotal).text =
                         red.autoMobilityPoints.toString()

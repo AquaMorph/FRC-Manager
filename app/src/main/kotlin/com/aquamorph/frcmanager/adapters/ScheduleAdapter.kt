@@ -15,7 +15,6 @@ import android.widget.TableRow
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.activities.MainActivity
 import com.aquamorph.frcmanager.activities.MatchBreakdownActivity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.tba.Match
@@ -34,16 +33,18 @@ import java.util.Locale
  */
 class ScheduleAdapter(
     private val context: Context,
-    private val data: ArrayList<Match>,
-    private var team: String?
+    private val data: ArrayList<Match>
 ) : RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater = from(context)
+    internal var highlightedTeam: String = ""
     private var predictions = SchedulePredictions()
+    private var predictionPercentage = false
 
-    internal fun updatePredictions(predictions: SchedulePredictions) {
-        if (this.predictions == predictions) return
+    internal fun updatePredictions(predictions: SchedulePredictions, percentage: Boolean) {
+        if (this.predictions == predictions && predictionPercentage == percentage) return
         this.predictions = predictions
+        predictionPercentage = percentage
         notifyDataSetChanged()
     }
 
@@ -69,20 +70,20 @@ class ScheduleAdapter(
         holder.blueTeam3.text = parseTeamNumber(false, 2, position)
 
         // Underlines team number
-        team = String.format("%4s", team)
+        val team = String.format("%4s", highlightedTeam)
         when (team) {
             parseTeamNumber(true, 0, position) ->
-                holder.redTeam1.text = Constants.fromHtml(Constants.underlineText(team!!))
+                holder.redTeam1.text = Constants.fromHtml(Constants.underlineText(team))
             parseTeamNumber(true, 1, position) ->
-                holder.redTeam2.text = Constants.fromHtml(Constants.underlineText(team!!))
+                holder.redTeam2.text = Constants.fromHtml(Constants.underlineText(team))
             parseTeamNumber(true, 2, position) ->
-                holder.redTeam3.text = Constants.fromHtml(Constants.underlineText(team!!))
+                holder.redTeam3.text = Constants.fromHtml(Constants.underlineText(team))
             parseTeamNumber(false, 0, position) ->
-                holder.blueTeam1.text = Constants.fromHtml(Constants.underlineText(team!!))
+                holder.blueTeam1.text = Constants.fromHtml(Constants.underlineText(team))
             parseTeamNumber(false, 1, position) ->
-                holder.blueTeam2.text = Constants.fromHtml(Constants.underlineText(team!!))
+                holder.blueTeam2.text = Constants.fromHtml(Constants.underlineText(team))
             parseTeamNumber(false, 2, position) ->
-                holder.blueTeam3.text = Constants.fromHtml(Constants.underlineText(team!!))
+                holder.blueTeam3.text = Constants.fromHtml(Constants.underlineText(team))
         }
 
         // Bolds winning score
@@ -180,18 +181,18 @@ class ScheduleAdapter(
 
         val matchKey = data[position].key
         holder.predictionTable.visibility = View.GONE
-        when (MainActivity.predMode) {
-            "tba" -> predictions.tba.firstOrNull { it.matchKey == matchKey }?.let { prediction ->
+        when {
+            predictions.tba.isNotEmpty() -> predictions.tba.firstOrNull { it.matchKey == matchKey }?.let { prediction ->
                 holder.predictionTable.visibility = View.VISIBLE
                 holder.predictionsText.setTextColor(getPredictionColor(prediction.prob, prediction.winningAlliance))
-                holder.predictionsText.text = predictionToString(prediction, MainActivity.predPercentage)
+                holder.predictionsText.text = predictionToString(prediction, predictionPercentage)
             }
-            "statbotics" -> predictions.statbotics.firstOrNull { it.key == matchKey }?.let { prediction ->
+            predictions.statbotics.isNotEmpty() -> predictions.statbotics.firstOrNull { it.key == matchKey }?.let { prediction ->
                 holder.predictionTable.visibility = View.VISIBLE
                 holder.predictionsText.setTextColor(
                     getPredictionColor(prediction.winnerProb(), prediction.pred.winner)
                 )
-                holder.predictionsText.text = predictionToString(prediction, MainActivity.predPercentage)
+                holder.predictionsText.text = predictionToString(prediction, predictionPercentage)
             }
         }
     }

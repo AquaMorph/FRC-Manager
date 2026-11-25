@@ -6,7 +6,6 @@ import android.text.Spanned
 import android.view.View
 import com.aquamorph.frcmanager.BuildConfig
 import com.aquamorph.frcmanager.models.tba.TBAPrediction
-import com.aquamorph.frcmanager.network.DataLoader
 import com.google.gson.JsonObject
 
 /**
@@ -21,8 +20,6 @@ object Constants {
     const val TBA_HEADER = "X-TBA-Auth-Key"
     const val STATBOTICS_API_URL = "https://api.statbotics.io/v3/"
     const val TRACING_LEVEL = 3
-    const val THREAD_WAIT_TIME = 100
-    const val MAX_NUMBER_OF_TABS = 7
     const val CACHE_SIZE = (10 * 1024 * 1024).toLong()
     const val DIVIDER_WIDTH = 4f
 
@@ -70,7 +67,7 @@ object Constants {
      * @param recyclerView data view
      * @param emptyView view for no data
      */
-    fun checkNoDataScreen(data: ArrayList<*>, recyclerView: View, emptyView: View) {
+    fun checkNoDataScreen(data: List<*>, recyclerView: View, emptyView: View) {
         if (data.isEmpty()) {
             recyclerView.visibility = View.GONE
             emptyView.visibility = View.VISIBLE
@@ -92,77 +89,6 @@ object Constants {
         } else {
             Html.fromHtml(html)
         }
-    }
-
-    /**
-     * getTeamName() returns the name of a team.
-     *
-     * @param number of the team
-     * @return name of the team
-     */
-    fun getTeamName(number: String): String {
-        if (isDistrict()) {
-            for (i in DataLoader.districtTeamDC.data.indices) {
-                if (number == DataLoader.districtTeamDC.data[i].key) {
-                    return DataLoader.districtTeamDC.data[i].nickname
-                }
-            }
-        } else {
-            for (i in DataLoader.teamDC.data.indices) {
-                if (number == DataLoader.teamDC.data[i].key) {
-                    return DataLoader.teamDC.data[i].nickname
-                }
-            }
-        }
-        return ""
-    }
-
-    /**
-     * getTeamRecord() returns the record of a team.
-     *
-     * @param number of the team
-     * @return record of the team
-     */
-    fun getTeamRecord(number: String): String {
-        if (DataLoader.rankDC.data != null && DataLoader.rankDC.data.isNotEmpty()) {
-            if (DataLoader.rankDC.data[0].rankings != null &&
-                    DataLoader.rankDC.data[0].rankings!!.isNotEmpty()) {
-                for (i in DataLoader.rankDC.data[0].rankings!!.indices) {
-                    if (number == DataLoader.rankDC.data[0].rankings!![i].teamKey) {
-                        val record = DataLoader.rankDC.data[0].rankings!![i].record
-                        return "(" + record.wins + "-" + record.losses + "-" + record.ties + ")"
-                    }
-                }
-            }
-        }
-        return ""
-    }
-
-    /**
-     * getTeamRecord() returns the rank of a team.
-     *
-     * @param number of the team
-     * @return rank of the team
-     */
-    fun getTeamRank(number: String): String {
-        if (DataLoader.rankDC.data.isNotEmpty()) {
-            for (i in DataLoader.rankDC.data[0].rankings!!.indices) {
-                if (number == DataLoader.rankDC.data[0].rankings!![i].teamKey) {
-                    val rank = DataLoader.rankDC.data[0].rankings!![i].rank
-                    return "Rank #$rank"
-                }
-            }
-        }
-        return ""
-    }
-
-    /**
-     * isDistrict() returns if the event is a district.
-     *
-     * @return district state
-     */
-    fun isDistrict(): Boolean {
-        return DataLoader.districtKey != ""
     }
 
     /**

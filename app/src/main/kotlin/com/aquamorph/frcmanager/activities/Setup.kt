@@ -4,12 +4,10 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.fragments.setup.EventSlide
 import com.aquamorph.frcmanager.fragments.setup.Slide
 import com.aquamorph.frcmanager.fragments.setup.TeamNumberSlide
-import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Logging
 import com.github.paolorotolo.appintro.AppIntro
 
@@ -50,13 +48,6 @@ class Setup : AppIntro() {
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
         Logging.info(this, "Team Number: " + teamNumberSlide.teamNumber, 0)
-        val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
-        val editor = prefs.edit()
-        editor.putString("teamRank", "")
-        editor.putString("teamRecord", "")
-        editor.apply()
-        DataLoader.clearData()
-        MainActivity.refresh()
         this.finish()
     }
 

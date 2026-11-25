@@ -1,157 +1,52 @@
 package com.aquamorph.frcmanager.adapters
 
-import android.app.Activity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.viewpager.widget.PagerAdapter
-import androidx.viewpager.widget.ViewPager
-import com.aquamorph.frcmanager.fragments.RefreshFragment
-import com.aquamorph.frcmanager.models.tba.Tab
-import com.aquamorph.frcmanager.network.DataLoader
-import com.aquamorph.frcmanager.utils.Logging
-import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.aquamorph.frcmanager.fragments.AllianceFragment
+import com.aquamorph.frcmanager.fragments.AwardFragment
+import com.aquamorph.frcmanager.fragments.DistrictRankFragment
+import com.aquamorph.frcmanager.fragments.EventScheduleFragment
+import com.aquamorph.frcmanager.fragments.RankFragment
+import com.aquamorph.frcmanager.fragments.TeamFragment
+import com.aquamorph.frcmanager.fragments.TeamScheduleFragment
+import com.aquamorph.frcmanager.network.EventState
 
-/**
- * Populates a tab layout with fragments.
- *
- * @author Christian Colglazier
- * @version 4/2/2018
- */
-class SectionsPagerAdapter(
-    fragmentManager: FragmentManager,
-    private val viewPager: ViewPager,
-    private val tabLayout: TabLayout,
-    var activity: Activity
-) : FragmentStatePagerAdapter(fragmentManager) {
-    var tabs = ArrayList<Tab>()
-
-    /**
-     * refreshAll() reloads all dataLoader in the fragments.
-     */
-    fun refreshAll() {
-        refreshData()
-        for (i in tabs.indices) {
-            (tabs[i].fragment as RefreshFragment).refresh()
-        }
+internal class SectionsPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+    private enum class Tab(val title: String, val create: () -> Fragment) {
+        TEAM_SCHEDULE("Team Schedule", { TeamScheduleFragment() }),
+        EVENT_SCHEDULE("Event Schedule", { EventScheduleFragment() }),
+        RANKINGS("Rankings", { RankFragment() }),
+        TEAMS("Teams", { TeamFragment() }),
+        ALLIANCES("Alliances", { AllianceFragment() }),
+        AWARDS("Awards", { AwardFragment() }),
+        DISTRICT_RANKINGS("District Rankings", { DistrictRankFragment() })
     }
 
-    /**
-     * refreshData() updates all event data.
-     */
-    private fun refreshData() {
-        DataLoader.teamDC.complete = false
-        DataLoader.rankDC.complete = false
-        DataLoader.awardDC.complete = false
-        DataLoader.allianceDC.complete = false
-        DataLoader.matchDC.complete = false
-        DataLoader.districtRankDC.complete = false
-        DataLoader.districtTeamDC.complete = false
-        DataLoader.refresh(this, activity)
-    }
+    private var tabs = emptyList<Tab>()
 
-    override fun getPageTitle(position: Int): CharSequence {
-        return tabs[position].name
-    }
-
-    override fun getItem(position: Int): Fragment {
-        return tabs[position].fragment
-    }
-
-    override fun getCount(): Int {
-        return tabs.size
-    }
-
-    override fun getItemPosition(`object`: Any): Int {
-        return PagerAdapter.POSITION_NONE
-    }
-
-    /**
-     * addFragment() adds a fragment tab to the adapter.
-     *
-     * @param tab tab data holder
-     */
-    fun addFragment(tab: Tab) {
-        try {
-            if (!tabs.contains(tab) and !tab.fragment.isAdded) {
-                tabs.add(tab)
-                tabs.sort()
-                notifyDataSetChanged()
+    fun updateTabs(state: EventState) {
+        val visible = buildList {
+            if (state.matches.items.isNotEmpty()) {
+                add(Tab.TEAM_SCHEDULE)
+                add(Tab.EVENT_SCHEDULE)
             }
-        } catch (e: Exception) {
-            Logging.error(this, e.toString(), 0)
+            if (state.rankings.items.isNotEmpty()) add(Tab.RANKINGS)
+            if (state.teams.items.isNotEmpty()) add(Tab.TEAMS)
+            if (state.alliances.items.isNotEmpty()) add(Tab.ALLIANCES)
+            if (state.awards.items.isNotEmpty()) add(Tab.AWARDS)
+            if (state.selection.eventKey.isNotEmpty() && state.selection.districtKey.isNotEmpty()) {
+                add(Tab.DISTRICT_RANKINGS)
+            }
         }
-    }
-
-    /**
-     * removeFragment() removes a fragment tab from the adapter
-     *
-     * @param position fragment tab position
-     */
-    fun removeFragment(position: Int) {
-        destroyFragmentView(viewPager)
-        removeTab(position)
-        tabs.removeAt(position)
+        if (tabs == visible) return
+        tabs = visible
         notifyDataSetChanged()
     }
 
-    /**
-     * destroyFragmentView() kills a fragment.
-     *
-     * @param view fragment view
-     */
-    private fun destroyFragmentView(view: Any) {
-        try {
-            val manager = (view as Fragment).fragmentManager
-            if (manager != null) {
-                val trans = manager.beginTransaction()
-                trans.remove(view)
-                trans.commitAllowingStateLoss()
-            }
-        } catch (e: Exception) {
-            Logging.error(this, e.toString(), 0)
-        }
-    }
-
-    /**
-     * removeTab() removes the tab at the given position.
-     *
-     * @param position position of tab to be removed
-     */
-    private fun removeTab(position: Int) {
-        if (tabLayout.childCount > 0) {
-            tabLayout.removeTabAt(position)
-        }
-    }
-
-    /**
-     * isTab() returns true if a tab name is in the list of tabs.
-     *
-     * @param name tab name
-     * @return if tab exists
-     */
-    fun isTab(name: String): Boolean {
-        for (tab in tabs) {
-            if (name == tab.name) {
-                return true
-            }
-        }
-        return false
-    }
-
-    /**
-     * tabPosition() returns the tab position matching the given string and returns -1 is none is
-     * found.
-     *
-     * @param name name of tab
-     * @return tab position
-     */
-    fun tabPosition(name: String): Int {
-        for (i in tabs.indices) {
-            if (name == tabs[i].name) {
-                return i
-            }
-        }
-        return -1
-    }
+    fun getPageTitle(position: Int) = tabs[position].title
+    override fun getItemCount() = tabs.size
+    override fun getItemId(position: Int) = tabs[position].ordinal.toLong()
+    override fun containsItem(itemId: Long) = tabs.any { it.ordinal.toLong() == itemId }
+    override fun createFragment(position: Int) = tabs[position].create()
 }
