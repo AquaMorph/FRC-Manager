@@ -10,4 +10,9 @@
         <item name="autoSizeMaxTextSize">@dimen/team_number_text</item>
         <item name="autoSizeStepGranularity">1sp</item>
     </style>
+
+    <style name="CompactNumber.Badge">
+        <item name="android:textSize">@dimen/team_number_badge_text</item>
+        <item name="autoSizeMaxTextSize">@dimen/team_number_badge_text</item>
+    </style>
 </resources>
