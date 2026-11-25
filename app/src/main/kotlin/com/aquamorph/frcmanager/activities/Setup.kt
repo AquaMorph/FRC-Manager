@@ -9,6 +9,7 @@ import com.aquamorph.frcmanager.fragments.setup.EventSlide
 import com.aquamorph.frcmanager.fragments.setup.Slide
 import com.aquamorph.frcmanager.fragments.setup.TeamNumberSlide
 import com.aquamorph.frcmanager.utils.Logging
+import com.aquamorph.frcmanager.utils.applyEdgeToEdge
 import com.github.paolorotolo.appintro.AppIntro
 
 /**
@@ -24,6 +25,7 @@ class Setup : AppIntro() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        applyEdgeToEdge()
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         teamNumberSlide = TeamNumberSlide()

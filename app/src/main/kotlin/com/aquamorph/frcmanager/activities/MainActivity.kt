@@ -28,6 +28,7 @@ import com.aquamorph.frcmanager.network.NetworkCheck
 import com.aquamorph.frcmanager.network.eventDisplay
 import com.aquamorph.frcmanager.network.eventSelection
 import com.aquamorph.frcmanager.utils.Constants
+import com.aquamorph.frcmanager.utils.applyEdgeToEdge
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_main)
+        applyEdgeToEdge()
         setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
 
         model = ViewModelProvider(this, EventViewModel.factory(applicationContext))[EventViewModel::class.java]

@@ -16,6 +16,7 @@ import com.aquamorph.frcmanager.models.tba.Rank
 import com.aquamorph.frcmanager.network.EventViewModel
 import com.aquamorph.frcmanager.network.eventDisplay
 import com.aquamorph.frcmanager.network.eventSelection
+import com.aquamorph.frcmanager.utils.applyEdgeToEdge
 import kotlinx.coroutines.launch
 
 class TeamSummary : AppCompatActivity() {
@@ -23,6 +24,7 @@ class TeamSummary : AppCompatActivity() {
         MainActivity.theme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings)
+        applyEdgeToEdge()
 
         val team = intent.getStringExtra("teamNumber").orEmpty().filter { it in '0'..'9' }
         setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))

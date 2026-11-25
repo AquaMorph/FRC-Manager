@@ -15,6 +15,7 @@ import com.aquamorph.frcmanager.network.TBARetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
+import com.aquamorph.frcmanager.utils.applyEdgeToEdge
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
@@ -42,6 +43,7 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
         super.onCreate(savedInstanceState)
         MainActivity.theme(this)
         setContentView(R.layout.match_breakdown)
+        applyEdgeToEdge()
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
         refresh.setOnRefreshListener(this)

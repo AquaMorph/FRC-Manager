@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.fragments.SettingsFragment
+import com.aquamorph.frcmanager.utils.applyEdgeToEdge
 
 /**
  * Settings activity to take users input about how the app should be set up as well as
@@ -20,6 +21,7 @@ class Settings : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         MainActivity.theme(this)
         setContentView(R.layout.settings)
+        applyEdgeToEdge()
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         if (toolbar != null) {
