@@ -20,6 +20,11 @@
     <string name="version">&appversion;</string>
     <string name="versionText">Version &appversion;</string>
     <string name="noData">No Data</string>
+    <string name="alliance_title">Alliance %1$d</string>
+    <string name="alliance_captain">Captain</string>
+    <string name="alliance_pick">Pick %1$d</string>
+    <string name="alliance_team_description">%1$s, team %2$s</string>
+    <string name="alliance_empty">No playoff alliances have been posted yet.</string>
     <string name="award_team_number">Team %1$s</string>
     <string name="award_blue_banner">Blue banner</string>
     <string name="award_empty">No awards have been posted yet.</string>

@@ -3,10 +3,11 @@ package com.aquamorph.frcmanager.adapters
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
@@ -22,7 +23,7 @@ import com.aquamorph.frcmanager.utils.Constants
 class AllianceAdapter(private val context: Context, private val data: ArrayList<Alliance>) :
         RecyclerView.Adapter<AllianceAdapter.MyViewHolder>() {
 
-    private val inflater: LayoutInflater = from(context)
+    private val inflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = inflater.inflate(R.layout.alliance, parent, false)
@@ -30,32 +31,51 @@ class AllianceAdapter(private val context: Context, private val data: ArrayList<
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.allianceNumber.text = (position + 1).toString()
-        holder.teams.forEachIndexed { index, slot ->
-            val number = data[position].picks.getOrNull(index)?.let(Constants::formatTeamNumber).orEmpty()
-            slot.text = number
-            slot.visibility = if (number.isEmpty()) View.INVISIBLE else View.VISIBLE
-        }
+        holder.bind(position + 1, data[position].picks)
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
 
-    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        internal val teams = listOf(R.id.team_1, R.id.team_2, R.id.team_3, R.id.team_4)
-            .map { itemView.findViewById<TextView>(it) }
-        internal val allianceNumber: TextView = itemView.findViewById(R.id.alliance_number)
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val title = itemView.findViewById<TextView>(R.id.alliance_number)
+        private val teams = listOf(R.id.team_1, R.id.team_2, R.id.team_3, R.id.team_4)
+            .map { TeamTile(itemView.findViewById(it)) }
 
         init {
-            teams.forEach { slot ->
-                slot.setOnClickListener {
-                    val intent = Intent(context, TeamSummary::class.java)
-                    intent.putExtra("teamNumber", slot.text.toString())
-                    context.startActivity(intent)
+            ViewCompat.setAccessibilityHeading(title, true)
+            val context = itemView.context
+            teams.forEachIndexed { index, tile ->
+                if (index == 0) tile.view.setBackgroundResource(R.drawable.bg_alliance_captain)
+                tile.role.text = if (index == 0) context.getString(R.string.alliance_captain)
+                    else context.getString(R.string.alliance_pick, index)
+                tile.view.setOnClickListener {
+                    val number = tile.number.text.toString()
+                    if (number.isNotEmpty()) {
+                        val intent = Intent(context, TeamSummary::class.java)
+                        intent.putExtra("teamNumber", number)
+                        context.startActivity(intent)
+                    }
                 }
             }
+        }
+
+        internal fun bind(seed: Int, picks: List<String>) {
+            val context = itemView.context
+            title.text = context.getString(R.string.alliance_title, seed)
+            teams.forEachIndexed { index, tile ->
+                val number = picks.getOrNull(index)?.let(Constants::formatTeamNumber).orEmpty()
+                tile.number.text = number
+                tile.view.isVisible = number.isNotEmpty()
+                tile.view.contentDescription = if (number.isEmpty()) null
+                    else context.getString(R.string.alliance_team_description, tile.role.text, number)
+            }
+        }
+
+        private class TeamTile(val view: View) {
+            val role: TextView = view.findViewById(R.id.alliance_team_role)
+            val number: TextView = view.findViewById(R.id.alliance_team_number)
         }
     }
 }
