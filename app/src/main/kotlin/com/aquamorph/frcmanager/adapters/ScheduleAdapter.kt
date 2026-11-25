@@ -2,9 +2,11 @@ package com.aquamorph.frcmanager.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.format.DateFormat
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -18,9 +20,7 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MatchBreakdownActivity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.utils.Constants
-import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 
 internal class ScheduleAdapter(private val context: Context) :
     ListAdapter<ScheduleRow, ScheduleAdapter.MatchHolder>(ScheduleRowDiff) {
@@ -29,7 +29,13 @@ internal class ScheduleAdapter(private val context: Context) :
         stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
     }
 
-    private val timeFormat = SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
+    private val timeFormat = DateFormat.getTimeFormat(context)
+    private val redWinBackground = themeColor(R.attr.scheduleRedWinBackground)
+    private val blueWinBackground = themeColor(R.attr.scheduleBlueWinBackground)
+
+    private fun themeColor(attr: Int): Int = TypedValue().let {
+        if (context.theme.resolveAttribute(attr, it, true)) it.data else Color.TRANSPARENT
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchHolder =
         MatchHolder(LayoutInflater.from(parent.context).inflate(R.layout.match, parent, false))
@@ -106,13 +112,18 @@ internal class ScheduleAdapter(private val context: Context) :
             .map { itemView.findViewById<TextView>(it) }
         private val matchTime = itemView.findViewById<TextView>(R.id.match_time)
         private val matchStatus = itemView.findViewById<View>(R.id.match_status)
+        private val scores = itemView.findViewById<View>(R.id.score_table)
         private val redScore = itemView.findViewById<TextView>(R.id.red_score)
         private val blueScore = itemView.findViewById<TextView>(R.id.blue_score)
-        private val scores = itemView.findViewById<View>(R.id.score_table)
         private val prediction = itemView.findViewById<TextView>(R.id.prediction)
 
         fun bind(row: ScheduleRow) {
             matchNumber.text = Constants.matchString(row.compLevel, row.setNumber, row.matchNumber)
+            matchNumber.setBackgroundColor(when (row.winningAlliance) {
+                "red" -> redWinBackground
+                "blue" -> blueWinBackground
+                else -> Color.TRANSPARENT
+            })
             matchNumber.setOnClickListener {
                 context.startActivity(Intent(context, MatchBreakdownActivity::class.java).apply {
                     putExtra("matchKey", row.key)
@@ -127,10 +138,13 @@ internal class ScheduleAdapter(private val context: Context) :
             }
             bindAlliance(row.red, redTeams, redScore)
             bindAlliance(row.blue, blueTeams, blueScore)
-            scores.visibility = if (row.time == null) View.VISIBLE else View.GONE
-            matchStatus.visibility = if (row.time == null) View.GONE else View.VISIBLE
-            matchTime.text = row.time?.let { timeFormat.format(Date(it * 1000)) }.orEmpty()
-            prediction.visibility = if (row.prediction == null) View.GONE else View.VISIBLE
+            val hasResult = row.red.score != null || row.blue.score != null
+            scores.visibility = if (hasResult) View.VISIBLE else View.GONE
+            matchStatus.visibility = if (hasResult) View.GONE else View.VISIBLE
+            matchTime.text = row.time?.let { timeFormat.format(Date(it * 1000)) }
+                ?: context.getString(R.string.scheduleTimeTbd)
+            prediction.visibility = if (row.prediction == null) View.INVISIBLE else View.VISIBLE
+            prediction.text = ""
             row.prediction?.let {
                 prediction.text = predictionToString(it.probability, it.winner, it.percentage)
                 prediction.setTextColor(getPredictionColor(it.probability, it.winner))
@@ -152,9 +166,11 @@ internal class ScheduleAdapter(private val context: Context) :
                 slot.isClickable = number.isNotEmpty()
             }
             score.setTypeface(Typeface.MONOSPACE, if (alliance.emphasized) Typeface.BOLD else Typeface.NORMAL)
-            score.text = alliance.score?.let {
-                context.getString(R.string.rankPointFormat, bonusRpDots(alliance.bonusRp), it.toString())
-            }.orEmpty()
+            score.text = when {
+                alliance.score == null -> ""
+                alliance.bonusRp == 0 -> alliance.score.toString()
+                else -> context.getString(R.string.scheduleScoreWithBonus, bonusRpDots(alliance.bonusRp), alliance.score)
+            }
         }
     }
 }

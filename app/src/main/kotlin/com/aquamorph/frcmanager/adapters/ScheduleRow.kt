@@ -13,7 +13,8 @@ internal data class ScheduleRow(
     val red: ScheduleAlliance,
     val blue: ScheduleAlliance,
     val time: Long?,
-    val prediction: SchedulePrediction?
+    val prediction: SchedulePrediction?,
+    val winningAlliance: String? = null
 )
 
 internal data class ScheduleAlliance(
@@ -66,7 +67,8 @@ internal fun scheduleRows(
             match.key, match.compLevel, match.setNumber, match.matchNumber,
             alliance(red, blue.score, "red", match.scoreBreakDown?.red?.rp),
             alliance(blue, red.score, "blue", match.scoreBreakDown?.blue?.rp),
-            match.time.takeUnless { match.hasResult }, prediction
+            match.time.takeUnless { match.hasResult }, prediction,
+            match.winningAlliance.takeIf { match.hasResult && (it == "red" || it == "blue") }
         )
     }
 }

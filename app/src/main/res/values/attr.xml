@@ -9,6 +9,13 @@
     <attr name="textOnBackground" format="reference|color"/>
     <attr name="bubbleText" format="reference|color"/>
     <attr name="cardBackground" format="reference|color"/>
+    <attr name="scheduleRule" format="color"/>
+    <attr name="scheduleRedSurface" format="color"/>
+    <attr name="scheduleRedInk" format="color"/>
+    <attr name="scheduleBlueSurface" format="color"/>
+    <attr name="scheduleBlueInk" format="color"/>
+    <attr name="scheduleRedWinBackground" format="color"/>
+    <attr name="scheduleBlueWinBackground" format="color"/>
     <attr name="awardSurface" format="color"/>
     <attr name="awardOutline" format="color"/>
     <attr name="awardAccentSurface" format="color"/>

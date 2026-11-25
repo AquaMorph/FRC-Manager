@@ -8,7 +8,11 @@
     <dimen name="team_number_text">17sp</dimen>
     <dimen name="team_number_badge_diameter">48dp</dimen>
     <dimen name="team_number_badge_text">15sp</dimen>
-    <dimen name="schedule_alliance_height">36dp</dimen>
+    <dimen name="schedule_alliance_height">28dp</dimen>
+    <dimen name="schedule_card_radius">6dp</dimen>
+    <dimen name="schedule_card_spacing">4dp</dimen>
+    <dimen name="schedule_card_side_margin">4dp</dimen>
+    <dimen name="schedule_fast_scroll_width">8dp</dimen>
     <dimen name="divider_padding">72dp</dimen>
     <dimen name="match_score_text">20sp</dimen>
     <dimen name="match_help_text_h1">25sp</dimen>

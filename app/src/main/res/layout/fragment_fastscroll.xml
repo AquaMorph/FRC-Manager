@@ -12,14 +12,15 @@
         android:layout_height="match_parent">
 
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.aquamorph.frcmanager.utils.ScheduleFastScrollView
             android:id="@+id/rv"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/schedule_card_spacing"
             app:fastScrollEnabled="true"
             app:fastScrollHorizontalThumbDrawable="@drawable/thumb_drawable"
             app:fastScrollHorizontalTrackDrawable="?attr/scroll_line"
             app:fastScrollVerticalThumbDrawable="@drawable/thumb_drawable"
-            app:fastScrollVerticalTrackDrawable="?attr/scroll_line"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
+            app:fastScrollVerticalTrackDrawable="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

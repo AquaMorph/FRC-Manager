@@ -1,111 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="?cardBackground"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp"
-    app:cardUseCompatPadding="true">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/schedule_card_side_margin"
+        android:layout_marginEnd="@dimen/schedule_card_side_margin"
+        android:layout_marginBottom="@dimen/schedule_card_spacing"
+        android:background="@drawable/bg_schedule_match_card"
         android:baselineAligned="false"
+        android:clipToOutline="true"
+        android:foreground="@drawable/outline_schedule_match_card"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/match_number"
-            style="@style/CompactNumber"
+            style="@style/CompactNumber.ScheduleMatch"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.35"
-            android:background="?android:attr/selectableItemBackground"
-            android:fontFamily="sans-serif-condensed"
+            android:layout_weight="15"
+            android:foreground="?android:attr/selectableItemBackground"
             android:textColor="?textOnBackground"
-            android:textStyle="bold"
             tools:text="QM-123" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="35"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/schedule_alliance_height"
-                android:background="?redAllianceBackground"
+                android:background="?scheduleRedSurface"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/red_team_1"
-                    style="@style/CompactNumber"
+                    style="@style/CompactNumber.ScheduleTeam"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:textColor="?redAllianceText"
+                    android:textColor="?scheduleRedInk"
                     tools:text="254" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/red_team_2"
-                    style="@style/CompactNumber"
+                    style="@style/CompactNumber.ScheduleTeam"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:textColor="?redAllianceText"
+                    android:textColor="?scheduleRedInk"
                     tools:text="1678" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/red_team_3"
-                    style="@style/CompactNumber"
+                    style="@style/CompactNumber.ScheduleTeam"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:textColor="?redAllianceText"
+                    android:textColor="?scheduleRedInk"
                     tools:text="10023" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/schedule_alliance_height"
-                android:background="?blueAllianceBackground"
+                android:background="?scheduleBlueSurface"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/blue_team_1"
-                    style="@style/CompactNumber"
+                    style="@style/CompactNumber.ScheduleTeam"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:textColor="?blueAllianceText"
+                    android:textColor="?scheduleBlueInk"
                     tools:text="254" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/blue_team_2"
-                    style="@style/CompactNumber"
+                    style="@style/CompactNumber.ScheduleTeam"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:textColor="?blueAllianceText"
+                    android:textColor="?scheduleBlueInk"
                     tools:text="1678" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/blue_team_3"
-                    style="@style/CompactNumber"
+                    style="@style/CompactNumber.ScheduleTeam"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?android:attr/selectableItemBackground"
-                    android:textColor="?blueAllianceText"
+                    android:textColor="?scheduleBlueInk"
                     tools:text="10023" />
             </LinearLayout>
         </LinearLayout>
@@ -114,7 +114,7 @@
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.65">
+            android:layout_weight="19">
 
             <LinearLayout
                 android:id="@+id/match_status"
@@ -122,26 +122,25 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingHorizontal="4dp">
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/match_time"
-                    style="@style/CompactNumber"
+                    style="@style/CompactNumber.ScheduleStatus"
                     android:layout_width="match_parent"
-                    android:layout_height="28dp"
+                    android:layout_height="@dimen/schedule_alliance_height"
                     android:fontFamily="sans-serif-condensed"
                     android:textColor="?textOnBackground"
                     tools:text="08:59 PM" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/prediction"
+                    style="@style/CompactNumber.ScheduleStatus"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:maxLines="2"
+                    android:layout_height="@dimen/schedule_alliance_height"
+                    android:fontFamily="sans-serif-condensed"
                     android:textColor="?textOnBackground"
-                    android:textSize="12sp"
                     tools:text="Likely blue" />
             </LinearLayout>
 
@@ -157,10 +156,10 @@
                     style="@style/CompactNumber"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/schedule_alliance_height"
-                    android:background="?redAllianceBackground"
+                    android:background="?scheduleRedSurface"
                     android:gravity="end|center_vertical"
-                    android:paddingEnd="8dp"
-                    android:textColor="?redAllianceText"
+                    android:paddingEnd="6dp"
+                    android:textColor="?scheduleRedInk"
                     tools:text="&#8226;&#8226;&#8226; 123" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -168,12 +167,12 @@
                     style="@style/CompactNumber"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/schedule_alliance_height"
-                    android:background="?blueAllianceBackground"
+                    android:background="?scheduleBlueSurface"
                     android:gravity="end|center_vertical"
-                    android:paddingEnd="8dp"
-                    android:textColor="?blueAllianceText"
+                    android:paddingEnd="6dp"
+                    android:textColor="?scheduleBlueInk"
                     tools:text="123" />
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</LinearLayout>

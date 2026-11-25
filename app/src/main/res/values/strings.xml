@@ -129,5 +129,6 @@
     <string name="score2019HatchPanel">Hatch Panel Points</string>
     <string name="score2019CargoPoints">Cargo Points</string>
     <string name="score2019HabClimb">Hab Climb Points</string>
-    <string name="rankPointFormat">%1$s%2$4s</string>
+    <string name="scheduleScoreWithBonus">%1$s %2$d</string>
+    <string name="scheduleTimeTbd">Time TBD</string>
 </resources>
