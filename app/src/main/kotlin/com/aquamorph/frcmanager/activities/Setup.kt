@@ -27,7 +27,7 @@ class Setup : AppIntro() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        applyEdgeToEdge()
+        applyEdgeToEdge(drawBehindNavigation = false)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         teamNumberSlide = TeamNumberSlide()

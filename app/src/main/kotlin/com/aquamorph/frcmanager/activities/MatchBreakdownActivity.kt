@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.ScrollView
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -18,6 +19,7 @@ import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
 import com.aquamorph.frcmanager.utils.NavigationMotion
 import com.aquamorph.frcmanager.utils.applyEdgeToEdge
+import com.aquamorph.frcmanager.utils.scrollBehindNavigationBar
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -47,6 +49,7 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
         super.onCreate(savedInstanceState)
         setContentView(R.layout.match_breakdown)
         applyEdgeToEdge()
+        findViewById<ScrollView>(R.id.match_breakdown_scroll).scrollBehindNavigationBar()
         val entrance = NavigationMotion.configureDetail(this)
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)

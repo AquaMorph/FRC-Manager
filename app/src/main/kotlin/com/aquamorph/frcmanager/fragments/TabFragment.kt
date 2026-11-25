@@ -19,6 +19,7 @@ import com.aquamorph.frcmanager.network.EventState
 import com.aquamorph.frcmanager.network.EventViewModel
 import com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout
 import com.aquamorph.frcmanager.utils.adaptiveCardGrid
+import com.aquamorph.frcmanager.utils.scrollBehindNavigationBar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -46,6 +47,7 @@ abstract class TabFragment : Fragment() {
         list.swipe.setColorSchemeResources(R.color.accent)
         list.swipe.isEnabled = host != null
         list.swipe.setOnRefreshListener { host?.refresh() }
+        list.recycler.scrollBehindNavigationBar()
         list.recycler.layoutManager = list.recycler.adaptiveCardGrid(minCardWidth)
         adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         list.recycler.adapter = adapter

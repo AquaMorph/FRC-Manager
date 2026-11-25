@@ -26,6 +26,7 @@
         android:layout_height="match_parent">
 
         <ScrollView
+            android:id="@+id/match_breakdown_scroll"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
             <TableLayout

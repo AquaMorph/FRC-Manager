@@ -3,9 +3,11 @@ package com.aquamorph.frcmanager.fragments
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.aquamorph.frcmanager.R
+import com.aquamorph.frcmanager.utils.scrollBehindNavigationBar
 
 /**
  * Settings fragment for all user settings.
@@ -15,6 +17,11 @@ import com.aquamorph.frcmanager.R
  */
 class SettingsFragment : PreferenceFragmentCompat(),
         SharedPreferences.OnSharedPreferenceChangeListener {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        listView.scrollBehindNavigationBar()
+    }
+
     override fun onCreatePreferences(p0: Bundle?, p1: String?) {
         addPreferencesFromResource(R.xml.settings)
 
