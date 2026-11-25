@@ -150,8 +150,9 @@ internal class ScheduleFastScrollView(context: Context, attrs: AttributeSet) : R
     }
 
     private fun cardScale(): Float {
-        val rowWidth = getChildAt(0)?.width ?: return 1f
-        return if (rowWidth > 0) ((width - visibleGutter) / rowWidth).coerceAtLeast(0f) else 1f
+        // Scale the entire row, not an individual card (which may occupy only one span).
+        val contentWidth = width - paddingEnd
+        return if (contentWidth > 0) ((width - visibleGutter) / contentWidth).coerceAtLeast(0f) else 1f
     }
 
     override fun dispatchDraw(canvas: Canvas) {

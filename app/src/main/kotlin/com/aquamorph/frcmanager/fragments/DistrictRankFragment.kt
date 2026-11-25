@@ -18,7 +18,7 @@ class DistrictRankFragment : TabFragment() {
         val items = ArrayList<DistrictRank>()
         val relatedItems = ArrayList<Team>()
         val adapter = DistrictRankAdapter(items, relatedItems)
-        setupList(view, adapter)
+        setupList(view, adapter, minCardWidth = R.dimen.ranking_grid_card_min_width)
         observeEvent({ Triple(it.districtRankings, it.districtTeams, it.districtHighlightCutoff) }) { (section, related, cutoff) ->
             val cutoffChanged = adapter.highlightCutoff != cutoff
             val rowsChanged = items != section.items || relatedItems != related.items

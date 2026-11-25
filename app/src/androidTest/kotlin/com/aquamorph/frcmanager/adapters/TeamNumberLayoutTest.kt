@@ -1,5 +1,6 @@
 package com.aquamorph.frcmanager.adapters
 
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -24,6 +25,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.Setup
 import com.aquamorph.frcmanager.utils.ScheduleFastScrollView
+import com.aquamorph.frcmanager.utils.adaptiveCardGrid
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -36,7 +38,84 @@ import kotlin.math.roundToInt
 @RunWith(AndroidJUnit4::class)
 class TeamNumberLayoutTest {
     @Test
-    fun eventScheduleThumbStaysInItsGutterAndCanBeDraggedInBothDirections() {
+    fun eventScheduleReflowsInPlaceAsAvailableWidthChanges() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        instrumentation.runOnMainSync {
+            val context = ContextThemeWrapper(instrumentation.targetContext, R.style.LightTheme)
+            val list = LayoutInflater.from(context).inflate(R.layout.fragment_fastscroll, null)
+                .findViewById<ScheduleFastScrollView>(R.id.rv)
+            val cardWidth = context.resources.getDimensionPixelSize(R.dimen.event_grid_card_min_width)
+            val gutter = context.resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_gutter)
+            val height = context.resources.getDimensionPixelSize(R.dimen.schedule_alliance_height) * 16
+            val manager = list.adaptiveCardGrid(R.dimen.event_grid_card_min_width)
+            list.layoutManager = manager
+            val schedule = ScheduleAdapter(context).apply {
+                val alliance = ScheduleAlliance(emptyList(), null, null, 0, false)
+                submitList(List(60) { ScheduleRow("event_$it", "qm", 1, it + 1, alliance, alliance, null, null) })
+            }
+            list.adapter = schedule
+
+            fun resize(width: Int) {
+                list.measure(
+                    View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
+                )
+                list.layout(0, 0, width, height)
+            }
+
+            val narrow = 2 * cardWidth + gutter - 1
+            val wide = narrow + 1
+            resize(narrow)
+            assertEquals(1, manager.spanCount)
+            manager.scrollToPositionWithOffset(20, 0)
+            resize(narrow)
+            assertEquals(20, manager.findFirstVisibleItemPosition())
+
+            resize(wide)
+            assertEquals(2, manager.spanCount)
+            assertEquals(20, manager.findFirstVisibleItemPosition())
+            val first = manager.findViewByPosition(20)!!
+            val second = manager.findViewByPosition(21)!!
+            assertEquals(first.top, second.top)
+            assertTrue(first.left != second.left)
+
+            resize(narrow)
+            assertEquals(1, manager.spanCount)
+            assertEquals(20, manager.findFirstVisibleItemPosition())
+            assertEquals(schedule, list.adapter)
+
+            list.setPaddingRelative(0, list.paddingTop, gutter, 0)
+            resize(wide)
+            assertEquals(2, manager.spanCount)
+        }
+    }
+
+    @Test
+    fun largeTextKeepsCardsInOneColumn() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        instrumentation.runOnMainSync {
+            val base = instrumentation.targetContext
+            val config = Configuration(base.resources.configuration).apply { fontScale = 1.5f }
+            val context = ContextThemeWrapper(base.createConfigurationContext(config), R.style.LightTheme)
+            val list = RecyclerView(context)
+            val manager = list.adaptiveCardGrid(R.dimen.event_grid_card_min_width)
+            list.layoutManager = manager
+            list.adapter = ScheduleAdapter(context)
+            val width = context.resources.getDimensionPixelSize(R.dimen.event_grid_card_min_width) * 3
+            val spec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY)
+            list.measure(spec, spec)
+            list.layout(0, 0, width, width)
+            assertEquals(1, manager.spanCount)
+        }
+    }
+
+    @Test
+    fun eventScheduleThumbWorksInOneColumn() = checkEventScheduleThumb(1)
+
+    @Test
+    fun eventScheduleThumbWorksInTwoColumns() = checkEventScheduleThumb(2)
+
+    private fun checkEventScheduleThumb(columns: Int) {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         instrumentation.runOnMainSync {
             val context = ContextThemeWrapper(instrumentation.targetContext, R.style.LightTheme)
@@ -44,18 +123,18 @@ class TeamNumberLayoutTest {
             val target = context.resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_target)
             val gutter = context.resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_gutter)
             val margin = context.resources.getDimensionPixelSize(R.dimen.schedule_card_side_margin)
-            val width = target * 7
+            val width = if (columns == 1) target * 7 else target * 15
             val height = target * 9
             for (direction in listOf(View.LAYOUT_DIRECTION_LTR, View.LAYOUT_DIRECTION_RTL)) {
                 val list = inflater.inflate(R.layout.fragment_fastscroll, null)
                     .findViewById<ScheduleFastScrollView>(R.id.rv)
                 list.layoutDirection = direction
                 val alliance = ScheduleAlliance(listOf("8", "254", "10023"), null, null, 0, false)
-                val manager = LinearLayoutManager(context)
+                val manager = list.adaptiveCardGrid(R.dimen.event_grid_card_min_width)
                 list.layoutManager = manager
                 list.adapter = ScheduleAdapter(context).apply {
-                    submitList(List(50) {
-                        val round = if (it == 49) "f" else "qm"
+                    submitList(List(51) {
+                        val round = if (it == 50) "f" else "qm"
                         ScheduleRow("event_$it", round, 1, it + 1, alliance, alliance, null, null)
                     })
                 }
@@ -64,8 +143,9 @@ class TeamNumberLayoutTest {
                     View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
                 )
                 list.layout(0, 0, width, height)
+                assertEquals(columns, manager.spanCount)
                 assertEquals(0, list.paddingEnd)
-                assertEquals(width, list.getChildAt(0).width)
+                assertEquals(width, (0 until columns).sumOf { list.getChildAt(it).width })
                 list.scrollBy(0, 1)
                 list.scrollBy(0, -1)
                 list.measure(
@@ -73,11 +153,11 @@ class TeamNumberLayoutTest {
                     View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
                 )
                 list.layout(0, 0, width, height)
-                val row = list.getChildAt(0)
-                val rowLeft = row.left
-                val rowRight = row.right
+                val cards = (0 until columns).map { list.getChildAt(it) }
+                val rowLeft = cards.minOf { it.left }
+                val rowRight = cards.maxOf { it.right }
                 assertEquals(gutter, if (direction == View.LAYOUT_DIRECTION_RTL) rowLeft else width - rowRight)
-                assertEquals(width - gutter, row.width)
+                assertEquals(width - gutter, rowRight - rowLeft)
                 val x = if (direction == View.LAYOUT_DIRECTION_RTL) target / 2f else width - target / 2f
                 val centerFromEdge = (gutter + margin) / 2f
                 val center = if (direction == View.LAYOUT_DIRECTION_RTL) centerFromEdge else width - centerFromEdge
@@ -107,11 +187,12 @@ class TeamNumberLayoutTest {
 
                 assertEquals(label(R.string.scheduleRoundQualification, "QM-1"), list.previewLabel)
                 assertTrue(touch(MotionEvent.ACTION_MOVE, height.toFloat()))
-                assertEquals(49, manager.findLastVisibleItemPosition())
-                assertEquals(label(R.string.scheduleRoundFinal, "F-1-50"), list.previewLabel)
+                assertEquals(50, manager.findLastVisibleItemPosition())
+                assertEquals(label(R.string.scheduleRoundFinal, "F-1-51"), list.previewLabel)
                 assertEquals(gutter, list.paddingEnd)
-                assertEquals(rowLeft, list.getChildAt(0).left)
-                assertEquals(rowRight, list.getChildAt(0).right)
+                val bottomCards = (0 until columns).map { list.getChildAt(it) }
+                assertEquals(rowLeft, bottomCards.minOf { it.left })
+                assertEquals(rowRight, bottomCards.maxOf { it.right })
                 assertTrue(touch(MotionEvent.ACTION_UP, height.toFloat()))
                 assertNull(list.previewLabel)
             }

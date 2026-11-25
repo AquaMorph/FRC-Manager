@@ -26,10 +26,6 @@ import java.util.Date
 internal class ScheduleAdapter(private val context: Context) :
     ListAdapter<ScheduleRow, ScheduleAdapter.MatchHolder>(ScheduleRowDiff) {
 
-    init {
-        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
-    }
-
     private val timeFormat = DateFormat.getTimeFormat(context)
     private val timeTbd = context.getString(R.string.scheduleTimeTbd)
     private val redWinBackground = themeColor(R.attr.scheduleRedWinBackground)

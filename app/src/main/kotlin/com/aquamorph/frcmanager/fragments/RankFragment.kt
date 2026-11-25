@@ -17,7 +17,7 @@ class RankFragment : TabFragment() {
         super.onViewCreated(view, savedInstanceState)
         val items = ArrayList<Rank>()
         val relatedItems = ArrayList<Team>()
-        setupList(view, RankAdapter(items, relatedItems))
+        setupList(view, RankAdapter(items, relatedItems), minCardWidth = R.dimen.ranking_grid_card_min_width)
         observeEvent({ it.rankings to it.teams }) { (section, related) ->
             items.clear()
             items.addAll(section.items)

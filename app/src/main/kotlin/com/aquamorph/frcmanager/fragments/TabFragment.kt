@@ -3,13 +3,13 @@ package com.aquamorph.frcmanager.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.DimenRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
@@ -18,6 +18,7 @@ import com.aquamorph.frcmanager.network.EventLoad
 import com.aquamorph.frcmanager.network.EventState
 import com.aquamorph.frcmanager.network.EventViewModel
 import com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout
+import com.aquamorph.frcmanager.utils.adaptiveCardGrid
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -33,14 +34,20 @@ abstract class TabFragment : Fragment() {
         var displayedItems: Pair<List<*>, List<*>?>? = null
     }
 
-    protected fun setupList(view: View, adapter: RecyclerView.Adapter<*>, decor: RecyclerView.ItemDecoration? = null) {
+    protected fun setupList(
+        view: View,
+        adapter: RecyclerView.Adapter<*>,
+        decor: RecyclerView.ItemDecoration? = null,
+        @DimenRes minCardWidth: Int = R.dimen.event_grid_card_min_width
+    ) {
         val list = TabViews(view)
         views = list
         val host = activity as? MainActivity
         list.swipe.setColorSchemeResources(R.color.accent)
         list.swipe.isEnabled = host != null
         list.swipe.setOnRefreshListener { host?.refresh() }
-        list.recycler.layoutManager = LinearLayoutManager(context)
+        list.recycler.layoutManager = list.recycler.adaptiveCardGrid(minCardWidth)
+        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         list.recycler.adapter = adapter
         if (decor != null) list.recycler.addItemDecoration(decor)
     }
