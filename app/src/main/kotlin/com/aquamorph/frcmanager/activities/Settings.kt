@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.commitNow
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.fragments.SettingsFragment
 import com.aquamorph.frcmanager.utils.applyEdgeToEdge
@@ -18,8 +19,8 @@ import com.aquamorph.frcmanager.utils.applyEdgeToEdge
 class Settings : AppCompatActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         MainActivity.theme(this)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.settings)
         applyEdgeToEdge()
 
@@ -29,18 +30,14 @@ class Settings : AppCompatActivity() {
         }
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        val fragment = supportFragmentManager.findFragmentById(R.id.content_frame)
-        if (fragment != null) {
-            supportFragmentManager.beginTransaction().remove(fragment).commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager.commitNow { replace(R.id.content_frame, SettingsFragment()) }
         }
-        supportFragmentManager.beginTransaction().replace(R.id.content_frame,
-                SettingsFragment()).commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> this.finish()
-        }
-        return super.onOptionsItemSelected(item)
+        if (item.itemId != android.R.id.home) return super.onOptionsItemSelected(item)
+        finishAfterTransition()
+        return true
     }
 }

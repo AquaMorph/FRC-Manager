@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
+import com.aquamorph.frcmanager.utils.NavigationMotion
 import com.aquamorph.frcmanager.models.tba.Rank
 import com.aquamorph.frcmanager.models.tba.Team
 
@@ -68,6 +69,7 @@ class TeamAdapter(
         spannableStringBuilder.append(rank)
 
         holder.rankNumber.text = data[position].teamNumber.toString()
+        holder.itemView.transitionName = "team:${data[position].key}"
         holder.teamNumber.setText(spannableStringBuilder, TextView.BufferType.SPANNABLE)
         holder.details.text = String.format("%s, %s", data[position].city, data[position].stateProv)
     }
@@ -94,7 +96,7 @@ class TeamAdapter(
         override fun onClick(v: View) {
             val intent = Intent(context, TeamSummary::class.java)
             intent.putExtra("teamNumber", rankNumber.text.toString())
-            context.startActivity(intent)
+            NavigationMotion.openDetail(v, intent)
         }
     }
 }

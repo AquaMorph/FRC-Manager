@@ -20,6 +20,7 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MatchBreakdownActivity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.utils.Constants
+import com.aquamorph.frcmanager.utils.NavigationMotion
 import java.util.Date
 
 internal class ScheduleAdapter(private val context: Context) :
@@ -124,7 +125,7 @@ internal class ScheduleAdapter(private val context: Context) :
         init {
             matchNumber.setOnClickListener {
                 val row = boundRow ?: return@setOnClickListener
-                context.startActivity(Intent(context, MatchBreakdownActivity::class.java).apply {
+                NavigationMotion.openDetail(itemView, Intent(context, MatchBreakdownActivity::class.java).apply {
                     putExtra("matchKey", row.key)
                     putExtra("compLevel", row.compLevel)
                     putExtra("setNumber", row.setNumber)
@@ -144,13 +145,14 @@ internal class ScheduleAdapter(private val context: Context) :
                 val row = boundRow ?: return@setOnClickListener
                 val number = (if (red) row.red else row.blue).teams.getOrNull(index).orEmpty()
                 if (number.isNotEmpty()) {
-                    context.startActivity(Intent(context, TeamSummary::class.java).putExtra("teamNumber", number))
+                    NavigationMotion.openDetail(slot, Intent(context, TeamSummary::class.java).putExtra("teamNumber", number))
                 }
             }
         }
 
         fun bind(row: ScheduleRow) {
             boundRow = row
+            itemView.transitionName = "match:${row.key}"
             matchNumber.text = Constants.matchString(row.compLevel, row.setNumber, row.matchNumber)
             matchNumber.setBackgroundColor(when (row.winningAlliance) {
                 "red" -> redWinBackground
@@ -174,6 +176,7 @@ internal class ScheduleAdapter(private val context: Context) :
             val typeface = if (alliance.emphasized) boldNumbers else Typeface.MONOSPACE
             slots.forEachIndexed { index, slot ->
                 val number = alliance.teams.getOrNull(index).orEmpty()
+                slot.transitionName = if (number.isEmpty()) null else "${itemView.transitionName}:${slot.id}:$number"
                 slot.text = if (number.isNotEmpty() && number == alliance.highlightedTeam) {
                     SpannableString(number).apply {
                         setSpan(UnderlineSpan(), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

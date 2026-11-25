@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -28,17 +29,16 @@ import com.aquamorph.frcmanager.network.NetworkCheck
 import com.aquamorph.frcmanager.network.eventDisplay
 import com.aquamorph.frcmanager.network.eventSelection
 import com.aquamorph.frcmanager.utils.Constants
+import com.aquamorph.frcmanager.utils.NavigationMotion
 import com.aquamorph.frcmanager.utils.TabJumpTransition
 import com.aquamorph.frcmanager.utils.applyEdgeToEdge
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var prefs: SharedPreferences
     private lateinit var model: EventViewModel
-    private lateinit var tabMediator: TabLayoutMediator
     private lateinit var tabJumpTransition: TabJumpTransition
     private var appliedTheme: String? = null
     private var shownFeedNotice: FeedNotice? = null
@@ -60,11 +60,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val sections = SectionsPagerAdapter(this)
         sections.updateTabs(model.state.value.selection)
         pager.adapter = sections
-        tabMediator = TabLayoutMediator(tabs, pager) { tab, position ->
-            tab.text = sections.getPageTitle(position)
-        }
-        tabMediator.attach()
-        tabJumpTransition = TabJumpTransition(tabs, pager)
+        tabJumpTransition = TabJumpTransition(tabs, pager, sections::getPageTitle)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -78,6 +74,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         if (savedInstanceState == null && prefs.eventDisplay().teamNumber.isEmpty()) {
             startActivity(Intent(this, Setup::class.java))
+        } else if (savedInstanceState == null && Build.VERSION.SDK_INT >= 31) {
+            splashScreen.setOnExitAnimationListener { splash ->
+                if (!NavigationMotion.isEnabled(this)) {
+                    splash.remove()
+                } else {
+                    splash.animate().alpha(0f).setDuration(180L)
+                        .setInterpolator(NavigationMotion.standard).withEndAction { splash.remove() }.start()
+                }
+            }
         }
     }
 
@@ -94,7 +99,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onDestroy() {
         tabJumpTransition.detach()
-        tabMediator.detach()
         super.onDestroy()
     }
 
@@ -144,11 +148,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun updateToolbar(state: EventState) {
+        val bar = supportActionBar ?: return
         val teamNumber = state.display.teamNumber
         val eventName = prefs.getString("eventShortName", "").orEmpty()
-        supportActionBar?.title = "$teamNumber - $eventName"
+        val title = "$teamNumber - $eventName"
+        if (bar.title != title) bar.title = title
         val rank = state.rankings.items.firstOrNull()?.rankings?.firstOrNull { it.teamKey == "frc$teamNumber" }
-        supportActionBar?.subtitle = if (rank == null) "" else {
+        val subtitle = if (rank == null) "" else {
             val nextMatch = state.matches.items.asSequence().filterNot { it.hasResult }.minOrNull()
             val nextText = nextMatch?.let { "Playing %S-%s".format(it.compLevel, it.matchNumber) }.orEmpty()
             prefs.getString("toolbarText", getString(R.string.toolBarDefault)).orEmpty()
@@ -156,6 +162,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 .replace("\$R", Rank.recordToString(rank.record))
                 .replace("\$n", nextText)
         }
+        if ((bar.subtitle?.toString() ?: "") != subtitle) bar.subtitle = subtitle
     }
 
     private fun showFeedNotice(notice: FeedNotice?) {

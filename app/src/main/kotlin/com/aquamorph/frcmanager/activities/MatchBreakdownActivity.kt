@@ -9,16 +9,19 @@ import android.widget.TableRow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.network.TBARetrofitInstance
 import com.aquamorph.frcmanager.network.TbaApi
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
+import com.aquamorph.frcmanager.utils.NavigationMotion
 import com.aquamorph.frcmanager.utils.applyEdgeToEdge
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.lang.Exception
+import kotlinx.coroutines.launch
 
 /**
  * Activity with a summary of the scoring of a match.
@@ -40,14 +43,15 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
     private var blueRobot3 = ""
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         MainActivity.theme(this)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.match_breakdown)
         applyEdgeToEdge()
+        val entrance = NavigationMotion.configureDetail(this)
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
         refresh.setOnRefreshListener(this)
-        refresh.isRefreshing = true
+        findViewById<TableLayout>(R.id.scoreBreakdown).visibility = View.GONE
 
         val extras = intent.extras
         if (extras != null) {
@@ -84,7 +88,10 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
         findViewById<TextView>(R.id.redAllianceThree).text = redRobot3
         findViewById<TextView>(R.id.blueAllianceThree).text = blueRobot3
 
-        refresh()
+        lifecycleScope.launch {
+            if (savedInstanceState == null) entrance?.await()
+            if (!isFinishing) refresh()
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -92,12 +99,12 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
         refresh.isRefreshing = true
 
-        val table = findViewById<TableLayout>(R.id.scoreMatchTeams)
         val scoreBreakdown = findViewById<TableLayout>(R.id.scoreBreakdown)
         scoreBreakdown.visibility = View.GONE
 
-        TBARetrofitInstance.getRetrofit(this).create(TbaApi::class.java)
-            .getMatch(matchKey).subscribeOn(Schedulers.io())
+        Observable.defer {
+            TBARetrofitInstance.getRetrofit(this).create(TbaApi::class.java).getMatch(matchKey)
+        }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result -> if (result?.scoreBreakdown != null) {
                 val red = result.scoreBreakdown.red
@@ -165,7 +172,7 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
                         blue.endGameParkPoints.toString()
                 }
 
-                scoreBreakdown.visibility = View.VISIBLE
+                NavigationMotion.reveal(scoreBreakdown)
                 refresh.isRefreshing = false
                 refresh.isEnabled = false
             } else {
@@ -193,10 +200,9 @@ class MatchBreakdownActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefresh
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> this.finish()
-        }
-        return super.onOptionsItemSelected(item)
+        if (item.itemId != android.R.id.home) return super.onOptionsItemSelected(item)
+        finishAfterTransition()
+        return true
     }
 
     override fun onRefresh() {

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.utils.Constants
+import com.aquamorph.frcmanager.utils.NavigationMotion
 import kotlin.math.roundToInt
 
 internal data class RankingMetric(val label: String, val value: String)
@@ -29,12 +30,13 @@ class RankingViewHolder private constructor(view: View) : RecyclerView.ViewHolde
 
     init {
         view.setOnClickListener {
-            context.startActivity(Intent(context, TeamSummary::class.java).putExtra("teamNumber", number))
+            NavigationMotion.openDetail(it, Intent(context, TeamSummary::class.java).putExtra("teamNumber", number))
         }
     }
 
     internal fun bind(position: Int, teamKey: String, nickname: String?, stats: List<RankingMetric>, highlighted: Boolean) {
         number = Constants.formatTeamNumber(teamKey)
+        itemView.transitionName = "ranking:$teamKey"
         rank.text = context.getString(R.string.rankingPosition, position)
         rank.contentDescription = context.getString(R.string.rankingPositionDescription, position)
         rank.isActivated = highlighted

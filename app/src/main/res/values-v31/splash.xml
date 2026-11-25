@@ -1,0 +1,6 @@
+<resources>
+    <style name="SplashTheme" parent="LightTheme">
+        <item name="android:windowSplashScreenBackground">@color/primary</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+    </style>
+</resources>

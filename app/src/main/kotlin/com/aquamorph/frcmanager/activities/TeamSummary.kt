@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.commit
+import androidx.fragment.app.commitNow
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +16,7 @@ import com.aquamorph.frcmanager.models.tba.Rank
 import com.aquamorph.frcmanager.network.EventViewModel
 import com.aquamorph.frcmanager.network.eventDisplay
 import com.aquamorph.frcmanager.network.eventSelection
+import com.aquamorph.frcmanager.utils.NavigationMotion
 import com.aquamorph.frcmanager.utils.applyEdgeToEdge
 import kotlinx.coroutines.launch
 
@@ -25,6 +26,7 @@ class TeamSummary : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings)
         applyEdgeToEdge()
+        val entrance = NavigationMotion.configureDetail(this)
 
         val team = intent.getStringExtra("teamNumber").orEmpty().filter { it in '0'..'9' }
         setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
@@ -37,6 +39,7 @@ class TeamSummary : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                if (savedInstanceState == null) entrance?.await()
                 model.state.collect { state ->
                     val key = "frc$team"
                     val nickname = state.teams.items.firstOrNull { it.key == key }?.nickname
@@ -49,7 +52,7 @@ class TeamSummary : AppCompatActivity() {
         }
 
         if (savedInstanceState == null) {
-            supportFragmentManager.commit {
+            supportFragmentManager.commitNow {
                 replace(R.id.content_frame, TeamScheduleFragment.forTeam(team))
             }
         }
@@ -57,7 +60,7 @@ class TeamSummary : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId != android.R.id.home) return super.onOptionsItemSelected(item)
-        finish()
+        finishAfterTransition()
         return true
     }
 }

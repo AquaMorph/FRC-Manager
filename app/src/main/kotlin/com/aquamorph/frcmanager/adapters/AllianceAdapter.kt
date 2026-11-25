@@ -13,6 +13,7 @@ import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.tba.Alliance
 import com.aquamorph.frcmanager.utils.Constants
+import com.aquamorph.frcmanager.utils.NavigationMotion
 
 /**
  * Populated a view with alliance dataLoader.
@@ -55,7 +56,7 @@ class AllianceAdapter(private val context: Context, private val data: ArrayList<
                     if (number.isNotEmpty()) {
                         val intent = Intent(context, TeamSummary::class.java)
                         intent.putExtra("teamNumber", number)
-                        context.startActivity(intent)
+                        NavigationMotion.openDetail(tile.view, intent)
                     }
                 }
             }
@@ -67,6 +68,7 @@ class AllianceAdapter(private val context: Context, private val data: ArrayList<
             teams.forEachIndexed { index, tile ->
                 val number = picks.getOrNull(index)?.let(Constants::formatTeamNumber).orEmpty()
                 tile.number.text = number
+                tile.view.transitionName = if (number.isEmpty()) null else "alliance:$seed:$index:$number"
                 tile.view.isVisible = number.isNotEmpty()
                 tile.view.contentDescription = if (number.isEmpty()) null
                     else context.getString(R.string.alliance_team_description, tile.role.text, number)

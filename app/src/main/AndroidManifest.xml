@@ -13,19 +13,19 @@
         android:theme="@style/LightTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".activities.MainActivity"
+            android:configChanges="keyboardHidden"
             android:theme="@style/SplashTheme"
+            android:exported="false" />
+        <activity-alias
+            android:name=".activities.SplashActivity"
+            android:targetActivity=".activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".activities.MainActivity"
-            android:configChanges="keyboardHidden"
-            android:theme="@style/LightTheme"/>
+        </activity-alias>
         <activity
             android:name=".activities.Settings"/>
         <activity
