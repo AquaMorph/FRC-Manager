@@ -2,21 +2,23 @@ package com.aquamorph.frcmanager.network
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
+import android.net.NetworkCapabilities
 
 class NetworkCheck {
     companion object {
         /**
-         * hasNetwork() checks if connected to a network.
+         * Checks whether the default network is configured for internet access.
          *
          * @param context app context
          * @return network state
          */
         fun hasNetwork(context: Context): Boolean {
-            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
-                    as ConnectivityManager
-            val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-            return activeNetwork != null && activeNetwork.isConnected
+            val connectivityManager = context.getSystemService(ConnectivityManager::class.java)
+                ?: return false
+            val activeNetwork = connectivityManager.activeNetwork ?: return false
+            val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+            // Let requests try networks that Android has not validated yet.
+            return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         }
     }
 }
