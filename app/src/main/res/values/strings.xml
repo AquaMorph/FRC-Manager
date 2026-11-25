@@ -4,6 +4,11 @@
     ]>
 
 <resources>
+    <string name="scheduleRoundQualification">Qualification</string>
+    <string name="scheduleRoundOctofinal">Octofinal</string>
+    <string name="scheduleRoundQuarterfinal">Quarterfinal</string>
+    <string name="scheduleRoundSemifinal">Semifinal</string>
+    <string name="scheduleRoundFinal">Final</string>
     <string name="appName">FRC Manager</string>
     <string name="actionSettings">Settings</string>
     <string name="actionDirections">Get Directions</string>

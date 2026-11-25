@@ -10,6 +10,8 @@
     <attr name="bubbleText" format="reference|color"/>
     <attr name="cardBackground" format="reference|color"/>
     <attr name="scheduleRule" format="color"/>
+    <attr name="scheduleScrollAccent" format="color"/>
+    <attr name="scheduleScrollPreview" format="color"/>
     <attr name="scheduleRedSurface" format="color"/>
     <attr name="scheduleRedInk" format="color"/>
     <attr name="scheduleBlueSurface" format="color"/>

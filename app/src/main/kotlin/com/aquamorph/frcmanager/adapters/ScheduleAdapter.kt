@@ -51,6 +51,21 @@ internal class ScheduleAdapter(private val context: Context) :
 
     override fun onBindViewHolder(holder: MatchHolder, position: Int) = holder.bind(getItem(position))
 
+    fun fastScrollLabel(position: Int): FastScrollLabel? = currentList.getOrNull(position)?.let { row ->
+        val match = Constants.matchString(row.compLevel, row.setNumber, row.matchNumber)
+        val round = when (row.compLevel) {
+            "qm" -> R.string.scheduleRoundQualification
+            "ef" -> R.string.scheduleRoundOctofinal
+            "qf" -> R.string.scheduleRoundQuarterfinal
+            "sf" -> R.string.scheduleRoundSemifinal
+            "f" -> R.string.scheduleRoundFinal
+            else -> return@let FastScrollLabel(null, match)
+        }
+        FastScrollLabel(context.getString(round), match)
+    }
+
+    data class FastScrollLabel(val round: String?, val match: String)
+
     /**
      * getPredictionColor() gets the color the prediction text should be based on predicted winner
      * and their probability of winning.

@@ -7,6 +7,8 @@
         <item name="backgroundColor">@color/background_light</item>
         <item name="cardBackground">@color/background_light</item>
         <item name="scheduleRule">#DFDFE4</item>
+        <item name="scheduleScrollAccent">#A52A25</item>
+        <item name="scheduleScrollPreview">#FFF6F5</item>
         <item name="scheduleRedSurface">#FBE8E6</item>
         <item name="scheduleRedInk">#862725</item>
         <item name="scheduleBlueSurface">#E5EFFC</item>
@@ -40,6 +42,8 @@
         <item name="backgroundColor">@color/background_dark</item>
         <item name="cardBackground">#616161</item>
         <item name="scheduleRule">#56565C</item>
+        <item name="scheduleScrollAccent">@color/primary_light</item>
+        <item name="scheduleScrollPreview">#382526</item>
         <item name="scheduleRedSurface">#4A272B</item>
         <item name="scheduleRedInk">#FFC3BA</item>
         <item name="scheduleBlueSurface">#22364C</item>
@@ -77,6 +81,8 @@
         <item name="backgroundColor">@color/black</item>
         <item name="cardBackground">@color/black</item>
         <item name="scheduleRule">#303039</item>
+        <item name="scheduleScrollAccent">@color/primary_light</item>
+        <item name="scheduleScrollPreview">#241516</item>
         <item name="scheduleRedSurface">#201011</item>
         <item name="scheduleRedInk">#FFB3AB</item>
         <item name="scheduleBlueSurface">#0F1824</item>

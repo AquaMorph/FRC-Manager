@@ -4,22 +4,28 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Handler
+import android.os.Looper
 import android.text.Spanned
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.ContextThemeWrapper
-import android.view.Choreographer
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.aquamorph.frcmanager.R
+import com.aquamorph.frcmanager.activities.Setup
+import com.aquamorph.frcmanager.utils.ScheduleFastScrollView
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,42 +36,138 @@ import kotlin.math.roundToInt
 @RunWith(AndroidJUnit4::class)
 class TeamNumberLayoutTest {
     @Test
-    fun eventScheduleKeepsFullWidthWhenFastScrollThumbAppears() {
+    fun eventScheduleThumbStaysInItsGutterAndCanBeDraggedInBothDirections() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
-        lateinit var list: RecyclerView
-        var rowWidth = 0
-        val thumbFadeIn = CountDownLatch(1)
         instrumentation.runOnMainSync {
             val context = ContextThemeWrapper(instrumentation.targetContext, R.style.LightTheme)
-            list = LayoutInflater.from(context).inflate(R.layout.fragment_fastscroll, null).findViewById(R.id.rv)
-            val alliance = ScheduleAlliance(listOf("8", "254", "10023"), null, null, 0, false)
-            list.layoutManager = LinearLayoutManager(context)
-            list.adapter = ScheduleAdapter(context).apply {
-                submitList(List(50) { ScheduleRow("event_qm$it", "qm", 1, it, alliance, alliance, null, null) })
-            }
-            val bitmap = Bitmap.createBitmap(320, 400, Bitmap.Config.ARGB_8888)
-            list.measure(
-                View.MeasureSpec.makeMeasureSpec(bitmap.width, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(bitmap.height, View.MeasureSpec.EXACTLY)
-            )
-            list.layout(0, 0, bitmap.width, bitmap.height)
-            val canvas = Canvas(bitmap)
-            list.draw(canvas)
-            assertEquals(0, list.paddingEnd)
-            rowWidth = list.getChildAt(0).width
-            list.scrollBy(0, 240)
-            list.draw(canvas)
-            assertTrue(list.computeVerticalScrollOffset() > 0)
-            bitmap.recycle()
+            val inflater = LayoutInflater.from(context)
+            val target = context.resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_target)
+            val gutter = context.resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_gutter)
+            val margin = context.resources.getDimensionPixelSize(R.dimen.schedule_card_side_margin)
+            val width = target * 7
+            val height = target * 9
+            for (direction in listOf(View.LAYOUT_DIRECTION_LTR, View.LAYOUT_DIRECTION_RTL)) {
+                val list = inflater.inflate(R.layout.fragment_fastscroll, null)
+                    .findViewById<ScheduleFastScrollView>(R.id.rv)
+                list.layoutDirection = direction
+                val alliance = ScheduleAlliance(listOf("8", "254", "10023"), null, null, 0, false)
+                val manager = LinearLayoutManager(context)
+                list.layoutManager = manager
+                list.adapter = ScheduleAdapter(context).apply {
+                    submitList(List(50) {
+                        val round = if (it == 49) "f" else "qm"
+                        ScheduleRow("event_$it", round, 1, it + 1, alliance, alliance, null, null)
+                    })
+                }
+                list.measure(
+                    View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
+                )
+                list.layout(0, 0, width, height)
+                assertEquals(0, list.paddingEnd)
+                assertEquals(width, list.getChildAt(0).width)
+                list.scrollBy(0, 1)
+                list.scrollBy(0, -1)
+                list.measure(
+                    View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
+                )
+                list.layout(0, 0, width, height)
+                val row = list.getChildAt(0)
+                val rowLeft = row.left
+                val rowRight = row.right
+                assertEquals(gutter, if (direction == View.LAYOUT_DIRECTION_RTL) rowLeft else width - rowRight)
+                assertEquals(width - gutter, row.width)
+                val x = if (direction == View.LAYOUT_DIRECTION_RTL) target / 2f else width - target / 2f
+                val centerFromEdge = (gutter + margin) / 2f
+                val center = if (direction == View.LAYOUT_DIRECTION_RTL) centerFromEdge else width - centerFromEdge
+                val thumbX = center.toInt()
+                val thumbY = list.paddingTop + target / 2
+                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                fun thumbColor(): Int {
+                    list.draw(Canvas(bitmap))
+                    return bitmap.getPixel(thumbX, thumbY)
+                }
+                fun touch(action: Int, y: Float): Boolean {
+                    val event = MotionEvent.obtain(0L, 0L, action, x, y, 0)
+                    return try {
+                        list.dispatchTouchEvent(event)
+                    } finally {
+                        event.recycle()
+                    }
+                }
+                assertEquals(direction, list.layoutDirection)
+                assertEquals(context.getColor(R.color.primary_dark), thumbColor())
+                val redPixels = (0 until width).filter { bitmap.getPixel(it, thumbY) == context.getColor(R.color.primary_dark) }
+                assertEquals(center, (redPixels.first() + redPixels.last() + 1) / 2f, 0.5f)
+                assertTrue(touch(MotionEvent.ACTION_DOWN, thumbY.toFloat()))
+                assertEquals(context.getColor(R.color.primary), thumbColor())
+                bitmap.recycle()
+                fun label(round: Int, match: String) = ScheduleAdapter.FastScrollLabel(context.getString(round), match)
 
-            // Let several animation frames pass before checking for a padding change.
-            val choreographer = Choreographer.getInstance()
-            choreographer.postFrameCallbackDelayed({ thumbFadeIn.countDown() }, 250L)
+                assertEquals(label(R.string.scheduleRoundQualification, "QM-1"), list.previewLabel)
+                assertTrue(touch(MotionEvent.ACTION_MOVE, height.toFloat()))
+                assertEquals(49, manager.findLastVisibleItemPosition())
+                assertEquals(label(R.string.scheduleRoundFinal, "F-1-50"), list.previewLabel)
+                assertEquals(gutter, list.paddingEnd)
+                assertEquals(rowLeft, list.getChildAt(0).left)
+                assertEquals(rowRight, list.getChildAt(0).right)
+                assertTrue(touch(MotionEvent.ACTION_UP, height.toFloat()))
+                assertNull(list.previewLabel)
+            }
         }
-        assertTrue(thumbFadeIn.await(5, TimeUnit.SECONDS))
-        instrumentation.runOnMainSync {
-            assertEquals(0, list.paddingEnd)
-            assertEquals(rowWidth, list.getChildAt(0).width)
+    }
+
+    @Test
+    fun eventScheduleThumbHidesAfterIdleAndReturnsOnScroll() {
+        lateinit var list: ScheduleFastScrollView
+        val faded = CountDownLatch(1)
+        val shownAgain = CountDownLatch(1)
+        ActivityScenario.launch(Setup::class.java).use { scenario ->
+            scenario.onActivity { activity ->
+                val context = ContextThemeWrapper(activity, R.style.DarkTheme)
+                val schedule = LayoutInflater.from(context).inflate(R.layout.fragment_fastscroll, null)
+                list = schedule.findViewById(R.id.rv)
+                list.layoutManager = LinearLayoutManager(context)
+                list.adapter = ScheduleAdapter(context).apply {
+                    val alliance = ScheduleAlliance(emptyList(), null, null, 0, false)
+                    submitList(List(60) { ScheduleRow("event_$it", "qm", 1, it + 1, alliance, alliance, null, null) })
+                }
+                activity.addContentView(schedule, ViewGroup.LayoutParams(600, 600))
+                schedule.measure(
+                    View.MeasureSpec.makeMeasureSpec(600, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(600, View.MeasureSpec.EXACTLY)
+                )
+                schedule.layout(0, 0, 600, 600)
+                assertTrue(list.thumbOpacity < 1f)
+                Handler(Looper.getMainLooper()).postDelayed({ faded.countDown() }, 2_200L)
+            }
+            assertTrue(faded.await(5, TimeUnit.SECONDS))
+            scenario.onActivity {
+                assertEquals(0f, list.thumbOpacity, 0f)
+                assertEquals(0, list.paddingEnd)
+                assertEquals(list.width, list.getChildAt(0).width)
+                val target = list.resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_target)
+                val event = MotionEvent.obtain(0L, 0L, MotionEvent.ACTION_DOWN, list.width - target / 2f, list.paddingTop + target / 2f, 0)
+                try {
+                    list.dispatchTouchEvent(event)
+                    assertNull(list.previewLabel)
+                    event.action = MotionEvent.ACTION_CANCEL
+                    list.dispatchTouchEvent(event)
+                } finally {
+                    event.recycle()
+                }
+                list.scrollBy(0, 100)
+                assertTrue(list.thumbOpacity < 1f)
+                assertEquals(0, list.paddingEnd)
+                Handler(Looper.getMainLooper()).postDelayed({ shownAgain.countDown() }, 350L)
+            }
+            assertTrue(shownAgain.await(5, TimeUnit.SECONDS))
+            scenario.onActivity {
+                assertEquals(1f, list.thumbOpacity, 0f)
+                assertEquals(list.resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_gutter), list.paddingEnd)
+                assertEquals(list.width - list.paddingEnd, list.getChildAt(0).width)
+            }
         }
     }
 
