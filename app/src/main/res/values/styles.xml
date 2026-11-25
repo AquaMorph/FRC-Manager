@@ -6,6 +6,9 @@
         <item name="colorAccent">@color/accent</item>
         <item name="backgroundColor">@color/background_light</item>
         <item name="cardBackground">@color/background_light</item>
+        <item name="awardSurface">#FFFFFF</item>
+        <item name="awardOutline">#DCE4F0</item>
+        <item name="awardAccentSurface">#EAF1FE</item>
         <item name="redAllianceBackground">@color/red_alliance_light</item>
         <item name="blueAllianceBackground">@color/blue_alliance_light</item>
         <item name="redAllianceText">@color/primary_text</item>
@@ -29,6 +32,9 @@
         <item name="colorAccent">@color/accent</item>
         <item name="backgroundColor">@color/background_dark</item>
         <item name="cardBackground">#616161</item>
+        <item name="awardSurface">#292D36</item>
+        <item name="awardOutline">#444D60</item>
+        <item name="awardAccentSurface">#233858</item>
         <item name="redAllianceBackground">#806161</item>
         <item name="blueAllianceBackground">#616180</item>
         <item name="redAllianceText">#F5F5F5</item>
@@ -56,6 +62,9 @@
         <item name="colorAccent">@color/accent</item>
         <item name="backgroundColor">@color/black</item>
         <item name="cardBackground">@color/black</item>
+        <item name="awardSurface">@color/black</item>
+        <item name="awardOutline">#30394A</item>
+        <item name="awardAccentSurface">@color/black</item>
         <item name="redAllianceBackground">@color/black</item>
         <item name="blueAllianceBackground">@color/black</item>
         <item name="redAllianceText">#B71C1C</item>

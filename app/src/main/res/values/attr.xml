@@ -9,6 +9,9 @@
     <attr name="textOnBackground" format="reference|color"/>
     <attr name="bubbleText" format="reference|color"/>
     <attr name="cardBackground" format="reference|color"/>
+    <attr name="awardSurface" format="color"/>
+    <attr name="awardOutline" format="color"/>
+    <attr name="awardAccentSurface" format="color"/>
     <attr name="dividerColor" format="color"/>
     <attr name="scroll_line" format="reference"/>
     <attr name="redLeaning" format="reference|color"/>

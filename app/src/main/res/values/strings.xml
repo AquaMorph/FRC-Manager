@@ -20,6 +20,9 @@
     <string name="version">&appversion;</string>
     <string name="versionText">Version &appversion;</string>
     <string name="noData">No Data</string>
+    <string name="award_team_number">Team %1$s</string>
+    <string name="award_blue_banner">Blue banner</string>
+    <string name="award_empty">No awards have been posted yet.</string>
     <string name="eventDataLoadError">Could not load data.</string>
     <string name="noConnectionMessage">No Connection. Loading from last refresh.</string>
     <string name="firstServerDown">The FIRST server is currently offline.</string>

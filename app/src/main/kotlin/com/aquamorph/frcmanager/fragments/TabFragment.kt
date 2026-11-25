@@ -3,6 +3,7 @@ package com.aquamorph.frcmanager.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -54,8 +55,13 @@ abstract class TabFragment : Fragment() {
         }
     }
 
-    internal fun showList(items: List<*>, section: EventList<*>, related: EventList<*>? = null) {
-        showListStatus(items.isEmpty(), section, related)
+    internal fun showList(
+        items: List<*>,
+        section: EventList<*>,
+        related: EventList<*>? = null,
+        @StringRes emptyMessage: Int = R.string.noData
+    ) {
+        showListStatus(items.isEmpty(), section, related, emptyMessage)
         val list = checkNotNull(views)
         val data = items to related?.items
         if (list.displayedItems != data) {
@@ -64,10 +70,15 @@ abstract class TabFragment : Fragment() {
         }
     }
 
-    internal fun showListStatus(isEmpty: Boolean, section: EventList<*>, related: EventList<*>? = null) {
+    internal fun showListStatus(
+        isEmpty: Boolean,
+        section: EventList<*>,
+        related: EventList<*>? = null,
+        @StringRes emptyMessage: Int = R.string.noData
+    ) {
         val list = checkNotNull(views)
         list.swipe.isRefreshing = section.loading || (!isEmpty && related?.loading == true)
-        list.empty.setText(if (section.load == EventLoad.FAILED) R.string.eventDataLoadError else R.string.noData)
+        list.empty.setText(if (section.load == EventLoad.FAILED) R.string.eventDataLoadError else emptyMessage)
         list.empty.visibility = if (isEmpty && !section.loading) View.VISIBLE else View.GONE
     }
 

@@ -6,28 +6,29 @@ import android.view.View
 import android.view.ViewGroup
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.adapters.AwardAdapter
-import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.tba.Award
-import com.aquamorph.frcmanager.utils.Constants
 
 class AwardFragment : TabFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?): View =
-        inflater.inflate(R.layout.fragment_team_schedule, container, false)
+        inflater.inflate(R.layout.fragment_awards, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val items = ArrayList<Award>()
-        setupList(
-            view,
-            AwardAdapter(requireContext(), items),
-            Divider(requireContext(), Constants.DIVIDER_WIDTH, 0)
-        )
-        observeEvent({ it.awards }) { section ->
+        val teamNames = mutableMapOf<String, String>()
+        setupList(view, AwardAdapter(items, teamNames))
+        observeEvent({ Triple(it.awards, it.teams, it.districtTeams.items) }) { (section, teams, districtTeams) ->
             items.clear()
             items.addAll(section.items.filterNot { award ->
                 award.recipientList.singleOrNull()?.let { it.awardee == null && it.teamKey == null } == true
             })
-            showList(items, section)
+            val roster = districtTeams + teams.items
+            teamNames.clear()
+            for (team in roster) {
+                val name = team.nickname?.takeIf { it.isNotBlank() } ?: team.name
+                if (!name.isNullOrBlank()) teamNames[team.key] = name
+            }
+            showList(items, section, teams.copy(items = roster), emptyMessage = R.string.award_empty)
         }
     }
 }

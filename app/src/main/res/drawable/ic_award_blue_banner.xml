@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="46dp"
+    android:height="64dp"
+    android:viewportWidth="52"
+    android:viewportHeight="72">
+    <!-- Swallowtail silhouette and geometric mark inspired by FRC event banners. -->
+    <path android:fillColor="#1247C1" android:pathData="M2,1H50V70L26,62L2,70Z" />
+    <path android:fillColor="#0D389C" android:pathData="M2,58H50V70L26,62L2,70Z" />
+    <path android:fillColor="#315DD1" android:pathData="M2,1H50V3H2Z" />
+    <group android:translateX="8" android:translateY="11">
+        <!-- Stop the side strokes short of the ring to keep the crossings clear at icon size. -->
+        <path android:pathData="M8.5,5L5,2L2,18L8.6,15.9" android:strokeColor="#F83543" android:strokeWidth="2.4" android:strokeLineJoin="round" />
+        <path android:pathData="M25,2.2L26.2,1L35.2,10L26.2,19L25,17.8" android:strokeColor="#6EABFF" android:strokeWidth="2.4" android:strokeLineJoin="round" />
+        <path android:pathData="M11,10A7,7 0,1 1,25 10A7,7 0,1 1,11 10Z" android:strokeColor="#FFFFFF" android:strokeWidth="2.4" />
+    </group>
+    <path android:fillColor="#FFFFFF" android:pathData="M12,38H41L40,41H11Z" />
+    <path android:fillColor="#AFC8FF" android:pathData="M14,48H38V50H14ZM19,53H33V55H19Z" />
+</vector>
