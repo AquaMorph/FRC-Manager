@@ -28,6 +28,7 @@ import com.aquamorph.frcmanager.network.NetworkCheck
 import com.aquamorph.frcmanager.network.eventDisplay
 import com.aquamorph.frcmanager.network.eventSelection
 import com.aquamorph.frcmanager.utils.Constants
+import com.aquamorph.frcmanager.utils.TabJumpTransition
 import com.aquamorph.frcmanager.utils.applyEdgeToEdge
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var prefs: SharedPreferences
     private lateinit var model: EventViewModel
     private lateinit var tabMediator: TabLayoutMediator
+    private lateinit var tabJumpTransition: TabJumpTransition
     private var appliedTheme: String? = null
     private var shownFeedNotice: FeedNotice? = null
 
@@ -62,6 +64,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             tab.text = sections.getPageTitle(position)
         }
         tabMediator.attach()
+        tabJumpTransition = TabJumpTransition(tabs, pager)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -90,6 +93,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     override fun onDestroy() {
+        tabJumpTransition.detach()
         tabMediator.detach()
         super.onDestroy()
     }
