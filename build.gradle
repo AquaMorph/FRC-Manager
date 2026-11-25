@@ -6,8 +6,8 @@ buildscript {
     }
     repositories {
         mavenCentral()
-        maven { url 'https://maven.google.com' }
-        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url = 'https://maven.google.com' }
+        maven { url = 'https://plugins.gradle.org/m2/' }
         google()
     }
     dependencies {
@@ -28,5 +28,5 @@ allprojects {
 }
 
 tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+    delete rootProject.layout.buildDirectory
 }
