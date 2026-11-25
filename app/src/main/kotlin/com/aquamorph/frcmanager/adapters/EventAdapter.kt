@@ -12,8 +12,9 @@ import com.aquamorph.frcmanager.models.tba.Event
 import com.aquamorph.frcmanager.utils.AppConfig
 import com.aquamorph.frcmanager.utils.Logging
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.Calendar
 import java.util.Locale
+import java.util.TimeZone
 import kotlin.collections.ArrayList
 
 class EventAdapter(private val context: Context?, private var events: ArrayList<Event>) :
@@ -51,9 +52,7 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
                 }
             }
             eventNameView.text = event.name
-            eventDateView.text = eventDateToString(
-                    stringToDate(event.startDate),
-                    stringToDate(event.endDate))
+            eventDateView.text = formatEventDateRange(event.startDate, event.endDate)
             itemView.setOnClickListener {
                 checkView.visibility = View.VISIBLE
                 if (checkedPosition != absoluteAdapterPosition) {
@@ -86,33 +85,26 @@ class EventAdapter(private val context: Context?, private var events: ArrayList<
             AppConfig.setEventAddress(event.address, context)
         }
     }
+}
 
-    /**
-     * stringtoDate() converts a date to a standard formatted string.
-     *
-     * @param text year month date formatted string
-     * @return date
-     */
-    private fun stringToDate(text: String): Date {
-        return SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(text)!!
-    }
+internal fun formatEventDateRange(startDate: String, endDate: String): String {
+    // Event dates have no time zone; use UTC so the device's time zone cannot shift them.
+    val utc = TimeZone.getTimeZone("UTC")
+    fun formatter(pattern: String) = SimpleDateFormat(pattern, Locale.US).apply { timeZone = utc }
 
-    /**
-     * eventDataToString() convert start and end date to a single string.
-     * @param start event start date
-     * @param end event end date
-     */
-    private fun eventDateToString(start: Date, end: Date): String {
-        return if (start.month == end.month) {
-            if (start.day == end.day) {
-                SimpleDateFormat("MMMM d yyyy", Locale.US).format(start)
-            } else {
-                "%s to %s".format(SimpleDateFormat("MMMM d", Locale.US)
-                        .format(start), SimpleDateFormat("d yyyy", Locale.US).format(end))
-            }
-        } else {
-            "%s to %s".format(SimpleDateFormat("MMMM d", Locale.US)
-                    .format(start), SimpleDateFormat("MMMM d yyyy", Locale.US).format(end))
-        }
+    val parser = formatter("yyyy-MM-dd")
+    val start = parser.parse(startDate)!!
+    val end = parser.parse(endDate)!!
+    val startCalendar = Calendar.getInstance(utc, Locale.US).apply { time = start }
+    val endCalendar = Calendar.getInstance(utc, Locale.US).apply { time = end }
+    val fullDate = formatter("MMMM d yyyy")
+
+    return when {
+        start == end -> fullDate.format(start)
+        startCalendar.get(Calendar.YEAR) != endCalendar.get(Calendar.YEAR) ->
+            "${fullDate.format(start)} to ${fullDate.format(end)}"
+        startCalendar.get(Calendar.MONTH) == endCalendar.get(Calendar.MONTH) ->
+            "${formatter("MMMM d").format(start)} to ${formatter("d yyyy").format(end)}"
+        else -> "${formatter("MMMM d").format(start)} to ${fullDate.format(end)}"
     }
 }
