@@ -17,7 +17,6 @@ import com.aquamorph.frcmanager.models.tba.Award
 import com.aquamorph.frcmanager.models.tba.DistrictRank
 import com.aquamorph.frcmanager.models.tba.Match
 import com.aquamorph.frcmanager.models.tba.Rank
-import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.aquamorph.frcmanager.models.tba.Tab
 import com.aquamorph.frcmanager.models.tba.Team
 import com.aquamorph.frcmanager.utils.Constants
@@ -28,6 +27,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import java.util.Collections.sort
 import kotlin.collections.ArrayList
 import retrofit2.Response
@@ -63,8 +63,9 @@ class DataLoader {
         val allianceDC = DataContainer<Alliance>()
         val districtRankDC = DataContainer<DistrictRank>()
         val districtTeamDC = DataContainer<Team>()
-        val tbaPredictionsDC = DataContainer<TBAPrediction.PredMatch>()
-        val statboticsMatches = DataContainer<com.aquamorph.frcmanager.models.statbotics.Match>()
+        private val predictions = BehaviorSubject.createDefault(SchedulePredictions())
+        internal val schedulePredictions = predictions.hide()
+        private var predictionRequest: Disposable? = null
         private val teamTabs = ArrayList<Tab>()
         private val rankTabs = ArrayList<Tab>()
         private val awardTabs = ArrayList<Tab>()
@@ -117,8 +118,6 @@ class DataLoader {
                     .create(TbaApi::class.java).getDistrictRankings(districtKey))
             retrofit.add(TBARetrofitInstance.getRetrofit(activity)
                     .create(TbaApi::class.java).getDistrictTeams(districtKey))
-            retrofit.add(TBARetrofitInstance.getRetrofit(activity)
-                    .create(TbaApi::class.java).getEventPredictions(eventKey))
             disposable = retrofit[observer]
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -129,9 +128,7 @@ class DataLoader {
                                             result.body() as Any) },
                                 { error ->
                                     Logging.error(this, error.toString(), 0)
-                                    if (observer != 7) {
-                                        removeTab(tabs, adapter)
-                                    }
+                                    removeTab(tabs, adapter)
                                     dataContainer.complete = true })
         }
 
@@ -150,17 +147,14 @@ class DataLoader {
             result: Any
         ) {
             dataContainer.data.clear()
-                if (result is Rank) {
-                    (dataContainer.data as MutableList<Any?>).add(result)
-                } else if (result is TBAPrediction) {
-                        (dataContainer.data as MutableList<Any?>)
-                                .addAll(Constants.tbaPredictionToArray(result))
-                } else {
-                    dataContainer.data.addAll(result as Collection<Nothing>)
-                    if (result is Comparable<*>) {
-                        sort(dataContainer.data as MutableList<Comparable<Any>>)
-                    }
+            if (result is Rank) {
+                (dataContainer.data as MutableList<Any?>).add(result)
+            } else {
+                dataContainer.data.addAll(result as Collection<Nothing>)
+                if (result is Comparable<*>) {
+                    sort(dataContainer.data as MutableList<Comparable<Any>>)
                 }
+            }
             if (dataContainer.data.isEmpty() || isRankEmpty(dataContainer)) {
                 removeTab(tabs, adapter)
             } else {
@@ -208,8 +202,35 @@ class DataLoader {
             allianceDC.data.clear()
             districtRankDC.data.clear()
             districtTeamDC.data.clear()
-            tbaPredictionsDC.data.clear()
-            statboticsMatches.data.clear()
+            clearPredictions()
+        }
+
+        private fun clearPredictions() {
+            predictionRequest?.dispose()
+            predictionRequest = null
+            predictions.onNext(SchedulePredictions())
+        }
+
+        private fun refreshPredictions(activity: Activity) {
+            clearPredictions()
+            if (eventKey.isEmpty()) return
+
+            val logError: (Throwable) -> Unit = { Logging.error(this, it.toString(), 0) }
+            val request = when (MainActivity.predMode) {
+                "tba" -> TBARetrofitInstance.getRetrofit(activity).create(TbaApi::class.java)
+                    .getEventPredictions(eventKey)
+                    .optionalPredictions(
+                        { SchedulePredictions(tba = Constants.tbaPredictionToArray(it)) },
+                        logError
+                    )
+                "statbotics" -> StatboticsRetrofitInstance.getRetrofit(activity)
+                    .create(StatboticsAPI::class.java).getEventMatches(eventKey)
+                    .optionalPredictions({ SchedulePredictions(statbotics = it) }, logError)
+                else -> return
+            }
+            predictionRequest = request.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ predictions.onNext(it) }, logError)
         }
 
         /**
@@ -239,19 +260,6 @@ class DataLoader {
                 } else {
                     removeTab(districtRankTabs, adapter)
                 }
-                if (MainActivity.predMode.equals("tba")) {
-                    getData(tbaPredictionsDC, matchTabs, adapter, 7, activity)
-                } else if (MainActivity.predMode.equals("statbotics")) {
-                    StatboticsRetrofitInstance.getRetrofit(activity).create(StatboticsAPI::class.java)
-                        .getEventMatches(eventKey).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ result -> if (result != null) {
-                            statboticsMatches.data.clear()
-                            statboticsMatches.data.addAll(result.body()!!)
-                            statboticsMatches.complete = true
-                        } },
-                            { error -> Logging.error(this, error.toString(), 0) })
-                }
                 // Check if FIRST or event feed is down
                 TBARetrofitInstance.getRetrofit(activity).create(TbaApi::class.java)
                         .getStatus().subscribeOn(Schedulers.io())
@@ -269,6 +277,7 @@ class DataLoader {
                         } },
                     { error -> Logging.error(this, error.toString(), 0) })
             }
+            refreshPredictions(activity)
         }
     }
 }

@@ -47,7 +47,6 @@ class SectionsPagerAdapter(
         DataLoader.matchDC.complete = false
         DataLoader.districtRankDC.complete = false
         DataLoader.districtTeamDC.complete = false
-        DataLoader.tbaPredictionsDC.complete = false
         DataLoader.refresh(this, activity)
     }
 

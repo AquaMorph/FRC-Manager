@@ -14,7 +14,6 @@ import com.aquamorph.frcmanager.adapters.ScheduleAdapter
 import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.decoration.Divider
 import com.aquamorph.frcmanager.models.tba.Match
-import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
@@ -29,9 +28,6 @@ import com.aquamorph.frcmanager.utils.MatchSort
 class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, RefreshFragment {
 
     private var teamEventMatches = ArrayList<Match>()
-    private var tbaPredictions: ArrayList<TBAPrediction.PredMatch> = ArrayList()
-    private var statboticsPredictions:
-            ArrayList<com.aquamorph.frcmanager.models.statbotics.Match> = ArrayList()
     private var teamNumber: String = ""
     private var getTeamFromSettings: Boolean = true
 
@@ -60,13 +56,11 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
         }
         if (MainActivity.appTheme == Constants.Theme.BATTERY_SAVER) {
             super.onCreateView(view, teamEventMatches,
-                    ScheduleAdapter(requireContext(), teamEventMatches, tbaPredictions,
-                        statboticsPredictions, teamNumber),
+                    ScheduleAdapter(requireContext(), teamEventMatches, teamNumber),
                     Divider(requireContext(), Constants.DIVIDER_WIDTH, 0))
         } else {
             super.onCreateView(view, teamEventMatches,
-                    ScheduleAdapter(requireContext(), teamEventMatches, tbaPredictions,
-                        statboticsPredictions, teamNumber))
+                    ScheduleAdapter(requireContext(), teamEventMatches, teamNumber))
         }
         if (!getTeamFromSettings) {
             mSwipeRefreshLayout.isEnabled = false
@@ -99,20 +93,15 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
      * refresh() loads dataLoader needed for this fragment.
      */
     override fun refresh() {
+        val scheduleView = view ?: return
         if (teamNumber != "" && DataLoader.eventKey != "") {
             mSwipeRefreshLayout.isRefreshing = true
             executor.execute {
                 while (!DataLoader.matchDC.complete) {
                     SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
                 }
-                while (MainActivity.predMode == "tba" && !DataLoader.tbaPredictionsDC.complete) {
-                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-                }
-                while (MainActivity.predMode == "statbotics" && !DataLoader.statboticsMatches.complete) {
-                    SystemClock.sleep(Constants.THREAD_WAIT_TIME.toLong())
-                }
                 handler.post {
-                    if (context != null) {
+                    if (view === scheduleView) {
                         dataUpdate()
                         mSwipeRefreshLayout.isRefreshing = false
                     }
@@ -146,20 +135,14 @@ class TeamScheduleFragment : TabFragment(), OnSharedPreferenceChangeListener, Re
     }
 
     override fun dataUpdate() {
-        if (MainActivity.predMode == "tba") {
-            tbaPredictions.clear()
-            tbaPredictions.addAll(DataLoader.tbaPredictionsDC.data)
-        }
         teamEventMatches.clear()
         for (match in DataLoader.matchDC.data) {
             if (isTeamInMatch(match, "frc$teamNumber")) teamEventMatches.add(match)
         }
-        statboticsPredictions.clear()
-        statboticsPredictions.addAll(DataLoader.statboticsMatches.data)
         MatchSort.sortMatches(teamEventMatches, prefs.getString("matchSort", ""))
         Constants.checkNoDataScreen(teamEventMatches, recyclerView, emptyView)
-        Animations.loadAnimation(context, recyclerView, adapter, firstLoad,
-                DataLoader.matchDC.newData)
+        if (firstLoad || !DataLoader.matchDC.newData) adapter.notifyDataSetChanged()
+        Animations.loadAnimation(context, recyclerView, adapter, firstLoad, DataLoader.matchDC.newData)
         firstLoad = false
     }
 

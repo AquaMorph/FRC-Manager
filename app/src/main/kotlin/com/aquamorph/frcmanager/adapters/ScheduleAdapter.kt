@@ -20,6 +20,7 @@ import com.aquamorph.frcmanager.activities.MatchBreakdownActivity
 import com.aquamorph.frcmanager.activities.TeamSummary
 import com.aquamorph.frcmanager.models.tba.Match
 import com.aquamorph.frcmanager.models.tba.TBAPrediction
+import com.aquamorph.frcmanager.network.SchedulePredictions
 import com.aquamorph.frcmanager.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -34,12 +35,17 @@ import java.util.Locale
 class ScheduleAdapter(
     private val context: Context,
     private val data: ArrayList<Match>,
-    private val tbaPredictions: ArrayList<TBAPrediction.PredMatch>,
-    private val statbosticsPredictions: ArrayList<com.aquamorph.frcmanager.models.statbotics.Match>,
     private var team: String?
 ) : RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
 
     private val inflater: LayoutInflater = from(context)
+    private var predictions = SchedulePredictions()
+
+    internal fun updatePredictions(predictions: SchedulePredictions) {
+        if (this.predictions == predictions) return
+        this.predictions = predictions
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = inflater.inflate(R.layout.match, parent, false)
@@ -172,27 +178,21 @@ class ScheduleAdapter(
         holder.blueScore.text = context.getString(R.string.rankPointFormat)
                 .format(rpToString(blueRP), holder.blueScore.text)
 
-        // The Blue Alliance predictions
-        if (MainActivity.predMode == "tba" && tbaPredictions.isNotEmpty()) {
-            holder.predictionTable.visibility = View.VISIBLE
-            val predMatch = getMatch(data[position].key, tbaPredictions)
-            holder.predictionsText.setTextColor(getPredictionColor(predMatch.prob,
-                predMatch.winningAlliance))
-            holder.predictionsText.text = predictionToString(predMatch, MainActivity.predPercentage)
-        }
-        // Statbotics predictions
-        else if (MainActivity.predMode == "statbotics" && statbosticsPredictions.isNotEmpty()) {
-            val predMatch = getMatch(data[position].key, statbosticsPredictions)
-            if (predMatch != null) {
-                holder.predictionsText.setTextColor(getPredictionColor(predMatch.winnerProb(),
-                    predMatch.pred.winner))
-                holder.predictionsText.text =
-                    predictionToString(predMatch, MainActivity.predPercentage)
-            } else {
-                holder.predictionTable.visibility = View.GONE
+        val matchKey = data[position].key
+        holder.predictionTable.visibility = View.GONE
+        when (MainActivity.predMode) {
+            "tba" -> predictions.tba.firstOrNull { it.matchKey == matchKey }?.let { prediction ->
+                holder.predictionTable.visibility = View.VISIBLE
+                holder.predictionsText.setTextColor(getPredictionColor(prediction.prob, prediction.winningAlliance))
+                holder.predictionsText.text = predictionToString(prediction, MainActivity.predPercentage)
             }
-        } else {
-            holder.predictionTable.visibility = View.GONE
+            "statbotics" -> predictions.statbotics.firstOrNull { it.key == matchKey }?.let { prediction ->
+                holder.predictionTable.visibility = View.VISIBLE
+                holder.predictionsText.setTextColor(
+                    getPredictionColor(prediction.winnerProb(), prediction.pred.winner)
+                )
+                holder.predictionsText.text = predictionToString(prediction, MainActivity.predPercentage)
+            }
         }
     }
 
@@ -284,38 +284,6 @@ class ScheduleAdapter(
                 else -> "Heavily %s".format(winner)
             }
         }
-    }
-
-    /**
-     * getMatch() returns a match prediction given a match key.
-     *
-     * @param matchKey match key
-     * @param predictions list of match predictions
-     * @return match prediction
-     */
-    private fun getMatch(matchKey: String, predictions: ArrayList<TBAPrediction.PredMatch>):
-            TBAPrediction.PredMatch {
-        for (p in predictions) {
-            if (p.matchKey == matchKey) return p
-        }
-        return TBAPrediction.PredMatch("", 0.5, "Red")
-    }
-
-    /**
-     * getMatch() returns a match prediction given a match key.
-     *
-     * @param matchKey match key
-     * @param predictions list of match predictions
-     * @return match prediction
-     */
-    private fun getMatch(
-        matchKey: String,
-        predictions: ArrayList<com.aquamorph.frcmanager.models.statbotics.Match>
-    ): com.aquamorph.frcmanager.models.statbotics.Match? {
-        for (p in predictions) {
-            if (p.key == matchKey) return p
-        }
-        return null
     }
 
     /**

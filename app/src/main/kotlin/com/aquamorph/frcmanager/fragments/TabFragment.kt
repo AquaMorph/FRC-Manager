@@ -13,8 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
+import com.aquamorph.frcmanager.adapters.ScheduleAdapter
+import com.aquamorph.frcmanager.network.DataLoader
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout
+import io.reactivex.disposables.Disposable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -27,12 +30,25 @@ abstract class TabFragment : Fragment() {
     protected var firstLoad = true
     protected val executor: ExecutorService = Executors.newSingleThreadExecutor()
     protected val handler = Handler(Looper.getMainLooper())
+    private var predictionSubscription: Disposable? = null
 
     abstract fun dataUpdate()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val scheduleAdapter = adapter as? ScheduleAdapter ?: return
+        predictionSubscription = DataLoader.schedulePredictions.subscribe(scheduleAdapter::updatePredictions)
+    }
+
+    override fun onDestroyView() {
+        predictionSubscription?.dispose()
+        predictionSubscription = null
+        super.onDestroyView()
     }
 
     fun onCreateView(
