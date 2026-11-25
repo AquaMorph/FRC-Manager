@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 internal class ScheduleFastScrollView(context: Context, attrs: AttributeSet) : RecyclerView(context, attrs) {
     private val thumbWidth = resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_width).toFloat()
     private val gutter = resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_gutter)
-    private val cardMargin = resources.getDimensionPixelSize(R.dimen.schedule_card_side_margin)
+    private val cardMargin = resources.getDimensionPixelSize(R.dimen.card_spacing)
     private val touchTarget = resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_target).toFloat()
     private val thumb = RectF()
     private val paint = TextPaint(TextPaint.ANTI_ALIAS_FLAG)

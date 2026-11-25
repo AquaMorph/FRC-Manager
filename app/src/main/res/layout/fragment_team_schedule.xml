@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="@dimen/schedule_card_spacing" />
+            android:paddingTop="@dimen/card_spacing" />
 
     </com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout>
 

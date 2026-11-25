@@ -122,7 +122,7 @@ class TeamNumberLayoutTest {
             val inflater = LayoutInflater.from(context)
             val target = context.resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_target)
             val gutter = context.resources.getDimensionPixelSize(R.dimen.schedule_fast_scroll_gutter)
-            val margin = context.resources.getDimensionPixelSize(R.dimen.schedule_card_side_margin)
+            val margin = context.resources.getDimensionPixelSize(R.dimen.card_spacing)
             val width = if (columns == 1) target * 7 else target * 15
             val height = target * 9
             for (direction in listOf(View.LAYOUT_DIRECTION_LTR, View.LAYOUT_DIRECTION_RTL)) {
@@ -257,7 +257,7 @@ class TeamNumberLayoutTest {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         instrumentation.runOnMainSync {
             val context = ContextThemeWrapper(instrumentation.targetContext, R.style.LightTheme)
-            val spacing = context.resources.getDimensionPixelSize(R.dimen.schedule_card_spacing)
+            val spacing = context.resources.getDimensionPixelSize(R.dimen.card_spacing)
             val inflater = LayoutInflater.from(context)
             for (layout in listOf(R.layout.fragment_fastscroll, R.layout.fragment_team_schedule)) {
                 val schedule = inflater.inflate(layout, null)
@@ -337,7 +337,7 @@ class TeamNumberLayoutTest {
                 val rowContents = (card as ViewGroup).getChildAt(0) as ViewGroup
                 val firstCell = rowContents.getChildAt(0)
                 val lastCell = rowContents.getChildAt(rowContents.childCount - 1)
-                val sideMargin = context.resources.getDimensionPixelSize(R.dimen.schedule_card_side_margin)
+                val sideMargin = context.resources.getDimensionPixelSize(R.dimen.card_spacing)
                 assertEquals(sideMargin, rowContents.left + minOf(firstCell.left, lastCell.left))
                 assertEquals(width - sideMargin, rowContents.left + maxOf(firstCell.right, lastCell.right))
                 for ((top, bottom) in redSlots.zip(blueSlots)) {
@@ -367,7 +367,7 @@ class TeamNumberLayoutTest {
             val allianceTops = listOf(redSlots.first(), blueSlots.first()).map { (it.parent as View).top }
             val rowHeight = card.height
             assertEquals(2 * context.resources.getDimensionPixelSize(R.dimen.schedule_alliance_height) +
-                context.resources.getDimensionPixelSize(R.dimen.schedule_card_spacing), rowHeight)
+                context.resources.getDimensionPixelSize(R.dimen.card_spacing), rowHeight)
             measure(upcoming.copy(
                 time = null, prediction = null,
                 red = red.copy(score = 120, bonusRp = 2, emphasized = true), blue = blue.copy(score = 0)
