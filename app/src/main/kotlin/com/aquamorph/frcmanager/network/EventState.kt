@@ -55,6 +55,7 @@ internal data class EventState(
     val awards: EventList<Award> = EventList(),
     val districtRankings: EventList<DistrictRank> = EventList(),
     val districtTeams: EventList<Team> = EventList(),
+    val districtHighlightCutoff: Int? = null,
     val predictions: SchedulePredictions = SchedulePredictions(),
     val feedNotice: FeedNotice? = null
 ) {
@@ -81,6 +82,7 @@ internal data class EventState(
             awards = current.awards.begin(),
             districtRankings = districtSection(current.districtRankings, selection, keepDistrict),
             districtTeams = districtSection(current.districtTeams, selection, keepDistrict),
+            districtHighlightCutoff = districtHighlightCutoff.takeIf { this.selection.districtKey == selection.districtKey },
             predictions = if (current.selection.predictionMode == selection.predictionMode) {
                 current.predictions
             } else SchedulePredictions(),

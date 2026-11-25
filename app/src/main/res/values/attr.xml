@@ -21,6 +21,12 @@
     <attr name="awardSurface" format="color"/>
     <attr name="awardOutline" format="color"/>
     <attr name="awardAccentSurface" format="color"/>
+    <attr name="rankingRowSurface" format="color"/>
+    <attr name="rankingBadgeSurface" format="color"/>
+    <attr name="rankingBadgeInk" format="color"/>
+    <attr name="rankingLeaderSurface" format="color"/>
+    <attr name="rankingLeaderInk" format="color"/>
+    <attr name="rankingLabelInk" format="color"/>
     <attr name="dividerColor" format="color"/>
     <attr name="scroll_line" format="reference"/>
     <attr name="redLeaning" format="reference|color"/>

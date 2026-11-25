@@ -2,6 +2,8 @@ package com.aquamorph.frcmanager.network
 
 import com.aquamorph.frcmanager.models.tba.Alliance
 import com.aquamorph.frcmanager.models.tba.Award
+import com.aquamorph.frcmanager.models.tba.DistrictAdvancement
+import com.aquamorph.frcmanager.models.tba.DistrictAllocation
 import com.aquamorph.frcmanager.models.tba.DistrictRank
 import com.aquamorph.frcmanager.models.tba.Event
 import com.aquamorph.frcmanager.models.tba.Match
@@ -110,6 +112,12 @@ interface TbaApi {
     @GET("district/{districtKey}/rankings")
     fun getDistrictRankings(@Path("districtKey") districtKey: String):
             Observable<Response<ArrayList<DistrictRank>>>
+
+    @GET("districts/{year}")
+    fun getDistrictAllocations(@Path("year") year: Int): Observable<Response<List<DistrictAllocation>>>
+
+    @GET("district/{districtKey}/advancement")
+    fun getDistrictAdvancement(@Path("districtKey") districtKey: String): Observable<Response<DistrictAdvancement>>
 
     /**
     * getDistrictTeams() returns list of teams in a district.

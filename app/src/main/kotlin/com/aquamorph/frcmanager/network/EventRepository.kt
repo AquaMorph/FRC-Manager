@@ -1,10 +1,12 @@
 package com.aquamorph.frcmanager.network
 
 import android.content.Context
+import com.aquamorph.frcmanager.models.tba.districtPointsSpots
 import com.aquamorph.frcmanager.utils.Constants
 import com.aquamorph.frcmanager.utils.Logging
 import io.reactivex.Observable
 import io.reactivex.Scheduler
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 import retrofit2.Response
@@ -53,6 +55,9 @@ internal class EventRepository(
             requests += listSection(tba.getDistrictTeams(district)) { state, update ->
                 state.copy(districtTeams = update(state.districtTeams))
             }
+            district.take(4).toIntOrNull()?.let { year ->
+                requests += districtCutoff(district, year)
+            }
         }
 
         val predictions = when (selection.predictionMode) {
@@ -70,6 +75,19 @@ internal class EventRepository(
             .subscribeOn(io)
         return Observable.merge(requests)
     }
+
+    private fun districtCutoff(district: String, year: Int): Observable<EventUpdate> = Observable.zip(
+        tba.getDistrictAllocations(year).subscribeOn(io),
+        tba.getDistrictAdvancement(district).subscribeOn(io),
+        BiFunction { allocations, advancement ->
+            if (!allocations.isSuccessful) throw HttpException(allocations)
+            if (!advancement.isSuccessful) throw HttpException(advancement)
+            val slots = allocations.body()?.firstOrNull { it.key == district }?.counts?.cmp
+            val cutoff = districtPointsSpots(slots, advancement.body())
+            val update: EventUpdate = { it.copy(districtHighlightCutoff = cutoff) }
+            update
+        }
+    ).doOnError(::logError).onErrorResumeNext(Observable.empty())
 
     private fun <T> listSection(
         request: Observable<Response<ArrayList<T>>>,

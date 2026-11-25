@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ranking_row_light">#EDF2F7</color>
+    <color name="ranking_badge_light">#DDE6F1</color>
+    <color name="ranking_badge_ink_light">#24364D</color>
+    <color name="ranking_leader_light">#CCDFFF</color>
+    <color name="ranking_leader_ink_light">#163A65</color>
+    <color name="ranking_row_dark">#303640</color>
+    <color name="ranking_row_oled">#141820</color>
+    <color name="ranking_badge_dark">#434E60</color>
+    <color name="ranking_badge_ink_dark">#E2EBFA</color>
+    <color name="ranking_leader_dark">#244D7E</color>
+    <color name="ranking_leader_ink_dark">#D6E5FF</color>
+</resources>
