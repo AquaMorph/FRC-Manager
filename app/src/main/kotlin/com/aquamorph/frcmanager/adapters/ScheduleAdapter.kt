@@ -98,20 +98,6 @@ internal class ScheduleAdapter(private val context: Context) :
         }
     }
 
-    /**
-     * rpToString() converts additional rank points to indicator string.
-     *
-     * @param rp additional rank points
-     * @return rank point unicode
-     */
-    private fun rpToString(rp: Int): String {
-        return when (rp) {
-            1 -> "⬤"
-            2 -> "⬤⬤"
-            else -> ""
-        }
-    }
-
     inner class MatchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val matchNumber = itemView.findViewById<TextView>(R.id.match_number)
         private val redTeams = listOf(R.id.red_team_1, R.id.red_team_2, R.id.red_team_3)
@@ -167,11 +153,13 @@ internal class ScheduleAdapter(private val context: Context) :
             }
             score.setTypeface(Typeface.MONOSPACE, if (alliance.emphasized) Typeface.BOLD else Typeface.NORMAL)
             score.text = alliance.score?.let {
-                context.getString(R.string.rankPointFormat, rpToString(alliance.bonusRp), it.toString())
+                context.getString(R.string.rankPointFormat, bonusRpDots(alliance.bonusRp), it.toString())
             }.orEmpty()
         }
     }
 }
+
+internal fun bonusRpDots(bonusRp: Int): String = "\u2022".repeat(bonusRp)
 
 internal object ScheduleRowDiff : DiffUtil.ItemCallback<ScheduleRow>() {
     override fun areItemsTheSame(oldItem: ScheduleRow, newItem: ScheduleRow) = oldItem.key == newItem.key

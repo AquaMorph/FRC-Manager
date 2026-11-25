@@ -38,16 +38,21 @@ internal fun scheduleRows(
     val tba = predictions.tba.associateBy { it.matchKey }
     val statbotics = predictions.statbotics.associateBy { it.key }
     return sorted.map { match ->
+        val season = match.eventKey.take(4).toIntOrNull()
+        val winRp = if (season != null && season >= 2025) 3 else 2
         fun alliance(data: Match.MatchAlliance, otherScore: Int, color: String, rp: Int?): ScheduleAlliance {
             val teams = data.teamKeys.take(3).map(Constants::formatTeamNumber)
             val resultRp = when (match.winningAlliance) {
-                color -> 2
+                color -> winRp
                 "red", "blue" -> 0
                 else -> 1
             }
+            val bonusRp = if (match.hasResult && match.compLevel == "qm" && rp != null) {
+                (rp - resultRp).coerceAtLeast(0)
+            } else 0
             return ScheduleAlliance(
                 teams, team.takeIf { it in teams }, data.score.takeIf { match.hasResult },
-                if (match.hasResult && rp != null) rp - resultRp else 0,
+                bonusRp,
                 match.hasResult && data.score >= otherScore
             )
         }

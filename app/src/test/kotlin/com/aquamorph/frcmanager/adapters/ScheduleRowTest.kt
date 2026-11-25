@@ -1,10 +1,12 @@
 package com.aquamorph.frcmanager.adapters
 
 import com.aquamorph.frcmanager.models.tba.Match
+import com.aquamorph.frcmanager.models.tba.MatchScore
 import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.aquamorph.frcmanager.network.EventSelection
 import com.aquamorph.frcmanager.network.EventState
 import com.aquamorph.frcmanager.network.SchedulePredictions
+import com.google.gson.Gson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -49,6 +51,42 @@ class ScheduleRowTest {
     }
 
     @Test
+    fun `modern winner and loser each show three dots when they earn three bonus points`() {
+        val row = rows(playedMatch("2026event", "red", 6, 3)).single()
+        assertEquals(3, row.red.bonusRp)
+        assertEquals(3, row.blue.bonusRp)
+        assertEquals("\u2022\u2022\u2022", bonusRpDots(row.red.bonusRp))
+    }
+
+    @Test
+    fun `win points alone show no dots starting in 2025`() {
+        val row = rows(playedMatch("2025event", "blue", 0, 3)).single()
+        assertEquals("", bonusRpDots(row.blue.bonusRp))
+    }
+
+    @Test
+    fun `older wins subtract two points and ties subtract one from both alliances`() {
+        val win = rows(playedMatch("2024event", "red", 4, 1)).single()
+        assertEquals(2, win.red.bonusRp)
+        assertEquals(1, win.blue.bonusRp)
+
+        val tie = rows(playedMatch("2026event", "", 4, 1)).single()
+        assertEquals(3, tie.red.bonusRp)
+        assertEquals(0, tie.blue.bonusRp)
+    }
+
+    @Test
+    fun `matches without earned qualification RP show no dots`() {
+        val played = playedMatch("2026event", "red", 0, 0)
+        assertEquals(0, rows(played).single().red.bonusRp)
+        assertEquals(0, rows(played.copy(scoreBreakDown = null)).single().red.bonusRp)
+
+        val withBonus = playedMatch("2026event", "red", 6, 3)
+        assertEquals(0, rows(withBonus.copy(compLevel = "sf")).single().red.bonusRp)
+        assertEquals(0, rows(withBonus.copy(alliances = match.alliances)).single().red.bonusRp)
+    }
+
+    @Test
     fun `refresh retains predictions only for the same event and source`() {
         val selection = EventSelection(eventKey = "event", predictionMode = "tba")
         val state = EventState(selection = selection, predictions = predictions)
@@ -56,6 +94,18 @@ class ScheduleRowTest {
         assertEquals(SchedulePredictions(), state.beginRefresh(selection.copy(eventKey = "other")).predictions)
         assertEquals(SchedulePredictions(), state.beginRefresh(selection.copy(predictionMode = "none")).predictions)
     }
+
+    private fun playedMatch(eventKey: String, winner: String, redRp: Int, blueRp: Int) = match.copy(
+        eventKey = eventKey,
+        winningAlliance = winner,
+        alliances = match.alliances.copy(
+            red = match.alliances.red.copy(score = if (winner == "blue") 100 else 120),
+            blue = match.alliances.blue.copy(score = if (winner == "red") 100 else 120)
+        ),
+        scoreBreakDown = Gson().fromJson(
+            """{"red":{"rp":$redRp},"blue":{"rp":$blueRp}}""", MatchScore.ScoreBreakDown::class.java
+        )
+    )
 
     private fun rows(match: Match) = scheduleRows(listOf(match), "10023", true, "seriesGrouping", predictions, true)
 }
