@@ -18,6 +18,8 @@ Features:
  - Awards
  - District Points
 
+Offline mode can show previously loaded event data when the API response is still in the app's cache. Load the event online first; a new event needs an internet connection.
+
 ## Setting Up
 
 1. Clone Repository
