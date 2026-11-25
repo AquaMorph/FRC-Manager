@@ -18,6 +18,7 @@ import com.aquamorph.frcmanager.network.EventLoad
 import com.aquamorph.frcmanager.network.EventState
 import com.aquamorph.frcmanager.network.EventViewModel
 import com.aquamorph.frcmanager.utils.ThemeSwipeRefreshLayout
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -44,13 +45,13 @@ abstract class TabFragment : Fragment() {
         if (decor != null) list.recycler.addItemDecoration(decor)
     }
 
-    internal fun <T> observeEvent(select: (EventState) -> T, render: (T) -> Unit) {
+    internal fun <T> observeEvent(select: (EventState) -> T, render: suspend (T) -> Unit) {
         val owner = viewLifecycleOwner
         val host = requireActivity()
         val model = ViewModelProvider(host, EventViewModel.factory(host.applicationContext))[EventViewModel::class.java]
         owner.lifecycleScope.launch {
             owner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                model.state.map(select).distinctUntilChanged().collect(render)
+                model.state.map(select).distinctUntilChanged().collectLatest(render)
             }
         }
     }

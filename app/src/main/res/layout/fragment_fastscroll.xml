@@ -12,7 +12,8 @@
         android:layout_height="match_parent">
 
 
-        <com.aquamorph.frcmanager.utils.ScheduleFastScrollView
+        <!-- The thumb overlays the cards so showing or fading it never remeasures the list. -->
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             android:clipToPadding="false"
             android:paddingTop="@dimen/schedule_card_spacing"

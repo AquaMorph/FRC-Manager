@@ -1,37 +1,71 @@
 package com.aquamorph.frcmanager.adapters
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.text.Spanned
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.ContextThemeWrapper
+import android.view.Choreographer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.aquamorph.frcmanager.R
-import com.aquamorph.frcmanager.utils.ScheduleFastScrollView
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
 class TeamNumberLayoutTest {
     @Test
-    fun eventScheduleStartsWithoutReservedFastScrollSpace() {
+    fun eventScheduleKeepsFullWidthWhenFastScrollThumbAppears() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
+        lateinit var list: RecyclerView
+        var rowWidth = 0
+        val thumbFadeIn = CountDownLatch(1)
         instrumentation.runOnMainSync {
             val context = ContextThemeWrapper(instrumentation.targetContext, R.style.LightTheme)
-            val schedule = LayoutInflater.from(context).inflate(R.layout.fragment_fastscroll, null)
-            val list = schedule.findViewById<ScheduleFastScrollView>(R.id.rv)
+            list = LayoutInflater.from(context).inflate(R.layout.fragment_fastscroll, null).findViewById(R.id.rv)
+            val alliance = ScheduleAlliance(listOf("8", "254", "10023"), null, null, 0, false)
+            list.layoutManager = LinearLayoutManager(context)
+            list.adapter = ScheduleAdapter(context).apply {
+                submitList(List(50) { ScheduleRow("event_qm$it", "qm", 1, it, alliance, alliance, null, null) })
+            }
+            val bitmap = Bitmap.createBitmap(320, 400, Bitmap.Config.ARGB_8888)
+            list.measure(
+                View.MeasureSpec.makeMeasureSpec(bitmap.width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(bitmap.height, View.MeasureSpec.EXACTLY)
+            )
+            list.layout(0, 0, bitmap.width, bitmap.height)
+            val canvas = Canvas(bitmap)
+            list.draw(canvas)
             assertEquals(0, list.paddingEnd)
+            rowWidth = list.getChildAt(0).width
+            list.scrollBy(0, 240)
+            list.draw(canvas)
+            assertTrue(list.computeVerticalScrollOffset() > 0)
+            bitmap.recycle()
+
+            // Let several animation frames pass before checking for a padding change.
+            val choreographer = Choreographer.getInstance()
+            choreographer.postFrameCallbackDelayed({ thumbFadeIn.countDown() }, 250L)
+        }
+        assertTrue(thumbFadeIn.await(5, TimeUnit.SECONDS))
+        instrumentation.runOnMainSync {
+            assertEquals(0, list.paddingEnd)
+            assertEquals(rowWidth, list.getChildAt(0).width)
         }
     }
 

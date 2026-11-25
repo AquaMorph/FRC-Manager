@@ -30,8 +30,17 @@ internal class ScheduleAdapter(private val context: Context) :
     }
 
     private val timeFormat = DateFormat.getTimeFormat(context)
+    private val timeTbd = context.getString(R.string.scheduleTimeTbd)
     private val redWinBackground = themeColor(R.attr.scheduleRedWinBackground)
     private val blueWinBackground = themeColor(R.attr.scheduleBlueWinBackground)
+    private val neutralPrediction = themeColor(R.attr.textOnBackground)
+    private val redPredictionColors = intArrayOf(
+        themeColor(R.attr.redLeaning), themeColor(R.attr.redLikely), themeColor(R.attr.redHeavily)
+    )
+    private val bluePredictionColors = intArrayOf(
+        themeColor(R.attr.blueLeaning), themeColor(R.attr.blueLikely), themeColor(R.attr.blueHeavily)
+    )
+    private val boldNumbers = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
 
     private fun themeColor(attr: Int): Int = TypedValue().let {
         if (context.theme.resolveAttribute(attr, it, true)) it.data else Color.TRANSPARENT
@@ -50,34 +59,13 @@ internal class ScheduleAdapter(private val context: Context) :
      * @return text color
      */
     private fun getPredictionColor(probability: Double, winningAlliance: String): Int {
-        val typedValue = TypedValue()
-        val theme = context.theme
-        when {
-            probability <= 0.55 -> {
-                theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
-            }
-            winningAlliance == "red" -> {
-                when {
-                    probability <= 0.6 ->
-                        theme.resolveAttribute(R.attr.redLeaning, typedValue, true)
-                    probability <= 0.65 ->
-                        theme.resolveAttribute(R.attr.redLikely, typedValue, true)
-                    else ->
-                        theme.resolveAttribute(R.attr.redHeavily, typedValue, true)
-                }
-            }
-            else -> {
-                when {
-                    probability <= 0.6 ->
-                        theme.resolveAttribute(R.attr.blueLeaning, typedValue, true)
-                    probability <= 0.65 ->
-                        theme.resolveAttribute(R.attr.blueLikely, typedValue, true)
-                    else ->
-                        theme.resolveAttribute(R.attr.blueHeavily, typedValue, true)
-                }
-            }
+        if (probability <= 0.55) return neutralPrediction
+        val colors = if (winningAlliance == "red") redPredictionColors else bluePredictionColors
+        return when {
+            probability <= 0.6 -> colors[0]
+            probability <= 0.65 -> colors[1]
+            else -> colors[2]
         }
-        return typedValue.data
     }
 
     /**
@@ -97,9 +85,9 @@ internal class ScheduleAdapter(private val context: Context) :
             }
             else -> when {
                 probability <= 0.55 -> "Tossup"
-                probability <= 0.6 -> "Leaning %s".format(winner)
-                probability <= 0.65 -> "Likely %s".format(winner)
-                else -> "Heavily %s".format(winner)
+                probability <= 0.6 -> "Leaning $winner"
+                probability <= 0.65 -> "Likely $winner"
+                else -> "Heavily $winner"
             }
         }
     }
@@ -116,15 +104,11 @@ internal class ScheduleAdapter(private val context: Context) :
         private val redScore = itemView.findViewById<TextView>(R.id.red_score)
         private val blueScore = itemView.findViewById<TextView>(R.id.blue_score)
         private val prediction = itemView.findViewById<TextView>(R.id.prediction)
+        private var boundRow: ScheduleRow? = null
 
-        fun bind(row: ScheduleRow) {
-            matchNumber.text = Constants.matchString(row.compLevel, row.setNumber, row.matchNumber)
-            matchNumber.setBackgroundColor(when (row.winningAlliance) {
-                "red" -> redWinBackground
-                "blue" -> blueWinBackground
-                else -> Color.TRANSPARENT
-            })
+        init {
             matchNumber.setOnClickListener {
+                val row = boundRow ?: return@setOnClickListener
                 context.startActivity(Intent(context, MatchBreakdownActivity::class.java).apply {
                     putExtra("matchKey", row.key)
                     putExtra("compLevel", row.compLevel)
@@ -136,22 +120,43 @@ internal class ScheduleAdapter(private val context: Context) :
                     }
                 })
             }
+            redTeams.forEachIndexed { index, slot -> setTeamClick(slot, index, red = true) }
+            blueTeams.forEachIndexed { index, slot -> setTeamClick(slot, index, red = false) }
+        }
+
+        private fun setTeamClick(slot: TextView, index: Int, red: Boolean) {
+            slot.setOnClickListener {
+                val row = boundRow ?: return@setOnClickListener
+                val number = (if (red) row.red else row.blue).teams.getOrNull(index).orEmpty()
+                if (number.isNotEmpty()) {
+                    context.startActivity(Intent(context, TeamSummary::class.java).putExtra("teamNumber", number))
+                }
+            }
+        }
+
+        fun bind(row: ScheduleRow) {
+            boundRow = row
+            matchNumber.text = Constants.matchString(row.compLevel, row.setNumber, row.matchNumber)
+            matchNumber.setBackgroundColor(when (row.winningAlliance) {
+                "red" -> redWinBackground
+                "blue" -> blueWinBackground
+                else -> Color.TRANSPARENT
+            })
             bindAlliance(row.red, redTeams, redScore)
             bindAlliance(row.blue, blueTeams, blueScore)
             val hasResult = row.red.score != null || row.blue.score != null
             scores.visibility = if (hasResult) View.VISIBLE else View.GONE
             matchStatus.visibility = if (hasResult) View.GONE else View.VISIBLE
-            matchTime.text = row.time?.let { timeFormat.format(Date(it * 1000)) }
-                ?: context.getString(R.string.scheduleTimeTbd)
+            if (!hasResult) matchTime.text = row.time?.let { timeFormat.format(Date(it * 1000)) } ?: timeTbd
             prediction.visibility = if (row.prediction == null) View.INVISIBLE else View.VISIBLE
-            prediction.text = ""
-            row.prediction?.let {
-                prediction.text = predictionToString(it.probability, it.winner, it.percentage)
+            prediction.text = row.prediction?.let {
                 prediction.setTextColor(getPredictionColor(it.probability, it.winner))
-            }
+                predictionToString(it.probability, it.winner, it.percentage)
+            }.orEmpty()
         }
 
         private fun bindAlliance(alliance: ScheduleAlliance, slots: List<TextView>, score: TextView) {
+            val typeface = if (alliance.emphasized) boldNumbers else Typeface.MONOSPACE
             slots.forEachIndexed { index, slot ->
                 val number = alliance.teams.getOrNull(index).orEmpty()
                 slot.text = if (number.isNotEmpty() && number == alliance.highlightedTeam) {
@@ -159,13 +164,10 @@ internal class ScheduleAdapter(private val context: Context) :
                         setSpan(UnderlineSpan(), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 } else number
-                slot.setTypeface(Typeface.MONOSPACE, if (alliance.emphasized) Typeface.BOLD else Typeface.NORMAL)
-                slot.setOnClickListener(if (number.isEmpty()) null else View.OnClickListener {
-                    context.startActivity(Intent(context, TeamSummary::class.java).putExtra("teamNumber", number))
-                })
+                slot.typeface = typeface
                 slot.isClickable = number.isNotEmpty()
             }
-            score.setTypeface(Typeface.MONOSPACE, if (alliance.emphasized) Typeface.BOLD else Typeface.NORMAL)
+            score.typeface = typeface
             score.text = when {
                 alliance.score == null -> ""
                 alliance.bonusRp == 0 -> alliance.score.toString()
