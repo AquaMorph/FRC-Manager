@@ -46,12 +46,6 @@ object MatchSort {
      *  @param matches list of matches
      *  @return next match position in list
      */
-    private fun matchNext(matches: ArrayList<Match>): Int {
-        var count = 0
-        matches.forEach { match ->
-            if (match.alliances.red.score <= 0 || match.alliances.blue.score <= 0) return count
-            count++
-        }
-        return count
-    }
+    private fun matchNext(matches: List<Match>): Int =
+        matches.indexOfFirst { !it.hasResult }.takeIf { it >= 0 } ?: matches.size
 }

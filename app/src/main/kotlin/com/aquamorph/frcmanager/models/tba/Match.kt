@@ -48,6 +48,10 @@ data class Match(
     var scoreBreakDown: MatchScore.ScoreBreakDown?
 ) : Comparable<Match> {
 
+    // The Blue Alliance reports -1 for an unplayed alliance score; zero is a valid result.
+    val hasResult: Boolean
+        get() = alliances.red.score != -1 && alliances.blue.score != -1
+
     data class Alliances(
         @Expose
         @SerializedName("blue")

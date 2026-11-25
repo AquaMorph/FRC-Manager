@@ -87,10 +87,11 @@ class ScheduleAdapter(
         }
 
         // Bolds winning score
+        val match = data[position]
+        val redScore = match.alliances.red.score
+        val blueScore = match.alliances.blue.score
         when {
-            data[position].alliances.red.score == data[position].alliances.blue.score &&
-                    data[position].alliances.red.score != -1 &&
-                    data[position].alliances.blue.score != -1 -> {
+            match.hasResult && redScore == blueScore -> {
                 holder.redTeam1.setTypeface(null, Typeface.BOLD)
                 holder.redTeam2.setTypeface(null, Typeface.BOLD)
                 holder.redTeam3.setTypeface(null, Typeface.BOLD)
@@ -100,7 +101,7 @@ class ScheduleAdapter(
                 holder.blueTeam3.setTypeface(null, Typeface.BOLD)
                 holder.blueScore.setTypeface(null, Typeface.BOLD)
             }
-            data[position].alliances.red.score > data[position].alliances.blue.score -> {
+            match.hasResult && redScore > blueScore -> {
                 holder.redTeam1.setTypeface(null, Typeface.BOLD)
                 holder.redTeam2.setTypeface(null, Typeface.BOLD)
                 holder.redTeam3.setTypeface(null, Typeface.BOLD)
@@ -110,7 +111,7 @@ class ScheduleAdapter(
                 holder.blueTeam3.setTypeface(null, Typeface.NORMAL)
                 holder.blueScore.setTypeface(null, Typeface.NORMAL)
             }
-            data[position].alliances.red.score < data[position].alliances.blue.score -> {
+            match.hasResult && redScore < blueScore -> {
                 holder.redTeam1.setTypeface(null, Typeface.NORMAL)
                 holder.redTeam2.setTypeface(null, Typeface.NORMAL)
                 holder.redTeam3.setTypeface(null, Typeface.NORMAL)
@@ -132,12 +133,12 @@ class ScheduleAdapter(
             }
         }
 
-        if (data[position].alliances.red.score != -1) {
+        if (match.hasResult) {
             holder.matchTimeTable.visibility = View.GONE
             holder.predictionTable.visibility = View.GONE
             holder.scoreTable.visibility = View.VISIBLE
-            holder.redScore.text = data[position].alliances.red.score.toString()
-            holder.blueScore.text = data[position].alliances.blue.score.toString()
+            holder.redScore.text = redScore.toString()
+            holder.blueScore.text = blueScore.toString()
         } else {
             holder.matchTimeTable.visibility = View.VISIBLE
             holder.predictionTable.visibility = View.VISIBLE

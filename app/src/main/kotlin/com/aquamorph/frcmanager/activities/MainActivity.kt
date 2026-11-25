@@ -143,7 +143,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         supportActionBar?.title = "$teamNumber - $eventName"
         val rank = state.rankings.items.firstOrNull()?.rankings?.firstOrNull { it.teamKey == "frc$teamNumber" }
         supportActionBar?.subtitle = if (rank == null) "" else {
-            val nextMatch = state.matches.items.filter { it.postResultTime <= 0 }.minOrNull()
+            val nextMatch = state.matches.items.asSequence().filterNot { it.hasResult }.minOrNull()
             val nextText = nextMatch?.let { "Playing %S-%s".format(it.compLevel, it.matchNumber) }.orEmpty()
             prefs.getString("toolbarText", getString(R.string.toolBarDefault)).orEmpty()
                 .replace("\$r", rank.rank.toString())
