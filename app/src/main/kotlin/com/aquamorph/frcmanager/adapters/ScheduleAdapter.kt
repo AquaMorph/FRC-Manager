@@ -2,201 +2,39 @@ package com.aquamorph.frcmanager.adapters
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Typeface
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.UnderlineSpan
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.LayoutInflater.from
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableLayout
-import android.widget.TableRow
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MatchBreakdownActivity
 import com.aquamorph.frcmanager.activities.TeamSummary
-import com.aquamorph.frcmanager.models.tba.Match
-import com.aquamorph.frcmanager.models.tba.TBAPrediction
-import com.aquamorph.frcmanager.network.SchedulePredictions
 import com.aquamorph.frcmanager.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-/**
- * Populates a RecyclerView with the schedule for a team.
- *
- * @author Christian Colglazier
- * @version 3/27/2023
- */
-class ScheduleAdapter(
-    private val context: Context,
-    private val data: ArrayList<Match>
-) : RecyclerView.Adapter<ScheduleAdapter.MyViewHolder>() {
+internal class ScheduleAdapter(private val context: Context) :
+    ListAdapter<ScheduleRow, ScheduleAdapter.MatchHolder>(ScheduleRowDiff) {
 
-    private val inflater: LayoutInflater = from(context)
-    internal var highlightedTeam: String = ""
-    private var predictions = SchedulePredictions()
-    private var predictionPercentage = false
-
-    internal fun updatePredictions(predictions: SchedulePredictions, percentage: Boolean) {
-        if (this.predictions == predictions && predictionPercentage == percentage) return
-        this.predictions = predictions
-        predictionPercentage = percentage
-        notifyDataSetChanged()
+    init {
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = inflater.inflate(R.layout.match, parent, false)
-        return MyViewHolder(view)
-    }
+    private val timeFormat = SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.matchKey = data[position].key
-        holder.compLevel = data[position].compLevel
-        holder.setNumber = data[position].setNumber
-        holder.matchNumberKey = data[position].matchNumber
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchHolder =
+        MatchHolder(LayoutInflater.from(parent.context).inflate(R.layout.match, parent, false))
 
-        holder.matchNumber.text = Constants.matchString(data[position].compLevel,
-                data[position].setNumber, data[position].matchNumber)
-
-        holder.redTeam1.text = parseTeamNumber(true, 0, position)
-        holder.redTeam2.text = parseTeamNumber(true, 1, position)
-        holder.redTeam3.text = parseTeamNumber(true, 2, position)
-        holder.blueTeam1.text = parseTeamNumber(false, 0, position)
-        holder.blueTeam2.text = parseTeamNumber(false, 1, position)
-        holder.blueTeam3.text = parseTeamNumber(false, 2, position)
-
-        // Underlines team number
-        val team = String.format("%4s", highlightedTeam)
-        when (team) {
-            parseTeamNumber(true, 0, position) ->
-                holder.redTeam1.text = Constants.fromHtml(Constants.underlineText(team))
-            parseTeamNumber(true, 1, position) ->
-                holder.redTeam2.text = Constants.fromHtml(Constants.underlineText(team))
-            parseTeamNumber(true, 2, position) ->
-                holder.redTeam3.text = Constants.fromHtml(Constants.underlineText(team))
-            parseTeamNumber(false, 0, position) ->
-                holder.blueTeam1.text = Constants.fromHtml(Constants.underlineText(team))
-            parseTeamNumber(false, 1, position) ->
-                holder.blueTeam2.text = Constants.fromHtml(Constants.underlineText(team))
-            parseTeamNumber(false, 2, position) ->
-                holder.blueTeam3.text = Constants.fromHtml(Constants.underlineText(team))
-        }
-
-        // Bolds winning score
-        val match = data[position]
-        val redScore = match.alliances.red.score
-        val blueScore = match.alliances.blue.score
-        when {
-            match.hasResult && redScore == blueScore -> {
-                holder.redTeam1.setTypeface(null, Typeface.BOLD)
-                holder.redTeam2.setTypeface(null, Typeface.BOLD)
-                holder.redTeam3.setTypeface(null, Typeface.BOLD)
-                holder.redScore.setTypeface(null, Typeface.BOLD)
-                holder.blueTeam1.setTypeface(null, Typeface.BOLD)
-                holder.blueTeam2.setTypeface(null, Typeface.BOLD)
-                holder.blueTeam3.setTypeface(null, Typeface.BOLD)
-                holder.blueScore.setTypeface(null, Typeface.BOLD)
-            }
-            match.hasResult && redScore > blueScore -> {
-                holder.redTeam1.setTypeface(null, Typeface.BOLD)
-                holder.redTeam2.setTypeface(null, Typeface.BOLD)
-                holder.redTeam3.setTypeface(null, Typeface.BOLD)
-                holder.redScore.setTypeface(null, Typeface.BOLD)
-                holder.blueTeam1.setTypeface(null, Typeface.NORMAL)
-                holder.blueTeam2.setTypeface(null, Typeface.NORMAL)
-                holder.blueTeam3.setTypeface(null, Typeface.NORMAL)
-                holder.blueScore.setTypeface(null, Typeface.NORMAL)
-            }
-            match.hasResult && redScore < blueScore -> {
-                holder.redTeam1.setTypeface(null, Typeface.NORMAL)
-                holder.redTeam2.setTypeface(null, Typeface.NORMAL)
-                holder.redTeam3.setTypeface(null, Typeface.NORMAL)
-                holder.redScore.setTypeface(null, Typeface.NORMAL)
-                holder.blueTeam1.setTypeface(null, Typeface.BOLD)
-                holder.blueTeam2.setTypeface(null, Typeface.BOLD)
-                holder.blueTeam3.setTypeface(null, Typeface.BOLD)
-                holder.blueScore.setTypeface(null, Typeface.BOLD)
-            }
-            else -> {
-                holder.redTeam1.setTypeface(null, Typeface.NORMAL)
-                holder.redTeam2.setTypeface(null, Typeface.NORMAL)
-                holder.redTeam3.setTypeface(null, Typeface.NORMAL)
-                holder.redScore.setTypeface(null, Typeface.NORMAL)
-                holder.blueTeam1.setTypeface(null, Typeface.NORMAL)
-                holder.blueTeam2.setTypeface(null, Typeface.NORMAL)
-                holder.blueTeam3.setTypeface(null, Typeface.NORMAL)
-                holder.blueScore.setTypeface(null, Typeface.NORMAL)
-            }
-        }
-
-        if (match.hasResult) {
-            holder.matchTimeTable.visibility = View.GONE
-            holder.predictionTable.visibility = View.GONE
-            holder.scoreTable.visibility = View.VISIBLE
-            holder.redScore.text = redScore.toString()
-            holder.blueScore.text = blueScore.toString()
-        } else {
-            holder.matchTimeTable.visibility = View.VISIBLE
-            holder.predictionTable.visibility = View.VISIBLE
-            holder.scoreTable.visibility = View.GONE
-            val time = Date()
-            val df = SimpleDateFormat("hh:mm aa", Locale.ENGLISH)
-            time.time = data[position].time * 1000
-            holder.matchTime.text = df.format(time)
-        }
-
-        holder.redTeam1.gravity = Gravity.CENTER
-        holder.redTeam2.gravity = Gravity.CENTER
-        holder.redTeam3.gravity = Gravity.CENTER
-        holder.blueTeam1.gravity = Gravity.CENTER
-        holder.blueTeam2.gravity = Gravity.CENTER
-        holder.blueTeam3.gravity = Gravity.CENTER
-
-        var redRP = 0
-        var blueRP = 0
-        if (data[position].scoreBreakDown != null) {
-            when (data[position].winningAlliance) {
-                "red" -> {
-                    redRP = data[position].scoreBreakDown!!.red.rp - 2
-                    blueRP = data[position].scoreBreakDown!!.blue.rp
-                }
-                "blue" -> {
-                    redRP = data[position].scoreBreakDown!!.red.rp
-                    blueRP = data[position].scoreBreakDown!!.blue.rp - 2
-                }
-                else -> {
-                    redRP = data[position].scoreBreakDown!!.red.rp - 1
-                    blueRP = data[position].scoreBreakDown!!.blue.rp - 1
-                }
-            }
-        }
-
-        holder.redScore.text = context.getString(R.string.rankPointFormat)
-                .format(rpToString(redRP), holder.redScore.text)
-        holder.blueScore.text = context.getString(R.string.rankPointFormat)
-                .format(rpToString(blueRP), holder.blueScore.text)
-
-        val matchKey = data[position].key
-        holder.predictionTable.visibility = View.GONE
-        when {
-            predictions.tba.isNotEmpty() -> predictions.tba.firstOrNull { it.matchKey == matchKey }?.let { prediction ->
-                holder.predictionTable.visibility = View.VISIBLE
-                holder.predictionsText.setTextColor(getPredictionColor(prediction.prob, prediction.winningAlliance))
-                holder.predictionsText.text = predictionToString(prediction, predictionPercentage)
-            }
-            predictions.statbotics.isNotEmpty() -> predictions.statbotics.firstOrNull { it.key == matchKey }?.let { prediction ->
-                holder.predictionTable.visibility = View.VISIBLE
-                holder.predictionsText.setTextColor(
-                    getPredictionColor(prediction.winnerProb(), prediction.pred.winner)
-                )
-                holder.predictionsText.text = predictionToString(prediction, predictionPercentage)
-            }
-        }
-    }
+    override fun onBindViewHolder(holder: MatchHolder, position: Int) = holder.bind(getItem(position))
 
     /**
      * getPredictionColor() gets the color the prediction text should be based on predicted winner
@@ -207,7 +45,7 @@ class ScheduleAdapter(
      */
     private fun getPredictionColor(probability: Double, winningAlliance: String): Int {
         val typedValue = TypedValue()
-        val theme: Resources.Theme = context.theme
+        val theme = context.theme
         when {
             probability <= 0.55 -> {
                 theme.resolveAttribute(R.attr.textOnBackground, typedValue, true)
@@ -234,34 +72,6 @@ class ScheduleAdapter(
             }
         }
         return typedValue.data
-    }
-
-    /**
-     * predictionToString() converts a match prediction to string with either percentage or text
-     * description.
-     *
-     * @param prediction match prediction
-     * @param percentageEnabled raw percentage enabled
-     * @return prediction text
-     */
-    private fun predictionToString(prediction: TBAPrediction.PredMatch, percentageEnabled: Boolean):
-            String {
-        return predictionToString(prediction.prob, prediction.winningAlliance, percentageEnabled)
-    }
-
-    /**
-     * predictionToString() converts a match prediction to string with either percentage or text
-     * description.
-     *
-     * @param prediction match prediction
-     * @param percentageEnabled raw percentage enabled
-     * @return prediction text
-     */
-    private fun predictionToString(
-        prediction: com.aquamorph.frcmanager.models.statbotics.Match,
-        percentageEnabled: Boolean
-    ): String {
-        return predictionToString(prediction.winnerProb(), prediction.pred.winner, percentageEnabled)
     }
 
     /**
@@ -302,92 +112,69 @@ class ScheduleAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
+    inner class MatchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val matchNumber = itemView.findViewById<TextView>(R.id.match_number)
+        private val redTeams = listOf(R.id.red_team_1, R.id.red_team_2, R.id.red_team_3)
+            .map { itemView.findViewById<TextView>(it) }
+        private val blueTeams = listOf(R.id.blue_team_1, R.id.blue_team_2, R.id.blue_team_3)
+            .map { itemView.findViewById<TextView>(it) }
+        private val matchTime = itemView.findViewById<TextView>(R.id.match_time)
+        private val matchStatus = itemView.findViewById<View>(R.id.match_status)
+        private val redScore = itemView.findViewById<TextView>(R.id.red_score)
+        private val blueScore = itemView.findViewById<TextView>(R.id.blue_score)
+        private val scores = itemView.findViewById<View>(R.id.score_table)
+        private val prediction = itemView.findViewById<TextView>(R.id.prediction)
 
-    /**
-     * parseTeamNumber returns a formatted team number.
-     *
-     * @param red is the robot red or blue
-     * @param robot position of the team
-     * @param position dataLoader position
-     * @return team number
-     */
-    private fun parseTeamNumber(red: Boolean, robot: Int, position: Int): String {
-        return if (red) {
-            Constants.formatTeamNumber(data[position].alliances.red.teamKeys[robot])
-        } else {
-            Constants.formatTeamNumber(data[position].alliances.blue.teamKeys[robot])
-        }
-    }
-
-    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        internal val matchNumber: TextView = itemView.findViewById(R.id.match_number)
-        internal val redTeam1: TextView = itemView.findViewById(R.id.red_team_1)
-        internal val redTeam2: TextView = itemView.findViewById(R.id.red_team_2)
-        internal val redTeam3: TextView = itemView.findViewById(R.id.red_team_3)
-        internal val blueTeam1: TextView = itemView.findViewById(R.id.blue_team_1)
-        internal val blueTeam2: TextView = itemView.findViewById(R.id.blue_team_2)
-        internal val blueTeam3: TextView = itemView.findViewById(R.id.blue_team_3)
-        internal val matchTime: TextView = itemView.findViewById(R.id.match_time)
-        internal val matchTimeTable: TableLayout = itemView.findViewById(R.id.matchTimeTable)
-        internal val redScore: TextView = itemView.findViewById(R.id.red_score)
-        internal val blueScore: TextView = itemView.findViewById(R.id.blue_score)
-        internal val scoreTable: TableLayout = itemView.findViewById(R.id.score_table)
-        internal val predictionTable: TableRow = itemView.findViewById(R.id.predictionTable)
-        internal val predictionsText: TextView = itemView.findViewById(R.id.prediction)
-        var matchKey = ""
-        var compLevel = ""
-        var setNumber = 0
-        var matchNumberKey = 0
-
-        init {
-            redTeam1.setOnClickListener {
-                val intent = Intent(context, TeamSummary::class.java)
-                intent.putExtra("teamNumber", redTeam1.text.toString())
-                context.startActivity(intent)
-            }
-            redTeam2.setOnClickListener {
-                val intent = Intent(context, TeamSummary::class.java)
-                intent.putExtra("teamNumber", redTeam2.text.toString())
-                context.startActivity(intent)
-            }
-            redTeam3.setOnClickListener {
-                val intent = Intent(context, TeamSummary::class.java)
-                intent.putExtra("teamNumber", redTeam3.text.toString())
-                context.startActivity(intent)
-            }
-            blueTeam1.setOnClickListener {
-                val intent = Intent(context, TeamSummary::class.java)
-                intent.putExtra("teamNumber", blueTeam1.text.toString())
-                context.startActivity(intent)
-            }
-            blueTeam2.setOnClickListener {
-                val intent = Intent(context, TeamSummary::class.java)
-                intent.putExtra("teamNumber", blueTeam2.text.toString())
-                context.startActivity(intent)
-            }
-            blueTeam3.setOnClickListener {
-                val intent = Intent(context, TeamSummary::class.java)
-                intent.putExtra("teamNumber", blueTeam3.text.toString())
-                context.startActivity(intent)
-            }
+        fun bind(row: ScheduleRow) {
+            matchNumber.text = Constants.matchString(row.compLevel, row.setNumber, row.matchNumber)
             matchNumber.setOnClickListener {
-                val intent = Intent(context, MatchBreakdownActivity::class.java)
-                intent.putExtra("matchKey", matchKey)
-                intent.putExtra("compLevel", compLevel)
-                intent.putExtra("setNumber", setNumber)
-                intent.putExtra("matchNumber", matchNumberKey)
-                intent.putExtra("redRobot1", redTeam1.text.toString())
-                intent.putExtra("redRobot2", redTeam2.text.toString())
-                intent.putExtra("redRobot3", redTeam3.text.toString())
-                intent.putExtra("blueRobot1", blueTeam1.text.toString())
-                intent.putExtra("blueRobot2", blueTeam2.text.toString())
-                intent.putExtra("blueRobot3", blueTeam3.text.toString())
-                context.startActivity(intent)
+                context.startActivity(Intent(context, MatchBreakdownActivity::class.java).apply {
+                    putExtra("matchKey", row.key)
+                    putExtra("compLevel", row.compLevel)
+                    putExtra("setNumber", row.setNumber)
+                    putExtra("matchNumber", row.matchNumber)
+                    for (i in 0..2) {
+                        putExtra("redRobot${i + 1}", row.red.teams.getOrNull(i).orEmpty())
+                        putExtra("blueRobot${i + 1}", row.blue.teams.getOrNull(i).orEmpty())
+                    }
+                })
+            }
+            bindAlliance(row.red, redTeams, redScore)
+            bindAlliance(row.blue, blueTeams, blueScore)
+            scores.visibility = if (row.time == null) View.VISIBLE else View.GONE
+            matchStatus.visibility = if (row.time == null) View.GONE else View.VISIBLE
+            matchTime.text = row.time?.let { timeFormat.format(Date(it * 1000)) }.orEmpty()
+            prediction.visibility = if (row.prediction == null) View.GONE else View.VISIBLE
+            row.prediction?.let {
+                prediction.text = predictionToString(it.probability, it.winner, it.percentage)
+                prediction.setTextColor(getPredictionColor(it.probability, it.winner))
             }
         }
+
+        private fun bindAlliance(alliance: ScheduleAlliance, slots: List<TextView>, score: TextView) {
+            slots.forEachIndexed { index, slot ->
+                val number = alliance.teams.getOrNull(index).orEmpty()
+                slot.text = if (number.isNotEmpty() && number == alliance.highlightedTeam) {
+                    SpannableString(number).apply {
+                        setSpan(UnderlineSpan(), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
+                } else number
+                slot.setTypeface(Typeface.MONOSPACE, if (alliance.emphasized) Typeface.BOLD else Typeface.NORMAL)
+                slot.setOnClickListener(if (number.isEmpty()) null else View.OnClickListener {
+                    context.startActivity(Intent(context, TeamSummary::class.java).putExtra("teamNumber", number))
+                })
+                slot.isClickable = number.isNotEmpty()
+            }
+            score.setTypeface(Typeface.MONOSPACE, if (alliance.emphasized) Typeface.BOLD else Typeface.NORMAL)
+            score.text = alliance.score?.let {
+                context.getString(R.string.rankPointFormat, rpToString(alliance.bonusRp), it.toString())
+            }.orEmpty()
+        }
     }
+}
+
+internal object ScheduleRowDiff : DiffUtil.ItemCallback<ScheduleRow>() {
+    override fun areItemsTheSame(oldItem: ScheduleRow, newItem: ScheduleRow) = oldItem.key == newItem.key
+
+    override fun areContentsTheSame(oldItem: ScheduleRow, newItem: ScheduleRow) = oldItem == newItem
 }

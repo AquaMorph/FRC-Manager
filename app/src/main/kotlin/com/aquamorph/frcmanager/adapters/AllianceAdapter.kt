@@ -30,14 +30,11 @@ class AllianceAdapter(private val context: Context, private val data: ArrayList<
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.allianceNumber.text = String.format((position + 1).toString())
-        holder.team1.text = Constants.formatTeamNumber(data[position].picks[0])
-        holder.team2.text = Constants.formatTeamNumber(data[position].picks[1])
-        holder.team3.text = Constants.formatTeamNumber(data[position].picks[2])
-        if (data[position].picks.size > 3) {
-            holder.team4.text = Constants.formatTeamNumber(data[position].picks[3])
-        } else {
-            holder.team4.visibility = View.GONE
+        holder.allianceNumber.text = (position + 1).toString()
+        holder.teams.forEachIndexed { index, slot ->
+            val number = data[position].picks.getOrNull(index)?.let(Constants::formatTeamNumber).orEmpty()
+            slot.text = number
+            slot.visibility = if (number.isEmpty()) View.INVISIBLE else View.VISIBLE
         }
     }
 
@@ -47,32 +44,17 @@ class AllianceAdapter(private val context: Context, private val data: ArrayList<
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        internal var team1: TextView = itemView.findViewById(R.id.team_1)
-        internal var team2: TextView = itemView.findViewById(R.id.team_2)
-        internal var team3: TextView = itemView.findViewById(R.id.team_3)
-        internal var team4: TextView = itemView.findViewById(R.id.team_4)
-        internal var allianceNumber: TextView = itemView.findViewById(R.id.alliance_number)
+        internal val teams = listOf(R.id.team_1, R.id.team_2, R.id.team_3, R.id.team_4)
+            .map { itemView.findViewById<TextView>(it) }
+        internal val allianceNumber: TextView = itemView.findViewById(R.id.alliance_number)
 
         init {
-            team1.setOnClickListener {
-                val intent = Intent(context, TeamSummary::class.java)
-                intent.putExtra("teamNumber", team1.text.toString())
-                context.startActivity(intent)
-            }
-            team2.setOnClickListener {
-                val intent = Intent(context, TeamSummary::class.java)
-                intent.putExtra("teamNumber", team2.text.toString())
-                context.startActivity(intent)
-            }
-            team3.setOnClickListener {
-                val intent = Intent(context, TeamSummary::class.java)
-                intent.putExtra("teamNumber", team3.text.toString())
-                context.startActivity(intent)
-            }
-            team4.setOnClickListener {
-                val intent = Intent(context, TeamSummary::class.java)
-                intent.putExtra("teamNumber", team4.text.toString())
-                context.startActivity(intent)
+            teams.forEach { slot ->
+                slot.setOnClickListener {
+                    val intent = Intent(context, TeamSummary::class.java)
+                    intent.putExtra("teamNumber", slot.text.toString())
+                    context.startActivity(intent)
+                }
             }
         }
     }

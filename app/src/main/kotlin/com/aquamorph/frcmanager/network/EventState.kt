@@ -81,7 +81,9 @@ internal data class EventState(
             awards = current.awards.begin(),
             districtRankings = districtSection(current.districtRankings, selection, keepDistrict),
             districtTeams = districtSection(current.districtTeams, selection, keepDistrict),
-            predictions = SchedulePredictions(),
+            predictions = if (current.selection.predictionMode == selection.predictionMode) {
+                current.predictions
+            } else SchedulePredictions(),
             feedNotice = null
         )
     }

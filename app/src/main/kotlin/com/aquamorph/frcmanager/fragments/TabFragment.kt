@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aquamorph.frcmanager.R
 import com.aquamorph.frcmanager.activities.MainActivity
-import com.aquamorph.frcmanager.decoration.Animations
 import com.aquamorph.frcmanager.network.EventList
 import com.aquamorph.frcmanager.network.EventLoad
 import com.aquamorph.frcmanager.network.EventState
@@ -24,18 +23,17 @@ import kotlinx.coroutines.launch
 
 abstract class TabFragment : Fragment() {
     private var views: TabViews? = null
-    private var firstLoad = true
 
-    private class TabViews(view: View, val adapter: RecyclerView.Adapter<*>) {
+    private class TabViews(view: View) {
         val recycler = view.findViewById<RecyclerView>(R.id.rv)
         val empty = view.findViewById<TextView>(R.id.empty_view)
         val swipe = view.findViewById<ThemeSwipeRefreshLayout>(R.id.swipeRefreshLayout)
+        var displayedItems: Pair<List<*>, List<*>?>? = null
     }
 
     protected fun setupList(view: View, adapter: RecyclerView.Adapter<*>, decor: RecyclerView.ItemDecoration? = null) {
-        val list = TabViews(view, adapter)
+        val list = TabViews(view)
         views = list
-        firstLoad = true
         val host = activity as? MainActivity
         list.swipe.setColorSchemeResources(R.color.accent)
         list.swipe.isEnabled = host != null
@@ -57,15 +55,20 @@ abstract class TabFragment : Fragment() {
     }
 
     internal fun showList(items: List<*>, section: EventList<*>, related: EventList<*>? = null) {
+        showListStatus(items.isEmpty(), section, related)
         val list = checkNotNull(views)
-        list.swipe.isRefreshing = section.loading || (items.isNotEmpty() && related?.loading == true)
-        list.empty.setText(if (section.load == EventLoad.FAILED) R.string.eventDataLoadError else R.string.noData)
-        list.empty.visibility = if (items.isEmpty() && !section.loading) View.VISIBLE else View.GONE
-        list.adapter.notifyDataSetChanged()
-        if (firstLoad && items.isNotEmpty()) {
-            Animations.loadAnimation(context, list.recycler, list.adapter, firstLoad = true, isNewData = false)
-            firstLoad = false
+        val data = items to related?.items
+        if (list.displayedItems != data) {
+            list.displayedItems = items.toList() to related?.items
+            list.recycler.adapter?.notifyDataSetChanged()
         }
+    }
+
+    internal fun showListStatus(isEmpty: Boolean, section: EventList<*>, related: EventList<*>? = null) {
+        val list = checkNotNull(views)
+        list.swipe.isRefreshing = section.loading || (!isEmpty && related?.loading == true)
+        list.empty.setText(if (section.load == EventLoad.FAILED) R.string.eventDataLoadError else R.string.noData)
+        list.empty.visibility = if (isEmpty && !section.loading) View.VISIBLE else View.GONE
     }
 
     override fun onDestroyView() {

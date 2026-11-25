@@ -1,8 +1,5 @@
 package com.aquamorph.frcmanager.utils
 
-import android.os.Build
-import android.text.Html
-import android.text.Spanned
 import com.aquamorph.frcmanager.BuildConfig
 import com.aquamorph.frcmanager.models.tba.TBAPrediction
 import com.google.gson.JsonObject
@@ -31,46 +28,7 @@ object Constants {
         return BuildConfig.TBA_KEY
     }
 
-    /**
-     * formatTeamNumber() removes all text from the team string and adds padding to create a string
-     * of length 4.
-     *
-     * @param team string
-     * @return formatted string
-     */
-    fun formatTeamNumber(team: String): String {
-        return String.format("%4s", team.replace("\\D+".toRegex(), ""))
-    }
-
-    /**
-     * underlineText() returns a string with formatting in HTML that is underlined.
-     *
-     * @param text team number
-     * @return returns formatted team number
-     */
-    fun underlineText(text: String): String {
-        val tmp = text.replace(" ", "")
-        val spaces = 4 - tmp.length
-        val spacesText = StringBuilder()
-        for (i in 0 until spaces) {
-            spacesText.append("&nbsp;")
-        }
-        return String.format("<pre>%s<u>%s</u></pre>", spacesText.toString(), tmp)
-    }
-
-    /**
-     * fromHtml() converts HTML code to a string.
-     *
-     * @param html html code
-     */
-    @SuppressWarnings("deprecation")
-    fun fromHtml(html: String): Spanned? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        } else {
-            Html.fromHtml(html)
-        }
-    }
+    fun formatTeamNumber(team: String): String = team.filter { it in '0'..'9' }
 
     /**
      * matchTypeToString() converts match type to english.

@@ -8,6 +8,21 @@ import org.junit.Test
 
 class MatchSortTest {
     @Test
+    fun `time-based sorts are independent of feed order for tied timestamps`() {
+        val first = match(1, 10, 0).copy(time = 0)
+        val second = match(2, -1, -1).copy(time = 0)
+        val third = match(3, -1, -1).copy(time = 0)
+        val original = listOf(first, second, third)
+        for (mode in listOf("chronological", "reverseChronological", "upcoming", "upcomingLast")) {
+            val ordered = ArrayList(original)
+            val shuffled = arrayListOf(third, first, second)
+            MatchSort.sortMatches(ordered, mode)
+            MatchSort.sortMatches(shuffled, mode)
+            assertEquals(mode, ordered, shuffled)
+        }
+    }
+
+    @Test
     fun `upcoming first skips completed zero score matches`() {
         val tie = match(1, 0, 0)
         val shutout = match(2, 20, 0)

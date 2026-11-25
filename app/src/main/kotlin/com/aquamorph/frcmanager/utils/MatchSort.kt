@@ -18,25 +18,24 @@ object MatchSort {
      * @param matchSort matching sorting method
      */
     fun sortMatches(matches: ArrayList<Match>, matchSort: String?) {
+        // Feeds can return equal-time matches in a different order on each refresh.
+        val series = naturalOrder<Match>().thenBy { it.key }
+        val chronological = compareBy(Match::time).then(series)
         when (matchSort) {
-            "seriesGrouping" -> matches.sort()
-            "chronological" -> matches.sortWith(compareBy(Match::time))
-            "reverseChronological" -> {
-                matches.sortWith(compareBy(Match::time))
-                matches.reverse()
-            }
+            "chronological" -> matches.sortWith(chronological)
+            "reverseChronological" -> matches.sortWith(chronological.reversed())
             "upcoming" -> {
-                matches.sortWith(compareBy { it.time })
+                matches.sortWith(chronological)
                 Collections.rotate(matches, matches.size - matchNext(matches))
             }
             "upcomingLast" -> {
-                matches.sortWith(compareBy(Match::time))
+                matches.sortWith(chronological)
                 val c = matchNext(matches)
                 if (c != matches.size && c != 0) {
                     Collections.rotate(matches, matches.size - c + 1)
                 }
             }
-            else -> matches.sort()
+            else -> matches.sortWith(series)
         }
     }
 
