@@ -17,10 +17,12 @@
         android:textColor="@color/icons"
         android:textSize="28sp"/>
 
+    <!-- AppIntro overlays its bottom bar on the slide. Keep the list above it. -->
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/eventRecyclerView"
+        android:layout_marginBottom="@dimen/appIntroBottomBarHeight"
         android:layout_weight="5" />
 
 </LinearLayout>
