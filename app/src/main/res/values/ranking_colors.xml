@@ -6,7 +6,7 @@
     <color name="ranking_leader_light">#CCDFFF</color>
     <color name="ranking_leader_ink_light">#163A65</color>
     <color name="ranking_row_dark">#303640</color>
-    <color name="ranking_row_oled">#141820</color>
+    <color name="ranking_row_oled">#000000</color>
     <color name="ranking_badge_dark">#434E60</color>
     <color name="ranking_badge_ink_dark">#E2EBFA</color>
     <color name="ranking_leader_dark">#244D7E</color>
