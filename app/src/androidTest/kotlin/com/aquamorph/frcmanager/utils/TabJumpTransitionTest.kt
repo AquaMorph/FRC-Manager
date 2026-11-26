@@ -4,6 +4,7 @@ import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.OneShotPreDrawListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -14,6 +15,7 @@ import com.aquamorph.frcmanager.activities.Settings
 import com.google.android.material.tabs.TabLayout
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.CountDownLatch
@@ -21,6 +23,55 @@ import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 class TabJumpTransitionTest {
+    @Test
+    fun distantTabTapsSlideAtFullOpacityInBothDirections() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        assumeTrue(NavigationMotion.isEnabled(instrumentation.targetContext))
+        ActivityScenario.launch(Settings::class.java).use { scenario ->
+            lateinit var pager: ViewPager2
+            lateinit var tabs: TabLayout
+            lateinit var transition: TabJumpTransition
+            scenario.onActivity { activity ->
+                pager = ViewPager2(activity).apply {
+                    layoutDirection = View.LAYOUT_DIRECTION_LTR
+                    adapter = PageAdapter()
+                }
+                tabs = TabLayout(activity)
+                activity.setContentView(LinearLayout(activity).apply {
+                    orientation = LinearLayout.VERTICAL
+                    addView(tabs)
+                    addView(pager, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
+                })
+                transition = TabJumpTransition(tabs, pager) { "Page $it" }
+            }
+
+            instrumentation.waitForIdleSync()
+            try {
+                for ((destination, direction) in listOf(4 to 1, 0 to -1)) {
+                    val drawn = CountDownLatch(1)
+                    var offset = 0f
+                    var opacity = 0f
+                    scenario.onActivity {
+                        tabs.getTabAt(destination)!!.select()
+                        assertEquals(destination, pager.currentItem)
+                        assertEquals(ViewPager2.SCROLL_STATE_IDLE, pager.scrollState)
+                        OneShotPreDrawListener.add(pager) {
+                            val pages = pager.getChildAt(0)
+                            offset = pages.translationX / pages.width
+                            opacity = pages.alpha
+                            drawn.countDown()
+                        }
+                    }
+                    assertTrue(drawn.await(5, TimeUnit.SECONDS))
+                    assertEquals(direction.toFloat(), offset, 0f)
+                    assertEquals(1f, opacity, 0f)
+                }
+            } finally {
+                scenario.onActivity { transition.detach() }
+            }
+        }
+    }
+
     @Test
     fun aSecondTapCanInterruptAnAttachedTabJump() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()

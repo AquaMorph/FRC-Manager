@@ -1,5 +1,8 @@
 package com.aquamorph.frcmanager.utils
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import androidx.core.view.OneShotPreDrawListener
 import androidx.recyclerview.widget.RecyclerView
@@ -15,9 +18,11 @@ internal class TabJumpTransition(
     private val adapter = checkNotNull(pager.adapter)
     private val pages = pager.getChildAt(0)
     private var pendingDraw: OneShotPreDrawListener? = null
+    private var outgoingPage: BitmapDrawable? = null
+    private var outgoingPosition = 0
     private var syncingTabs = false
     private var settlingFromSwipe = false
-    private var requestedPage: Int? = null
+    private var switchingPage = false
     private val adapterObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onChanged() = populateTabs()
     }
@@ -27,17 +32,17 @@ internal class TabJumpTransition(
                 settlingFromSwipe = true
                 resetMotion()
             } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
-                if (requestedPage == null) selectCurrentPage()
+                if (!switchingPage) selectCurrentPage()
                 settlingFromSwipe = false
             }
         }
 
         override fun onPageScrolled(position: Int, offset: Float, pixels: Int) {
-            if (settlingFromSwipe && requestedPage == null) tabs.setScrollPosition(position, offset, true)
+            if (settlingFromSwipe && !switchingPage) tabs.setScrollPosition(position, offset, true)
         }
 
         override fun onPageSelected(position: Int) {
-            if (!settlingFromSwipe && requestedPage == null) selectCurrentPage()
+            if (!settlingFromSwipe && !switchingPage) selectCurrentPage()
         }
     }
 
@@ -80,43 +85,53 @@ internal class TabJumpTransition(
     override fun onTabUnselected(tab: TabLayout.Tab) = Unit
 
     private fun navigateTo(destination: Int) {
-        if (destination == requestedPage) return
-        pages.animate().cancel()
-        pendingDraw?.removeListener()
-        pendingDraw = null
-        requestedPage = destination
-        if (destination == pager.currentItem) {
-            requestedPage = null
-            revealPage()
-            return
-        }
-        if (!pager.isAttachedToWindow || !pager.isLaidOut || !NavigationMotion.isEnabled(pager.context)) {
-            resetMotion()
+        if (destination == pager.currentItem) return
+        val source = if (pendingDraw != null) outgoingPosition else pager.currentItem
+        val snapshot = outgoingPage.takeIf { pendingDraw != null }
+        resetMotion()
+        if (destination == source || !pager.isAttachedToWindow || !pager.isLaidOut ||
+            pages.width == 0 || pages.height == 0 || !NavigationMotion.isEnabled(pager.context)
+        ) {
             pager.setCurrentItem(destination, false)
             return
         }
 
-        val direction = if (destination > pager.currentItem) 1 else -1
-        // Fade the live page to its themed background, then swap while the content is hidden.
-        // No bitmap capture, GPU upload, or scroll through intermediate fragments on the tap path.
-        pages.animate().alpha(0f).setDuration((90 * pages.alpha).toLong())
-            .setInterpolator(NavigationMotion.standard).withLayer().withEndAction {
-                pager.setCurrentItem(destination, false)
-                pendingDraw = OneShotPreDrawListener.add(pager) {
-                    pendingDraw = null
-                    requestedPage = null
-                    selectCurrentPage()
-                    val layoutDirection = if (pager.layoutDirection == View.LAYOUT_DIRECTION_RTL) -1 else 1
-                    pages.translationX = direction * layoutDirection * 8f * pager.resources.displayMetrics.density
-                    revealPage()
+        // Keep the old page visible while the pager jumps straight to the destination.
+        val width = pages.width
+        val height = pages.height
+        val outgoing = snapshot ?: capturePage(width, height)
+        val direction = if (destination > source) 1 else -1
+        val layoutDirection = if (pager.layoutDirection == View.LAYOUT_DIRECTION_RTL) -1 else 1
+        val distance = direction * layoutDirection * width
+        outgoing.setBounds(0, 0, width, height)
+        outgoingPage = outgoing
+        outgoingPosition = source
+        pager.overlay.add(outgoing)
+        switchingPage = true
+        pager.setCurrentItem(destination, false)
+        pendingDraw = OneShotPreDrawListener.add(pager) {
+            pendingDraw = null
+            switchingPage = false
+            selectCurrentPage()
+            pages.translationX = distance.toFloat()
+            pages.animate().translationX(0f).setDuration(280L)
+                .setInterpolator(NavigationMotion.standard)
+                .setUpdateListener {
+                    val left = pages.translationX.toInt() - distance
+                    outgoing.setBounds(left, 0, left + width, height)
+                    pager.invalidate()
                 }
-            }.start()
+                .withEndAction { resetMotion() }.start()
+        }
     }
 
-    private fun revealPage() {
-        if (pages.alpha == 1f && pages.translationX == 0f) return
-        pages.animate().alpha(1f).translationX(0f).setDuration(180L)
-            .setInterpolator(NavigationMotion.standard).withLayer().start()
+    private fun capturePage(width: Int, height: Int): BitmapDrawable {
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        Canvas(bitmap).apply {
+            drawColor(NavigationMotion.surfaceColor(pager.context))
+            pages.draw(this)
+        }
+        return BitmapDrawable(pager.resources, bitmap)
     }
 
     fun detach() {
@@ -128,10 +143,12 @@ internal class TabJumpTransition(
 
     private fun resetMotion() {
         pages.animate().cancel()
+        pages.animate().setUpdateListener(null)
         pendingDraw?.removeListener()
         pendingDraw = null
-        requestedPage = null
-        pages.alpha = 1f
+        outgoingPage?.let { pager.overlay.remove(it) }
+        outgoingPage = null
+        switchingPage = false
         pages.translationX = 0f
     }
 }
